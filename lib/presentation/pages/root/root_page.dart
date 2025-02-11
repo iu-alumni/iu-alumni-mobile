@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/root/root_page_cubit.dart';
-import '../../common/app_colors.dart';
+import '../../common/constants/app_colors.dart';
 import '../events_list/events_list_page.dart';
 import '../map/map_page.dart';
 import '../profile/profile_page.dart';
@@ -10,6 +10,8 @@ import '../profile/profile_page.dart';
 @RoutePage()
 class RootPage extends StatefulWidget {
   const RootPage({super.key});
+
+  static const navigationBarHeight = 144;
 
   @override
   State<RootPage> createState() => _RootPageState();
