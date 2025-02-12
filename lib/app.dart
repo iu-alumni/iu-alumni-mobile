@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'presentation/blocs/root/root_page_cubit.dart';
-import 'presentation/common/app_colors.dart';
+import 'presentation/common/constants/app_colors.dart';
 import 'presentation/router/config.dart';
 
 class App extends StatelessWidget {
