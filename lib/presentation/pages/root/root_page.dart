@@ -18,13 +18,13 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  late final Widget _eventsPage = EventsListPage();
-  late final Widget _mapPage = MapPage();
-  late final Widget _profilePage = ProfilePage();
+  late final Widget _eventsPage = const EventsListPage();
+  late final Widget _mapPage = const MapPage();
+  late final Widget _profilePage = const ProfilePage();
 
   late final _icons = [
-    (true, Icons.calendar_month, RootPageState.eventsListPage),
-    (false, Icons.location_pin, RootPageState.mapPage),
+    (true, Icons.location_pin, RootPageState.mapPage),
+    (false, Icons.calendar_month, RootPageState.eventsListPage),
     (true, Icons.person, RootPageState.profilePage),
   ]
       .map(

@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../util/gap.dart';
+import '../../blocs/events_list/events_list_cubit.dart';
+import '../../blocs/events_list/events_list_state.dart';
+import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
-import '../../common/widgets/alumni_logo.dart';
 import '../../common/widgets/button.dart';
-import '../root/root_page.dart';
+import 'widgets/events_list.dart';
 
-class EventsListPage extends StatelessWidget {
+class EventsListPage extends StatefulWidget {
   const EventsListPage({super.key});
+
+  @override
+  State<EventsListPage> createState() => _EventsListPageState();
+}
+
+class _EventsListPageState extends State<EventsListPage> {
+  @override
+  void initState() {
+    context.read<EventsListCubit>().loadEvents();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -15,18 +28,25 @@ class EventsListPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const _Header(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text('Soon', style: AppTextStyles.h3),
+            ),
             Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(
-                    bottom: RootPage.navigationBarHeight + 16, top: 16),
-                child: Column(
-                  children: <Widget>[
-                    const _Section(heading: 'Soon'),
-                    const _Section(heading: 'Close to you'),
-                    const _Section(heading: 'Others'),
-                  ].gap((_) => const SizedBox(height: 80)),
-                ),
+              child: BlocBuilder<EventsListCubit, EventsListState>(
+                builder: (context, eventsState) => switch (eventsState) {
+                  EventsListStateData d when d.events.isEmpty =>
+                    const _CenterText(
+                      text: 'No Events',
+                    ),
+                  EventsListStateData d => EventsList(events: d.events),
+                  EventsListStateError e => _CenterText(text: e.msg),
+                  _ => const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    )
+                },
               ),
             ),
           ],
@@ -42,25 +62,18 @@ class _Header extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24)
             .copyWith(top: 16, bottom: 8),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AlumniLogo(),
-            Spacer(),
+            // const AlumniLogo(),
+            Text('Events', style: AppTextStyles.h2),
             Button(
               onTap: () {},
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  children: [
-                    Text(
-                      'Create event',
-                      style: AppTextStyles.buttonText,
-                    ),
-                    const SizedBox(width: 8),
-                    Icon(
-                      Icons.calendar_month_outlined,
-                      color: Colors.white,
-                    ),
-                  ],
+              borderRadius: BorderRadius.circular(24),
+              child: const Padding(
+                padding: EdgeInsets.all(12),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
                 ),
               ),
             )
@@ -69,36 +82,16 @@ class _Header extends StatelessWidget {
       );
 }
 
-class _Section extends StatelessWidget {
-  const _Section({required this.heading});
+class _CenterText extends StatelessWidget {
+  const _CenterText({required this.text});
 
-  final String heading;
-  // final List content;
+  final String text;
 
   @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Text(heading, style: AppTextStyles.h3),
-          ),
-          const SizedBox(height: 2),
-          SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(
-                10,
-                (_) => SizedBox(
-                  width: 250,
-                  height: 150,
-                  child: ColoredBox(color: Colors.amber),
-                ),
-              ).gap((_) => const SizedBox(width: 16)),
-            ),
-          ),
-        ],
+  Widget build(BuildContext context) => Center(
+        child: Text(
+          text,
+          style: AppTextStyles.h3,
+        ),
       );
 }
