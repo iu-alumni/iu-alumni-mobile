@@ -1,10 +1,10 @@
 name: ui_alumni_mobile
 description: "UI Alumni Flutter Mobile App created during the Industrial Project Master's Course at Innopolis University."
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.6.2
+  sdk: ^3.6.0
 
 dependencies:
   flutter:
@@ -22,6 +22,10 @@ dependencies:
   flutter_svg: ^2.0.17
   intl: ^0.20.2
   flutter_staggered_grid_view: ^0.7.0
+  flutter_map:
+  flutter_map_marker_cluster:
+  latlong2:
+  geolocator: ^13.0.2
 
 dev_dependencies:
   flutter_test:
@@ -35,11 +39,12 @@ dev_dependencies:
   flutter_gen_runner: ^5.9.0
 
 flutter:
-
   uses-material-design: true
 
   assets:
     - assets/images/
+    - assets/icons/
+    - assets/icons/map/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
