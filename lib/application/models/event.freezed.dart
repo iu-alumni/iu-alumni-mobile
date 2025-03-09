@@ -16,9 +16,12 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$EventModel {
+  String get eventId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError; // TODO
+  String? get coverUrl => throw _privateConstructorUsedError;
   String get location => throw _privateConstructorUsedError;
+  CostModel get cost => throw _privateConstructorUsedError;
   DateTime get occurringAt => throw _privateConstructorUsedError;
 
   /// Create a copy of EventModel
@@ -35,10 +38,15 @@ abstract class $EventModelCopyWith<$Res> {
       _$EventModelCopyWithImpl<$Res, EventModel>;
   @useResult
   $Res call(
-      {String title,
+      {String eventId,
+      String title,
       String description,
+      String? coverUrl,
       String location,
+      CostModel cost,
       DateTime occurringAt});
+
+  $CostModelCopyWith<$Res> get cost;
 }
 
 /// @nodoc
@@ -56,12 +64,19 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? eventId = null,
     Object? title = null,
     Object? description = null,
+    Object? coverUrl = freezed,
     Object? location = null,
+    Object? cost = null,
     Object? occurringAt = null,
   }) {
     return _then(_value.copyWith(
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -70,15 +85,33 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      coverUrl: freezed == coverUrl
+          ? _value.coverUrl
+          : coverUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       location: null == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String,
+      cost: null == cost
+          ? _value.cost
+          : cost // ignore: cast_nullable_to_non_nullable
+              as CostModel,
       occurringAt: null == occurringAt
           ? _value.occurringAt
           : occurringAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ) as $Val);
+  }
+
+  /// Create a copy of EventModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CostModelCopyWith<$Res> get cost {
+    return $CostModelCopyWith<$Res>(_value.cost, (value) {
+      return _then(_value.copyWith(cost: value) as $Val);
+    });
   }
 }
 
@@ -91,10 +124,16 @@ abstract class _$$EventModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String title,
+      {String eventId,
+      String title,
       String description,
+      String? coverUrl,
       String location,
+      CostModel cost,
       DateTime occurringAt});
+
+  @override
+  $CostModelCopyWith<$Res> get cost;
 }
 
 /// @nodoc
@@ -110,12 +149,19 @@ class __$$EventModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? eventId = null,
     Object? title = null,
     Object? description = null,
+    Object? coverUrl = freezed,
     Object? location = null,
+    Object? cost = null,
     Object? occurringAt = null,
   }) {
     return _then(_$EventModelImpl(
+      eventId: null == eventId
+          ? _value.eventId
+          : eventId // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -124,10 +170,18 @@ class __$$EventModelImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      coverUrl: freezed == coverUrl
+          ? _value.coverUrl
+          : coverUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       location: null == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
               as String,
+      cost: null == cost
+          ? _value.cost
+          : cost // ignore: cast_nullable_to_non_nullable
+              as CostModel,
       occurringAt: null == occurringAt
           ? _value.occurringAt
           : occurringAt // ignore: cast_nullable_to_non_nullable
@@ -139,24 +193,34 @@ class __$$EventModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$EventModelImpl implements _EventModel {
-  _$EventModelImpl(
-      {required this.title,
+  const _$EventModelImpl(
+      {required this.eventId,
+      required this.title,
       required this.description,
+      required this.coverUrl,
       required this.location,
+      required this.cost,
       required this.occurringAt});
 
+  @override
+  final String eventId;
   @override
   final String title;
   @override
   final String description;
+// TODO
+  @override
+  final String? coverUrl;
   @override
   final String location;
+  @override
+  final CostModel cost;
   @override
   final DateTime occurringAt;
 
   @override
   String toString() {
-    return 'EventModel(title: $title, description: $description, location: $location, occurringAt: $occurringAt)';
+    return 'EventModel(eventId: $eventId, title: $title, description: $description, coverUrl: $coverUrl, location: $location, cost: $cost, occurringAt: $occurringAt)';
   }
 
   @override
@@ -164,18 +228,22 @@ class _$EventModelImpl implements _EventModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$EventModelImpl &&
+            (identical(other.eventId, eventId) || other.eventId == eventId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            (identical(other.coverUrl, coverUrl) ||
+                other.coverUrl == coverUrl) &&
             (identical(other.location, location) ||
                 other.location == location) &&
+            (identical(other.cost, cost) || other.cost == cost) &&
             (identical(other.occurringAt, occurringAt) ||
                 other.occurringAt == occurringAt));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, title, description, location, occurringAt);
+  int get hashCode => Object.hash(runtimeType, eventId, title, description,
+      coverUrl, location, cost, occurringAt);
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -187,18 +255,27 @@ class _$EventModelImpl implements _EventModel {
 }
 
 abstract class _EventModel implements EventModel {
-  factory _EventModel(
-      {required final String title,
+  const factory _EventModel(
+      {required final String eventId,
+      required final String title,
       required final String description,
+      required final String? coverUrl,
       required final String location,
+      required final CostModel cost,
       required final DateTime occurringAt}) = _$EventModelImpl;
 
   @override
+  String get eventId;
+  @override
   String get title;
   @override
-  String get description;
+  String get description; // TODO
+  @override
+  String? get coverUrl;
   @override
   String get location;
+  @override
+  CostModel get cost;
   @override
   DateTime get occurringAt;
 
