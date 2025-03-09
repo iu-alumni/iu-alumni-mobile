@@ -6,7 +6,6 @@ import '../../../../application/models/event.dart';
 import '../../../../util/gap.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../router/config.gr.dart';
-import '../../event/event_page.dart';
 
 class EventCard extends StatefulWidget {
   const EventCard({
@@ -34,19 +33,6 @@ class _EventCardState extends State<EventCard> {
         borderRadius: BorderRadius.circular(4),
         shadowColor: Colors.black26,
         elevation: 4,
-        // decoration: BoxDecoration(
-        //   color: widget.cardColor,
-        //   borderRadius: BorderRadius.circular(4),
-        //   boxShadow: const [
-        //     BoxShadow(
-        //       color: Colors.black26,
-        //       offset: Offset(1, 1),
-        //       blurRadius: 4,
-        //       spreadRadius: 1,
-        //     )
-        //   ],
-        // ),
-        // padding: const EdgeInsets.all(12),
         child: InkWell(
           onTap: () => context.pushRoute(
             EventRoute(eventId: widget.event.eventId),
