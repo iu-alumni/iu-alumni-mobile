@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../application/models/event.dart';
 import '../../../../util/gap.dart';
 import '../../../common/constants/app_text_styles.dart';
+import '../../../router/config.gr.dart';
 
 class EventCard extends StatefulWidget {
   const EventCard({
@@ -26,58 +28,61 @@ class _EventCardState extends State<EventCard> {
   late final _secondaryTextColor = widget.textColor.withValues(alpha: 0.8);
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: widget.cardColor,
-          borderRadius: BorderRadius.circular(4),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(1, 1),
-              blurRadius: 4,
-              spreadRadius: 1,
-            )
-          ],
-        ),
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              widget.event.title,
-              style: AppTextStyles.h6.copyWith(color: widget.textColor),
-            ),
-            Row(
+  Widget build(BuildContext context) => Material(
+        color: widget.cardColor,
+        borderRadius: BorderRadius.circular(4),
+        shadowColor: Colors.black26,
+        elevation: 4,
+        child: InkWell(
+          onTap: () => context.pushRoute(
+            EventRoute(eventId: widget.event.eventId),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Icon(Icons.calendar_month_outlined, color: widget.textColor),
-                const SizedBox(width: 4),
                 Text(
-                  _formatter.format(widget.event.occurringAt),
-                  style: AppTextStyles.caption.copyWith(
-                    color: _secondaryTextColor,
-                  ),
+                  widget.event.title,
+                  style: AppTextStyles.h6.copyWith(color: widget.textColor),
                 ),
-              ],
-            ),
-            Row(
-              children: [
-                Icon(Icons.location_pin, color: widget.textColor),
-                const SizedBox(width: 4),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.calendar_month_outlined,
+                      color: widget.textColor,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      _formatter.format(widget.event.occurringAt),
+                      style: AppTextStyles.caption.copyWith(
+                        color: _secondaryTextColor,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.location_pin, color: widget.textColor),
+                    const SizedBox(width: 4),
+                    Text(
+                      widget.event.location,
+                      style: AppTextStyles.caption.copyWith(
+                        color: _secondaryTextColor,
+                      ),
+                    ),
+                  ],
+                ),
                 Text(
-                  widget.event.location,
-                  style: AppTextStyles.caption.copyWith(
-                    color: _secondaryTextColor,
-                  ),
+                  widget.event.description,
+                  style:
+                      AppTextStyles.smallBody.copyWith(color: widget.textColor),
+                  maxLines: 3,
+                  textAlign: TextAlign.start,
                 ),
-              ],
+              ].gap(const SizedBox(height: 2)),
             ),
-            Text(
-              widget.event.description,
-              style: AppTextStyles.smallBody.copyWith(color: widget.textColor),
-              maxLines: 3,
-              textAlign: TextAlign.start,
-            ),
-          ].gap(const SizedBox(height: 2)),
+          ),
         ),
       );
 }

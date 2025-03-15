@@ -18,6 +18,11 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w600,
     height: 1.3,
   );
+  static final h4 = _default.copyWith(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    height: 1.3,
+  );
   static final h6 = _default.copyWith(
     fontSize: 14,
     fontWeight: FontWeight.w600,
@@ -36,4 +41,5 @@ abstract class AppTextStyles {
     fontWeight: FontWeight.w600,
     color: Colors.white,
   );
+  static final body = _default;
 }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../application/models/cost.dart';
 import '../../../application/models/event.dart';
 import 'events_list_state.dart';
 
@@ -45,10 +46,13 @@ class EventsListCubit extends Cubit<EventsListState> {
         Iterable.generate(
           20,
           (_) => EventModel(
+            eventId: '${_random.nextInt(1000000)}',
             title: _randomTitle,
             description: _randomDesc,
             location: 'UAE, Dubai',
             occurringAt: _radomDateTime,
+            cost: const CostModel(number: 12, currency: Currency.aed),
+            coverUrl: null,
           ),
         ),
       ),
