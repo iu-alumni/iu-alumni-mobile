@@ -12,8 +12,10 @@ class EventModel with _$EventModel {
     required String description,
     // TODO
     required String? coverUrl,
+    // TODO
     required String location,
     required CostModel cost,
     required DateTime occurringAt,
+    required bool onlineEvent,
   }) = _EventModel;
 }

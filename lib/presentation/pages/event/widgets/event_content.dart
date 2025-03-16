@@ -3,11 +3,12 @@ import 'package:intl/intl.dart';
 
 import '../../../../application/models/cost.dart';
 import '../../../../application/models/event.dart';
-import '../../../../util/currency_presenter.dart';
+import '../../../../util/currency_formatter.dart';
 import '../../../../util/numbers_presenter.dart';
-import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/button.dart';
+import '../../../common/widgets/event_cover.dart';
+import '../../../common/widgets/titled_item.dart';
 
 class EventViewingContent extends StatefulWidget {
   const EventViewingContent({required this.event, super.key});
@@ -19,10 +20,10 @@ class EventViewingContent extends StatefulWidget {
 }
 
 class _EventViewingContentState extends State<EventViewingContent> {
-  late final _formatter = DateFormat('dd/MM/YYYY');
+  late final _formatter = DateFormat('dd/MM/yyyy');
 
   String _costToStr(CostModel cost) =>
-      '${cost.number.humanReadable} ${cost.currency.present}';
+      '${cost.number.humanReadable} ${cost.currency.format}';
 
   @override
   Widget build(BuildContext context) => Column(
@@ -66,84 +67,24 @@ class _Cover extends StatelessWidget {
   final EventModel event;
 
   @override
-  Widget build(BuildContext context) {
-    final horPadding = const EdgeInsets.symmetric(horizontal: 24);
-    final secondaryWhite = Colors.white.withValues(alpha: 0.5);
-    return Stack(
-      children: [
-        // TODO cover image
-        const Positioned.fill(child: ColoredBox(color: Colors.black38)),
-        Positioned.fill(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.black12.withAlpha(0), Colors.white],
-                    ),
-                  ),
-                ),
+  Widget build(BuildContext context) => EventCover(
+        title: event.title,
+        location: event.location,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Button(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(
+                'Count me in!',
+                style: AppTextStyles.buttonText,
+                textAlign: TextAlign.center,
               ),
-              Container(
-                color: Colors.white,
-                height: 24,
-              ),
-            ],
+            ),
+            onTap: () {},
           ),
         ),
-        SafeArea(
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 24),
-              Padding(
-                padding: horPadding,
-                child: Text(
-                  event.title,
-                  style: AppTextStyles.h2.copyWith(color: Colors.white),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Padding(
-                padding: horPadding,
-                child: Row(
-                  children: [
-                    Icon(Icons.location_pin, color: secondaryWhite),
-                    const SizedBox(width: 8),
-                    Text(
-                      event.location,
-                      style: AppTextStyles.h4.copyWith(color: secondaryWhite),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 140),
-              Padding(
-                padding: horPadding,
-                child: Button(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Text(
-                      'Count me in!',
-                      style: AppTextStyles.buttonText,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+      );
 }
 
 class _Item extends StatelessWidget {
@@ -154,31 +95,13 @@ class _Item extends StatelessWidget {
   final IconData icon;
 
   @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Icon(
-                icon,
-                color: AppColors.blueGray,
-              ),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Text(
-                  name,
-                  style: AppTextStyles.h4.copyWith(color: AppColors.blueGray),
-                  textAlign: TextAlign.start,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            content,
-            style: AppTextStyles.body,
-            textAlign: TextAlign.start,
-          ),
-        ],
+  Widget build(BuildContext context) => TitledItem(
+        name: name,
+        icon: icon,
+        child: Text(
+          content,
+          style: AppTextStyles.body,
+          textAlign: TextAlign.start,
+        ),
       );
 }

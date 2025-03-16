@@ -24,7 +24,7 @@ class EventCard extends StatefulWidget {
 }
 
 class _EventCardState extends State<EventCard> {
-  late final _formatter = DateFormat('hh:mm dd.MM.YYYY');
+  late final _formatter = DateFormat('hh:mm dd.MM.yyyy');
   late final _secondaryTextColor = widget.textColor.withValues(alpha: 0.8);
 
   @override

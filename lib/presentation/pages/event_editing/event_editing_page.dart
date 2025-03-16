@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/events/events_repository.dart';
+import '../../blocs/events_list/events_list_cubit.dart';
 import '../../blocs/one_event/one_event_cubit.dart';
-import 'widgets/event_content.dart';
+import 'widgets/event_editing_content.dart';
 
 @RoutePage()
-class EventPage extends StatefulWidget implements AutoRouteWrapper {
-  const EventPage({required this.eventId, super.key});
+class EventEditingPage extends StatefulWidget implements AutoRouteWrapper {
+  const EventEditingPage({required this.eventId, super.key});
 
   final String eventId;
 
   @override
-  State<EventPage> createState() => _EventPageState();
+  State<EventEditingPage> createState() => _EventEditingPageState();
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider(
@@ -24,23 +25,33 @@ class EventPage extends StatefulWidget implements AutoRouteWrapper {
       );
 }
 
-class _EventPageState extends State<EventPage> {
+class _EventEditingPageState extends State<EventEditingPage> {
+  late final EventsListCubit _cubit;
+
   @override
   void initState() {
+    _cubit = context.read<EventsListCubit>();
     context.read<OneEventCubit>().loadEvent(widget.eventId);
     super.initState();
   }
 
   @override
+  void dispose() {
+    _cubit.update(widget.eventId);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => Scaffold(
         body: BlocBuilder<OneEventCubit, OneEventState>(
+          buildWhen: (p, c) => p.isNone() != c.isNone(),
           builder: (context, eventState) => eventState.match(
             () => const Center(child: CircularProgressIndicator()),
-            (event) => SafeArea(
+            (event) => const SafeArea(
               top: false,
               child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: EventViewingContent(event: event),
+                physics: BouncingScrollPhysics(),
+                child: EventEditingContent(),
               ),
             ),
           ),
