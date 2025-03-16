@@ -10,7 +10,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.8
   flutter_bloc: ^9.0.0
   auto_route: ^9.3.0+1
   fast_immutable_collections: ^11.0.3

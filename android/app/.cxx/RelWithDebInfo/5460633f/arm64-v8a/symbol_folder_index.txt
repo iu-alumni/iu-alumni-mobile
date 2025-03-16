@@ -1,0 +1,1 @@
+/Users/kf/Documents/projects/uni/ui_alumni_mobile/build/app/intermediates/cxx/RelWithDebInfo/5460633f/obj/arm64-v8a
