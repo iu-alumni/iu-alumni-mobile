@@ -18,9 +18,9 @@ abstract class EventMapper {
 
   static EventRequestDataModel eventRequestFromModel(EventModel model) =>
       EventRequestDataModel(
-        title: model.title,
-        description: model.description,
-        location: model.location,
+        title: model.title ?? 'Untitled',
+        description: model.description ?? '',
+        location: model.location ?? '',
         datetime: model.occurringAt,
         cost: model.cost.number,
         isOnline: model.onlineEvent,

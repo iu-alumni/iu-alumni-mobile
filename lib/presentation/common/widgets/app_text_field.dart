@@ -12,7 +12,7 @@ class AppTextField extends StatefulWidget {
     this.inputType,
   });
 
-  final String initialText;
+  final String? initialText;
   final String hintText;
   final void Function(String) onChange;
   final TextInputType? inputType;

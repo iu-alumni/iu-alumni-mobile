@@ -15,36 +15,8 @@ class EventsRepositoryImpl implements EventsRepository {
   final Uuid _uuid;
   final EventsGateway _gateway;
 
-  // late final _random = Random();
-
   Map<String, EventModel>? _cache;
   _ModifiedEvent? _modifiedEvent;
-
-  // DateTime get _radomDateTime => DateTime(
-  //       2025,
-  //       _random.nextInt(7) + 5,
-  //       _random.nextInt(28),
-  //       _random.nextInt(12) + 9,
-  //       _random.nextInt(2) * 30,
-  //     );
-
-  // static const _descs = [
-  //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque fringilla ligula erat, vitae accumsan nisi accumsan in. Suspendisse blandit leo quis diam posuere, placerat posuere nisi aliquet.',
-  //   'This layout facilitates the browsing of uncropped peer content. Container heights are sized based on the widget size.',
-  //   'Evenly divided in n columns',
-  //   'Core subdomain - describes the main value the software brings. Supporting subdomain - describes what the software has to do to work correctly. Generic subdomain - describes what can be outsourced'
-  // ];
-
-  // static const _titles = [
-  //   'Skydiving in Dubai',
-  //   'Step 2: Establish a common dictionary',
-  //   'Convert the data source into a list of widgets',
-  //   'Event 23'
-  // ];
-
-  // String get _randomDesc => _descs[_random.nextInt(_descs.length)];
-
-  // String get _randomTitle => _titles[_random.nextInt(_titles.length)];
 
   @override
   Future<Iterable<EventModel>> getEvents() async {
@@ -58,19 +30,6 @@ class EventsRepositoryImpl implements EventsRepository {
     }
     final data = await _gateway.loadEvents();
     final eventModels = data.map(EventMapper.eventFromData);
-    // Iterable.generate(
-    //   5,
-    //   (_) => EventModel(
-    //     eventId: _uuid.v4(),
-    //     title: _randomTitle,
-    //     description: _randomDesc,
-    //     location: 'UAE, Dubai',
-    //     occurringAt: _radomDateTime,
-    //     cost: const CostModel(number: 12, currency: Currency.aed),
-    //     coverUrl: null,
-    //     onlineEvent: false,
-    //   ),
-    // );
     // Fill the cache
     _cache?.clear();
     _cache ??= {};
@@ -83,12 +42,12 @@ class EventsRepositoryImpl implements EventsRepository {
   EventModel createEvent() {
     final event = EventModel(
       eventId: _uuid.v4(),
-      title: 'Untitled',
-      description: '',
+      title: null,
+      description: null,
       coverUrl: null,
-      location: 'Innopolis',
+      location: null,
       cost: const CostModel(number: 0, currency: Currency.rub),
-      occurringAt: DateTime.now(),
+      occurringAt: DateTime.now().add(const Duration(days: 1)),
       onlineEvent: false,
     );
     _addToCache(event);

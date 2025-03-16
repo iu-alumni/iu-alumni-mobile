@@ -17,10 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$EventModel {
   String get eventId => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError; // TODO
+  String? get title => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError; // TODO
   String? get coverUrl => throw _privateConstructorUsedError; // TODO
-  String get location => throw _privateConstructorUsedError;
+  String? get location => throw _privateConstructorUsedError;
   CostModel get cost => throw _privateConstructorUsedError;
   DateTime get occurringAt => throw _privateConstructorUsedError;
   bool get onlineEvent => throw _privateConstructorUsedError;
@@ -40,10 +40,10 @@ abstract class $EventModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String eventId,
-      String title,
-      String description,
+      String? title,
+      String? description,
       String? coverUrl,
-      String location,
+      String? location,
       CostModel cost,
       DateTime occurringAt,
       bool onlineEvent});
@@ -67,10 +67,10 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
   @override
   $Res call({
     Object? eventId = null,
-    Object? title = null,
-    Object? description = null,
+    Object? title = freezed,
+    Object? description = freezed,
     Object? coverUrl = freezed,
-    Object? location = null,
+    Object? location = freezed,
     Object? cost = null,
     Object? occurringAt = null,
     Object? onlineEvent = null,
@@ -80,22 +80,22 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
           ? _value.eventId
           : eventId // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
+              as String?,
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       coverUrl: freezed == coverUrl
           ? _value.coverUrl
           : coverUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      location: null == location
+      location: freezed == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       cost: null == cost
           ? _value.cost
           : cost // ignore: cast_nullable_to_non_nullable
@@ -132,10 +132,10 @@ abstract class _$$EventModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String eventId,
-      String title,
-      String description,
+      String? title,
+      String? description,
       String? coverUrl,
-      String location,
+      String? location,
       CostModel cost,
       DateTime occurringAt,
       bool onlineEvent});
@@ -158,10 +158,10 @@ class __$$EventModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? eventId = null,
-    Object? title = null,
-    Object? description = null,
+    Object? title = freezed,
+    Object? description = freezed,
     Object? coverUrl = freezed,
-    Object? location = null,
+    Object? location = freezed,
     Object? cost = null,
     Object? occurringAt = null,
     Object? onlineEvent = null,
@@ -171,22 +171,22 @@ class __$$EventModelImplCopyWithImpl<$Res>
           ? _value.eventId
           : eventId // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
+              as String?,
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       coverUrl: freezed == coverUrl
           ? _value.coverUrl
           : coverUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      location: null == location
+      location: freezed == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       cost: null == cost
           ? _value.cost
           : cost // ignore: cast_nullable_to_non_nullable
@@ -219,15 +219,15 @@ class _$EventModelImpl implements _EventModel {
   @override
   final String eventId;
   @override
-  final String title;
+  final String? title;
   @override
-  final String description;
+  final String? description;
 // TODO
   @override
   final String? coverUrl;
 // TODO
   @override
-  final String location;
+  final String? location;
   @override
   final CostModel cost;
   @override
@@ -276,10 +276,10 @@ class _$EventModelImpl implements _EventModel {
 abstract class _EventModel implements EventModel {
   const factory _EventModel(
       {required final String eventId,
-      required final String title,
-      required final String description,
+      required final String? title,
+      required final String? description,
       required final String? coverUrl,
-      required final String location,
+      required final String? location,
       required final CostModel cost,
       required final DateTime occurringAt,
       required final bool onlineEvent}) = _$EventModelImpl;
@@ -287,13 +287,13 @@ abstract class _EventModel implements EventModel {
   @override
   String get eventId;
   @override
-  String get title;
+  String? get title;
   @override
-  String get description; // TODO
+  String? get description; // TODO
   @override
   String? get coverUrl; // TODO
   @override
-  String get location;
+  String? get location;
   @override
   CostModel get cost;
   @override

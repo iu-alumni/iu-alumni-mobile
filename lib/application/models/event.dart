@@ -8,12 +8,12 @@ part 'event.freezed.dart';
 class EventModel with _$EventModel {
   const factory EventModel({
     required String eventId,
-    required String title,
-    required String description,
+    required String? title,
+    required String? description,
     // TODO
     required String? coverUrl,
     // TODO
-    required String location,
+    required String? location,
     required CostModel cost,
     required DateTime occurringAt,
     required bool onlineEvent,

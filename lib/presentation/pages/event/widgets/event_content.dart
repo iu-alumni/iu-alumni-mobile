@@ -34,12 +34,12 @@ class _EventViewingContentState extends State<EventViewingContent> {
             _Item(
               icon: Icons.description_outlined,
               name: 'Description',
-              content: widget.event.description,
+              content: widget.event.description ?? '',
             ),
             _Item(
               icon: Icons.location_pin,
               name: 'Location',
-              content: widget.event.location,
+              content: widget.event.location ?? '',
             ),
             _Item(
               icon: Icons.attach_money_outlined,
