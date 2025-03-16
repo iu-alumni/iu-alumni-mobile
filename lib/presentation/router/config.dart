@@ -7,5 +7,6 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
         AutoRoute(page: RootRoute.page, initial: true),
         AutoRoute(page: EventRoute.page),
+        AutoRoute(page: EventEditingRoute.page),
       ];
 }

@@ -24,7 +24,7 @@ class EventCard extends StatefulWidget {
 }
 
 class _EventCardState extends State<EventCard> {
-  late final _formatter = DateFormat('hh:mm dd.MM.YYYY');
+  late final _formatter = DateFormat('hh:mm dd.MM.yyyy');
   late final _secondaryTextColor = widget.textColor.withValues(alpha: 0.8);
 
   @override
@@ -43,7 +43,8 @@ class _EventCardState extends State<EventCard> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  widget.event.title,
+                  // TODO do something with empty titles like default title 
+                  widget.event.title ?? 'Untitled',
                   style: AppTextStyles.h6.copyWith(color: widget.textColor),
                 ),
                 Row(
@@ -61,25 +62,27 @@ class _EventCardState extends State<EventCard> {
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Icon(Icons.location_pin, color: widget.textColor),
-                    const SizedBox(width: 4),
-                    Text(
-                      widget.event.location,
-                      style: AppTextStyles.caption.copyWith(
-                        color: _secondaryTextColor,
+                if (widget.event.location case final location?)
+                  Row(
+                    children: [
+                      Icon(Icons.location_pin, color: widget.textColor),
+                      const SizedBox(width: 4),
+                      Text(
+                        location,
+                        style: AppTextStyles.caption.copyWith(
+                          color: _secondaryTextColor,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Text(
-                  widget.event.description,
-                  style:
-                      AppTextStyles.smallBody.copyWith(color: widget.textColor),
-                  maxLines: 3,
-                  textAlign: TextAlign.start,
-                ),
+                    ],
+                  ),
+                if (widget.event.description case final desc?)
+                  Text(
+                    desc,
+                    style: AppTextStyles.smallBody
+                        .copyWith(color: widget.textColor),
+                    maxLines: 3,
+                    textAlign: TextAlign.start,
+                  ),
               ].gap(const SizedBox(height: 2)),
             ),
           ),

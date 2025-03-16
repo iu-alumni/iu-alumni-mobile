@@ -39,9 +39,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Map Screen'),
-      ),
+      appBar: AppBar(title: const Text('Map Screen')),
       body: FlutterMap(
         mapController: _mapController,
         options: const MapOptions(
