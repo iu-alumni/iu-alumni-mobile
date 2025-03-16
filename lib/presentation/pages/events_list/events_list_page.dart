@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 
 import '../../blocs/events_list/events_list_cubit.dart';
 import '../../blocs/events_list/events_list_state.dart';
@@ -68,12 +69,9 @@ class _Header extends StatelessWidget {
           children: [
             Text('Events', style: AppTextStyles.h2),
             Button(
-              onTap: () {
-                final maybeId = context.read<EventsListCubit>().createEvent();
-                if (maybeId != null) {
-                  context.pushRoute(EventEditingRoute(eventId: maybeId));
-                }
-              },
+              onTap: () => context.pushRoute(
+                EventEditingRoute(eventId: const None()),
+              ),
               borderRadius: BorderRadius.circular(24),
               child: const Padding(
                 padding: EdgeInsets.all(12),

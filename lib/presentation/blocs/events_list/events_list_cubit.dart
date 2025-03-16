@@ -14,18 +14,20 @@ class EventsListCubit extends Cubit<EventsListState> {
     emit(EventsListState.data(events: IList(events)));
   }
 
-  String? createEvent() {
+  // The same as [update] but adds the event right away to save some time
+  Future<void> add(String eventId) async {
     final currState = state;
     if (currState is! EventsListStateData) {
-      return null;
+      return;
     }
-    final newEvent = _repository.createEvent();
-    emit(
-      currState.copyWith(
-        events: currState.events.add(newEvent),
+    final maybeEvent = await _repository.getOneEvent(eventId);
+    maybeEvent.map(
+      (event) => emit(
+        currState.copyWith(
+          events: currState.events.add(event),
+        ),
       ),
     );
-    return newEvent.eventId;
   }
 
   Future<void> update(String eventId) async {
@@ -36,10 +38,12 @@ class EventsListCubit extends Cubit<EventsListState> {
     final maybeEvent = await _repository.getOneEvent(eventId);
     maybeEvent.map((event) {
       final index = currState.events.indexWhere((e) => e.eventId == eventId);
-      if (index == -1) {
-        return;
-      }
-      emit(currState.copyWith(events: currState.events.replace(index, event)));
+      final newEvents = switch (index) {
+        // The event is newly added
+        -1 => currState.events.add(event),
+        _ => currState.events.replace(index, event),
+      };
+      emit(currState.copyWith(events: newEvents));
     });
   }
 }

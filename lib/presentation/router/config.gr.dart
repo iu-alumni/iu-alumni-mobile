@@ -10,7 +10,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i4;
-import 'package:flutter/material.dart' as _i5;
+import 'package:flutter/material.dart' as _i6;
+import 'package:fpdart/fpdart.dart' as _i5;
 import 'package:ui_alumni_mobile/presentation/pages/event/event_page.dart'
     as _i2;
 import 'package:ui_alumni_mobile/presentation/pages/event_editing/event_editing_page.dart'
@@ -21,8 +22,8 @@ import 'package:ui_alumni_mobile/presentation/pages/root/root_page.dart' as _i3;
 /// [_i1.EventEditingPage]
 class EventEditingRoute extends _i4.PageRouteInfo<EventEditingRouteArgs> {
   EventEditingRoute({
-    required String eventId,
-    _i5.Key? key,
+    required _i5.Option<String> eventId,
+    _i6.Key? key,
     List<_i4.PageRouteInfo>? children,
   }) : super(
          EventEditingRoute.name,
@@ -46,9 +47,9 @@ class EventEditingRoute extends _i4.PageRouteInfo<EventEditingRouteArgs> {
 class EventEditingRouteArgs {
   const EventEditingRouteArgs({required this.eventId, this.key});
 
-  final String eventId;
+  final _i5.Option<String> eventId;
 
-  final _i5.Key? key;
+  final _i6.Key? key;
 
   @override
   String toString() {
@@ -61,7 +62,7 @@ class EventEditingRouteArgs {
 class EventRoute extends _i4.PageRouteInfo<EventRouteArgs> {
   EventRoute({
     required String eventId,
-    _i5.Key? key,
+    _i6.Key? key,
     List<_i4.PageRouteInfo>? children,
   }) : super(
          EventRoute.name,
@@ -87,7 +88,7 @@ class EventRouteArgs {
 
   final String eventId;
 
-  final _i5.Key? key;
+  final _i6.Key? key;
 
   @override
   String toString() {

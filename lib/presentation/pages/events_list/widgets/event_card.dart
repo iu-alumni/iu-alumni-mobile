@@ -44,7 +44,7 @@ class _EventCardState extends State<EventCard> {
               children: [
                 Text(
                   // TODO do something with empty titles like default title 
-                  widget.event.title ?? '',
+                  widget.event.title ?? 'Untitled',
                   style: AppTextStyles.h6.copyWith(color: widget.textColor),
                 ),
                 Row(

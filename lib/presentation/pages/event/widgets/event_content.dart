@@ -26,39 +26,45 @@ class _EventViewingContentState extends State<EventViewingContent> {
       '${cost.number.humanReadable} ${cost.currency.format}';
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          _Cover(event: widget.event),
-          const SizedBox(height: 40),
-          ...[
+  Widget build(BuildContext context) {
+    final location = widget.event.location;
+    final desc = widget.event.description;
+    return Column(
+      children: [
+        _Cover(event: widget.event),
+        const SizedBox(height: 40),
+        ...[
+          if (desc != null && desc.isNotEmpty)
             _Item(
               icon: Icons.description_outlined,
               name: 'Description',
               content: widget.event.description ?? '',
             ),
+          if (location != null && location.isNotEmpty)
             _Item(
               icon: Icons.location_pin,
               name: 'Location',
-              content: widget.event.location ?? '',
+              content: location,
             ),
-            _Item(
-              icon: Icons.attach_money_outlined,
-              name: 'Cost',
-              content: _costToStr(widget.event.cost),
-            ),
-            _Item(
-              icon: Icons.watch_later_outlined,
-              name: 'When',
-              content: _formatter.format(widget.event.occurringAt),
-            ),
-          ].map(
-            (w) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              child: w,
-            ),
+          _Item(
+            icon: Icons.attach_money_outlined,
+            name: 'Cost',
+            content: _costToStr(widget.event.cost),
           ),
-        ],
-      );
+          _Item(
+            icon: Icons.watch_later_outlined,
+            name: 'When',
+            content: _formatter.format(widget.event.occurringAt),
+          ),
+        ].map(
+          (w) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            child: w,
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _Cover extends StatelessWidget {

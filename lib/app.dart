@@ -16,39 +16,37 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
-        providers: [
-          // --- SERVICES ---
-          RepositoryProvider(create: (_) => Dio()),
-          RepositoryProvider(create: (_) => const Uuid()),
-          RepositoryProvider<EventsGateway>(
-            create: (context) => EventsGatewayImpl(
-              context.read<Dio>(),
-            ),
+      providers: [
+        // --- SERVICES ---
+        RepositoryProvider(create: (_) => Dio()),
+        RepositoryProvider(create: (_) => const Uuid()),
+        RepositoryProvider<EventsGateway>(
+          create: (context) => EventsGatewayImpl(
+            context.read<Dio>(),
           ),
-          // --- REPOSITORIES ---
-          RepositoryProvider<EventsRepository>(
-            create: (context) => EventsRepositoryImpl(
-              context.read<Uuid>(),
-              context.read<EventsGateway>()
-            ),
-          ),
-          // --- BLOCS ---
-          BlocProvider(create: (_) => RootPageCubit()),
-          BlocProvider(
-            create: (context) => EventsListCubit(
-              context.read<EventsRepository>(),
-            ),
-          ),
-        ],
-        child: MaterialApp.router(
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: AppColors.primary,
-              surface: Colors.white,
-            ),
-            useMaterial3: true,
-          ),
-          routerConfig: AppRouter().config(),
         ),
-      );
+        // --- REPOSITORIES ---
+        RepositoryProvider<EventsRepository>(
+          create: (context) => EventsRepositoryImpl(
+              context.read<Uuid>(), context.read<EventsGateway>()),
+        ),
+        // --- BLOCS ---
+        BlocProvider(create: (_) => RootPageCubit()),
+        BlocProvider(
+          create: (context) => EventsListCubit(
+            context.read<EventsRepository>(),
+          ),
+        ),
+      ],
+      child: MaterialApp.router(
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: AppColors.primary,
+            surface: Colors.white,
+          ),
+          useMaterial3: true,
+        ),
+        routerConfig: AppRouter().config(),
+      ),
+    );
 }

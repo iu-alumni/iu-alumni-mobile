@@ -55,9 +55,16 @@ class EventsRepositoryImpl implements EventsRepository {
     return event;
   }
 
+  EventModel _fixEvent(EventModel model) => model.copyWith(
+        title: model.title == null || model.title!.isEmpty
+            ? 'Untitled'
+            : model.title,
+      );
+
   Future<void> _addToCache(EventModel model) async {
     await _loadEvents();
-    _cache![model.eventId] = model;
+    final fixed = _fixEvent(model);
+    _cache![fixed.eventId] = fixed;
   }
 
   @override
