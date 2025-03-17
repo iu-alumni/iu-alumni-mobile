@@ -27,7 +27,7 @@ class OneEventCubit extends Cubit<OneEventState> {
   }
 
   Future<void> commit() async {
-    await state.map(_repository.modifyEvent).match(() async {}, identity);
+    state.map(_repository.modifyEvent);
     await _repository.save();
   }
 }

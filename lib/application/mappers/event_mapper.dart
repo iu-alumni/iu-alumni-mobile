@@ -22,7 +22,7 @@ abstract class EventMapper {
         description: model.description ?? '',
         location: model.location ?? '',
         datetime: model.occurringAt,
-        cost: model.cost.number,
+        cost: model.cost.number.toInt(),
         isOnline: model.onlineEvent,
         cover: model.coverUrl ?? '',
       );

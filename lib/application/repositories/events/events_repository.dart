@@ -9,7 +9,7 @@ abstract interface class EventsRepository {
 
   EventModel createEvent();
 
-  Future<void> modifyEvent(EventModel event);
+  void modifyEvent(EventModel event);
 
   Future<void> save();
 }

@@ -56,14 +56,10 @@ class EventsGatewayImpl implements EventsGateway {
       );
 
   @override
-  Future<void> addEvent(String eid, EventRequestDataModel event) =>
+  Future<void> addEvent(EventRequestDataModel event) =>
       TaskOption.tryCatch(() async {
-        // TODO uncomment when the back-end is ready
-        // final resp = await _dio.put(
-        //   Paths.eventWithId(eid),
-        //   data: jsonEncode(event),
-        // );
-        // print('Response: ${resp.data}');
+        // final data = jsonEncode(event);
+        // await _dio.post(Paths.events, data: data);
       })
           .run();
 

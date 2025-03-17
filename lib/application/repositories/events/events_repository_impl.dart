@@ -16,7 +16,7 @@ class EventsRepositoryImpl implements EventsRepository {
   final EventsGateway _gateway;
 
   Map<String, EventModel>? _cache;
-  _ModifiedEvent? _modifiedEvent;
+  EventModel? _modifiedEvent;
 
   @override
   Future<Iterable<EventModel>> getEvents() async {
@@ -50,8 +50,7 @@ class EventsRepositoryImpl implements EventsRepository {
       occurringAt: DateTime.now().add(const Duration(days: 1)),
       onlineEvent: false,
     );
-    _addToCache(event);
-    _modifiedEvent = _ModifiedEvent(event.eventId, true);
+    _modifiedEvent = event;
     return event;
   }
 
@@ -61,36 +60,33 @@ class EventsRepositoryImpl implements EventsRepository {
             : model.title,
       );
 
-  Future<void> _addToCache(EventModel model) async {
-    await _loadEvents();
-    final fixed = _fixEvent(model);
-    _cache![fixed.eventId] = fixed;
+  @override
+  void modifyEvent(EventModel event) {
+    _modifiedEvent = event;
+  }
+
+  Future<void> _mutateAndSave(EventModel event) async {
+    final isOldEvent = _cache!.containsKey(event.eventId);
+    _cache![event.eventId] = event;
+    final eventRequest = EventMapper.eventRequestFromModel(event);
+    if (isOldEvent) {
+      // TODO update an event
+    } else {
+      // Event not found in the cache, so it is a new event
+      await _gateway.addEvent(eventRequest);
+    }
   }
 
   @override
-  Future<void> modifyEvent(EventModel event) => _addToCache(event);
-
-  @override
   Future<void> save() async {
-    if (_cache == null) {
-      // Events have to be loaded at least, otherwise there is nothing to save
-      return;
-    }
+    await _loadEvents();
     final event = _modifiedEvent;
     if (event == null) {
       // Nothing modified, so nothing to save
       return;
     }
-    final eventModel = _cache![event.eventId];
-    if (eventModel == null) {
-      // Event not found in the cache
-      return;
-    }
-    final eventRequest = EventMapper.eventRequestFromModel(eventModel);
-    if (event.isNewlyCreated) {
-      await _gateway.addEvent(event.eventId, eventRequest);
-    }
     _modifiedEvent = null;
+    _mutateAndSave(_fixEvent(event));
   }
 
   @override
@@ -98,10 +94,4 @@ class EventsRepositoryImpl implements EventsRepository {
     await _loadEvents();
     return Option.fromNullable(_cache![eventId]);
   }
-}
-
-class _ModifiedEvent {
-  _ModifiedEvent(this.eventId, this.isNewlyCreated);
-  final String eventId;
-  final bool isNewlyCreated;
 }

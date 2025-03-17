@@ -11,7 +11,7 @@ class EventRequestDataModel with _$EventRequestDataModel {
     required String description,
     required String location,
     required DateTime datetime,
-    required double cost,
+    required int cost,
     @JsonKey(name: 'is_online') required bool isOnline,
     required String cover,
   }) = _EventRequestDataModel;

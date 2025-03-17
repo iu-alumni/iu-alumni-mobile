@@ -16,37 +16,43 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
-      providers: [
-        // --- SERVICES ---
-        RepositoryProvider(create: (_) => Dio()),
-        RepositoryProvider(create: (_) => const Uuid()),
-        RepositoryProvider<EventsGateway>(
-          create: (context) => EventsGatewayImpl(
-            context.read<Dio>(),
+        providers: [
+          // --- SERVICES ---
+          RepositoryProvider(
+            create: (_) => Dio(
+              BaseOptions(
+                connectTimeout: const Duration(seconds: 5),
+              ),
+            ),
           ),
-        ),
-        // --- REPOSITORIES ---
-        RepositoryProvider<EventsRepository>(
-          create: (context) => EventsRepositoryImpl(
-              context.read<Uuid>(), context.read<EventsGateway>()),
-        ),
-        // --- BLOCS ---
-        BlocProvider(create: (_) => RootPageCubit()),
-        BlocProvider(
-          create: (context) => EventsListCubit(
-            context.read<EventsRepository>(),
+          RepositoryProvider(create: (_) => const Uuid()),
+          RepositoryProvider<EventsGateway>(
+            create: (context) => EventsGatewayImpl(
+              context.read<Dio>(),
+            ),
           ),
-        ),
-      ],
-      child: MaterialApp.router(
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: AppColors.primary,
-            surface: Colors.white,
+          // --- REPOSITORIES ---
+          RepositoryProvider<EventsRepository>(
+            create: (context) => EventsRepositoryImpl(
+                context.read<Uuid>(), context.read<EventsGateway>()),
           ),
-          useMaterial3: true,
+          // --- BLOCS ---
+          BlocProvider(create: (_) => RootPageCubit()),
+          BlocProvider(
+            create: (context) => EventsListCubit(
+              context.read<EventsRepository>(),
+            ),
+          ),
+        ],
+        child: MaterialApp.router(
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: AppColors.primary,
+              surface: Colors.white,
+            ),
+            useMaterial3: true,
+          ),
+          routerConfig: AppRouter().config(),
         ),
-        routerConfig: AppRouter().config(),
-      ),
-    );
+      );
 }

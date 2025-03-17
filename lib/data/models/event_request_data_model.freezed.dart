@@ -25,7 +25,7 @@ mixin _$EventRequestDataModel {
   String get description => throw _privateConstructorUsedError;
   String get location => throw _privateConstructorUsedError;
   DateTime get datetime => throw _privateConstructorUsedError;
-  double get cost => throw _privateConstructorUsedError;
+  int get cost => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_online')
   bool get isOnline => throw _privateConstructorUsedError;
   String get cover => throw _privateConstructorUsedError;
@@ -51,7 +51,7 @@ abstract class $EventRequestDataModelCopyWith<$Res> {
       String description,
       String location,
       DateTime datetime,
-      double cost,
+      int cost,
       @JsonKey(name: 'is_online') bool isOnline,
       String cover});
 }
@@ -100,7 +100,7 @@ class _$EventRequestDataModelCopyWithImpl<$Res,
       cost: null == cost
           ? _value.cost
           : cost // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       isOnline: null == isOnline
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
@@ -127,7 +127,7 @@ abstract class _$$EventRequestDataModelImplCopyWith<$Res>
       String description,
       String location,
       DateTime datetime,
-      double cost,
+      int cost,
       @JsonKey(name: 'is_online') bool isOnline,
       String cover});
 }
@@ -174,7 +174,7 @@ class __$$EventRequestDataModelImplCopyWithImpl<$Res>
       cost: null == cost
           ? _value.cost
           : cost // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       isOnline: null == isOnline
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
@@ -211,7 +211,7 @@ class _$EventRequestDataModelImpl implements _EventRequestDataModel {
   @override
   final DateTime datetime;
   @override
-  final double cost;
+  final int cost;
   @override
   @JsonKey(name: 'is_online')
   final bool isOnline;
@@ -269,7 +269,7 @@ abstract class _EventRequestDataModel implements EventRequestDataModel {
       required final String description,
       required final String location,
       required final DateTime datetime,
-      required final double cost,
+      required final int cost,
       @JsonKey(name: 'is_online') required final bool isOnline,
       required final String cover}) = _$EventRequestDataModelImpl;
 
@@ -285,7 +285,7 @@ abstract class _EventRequestDataModel implements EventRequestDataModel {
   @override
   DateTime get datetime;
   @override
-  double get cost;
+  int get cost;
   @override
   @JsonKey(name: 'is_online')
   bool get isOnline;

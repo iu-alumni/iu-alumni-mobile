@@ -13,7 +13,7 @@ _$EventRequestDataModelImpl _$$EventRequestDataModelImplFromJson(
       description: json['description'] as String,
       location: json['location'] as String,
       datetime: DateTime.parse(json['datetime'] as String),
-      cost: (json['cost'] as num).toDouble(),
+      cost: (json['cost'] as num).toInt(),
       isOnline: json['is_online'] as bool,
       cover: json['cover'] as String,
     );
