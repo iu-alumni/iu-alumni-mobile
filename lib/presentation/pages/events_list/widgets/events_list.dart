@@ -34,7 +34,7 @@ class _EventsListState extends State<EventsList> {
         physics: const BouncingScrollPhysics(),
         padding:
             const EdgeInsets.symmetric(horizontal: 24, vertical: 16).copyWith(
-          bottom: RootPage.navigationBarHeight + 16,
+          bottom: RootPage.navigationBarHeight + 32,
         ),
         itemCount: widget.events.length,
         itemBuilder: (context, i) {

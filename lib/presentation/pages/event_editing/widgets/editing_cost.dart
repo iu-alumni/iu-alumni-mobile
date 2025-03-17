@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 
 import '../../../../application/models/cost.dart';
 import '../../../../util/currency_formatter.dart';
+import '../../../../util/num_formatter.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/widgets/app_text_field.dart';
@@ -32,7 +33,7 @@ class EditingCost extends StatelessWidget {
     final initialCost = context
         .read<OneEventCubit>()
         .state
-        .map((e) => '${e.cost.number}')
+        .map((e) => e.cost.number.format)
         .match(() => '', identity);
     return TitledItem(
       icon: Icons.attach_money_outlined,

@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../application/models/cost.dart';
 import '../../../../application/models/event.dart';
 import '../../../../util/currency_formatter.dart';
-import '../../../../util/numbers_presenter.dart';
+import '../../../../util/num_formatter.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/button.dart';
 import '../../../common/widgets/event_cover.dart';
@@ -23,7 +23,7 @@ class _EventViewingContentState extends State<EventViewingContent> {
   late final _formatter = DateFormat('dd/MM/yyyy');
 
   String _costToStr(CostModel cost) =>
-      '${cost.number.humanReadable} ${cost.currency.format}';
+      '${cost.number.format} ${cost.currency.format}';
 
   @override
   Widget build(BuildContext context) {

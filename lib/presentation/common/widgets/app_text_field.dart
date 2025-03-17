@@ -23,6 +23,7 @@ class AppTextField extends StatefulWidget {
 
 class _AppTextFieldState extends State<AppTextField> {
   late final TextEditingController _controller;
+  late final _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _AppTextFieldState extends State<AppTextField> {
   void dispose() {
     _controller.removeListener(_onChange);
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -46,7 +48,12 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) => TextField(
         controller: _controller,
+        focusNode: _focusNode,
         maxLines: null,
+        onTapUpOutside: (e) {
+          print(e.kind);
+          _focusNode.unfocus();
+        },
         style: AppTextStyles.body,
         keyboardType: widget.inputType,
         decoration: InputDecoration(

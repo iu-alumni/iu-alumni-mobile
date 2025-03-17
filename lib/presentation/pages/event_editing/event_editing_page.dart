@@ -59,22 +59,17 @@ class _EventEditingPageState extends State<EventEditingPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        floatingActionButton: Align(
-          alignment: Alignment.bottomCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: double.maxFinite),
+        resizeToAvoidBottomInset: true,
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Button(
+            onTap: _save,
             child: Padding(
-              padding: const EdgeInsets.only(left: 32, right: 0, bottom: 8),
-              child: Button(
-                onTap: _save,
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    'Post event',
-                    style: AppTextStyles.buttonText,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              padding: const EdgeInsets.all(24),
+              child: Text(
+                'Post event',
+                style: AppTextStyles.buttonText,
+                textAlign: TextAlign.center,
               ),
             ),
           ),
@@ -85,11 +80,15 @@ class _EventEditingPageState extends State<EventEditingPage> {
             () => const Center(child: CircularProgressIndicator()),
             (event) => const SafeArea(
               top: false,
-              child: SingleChildScrollView(
-                // Button height + padding
-                padding: EdgeInsets.only(bottom: 107),
-                physics: BouncingScrollPhysics(),
-                child: EventEditingContent(),
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    // Button height + padding
+                    padding: EdgeInsets.only(bottom: 107),
+                    physics: BouncingScrollPhysics(),
+                    child: EventEditingContent(),
+                  ),
+                ],
               ),
             ),
           ),
