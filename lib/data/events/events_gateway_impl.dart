@@ -58,18 +58,18 @@ class EventsGatewayImpl implements EventsGateway {
   @override
   Future<void> addEvent(EventRequestDataModel event) =>
       TaskOption.tryCatch(() async {
-        // final data = jsonEncode(event);
-        // await _dio.post(Paths.events, data: data);
+        final data = jsonEncode(event);
+        await _dio.post(Paths.events, data: data);
       })
           .run();
 
   @override
   Future<Iterable<EventDataModel>> loadEvents() =>
       TaskOption.tryCatch(() async {
-        return Iterable.generate(5, (_) => _randomEvent);
+        // return Iterable.generate(5, (_) => _randomEvent);
         // TODO uncomment when the back-end is ready
-        // final resp = await _dio.get(Paths.events);
-        // final list = jsonDecode(resp.data) as List;
-        // return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
+        final resp = await _dio.get(Paths.events);
+        final list = jsonDecode(resp.data) as List;
+        return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
       }).match<Iterable<EventDataModel>>(() => [], identity).run();
 }
