@@ -8,12 +8,14 @@ import '../../application/models/cost.dart';
 import '../models/event_data_model.dart';
 import '../models/event_request_data_model.dart';
 import '../paths.dart';
+import '../token/token_provider.dart';
 import 'events_gateway.dart';
 
 class EventsGatewayImpl implements EventsGateway {
-  EventsGatewayImpl(this._dio);
+  EventsGatewayImpl(this._dio, this._tokenProvider);
 
   final Dio _dio;
+  final TokenProvider _tokenProvider;
 
   late final _random = Random();
 
@@ -55,21 +57,32 @@ class EventsGatewayImpl implements EventsGateway {
         cover: '',
       );
 
+  Option<Options> get headers => _tokenProvider.token.map(
+        (token) => Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
   @override
-  Future<void> addEvent(EventRequestDataModel event) =>
-      TaskOption.tryCatch(() async {
-        final data = jsonEncode(event);
-        await _dio.post(Paths.events, data: data);
-      })
-          .run();
+  Future<void> addEvent(EventRequestDataModel event) => headers
+      .toTaskOption()
+      .flatMap(
+        (opts) => TaskOption.tryCatch(() async {
+          // final data = jsonEncode(event);
+          // await _dio.post(Paths.events, data: data, options: opts);
+        }),
+      )
+      .run();
 
   @override
   Future<Iterable<EventDataModel>> loadEvents() =>
       TaskOption.tryCatch(() async {
-        // return Iterable.generate(5, (_) => _randomEvent);
+        return Iterable.generate(5, (_) => _randomEvent);
         // TODO uncomment when the back-end is ready
-        final resp = await _dio.get(Paths.events);
-        final list = jsonDecode(resp.data) as List;
-        return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
+        // final resp = await _dio.get(Paths.events);
+        // final list = jsonDecode(resp.data) as List;
+        // return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
       }).match<Iterable<EventDataModel>>(() => [], identity).run();
 }

@@ -11,5 +11,7 @@ abstract interface class EventsRepository {
 
   void modifyEvent(EventModel event);
 
+  Future<void> deleteEvent(String eventId);
+
   Future<void> save();
 }

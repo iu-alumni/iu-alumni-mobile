@@ -23,7 +23,13 @@ class OneEventCubit extends Cubit<OneEventState> {
 
   void modify(EventModel Function(EventModel) withPrev) {
     final newState = state.map(withPrev);
+    // TODO
+    // _repository.modifyEvent(newState);
     emit(newState);
+  }
+  
+  void delete() {
+    state.map((s) => s.eventId).map(_repository.deleteEvent);
   }
 
   Future<void> commit() async {

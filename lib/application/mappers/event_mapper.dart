@@ -24,6 +24,6 @@ abstract class EventMapper {
         datetime: model.occurringAt,
         cost: model.cost.number.toInt(),
         isOnline: model.onlineEvent,
-        cover: model.coverUrl ?? '',
+        cover: model.coverUrl,
       );
 }

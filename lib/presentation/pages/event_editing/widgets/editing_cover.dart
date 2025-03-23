@@ -17,7 +17,7 @@ class EditingCover extends StatelessWidget {
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Button(
+              child: AppButton(
                 onTap: () {},
                 buttonStyle: AppButtonStyle.secondary,
                 child: Padding(

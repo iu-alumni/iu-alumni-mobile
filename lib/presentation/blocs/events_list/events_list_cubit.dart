@@ -30,6 +30,18 @@ class EventsListCubit extends Cubit<EventsListState> {
     );
   }
 
+  void remove(String eventId) {
+    final currState = state;
+    if (currState is! EventsListStateData) {
+      return;
+    }
+    emit(
+      currState.copyWith(
+        events: currState.events.removeWhere((e) => e.eventId == eventId),
+      ),
+    );
+  }
+
   Future<void> update(String eventId) async {
     final currState = state;
     if (currState is! EventsListStateData) {

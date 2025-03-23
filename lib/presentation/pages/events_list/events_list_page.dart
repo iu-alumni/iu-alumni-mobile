@@ -68,7 +68,7 @@ class _Header extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Events', style: AppTextStyles.h2),
-            Button(
+            AppButton(
               onTap: () => context.pushRoute(
                 EventEditingRoute(eventId: const None()),
               ),

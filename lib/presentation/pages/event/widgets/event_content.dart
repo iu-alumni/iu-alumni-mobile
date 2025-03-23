@@ -1,14 +1,19 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 import 'package:intl/intl.dart';
 
 import '../../../../application/models/cost.dart';
 import '../../../../application/models/event.dart';
 import '../../../../util/currency_formatter.dart';
 import '../../../../util/num_formatter.dart';
+import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/button.dart';
 import '../../../common/widgets/event_cover.dart';
 import '../../../common/widgets/titled_item.dart';
+import '../../../router/config.gr.dart';
 
 class EventViewingContent extends StatefulWidget {
   const EventViewingContent({required this.event, super.key});
@@ -72,22 +77,34 @@ class _Cover extends StatelessWidget {
 
   final EventModel event;
 
+  void _edit(BuildContext context) async {
+    await context.pushRoute(
+      EventEditingRoute(
+        eventId: Option.of(event.eventId),
+      ),
+    );
+    if (!context.mounted) {
+      return;
+    }
+    context.read<OneEventCubit>().loadEvent(event.eventId);
+  }
+
   @override
   Widget build(BuildContext context) => EventCover(
         title: event.title,
         location: event.location,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Button(
+          child: AppButton(
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Text(
-                'Count me in!',
+                'Edit',
                 style: AppTextStyles.buttonText,
                 textAlign: TextAlign.center,
               ),
             ),
-            onTap: () {},
+            onTap: () => _edit(context),
           ),
         ),
       );

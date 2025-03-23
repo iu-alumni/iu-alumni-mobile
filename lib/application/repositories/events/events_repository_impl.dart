@@ -94,4 +94,11 @@ class EventsRepositoryImpl implements EventsRepository {
     await _loadEvents();
     return Option.fromNullable(_cache![eventId]);
   }
+  
+  @override
+  Future<void> deleteEvent(String eventId) async {
+    await _loadEvents();
+    _cache!.remove(eventId);
+    // TODO call delete event
+  }
 }

@@ -8,14 +8,18 @@ class AppTextField extends StatefulWidget {
     required this.initialText,
     required this.onChange,
     required this.hintText,
-    super.key,
     this.inputType,
+    this.obscureText = false,
+    this.maxLines,
+    super.key,
   });
 
   final String? initialText;
   final String hintText;
   final void Function(String) onChange;
   final TextInputType? inputType;
+  final bool obscureText;
+  final int? maxLines;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -49,11 +53,12 @@ class _AppTextFieldState extends State<AppTextField> {
   Widget build(BuildContext context) => TextField(
         controller: _controller,
         focusNode: _focusNode,
-        maxLines: null,
+        maxLines: widget.maxLines,
         onTapUpOutside: (e) {
           print(e.kind);
           _focusNode.unfocus();
         },
+        obscureText: widget.obscureText,
         style: AppTextStyles.body,
         keyboardType: widget.inputType,
         decoration: InputDecoration(

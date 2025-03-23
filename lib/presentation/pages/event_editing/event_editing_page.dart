@@ -6,6 +6,7 @@ import 'package:fpdart/fpdart.dart' hide State;
 import '../../../application/repositories/events/events_repository.dart';
 import '../../blocs/events_list/events_list_cubit.dart';
 import '../../blocs/one_event/one_event_cubit.dart';
+import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/widgets/button.dart';
 import 'widgets/event_editing_content.dart';
@@ -57,21 +58,48 @@ class _EventEditingPageState extends State<EventEditingPage> {
     context.maybePop();
   }
 
+  void _delete() {
+    _oneEventCubit.delete();
+    widget.eventId.map(context.read<EventsListCubit>().remove);
+    context.router.popUntilRoot();
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         resizeToAvoidBottomInset: true,
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Button(
-            onTap: _save,
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Text(
-                'Post event',
-                style: AppTextStyles.buttonText,
-                textAlign: TextAlign.center,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: AppButton(
+                  onTap: _save,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Text(
+                      widget.eventId.match(() => 'Post event', (_) => 'Done'),
+                      style: AppTextStyles.buttonText,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               ),
-            ),
+              ...widget.eventId.match(
+                () => [],
+                (_) => [
+                  const SizedBox(width: 8),
+                  AppButton(
+                    onTap: _delete,
+                    buttonStyle: AppButtonStyle.text,
+                    child: const Padding(
+                      padding: EdgeInsets.all(24),
+                      child: Icon(Icons.delete, color: AppColors.error),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
         body: BlocBuilder<OneEventCubit, OneEventState>(

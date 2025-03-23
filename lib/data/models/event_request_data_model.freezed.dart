@@ -28,7 +28,7 @@ mixin _$EventRequestDataModel {
   int get cost => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_online')
   bool get isOnline => throw _privateConstructorUsedError;
-  String get cover => throw _privateConstructorUsedError;
+  String? get cover => throw _privateConstructorUsedError;
 
   /// Serializes this EventRequestDataModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,7 +53,7 @@ abstract class $EventRequestDataModelCopyWith<$Res> {
       DateTime datetime,
       int cost,
       @JsonKey(name: 'is_online') bool isOnline,
-      String cover});
+      String? cover});
 }
 
 /// @nodoc
@@ -78,7 +78,7 @@ class _$EventRequestDataModelCopyWithImpl<$Res,
     Object? datetime = null,
     Object? cost = null,
     Object? isOnline = null,
-    Object? cover = null,
+    Object? cover = freezed,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -105,10 +105,10 @@ class _$EventRequestDataModelCopyWithImpl<$Res,
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
               as bool,
-      cover: null == cover
+      cover: freezed == cover
           ? _value.cover
           : cover // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -129,7 +129,7 @@ abstract class _$$EventRequestDataModelImplCopyWith<$Res>
       DateTime datetime,
       int cost,
       @JsonKey(name: 'is_online') bool isOnline,
-      String cover});
+      String? cover});
 }
 
 /// @nodoc
@@ -152,7 +152,7 @@ class __$$EventRequestDataModelImplCopyWithImpl<$Res>
     Object? datetime = null,
     Object? cost = null,
     Object? isOnline = null,
-    Object? cover = null,
+    Object? cover = freezed,
   }) {
     return _then(_$EventRequestDataModelImpl(
       title: null == title
@@ -179,10 +179,10 @@ class __$$EventRequestDataModelImplCopyWithImpl<$Res>
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
               as bool,
-      cover: null == cover
+      cover: freezed == cover
           ? _value.cover
           : cover // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -216,7 +216,7 @@ class _$EventRequestDataModelImpl implements _EventRequestDataModel {
   @JsonKey(name: 'is_online')
   final bool isOnline;
   @override
-  final String cover;
+  final String? cover;
 
   @override
   String toString() {
@@ -271,7 +271,7 @@ abstract class _EventRequestDataModel implements EventRequestDataModel {
       required final DateTime datetime,
       required final int cost,
       @JsonKey(name: 'is_online') required final bool isOnline,
-      required final String cover}) = _$EventRequestDataModelImpl;
+      required final String? cover}) = _$EventRequestDataModelImpl;
 
   factory _EventRequestDataModel.fromJson(Map<String, dynamic> json) =
       _$EventRequestDataModelImpl.fromJson;
@@ -290,7 +290,7 @@ abstract class _EventRequestDataModel implements EventRequestDataModel {
   @JsonKey(name: 'is_online')
   bool get isOnline;
   @override
-  String get cover;
+  String? get cover;
 
   /// Create a copy of EventRequestDataModel
   /// with the given fields replaced by the non-null parameter values.

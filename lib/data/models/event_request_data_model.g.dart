@@ -15,7 +15,7 @@ _$EventRequestDataModelImpl _$$EventRequestDataModelImplFromJson(
       datetime: DateTime.parse(json['datetime'] as String),
       cost: (json['cost'] as num).toInt(),
       isOnline: json['is_online'] as bool,
-      cover: json['cover'] as String,
+      cover: json['cover'] as String?,
     );
 
 Map<String, dynamic> _$$EventRequestDataModelImplToJson(
