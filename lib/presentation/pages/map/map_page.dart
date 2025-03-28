@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../blocs/map/map_cubit.dart';
+import '../../blocs/map/map_state.dart';
+
 class MapPage extends StatefulWidget {
-  const MapPage({
-    super.key,
-  });
+  const MapPage({super.key});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -38,40 +40,66 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Map Screen'),
-      ),
-      body: FlutterMap(
-        mapController: _mapController,
-        options: const MapOptions(
-          initialCenter: LatLng(55.755793, 37.617134),
-          initialZoom: 5,
+    return BlocProvider<MovingMarkerCubit>(
+      create: (_) => MovingMarkerCubit(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Map Screen'),
         ),
-        children: [
-          ColorFiltered(
-            colorFilter: const ColorFilter.mode(
-              Colors.grey,
-              BlendMode.saturation,
-            ),
-            child: TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.flutter_map_example',
-            ),
-          ),
-          MarkerClusterLayerWidget(
-            options: MarkerClusterLayerOptions(
-              size: const Size(50, 50),
-              maxClusterRadius: 50,
-              markers: _getMarkers(_mapPoints),
-              builder: (_, markers) {
-                return _ClusterMarker(
-                  markersLength: markers.length.toString(),
-                );
-              },
-            ),
-          ),
-        ],
+        body: BlocBuilder<MovingMarkerCubit, MapState>(
+          builder: (context, state) {
+            final movingPosition = state.when(
+              initial: (position) => position,
+              moving: (position) => position,
+              error: (_) => const LatLng(55.755793, 37.617134),
+            );
+
+            final List<Marker> staticMarkers = _getMarkers(_mapPoints);
+
+            final movingMarker = Marker(
+              point: movingPosition,
+              child: Image.asset('assets/icons/map/profile_pin.png'),
+              width: 50,
+              height: 50,
+              alignment: Alignment.center,
+            );
+
+            final allMarkers = [...staticMarkers, movingMarker];
+
+            return FlutterMap(
+              mapController: _mapController,
+              options: MapOptions(
+                initialCenter: const LatLng(55.755793, 37.617134),
+                initialZoom: 5,
+              ),
+              children: [
+                ColorFiltered(
+                  colorFilter: const ColorFilter.mode(
+                    Colors.grey,
+                    BlendMode.saturation,
+                  ),
+                  child: TileLayer(
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.example.flutter_map_example',
+                  ),
+                ),
+                MarkerClusterLayerWidget(
+                  options: MarkerClusterLayerOptions(
+                    size: const Size(50, 50),
+                    maxClusterRadius: 50,
+                    markers: allMarkers,
+                    builder: (_, markers) {
+                      return _ClusterMarker(
+                        markersLength: markers.length.toString(),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
