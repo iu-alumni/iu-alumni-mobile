@@ -73,16 +73,9 @@ class _MapPageState extends State<MapPage> {
                 initialZoom: 5,
               ),
               children: [
-                ColorFiltered(
-                  colorFilter: const ColorFilter.mode(
-                    Colors.grey,
-                    BlendMode.saturation,
-                  ),
-                  child: TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.example.flutter_map_example',
-                  ),
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.flutter_map_example',
                 ),
                 MarkerClusterLayerWidget(
                   options: MarkerClusterLayerOptions(

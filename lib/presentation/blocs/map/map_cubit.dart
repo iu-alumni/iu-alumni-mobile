@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:fpdart/fpdart.dart';
 import 'map_state.dart';
 
 class MovingMarkerCubit extends Cubit<MapState> {
@@ -17,8 +18,8 @@ class MovingMarkerCubit extends Cubit<MapState> {
   void _startMoving() {
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       final currentPosition = state.when(
-        initial: (position) => position,
-        moving: (position) => position,
+        initial: identity,
+        moving: identity,
         error: (_) => _initialPosition,
       );
 
