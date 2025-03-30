@@ -8,7 +8,7 @@ import '../../blocs/events_list/events_list_state.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/widgets/button.dart';
-import '../../router/config.gr.dart';
+import '../../router/app_router.gr.dart';
 import 'widgets/events_list.dart';
 
 class EventsListPage extends StatefulWidget {

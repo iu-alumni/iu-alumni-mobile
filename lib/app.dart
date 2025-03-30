@@ -13,7 +13,7 @@ import 'data/events/events_gateway_impl.dart';
 import 'data/token/token_provider.dart';
 import 'presentation/blocs/events_list/events_list_cubit.dart';
 import 'presentation/common/constants/app_colors.dart';
-import 'presentation/router/config.dart';
+import 'presentation/router/app_router.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

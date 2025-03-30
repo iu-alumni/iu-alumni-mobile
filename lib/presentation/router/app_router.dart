@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'config.gr.dart';
+
+import 'app_router.gr.dart';
 
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
@@ -9,5 +10,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: EventRoute.page),
         AutoRoute(page: EventEditingRoute.page),
         AutoRoute(page: AuthRoute.page, initial: true),
+        AutoRoute(page: VerificationRoute.page),
       ];
 }

@@ -111,9 +111,9 @@ class _EventEditingPageState extends State<EventEditingPage> {
               child: Stack(
                 children: [
                   SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     // Button height + padding
                     padding: EdgeInsets.only(bottom: 107),
-                    physics: BouncingScrollPhysics(),
                     child: EventEditingContent(),
                   ),
                 ],
