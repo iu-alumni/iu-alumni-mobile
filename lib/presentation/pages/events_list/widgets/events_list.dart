@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../../../application/models/event.dart';
 import '../../../common/constants/app_colors.dart';
+import '../../root/root_page.dart';
 import 'event_card.dart';
 
 class EventsList extends StatefulWidget {
@@ -31,7 +32,10 @@ class _EventsListState extends State<EventsList> {
         mainAxisSpacing: 6,
         crossAxisSpacing: 6,
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 24, vertical: 16).copyWith(
+          bottom: RootPage.navigationBarHeight + 32,
+        ),
         itemCount: widget.events.length,
         itemBuilder: (context, i) {
           final colors = _colorsFor(i);

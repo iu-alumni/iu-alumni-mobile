@@ -1,11 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 
 import '../../blocs/events_list/events_list_cubit.dart';
 import '../../blocs/events_list/events_list_state.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/widgets/button.dart';
+import '../../router/config.gr.dart';
 import 'widgets/events_list.dart';
 
 class EventsListPage extends StatefulWidget {
@@ -64,10 +67,11 @@ class _Header extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // const AlumniLogo(),
             Text('Events', style: AppTextStyles.h2),
-            Button(
-              onTap: () {},
+            AppButton(
+              onTap: () => context.pushRoute(
+                EventEditingRoute(eventId: const None()),
+              ),
               borderRadius: BorderRadius.circular(24),
               child: const Padding(
                 padding: EdgeInsets.all(12),

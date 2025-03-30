@@ -8,13 +8,19 @@ import '../map/map_page.dart';
 import '../profile/profile_page.dart';
 
 @RoutePage()
-class RootPage extends StatefulWidget {
+class RootPage extends StatefulWidget implements AutoRouteWrapper {
   const RootPage({super.key});
 
   static const navigationBarHeight = 144;
 
   @override
   State<RootPage> createState() => _RootPageState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) => BlocProvider(
+        create: (_) => RootPageCubit(),
+        child: this,
+      );
 }
 
 class _RootPageState extends State<RootPage> {

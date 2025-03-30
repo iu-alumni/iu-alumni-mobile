@@ -103,7 +103,7 @@ List<Marker> _getMarkers(List<LatLng> mapPoints) {
     mapPoints.length,
     (index) => Marker(
       point: mapPoints[index],
-      child: Image.asset('assets/icons/map/profile_pin.png'),
+      child: Image.asset(Assets.icons.map.profilePin.path),
       width: 50,
       height: 50,
       alignment: Alignment.center,
