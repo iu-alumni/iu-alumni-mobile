@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../gen/assets.gen.dart';
 import '../../blocs/map/map_cubit.dart';
 import '../../blocs/map/map_state.dart';
 
@@ -68,8 +69,8 @@ class _MapPageState extends State<MapPage> {
 
             return FlutterMap(
               mapController: _mapController,
-              options: MapOptions(
-                initialCenter: const LatLng(55.755793, 37.617134),
+              options: const MapOptions(
+                initialCenter: LatLng(55.755793, 37.617134),
                 initialZoom: 5,
               ),
               children: [
