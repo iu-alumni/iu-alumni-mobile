@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/auth/auth_repository.dart';
 import '../../blocs/auth/auth_cubit.dart';
-import '../../blocs/auth/auth_state.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
+import '../../common/models/loaded_state.dart';
 import '../../common/widgets/alumni_logo.dart';
 import '../../common/widgets/app_text_field.dart';
 import '../../common/widgets/button.dart';
-import '../../router/config.gr.dart';
+import '../../router/app_router.gr.dart';
 
 @RoutePage()
 class AuthPage extends StatefulWidget implements AutoRouteWrapper {
@@ -33,15 +33,24 @@ class _AuthPageState extends State<AuthPage> {
   void _auth() => context.read<AuthCubit>().authorize(_login, _password);
 
   @override
-  Widget build(BuildContext context) => BlocListener<AuthCubit, AuthState>(
+  Widget build(BuildContext context) => BlocListener<AuthCubit, LoadedState>(
         listener: (context, state) {
-          if (state case AuthStateAuthorized()) {
+          if (state case LoadedStateData()) {
             context.replaceRoute(const RootRoute());
+          }
+          if (state case LoadedStateError()) {
+            context.pushRoute(
+              VerificationRoute(
+                initialEmail: _login,
+                initialPassword: _password,
+              ),
+            );
           }
         },
         child: Scaffold(
           body: SafeArea(
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,9 +81,9 @@ class _AuthPageState extends State<AuthPage> {
                     onTap: _auth,
                     child: Padding(
                       padding: const EdgeInsets.all(24),
-                      child: BlocBuilder<AuthCubit, AuthState>(
+                      child: BlocBuilder<AuthCubit, LoadedState>(
                           builder: (context, state) {
-                        if (state case AuthStateLoading()) {
+                        if (state case LoadedStateLoading()) {
                           return const Center(
                             child: CircularProgressIndicator(
                               color: Colors.white,

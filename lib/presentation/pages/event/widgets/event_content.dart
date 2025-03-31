@@ -13,7 +13,7 @@ import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/button.dart';
 import '../../../common/widgets/event_cover.dart';
 import '../../../common/widgets/titled_item.dart';
-import '../../../router/config.gr.dart';
+import '../../../router/app_router.gr.dart';
 
 class EventViewingContent extends StatefulWidget {
   const EventViewingContent({required this.event, super.key});

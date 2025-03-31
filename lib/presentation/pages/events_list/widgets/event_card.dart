@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../../application/models/event.dart';
 import '../../../../util/gap.dart';
 import '../../../common/constants/app_text_styles.dart';
-import '../../../router/config.gr.dart';
+import '../../../router/app_router.gr.dart';
 
 class EventCard extends StatefulWidget {
   const EventCard({
