@@ -6,6 +6,8 @@ import 'application/repositories/auth/auth_repository.dart';
 import 'application/repositories/auth/auth_repository_impl.dart';
 import 'application/repositories/events/events_repository.dart';
 import 'application/repositories/events/events_repository_impl.dart';
+import 'application/repositories/profile/profile_repository.dart';
+import 'application/repositories/profile/profile_repository_impl.dart';
 import 'data/auth/auth_gateway.dart';
 import 'data/auth/auth_gateway_impl.dart';
 import 'data/events/events_gateway.dart';
@@ -54,6 +56,9 @@ class App extends StatelessWidget {
             create: (context) => AuthRepositoryImpl(
               context.read<AuthGateway>(),
             ),
+          ),
+          RepositoryProvider<ProfileRepository>(
+            create: (context) => ProfileRepositoryImpl(),
           ),
           // --- BLOCs ---
           BlocProvider(

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 
 import '../../blocs/events_list/events_list_cubit.dart';
-import '../../blocs/events_list/events_list_state.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/widgets/button.dart';
@@ -38,12 +37,11 @@ class _EventsListPageState extends State<EventsListPage> {
             Expanded(
               child: BlocBuilder<EventsListCubit, EventsListState>(
                 builder: (context, eventsState) => switch (eventsState) {
-                  EventsListStateData d when d.events.isEmpty =>
-                    const _CenterText(
+                  EventsListData d when d.data.isEmpty => const _CenterText(
                       text: 'No Events',
                     ),
-                  EventsListStateData d => EventsList(events: d.events),
-                  EventsListStateError e => _CenterText(text: e.msg),
+                  EventsListData d => EventsList(events: d.data),
+                  EventsListError e => _CenterText(text: e.error),
                   _ => const Center(
                       child: CircularProgressIndicator(
                         color: AppColors.primary,

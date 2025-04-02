@@ -119,7 +119,7 @@ class _Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TitledItem(
-        name: name,
+        title: name,
         icon: icon,
         child: Text(
           content,

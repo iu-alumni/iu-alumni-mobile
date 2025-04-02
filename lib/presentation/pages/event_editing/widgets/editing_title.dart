@@ -12,7 +12,7 @@ class EditingTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) => TitledItem(
         icon: Icons.title,
-        name: 'Title',
+        title: 'Title',
         child: AppTextField(
           initialText: context
               .read<OneEventCubit>()

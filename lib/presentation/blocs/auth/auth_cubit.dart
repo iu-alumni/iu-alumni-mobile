@@ -13,7 +13,7 @@ class AuthCubit extends Cubit<LoadedState> {
     emit(const LoadedState.loading());
     // final result = await _authRepository.authorize(login, password);
     await Future.delayed(const Duration(seconds: 1));
-    final result = Left('not verified'); //Either<String, Unit>.of(unit);
+    final result = Either<String, Unit>.of(unit);
     emit(result.match(LoadedState.error, (_) => const LoadedState.data(unit)));
   }
 }
