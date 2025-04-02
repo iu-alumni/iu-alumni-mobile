@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'loaded_state.freezed.dart';
 
 @freezed
-class LoadedState<T> with _$LoadedState {
+sealed class LoadedState<T> with _$LoadedState {
   const factory LoadedState.init() = LoadedStateInit;
   const factory LoadedState.loading() = LoadedStateLoading;
   const factory LoadedState.data(T data) = LoadedStateData;

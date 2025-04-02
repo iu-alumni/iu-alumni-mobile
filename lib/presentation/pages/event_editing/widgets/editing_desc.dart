@@ -12,7 +12,7 @@ class EditingDesc extends StatelessWidget {
   @override
   Widget build(BuildContext context) => TitledItem(
         icon: Icons.description_outlined,
-        name: 'Description',
+        title: 'Description',
         child: AppTextField(
           initialText: context
               .read<OneEventCubit>()

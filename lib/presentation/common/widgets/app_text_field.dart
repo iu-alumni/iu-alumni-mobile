@@ -7,7 +7,7 @@ class AppTextField extends StatefulWidget {
   const AppTextField({
     required this.initialText,
     required this.onChange,
-    required this.hintText,
+    this.hintText = '',
     this.inputType,
     this.obscureText = false,
     this.maxLines,

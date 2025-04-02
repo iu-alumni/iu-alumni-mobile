@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../application/repositories/profile/profile_repository.dart';
+import '../../blocs/profile/profile_cubit.dart';
 import '../../blocs/root/root_page_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../events_list/events_list_page.dart';
@@ -17,8 +19,13 @@ class RootPage extends StatefulWidget implements AutoRouteWrapper {
   State<RootPage> createState() => _RootPageState();
 
   @override
-  Widget wrappedRoute(BuildContext context) => BlocProvider(
-        create: (_) => RootPageCubit(),
+  Widget wrappedRoute(BuildContext context) => MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => RootPageCubit()),
+          BlocProvider(
+            create: (ctx) => ProfileCubit(ctx.read<ProfileRepository>()),
+          ),
+        ],
         child: this,
       );
 }

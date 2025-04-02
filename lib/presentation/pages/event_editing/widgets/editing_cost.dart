@@ -37,7 +37,7 @@ class EditingCost extends StatelessWidget {
         .match(() => '', identity);
     return TitledItem(
       icon: Icons.attach_money_outlined,
-      name: 'Cost',
+      title: 'Cost',
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

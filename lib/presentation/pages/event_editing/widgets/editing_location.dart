@@ -20,7 +20,7 @@ class EditingLocation extends StatelessWidget {
           child: hasLocation
               ? TitledItem(
                   icon: Icons.location_pin,
-                  name: 'Location',
+                  title: 'Location',
                   // TODO
                   child: Text(
                     'Location Picker (TODO)',

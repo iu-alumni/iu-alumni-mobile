@@ -34,7 +34,7 @@ class _EditingDateState extends State<EditingDate> {
   @override
   Widget build(BuildContext context) => TitledItem(
         icon: Icons.watch_later_outlined,
-        name: 'When',
+        title: 'When',
         child: Material(
           color: AppColors.lightGray,
           borderRadius: BorderRadius.circular(4),
