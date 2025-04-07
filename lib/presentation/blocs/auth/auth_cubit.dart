@@ -11,9 +11,9 @@ class AuthCubit extends Cubit<LoadedState> {
 
   Future<void> authorize(String login, String password) async {
     emit(const LoadedState.loading());
-    // final result = await _authRepository.authorize(login, password);
-    await Future.delayed(const Duration(seconds: 1));
-    final result = Either<String, Unit>.of(unit);
+    final result = await _authRepository.authorize(login, password);
+    // await Future.delayed(const Duration(seconds: 1));
+    // final result = Either<String, Unit>.of(unit);
     emit(result.match(LoadedState.error, (_) => const LoadedState.data(unit)));
   }
 }

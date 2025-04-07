@@ -6,4 +6,7 @@ abstract class Paths {
 
   static const _auth = '$_base/auth';
   static const login = '$_auth/login';
+
+  static const _profile = '$_base/profile';
+  static const myProfile = '$_profile/me';
 }

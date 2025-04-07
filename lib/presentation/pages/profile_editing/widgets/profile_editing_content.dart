@@ -40,11 +40,27 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
           Padding(
             padding: _horPadding,
             child: TitledItem(
-              title: 'Name',
+              title: 'First Name',
               child: AppTextField(
                 initialText: widget.profile.firstName,
-                onChange: (nn) =>
-                    _cubit.update((p) => p.copyWith(firstName: nn)),
+                hintText: 'Ivan',
+                onChange: (nn) => _cubit.update(
+                  (p) => p.copyWith(firstName: nn),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: _horPadding,
+            child: TitledItem(
+              title: 'Last Name',
+              child: AppTextField(
+                initialText: widget.profile.lastName,
+                hintText: 'Ivanov',
+                onChange: (nn) => _cubit.update(
+                  (p) => p.copyWith(lastName: nn),
+                ),
               ),
             ),
           ),
@@ -81,19 +97,19 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
             ),
           ),
           const SizedBox(height: 16),
-          if (widget.profile.biography case final bio?)
-            Padding(
-              padding: _horPadding,
-              child: TitledItem(
-                title: 'Biography',
-                child: AppTextField(
-                  initialText: bio,
-                  onChange: (nb) => _cubit.update(
-                    (p) => p.copyWith(biography: nb),
-                  ),
+          Padding(
+            padding: _horPadding,
+            child: TitledItem(
+              title: 'Biography',
+              child: AppTextField(
+                initialText: widget.profile.biography,
+                hintText: 'What is on your mind?',
+                onChange: (nb) => _cubit.update(
+                  (p) => p.copyWith(biography: nb),
                 ),
               ),
             ),
+          ),
           const SizedBox(height: 16),
           Padding(
             padding: _horPadding,
@@ -103,6 +119,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
                 child: Text(
                   'Done',
                   style: AppTextStyles.buttonText,
+                  textAlign: TextAlign.center,
                 ),
               ),
               onTap: () {

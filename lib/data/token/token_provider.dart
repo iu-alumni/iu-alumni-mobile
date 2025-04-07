@@ -1,9 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 
-class TokenProvider {
-  Option<String> _token = const None();
+abstract class TokenProvider {
+  Future<void> init();
 
-  Option<String> get token => _token;
-
-  void set(String token) => _token = Option.of(token);
+  Option<String> get token;
 }
