@@ -5,7 +5,6 @@ part 'event_request_data_model.g.dart';
 
 @freezed
 class EventRequestDataModel with _$EventRequestDataModel {
-
   factory EventRequestDataModel({
     required String title,
     required String description,
@@ -16,5 +15,6 @@ class EventRequestDataModel with _$EventRequestDataModel {
     required String? cover,
   }) = _EventRequestDataModel;
 
-  factory EventRequestDataModel.fromJson(Map<String, dynamic> json) => _$EventRequestDataModelFromJson(json);
+  factory EventRequestDataModel.fromJson(Map<String, dynamic> json) =>
+      _$EventRequestDataModelFromJson(json);
 }

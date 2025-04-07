@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../constants/app_text_styles.dart';
@@ -5,6 +7,7 @@ import '../constants/app_text_styles.dart';
 class EventCover extends StatelessWidget {
   const EventCover({
     required this.child,
+    required this.imageBytes,
     this.title,
     this.location,
     super.key,
@@ -13,6 +16,7 @@ class EventCover extends StatelessWidget {
   final String? title;
   final String? location;
   final Widget child;
+  final String? imageBytes;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +26,13 @@ class EventCover extends StatelessWidget {
     final secondaryWhite = Colors.white.withValues(alpha: 0.5);
     return Stack(
       children: [
-        // TODO cover image
-        const Positioned.fill(child: ColoredBox(color: Colors.black38)),
+        if (imageBytes case final bytes?)
+          Positioned.fill(
+            child: Image.memory(
+              base64Decode(bytes),
+              fit: BoxFit.cover,
+            ),
+          ),
         Positioned.fill(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -20,7 +20,7 @@ class ProfileContent extends StatelessWidget {
           Padding(
             padding: _horPadding,
             child: Text(
-              profile.firstName,
+              '${profile.firstName.trim()} ${profile.lastName.trim()}',
               style: AppTextStyles.h3,
               textAlign: TextAlign.center,
             ),

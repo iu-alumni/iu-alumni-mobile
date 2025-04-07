@@ -91,6 +91,7 @@ class _Cover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => EventCover(
+        imageBytes: event.coverBytes,
         title: event.title,
         location: event.location,
         child: Padding(

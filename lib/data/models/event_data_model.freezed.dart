@@ -30,10 +30,10 @@ mixin _$EventDataModel {
   String get description => throw _privateConstructorUsedError;
   String get location => throw _privateConstructorUsedError;
   DateTime get datetime => throw _privateConstructorUsedError;
-  double get cost => throw _privateConstructorUsedError;
+  int get cost => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_online')
   bool get isOnline => throw _privateConstructorUsedError;
-  String get cover => throw _privateConstructorUsedError;
+  String? get cover => throw _privateConstructorUsedError;
 
   /// Serializes this EventDataModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -59,9 +59,9 @@ abstract class $EventDataModelCopyWith<$Res> {
       String description,
       String location,
       DateTime datetime,
-      double cost,
+      int cost,
       @JsonKey(name: 'is_online') bool isOnline,
-      String cover});
+      String? cover});
 }
 
 /// @nodoc
@@ -88,7 +88,7 @@ class _$EventDataModelCopyWithImpl<$Res, $Val extends EventDataModel>
     Object? datetime = null,
     Object? cost = null,
     Object? isOnline = null,
-    Object? cover = null,
+    Object? cover = freezed,
   }) {
     return _then(_value.copyWith(
       eventId: null == eventId
@@ -122,15 +122,15 @@ class _$EventDataModelCopyWithImpl<$Res, $Val extends EventDataModel>
       cost: null == cost
           ? _value.cost
           : cost // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       isOnline: null == isOnline
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
               as bool,
-      cover: null == cover
+      cover: freezed == cover
           ? _value.cover
           : cover // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -151,9 +151,9 @@ abstract class _$$EventDataModelImplCopyWith<$Res>
       String description,
       String location,
       DateTime datetime,
-      double cost,
+      int cost,
       @JsonKey(name: 'is_online') bool isOnline,
-      String cover});
+      String? cover});
 }
 
 /// @nodoc
@@ -178,7 +178,7 @@ class __$$EventDataModelImplCopyWithImpl<$Res>
     Object? datetime = null,
     Object? cost = null,
     Object? isOnline = null,
-    Object? cover = null,
+    Object? cover = freezed,
   }) {
     return _then(_$EventDataModelImpl(
       eventId: null == eventId
@@ -212,15 +212,15 @@ class __$$EventDataModelImplCopyWithImpl<$Res>
       cost: null == cost
           ? _value.cost
           : cost // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       isOnline: null == isOnline
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
               as bool,
-      cover: null == cover
+      cover: freezed == cover
           ? _value.cover
           : cover // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -269,12 +269,12 @@ class _$EventDataModelImpl implements _EventDataModel {
   @override
   final DateTime datetime;
   @override
-  final double cost;
+  final int cost;
   @override
   @JsonKey(name: 'is_online')
   final bool isOnline;
   @override
-  final String cover;
+  final String? cover;
 
   @override
   String toString() {
@@ -345,9 +345,9 @@ abstract class _EventDataModel implements EventDataModel {
       required final String description,
       required final String location,
       required final DateTime datetime,
-      required final double cost,
+      required final int cost,
       @JsonKey(name: 'is_online') required final bool isOnline,
-      required final String cover}) = _$EventDataModelImpl;
+      required final String? cover}) = _$EventDataModelImpl;
 
   factory _EventDataModel.fromJson(Map<String, dynamic> json) =
       _$EventDataModelImpl.fromJson;
@@ -370,12 +370,12 @@ abstract class _EventDataModel implements EventDataModel {
   @override
   DateTime get datetime;
   @override
-  double get cost;
+  int get cost;
   @override
   @JsonKey(name: 'is_online')
   bool get isOnline;
   @override
-  String get cover;
+  String? get cover;
 
   /// Create a copy of EventDataModel
   /// with the given fields replaced by the non-null parameter values.

@@ -11,7 +11,7 @@ class EventModel with _$EventModel {
     required String? title,
     required String? description,
     // TODO
-    required String? coverUrl,
+    required String? coverBytes,
     // TODO
     required String? location,
     required CostModel cost,

@@ -19,7 +19,7 @@ mixin _$EventModel {
   String get eventId => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError; // TODO
-  String? get coverUrl => throw _privateConstructorUsedError; // TODO
+  String? get coverBytes => throw _privateConstructorUsedError; // TODO
   String? get location => throw _privateConstructorUsedError;
   CostModel get cost => throw _privateConstructorUsedError;
   DateTime get occurringAt => throw _privateConstructorUsedError;
@@ -42,7 +42,7 @@ abstract class $EventModelCopyWith<$Res> {
       {String eventId,
       String? title,
       String? description,
-      String? coverUrl,
+      String? coverBytes,
       String? location,
       CostModel cost,
       DateTime occurringAt,
@@ -69,7 +69,7 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
     Object? eventId = null,
     Object? title = freezed,
     Object? description = freezed,
-    Object? coverUrl = freezed,
+    Object? coverBytes = freezed,
     Object? location = freezed,
     Object? cost = null,
     Object? occurringAt = null,
@@ -88,9 +88,9 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      coverUrl: freezed == coverUrl
-          ? _value.coverUrl
-          : coverUrl // ignore: cast_nullable_to_non_nullable
+      coverBytes: freezed == coverBytes
+          ? _value.coverBytes
+          : coverBytes // ignore: cast_nullable_to_non_nullable
               as String?,
       location: freezed == location
           ? _value.location
@@ -134,7 +134,7 @@ abstract class _$$EventModelImplCopyWith<$Res>
       {String eventId,
       String? title,
       String? description,
-      String? coverUrl,
+      String? coverBytes,
       String? location,
       CostModel cost,
       DateTime occurringAt,
@@ -160,7 +160,7 @@ class __$$EventModelImplCopyWithImpl<$Res>
     Object? eventId = null,
     Object? title = freezed,
     Object? description = freezed,
-    Object? coverUrl = freezed,
+    Object? coverBytes = freezed,
     Object? location = freezed,
     Object? cost = null,
     Object? occurringAt = null,
@@ -179,9 +179,9 @@ class __$$EventModelImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      coverUrl: freezed == coverUrl
-          ? _value.coverUrl
-          : coverUrl // ignore: cast_nullable_to_non_nullable
+      coverBytes: freezed == coverBytes
+          ? _value.coverBytes
+          : coverBytes // ignore: cast_nullable_to_non_nullable
               as String?,
       location: freezed == location
           ? _value.location
@@ -210,7 +210,7 @@ class _$EventModelImpl implements _EventModel {
       {required this.eventId,
       required this.title,
       required this.description,
-      required this.coverUrl,
+      required this.coverBytes,
       required this.location,
       required this.cost,
       required this.occurringAt,
@@ -224,7 +224,7 @@ class _$EventModelImpl implements _EventModel {
   final String? description;
 // TODO
   @override
-  final String? coverUrl;
+  final String? coverBytes;
 // TODO
   @override
   final String? location;
@@ -237,7 +237,7 @@ class _$EventModelImpl implements _EventModel {
 
   @override
   String toString() {
-    return 'EventModel(eventId: $eventId, title: $title, description: $description, coverUrl: $coverUrl, location: $location, cost: $cost, occurringAt: $occurringAt, onlineEvent: $onlineEvent)';
+    return 'EventModel(eventId: $eventId, title: $title, description: $description, coverBytes: $coverBytes, location: $location, cost: $cost, occurringAt: $occurringAt, onlineEvent: $onlineEvent)';
   }
 
   @override
@@ -249,8 +249,8 @@ class _$EventModelImpl implements _EventModel {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.coverUrl, coverUrl) ||
-                other.coverUrl == coverUrl) &&
+            (identical(other.coverBytes, coverBytes) ||
+                other.coverBytes == coverBytes) &&
             (identical(other.location, location) ||
                 other.location == location) &&
             (identical(other.cost, cost) || other.cost == cost) &&
@@ -262,7 +262,7 @@ class _$EventModelImpl implements _EventModel {
 
   @override
   int get hashCode => Object.hash(runtimeType, eventId, title, description,
-      coverUrl, location, cost, occurringAt, onlineEvent);
+      coverBytes, location, cost, occurringAt, onlineEvent);
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -278,7 +278,7 @@ abstract class _EventModel implements EventModel {
       {required final String eventId,
       required final String? title,
       required final String? description,
-      required final String? coverUrl,
+      required final String? coverBytes,
       required final String? location,
       required final CostModel cost,
       required final DateTime occurringAt,
@@ -291,7 +291,7 @@ abstract class _EventModel implements EventModel {
   @override
   String? get description; // TODO
   @override
-  String? get coverUrl; // TODO
+  String? get coverBytes; // TODO
   @override
   String? get location;
   @override
