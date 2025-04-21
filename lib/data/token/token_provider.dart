@@ -4,4 +4,6 @@ abstract class TokenProvider {
   Future<void> init();
 
   Option<String> get token;
+
+  void clear();
 }

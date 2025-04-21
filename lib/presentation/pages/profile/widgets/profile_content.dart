@@ -6,9 +6,14 @@ import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
 
 class ProfileContent extends StatelessWidget {
-  const ProfileContent({required this.profile, super.key});
+  const ProfileContent({
+    required this.profile,
+    required this.personal,
+    super.key,
+  });
 
   final Profile profile;
+  final bool personal;
 
   static const _horPadding = EdgeInsets.symmetric(horizontal: 40);
 
@@ -17,46 +22,39 @@ class ProfileContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 40),
-          Padding(
-            padding: _horPadding,
-            child: Text(
-              '${profile.firstName.trim()} ${profile.lastName.trim()}',
-              style: AppTextStyles.h3,
-              textAlign: TextAlign.center,
-            ),
+          Text(
+            '${profile.firstName.trim()} ${profile.lastName.trim()}',
+            style: AppTextStyles.h3,
+            textAlign: TextAlign.center,
           ),
-          Padding(
-            padding: _horPadding,
-            child: Text(
-              profile.graduationYear,
-              style: AppTextStyles.body,
-              textAlign: TextAlign.center,
-            ),
+          Text(
+            profile.graduationYear,
+            style: AppTextStyles.body,
+            textAlign: TextAlign.center,
           ),
           ...[
             if (profile.biography case final bio?)
-              Padding(
-                padding: _horPadding,
-                child: TitledItem(
-                  title: 'Biography',
-                  child: Text(
-                    bio,
-                    style: AppTextStyles.body,
-                  ),
+              TitledItem(
+                title: 'Biography',
+                child: Text(
+                  bio,
+                  style: AppTextStyles.body,
                 ),
               ),
             if (profile.location case final location?)
-              Padding(
-                padding: _horPadding,
-                child: TitledItem(
-                  title: 'Location',
-                  child: Text(
-                    location,
-                    style: AppTextStyles.body,
-                  ),
+              TitledItem(
+                title: 'Location',
+                child: Text(
+                  location,
+                  style: AppTextStyles.body,
                 ),
               ),
-          ].expand((e) => [const SizedBox(height: 16), e]),
+          ].expand(
+            (e) => [
+              const SizedBox(height: 16),
+              Padding(padding: _horPadding, child: e),
+            ],
+          ),
           const SizedBox(height: RootPage.navigationBarHeight + 16),
         ],
       );

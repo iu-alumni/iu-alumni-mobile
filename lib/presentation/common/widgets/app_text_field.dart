@@ -29,6 +29,8 @@ class _AppTextFieldState extends State<AppTextField> {
   late final TextEditingController _controller;
   late final _focusNode = FocusNode();
 
+  late var _textObscured = widget.obscureText;
+
   @override
   void initState() {
     _controller = TextEditingController(text: widget.initialText);
@@ -55,7 +57,7 @@ class _AppTextFieldState extends State<AppTextField> {
         focusNode: _focusNode,
         maxLines: widget.maxLines,
         onTapUpOutside: (e) => _focusNode.unfocus(),
-        obscureText: widget.obscureText,
+        obscureText: _textObscured,
         style: AppTextStyles.body,
         keyboardType: widget.inputType,
         decoration: InputDecoration(
@@ -67,6 +69,17 @@ class _AppTextFieldState extends State<AppTextField> {
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(4),
           ),
+          suffixIcon: widget.obscureText
+              ? IconButton(
+                  onPressed: () => setState(
+                    () => _textObscured = !_textObscured,
+                  ),
+                  icon: Icon(
+                    _textObscured ? Icons.visibility : Icons.visibility_off,
+                    color: AppColors.blueGray,
+                  ),
+                )
+              : null,
         ),
       );
 }

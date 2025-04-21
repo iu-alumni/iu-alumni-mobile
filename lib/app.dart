@@ -105,6 +105,7 @@ class App extends StatelessWidget {
           RepositoryProvider<ProfileRepository>(
             create: (context) => ProfileRepositoryImpl(
               context.read<ProfileGateway>(),
+              context.read<TokenProvider>(),
             ),
           ),
           RepositoryProvider(

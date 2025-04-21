@@ -34,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ProfilePageTitle(showEditingIcon: widget.profile.isNone()),
+            ProfilePageTitle(personal: widget.profile.isNone()),
             Expanded(
               child: SafeArea(
                 top: false,
@@ -43,7 +43,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     builder: (context, profile) => switch (profile) {
                       ProfileData(:final data) => SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
-                          child: ProfileContent(profile: data),
+                          child: ProfileContent(
+                            profile: data,
+                            personal: true,
+                          ),
                         ),
                       ProfileError e => Center(
                           child: Text(
@@ -57,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                     },
                   ),
-                  (p) => ProfileContent(profile: p),
+                  (p) => ProfileContent(profile: p, personal: false),
                 ),
               ),
             ),

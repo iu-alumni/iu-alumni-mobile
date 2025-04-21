@@ -23,4 +23,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       ),
     );
   }
+
+  void logout() {
+    _repository.logout();
+  }
 }

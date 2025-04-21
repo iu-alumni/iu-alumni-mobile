@@ -33,7 +33,7 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const ProfilePageTitle(showEditingIcon: false),
+            const ProfilePageTitle(personal: false),
             Expanded(
               child: SafeArea(
                 top: false,

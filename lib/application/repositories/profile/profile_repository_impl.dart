@@ -1,13 +1,15 @@
 import 'package:fpdart/fpdart.dart';
 
 import '../../../data/profile_gateway/profile_gateway.dart';
+import '../../../data/token/token_provider.dart';
 import '../../models/profile.dart';
 import 'profile_repository.dart';
 
 class ProfileRepositoryImpl extends ProfileRepository {
-  ProfileRepositoryImpl(this._profileGateway);
+  ProfileRepositoryImpl(this._profileGateway, this._tokenProvider);
 
   final ProfileGateway _profileGateway;
+  final TokenProvider _tokenProvider;
 
   Profile? _cache;
 
@@ -32,5 +34,11 @@ class ProfileRepositoryImpl extends ProfileRepository {
       // TODO return an error
       _cache = oldProfile;
     }
+  }
+
+  @override
+  void logout() {
+    _cache = null;
+    _tokenProvider.clear();
   }
 }
