@@ -8,11 +8,15 @@ import 'application/repositories/auth/auth_repository.dart';
 import 'application/repositories/auth/auth_repository_impl.dart';
 import 'application/repositories/events/events_repository.dart';
 import 'application/repositories/events/events_repository_impl.dart';
+import 'application/repositories/map/map_repository.dart';
+import 'application/repositories/map/map_repository_impl.dart';
 import 'application/repositories/profile/profile_repository.dart';
 import 'application/repositories/profile/profile_repository_impl.dart';
 import 'data/auth/auth_gateway.dart';
 import 'data/auth/auth_gateway_impl.dart';
 import 'data/common/dio_options_manager.dart';
+import 'data/db/db_manager.dart';
+import 'data/db/db_manager_impl.dart';
 import 'data/events/events_gateway.dart';
 import 'data/events/events_gateway_impl.dart';
 import 'data/profile_gateway/profile_gateway.dart';
@@ -20,6 +24,8 @@ import 'data/profile_gateway/profile_gateway_impl.dart';
 import 'data/token/token_manager.dart';
 import 'data/token/token_provider.dart';
 import 'data/token/token_provider_impl.dart';
+import 'data/users/users_gateway.dart';
+import 'data/users/users_gateway_impl.dart';
 import 'presentation/blocs/events_list/events_list_cubit.dart';
 import 'presentation/common/constants/app_colors.dart';
 import 'presentation/managers/app_loading_manager.dart';
@@ -34,6 +40,7 @@ class App extends StatelessWidget {
           // --- SERVICES ---
           RepositoryProvider(create: (_) => const FlutterSecureStorage()),
           RepositoryProvider(create: (_) => ImagePicker()),
+          RepositoryProvider<DbManager>(create: (_) => DbManagerImpl()),
           RepositoryProvider(
             create: (context) => TokenManager(
               context.read<FlutterSecureStorage>(),
@@ -77,6 +84,12 @@ class App extends StatelessWidget {
               context.read<DioOptionsManager>(),
             ),
           ),
+          RepositoryProvider<UsersGateway>(
+            create: (context) => UsersGatewayImpl(
+              context.read<Dio>(),
+              context.read<DioOptionsManager>(),
+            ),
+          ),
           // --- REPOSITORIES ---
           RepositoryProvider<EventsRepository>(
             create: (context) => EventsRepositoryImpl(
@@ -97,6 +110,13 @@ class App extends StatelessWidget {
           RepositoryProvider(
             create: (context) => AppLoadingManager(
               context.read<TokenProvider>(),
+              context.read<DbManager>(),
+            ),
+          ),
+          RepositoryProvider<MapRepository>(
+            create: (context) => MapRepositoryImpl(
+              context.read<DbManager>(),
+              context.read<UsersGateway>(),
             ),
           ),
           // --- BLOCs ---

@@ -5,8 +5,8 @@ import '../constants/app_text_styles.dart';
 
 class AppTextField extends StatefulWidget {
   const AppTextField({
-    required this.initialText,
     required this.onChange,
+    required this.initialText,
     this.hintText = '',
     this.inputType,
     this.obscureText = false,
@@ -54,10 +54,7 @@ class _AppTextFieldState extends State<AppTextField> {
         controller: _controller,
         focusNode: _focusNode,
         maxLines: widget.maxLines,
-        onTapUpOutside: (e) {
-          print(e.kind);
-          _focusNode.unfocus();
-        },
+        onTapUpOutside: (e) => _focusNode.unfocus(),
         obscureText: widget.obscureText,
         style: AppTextStyles.body,
         keyboardType: widget.inputType,

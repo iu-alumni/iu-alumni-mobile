@@ -1,13 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/models/profile.dart';
 import '../../../blocs/profile/profile_editing_cubit.dart';
+import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/app_text_field.dart';
 import '../../../common/widgets/button.dart';
+import '../../../common/widgets/location_dialog.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
 import '../../verification/widgets/year_picker.dart';
@@ -30,6 +31,14 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
   void initState() {
     _cubit = context.read<ProfileEditingCubit>();
     super.initState();
+  }
+
+  void _showLocationPicker(BuildContext context) async {
+    final location = await LocationDialog.show(context);
+    if (!context.mounted) {
+      return;
+    }
+    _cubit.update((e) => e.copyWith(location: location));
   }
 
   @override
@@ -107,6 +116,28 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
                 onChange: (nb) => _cubit.update(
                   (p) => p.copyWith(biography: nb),
                 ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: _horPadding,
+            child: TitledItem(
+              title: 'Location',
+              child: AppButton(
+                buttonStyle: AppButtonStyle.input,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    widget.profile.location ?? 'No location',
+                    style: AppTextStyles.buttonText.copyWith(
+                      color: widget.profile.location == null
+                          ? AppColors.blueGray
+                          : Colors.black,
+                    ),
+                  ),
+                ),
+                onTap: () => _showLocationPicker(context),
               ),
             ),
           ),

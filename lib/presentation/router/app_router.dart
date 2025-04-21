@@ -13,5 +13,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: VerificationRoute.page),
         AutoRoute(page: ProfileEditingRoute.page),
         AutoRoute(page: AppLoadingRoute.page, initial: true),
+        AutoRoute(page: ProfileRoute.page),
       ];
 }

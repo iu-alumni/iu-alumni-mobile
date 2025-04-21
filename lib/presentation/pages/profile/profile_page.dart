@@ -1,13 +1,19 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 
+import '../../../application/models/profile.dart';
 import '../../blocs/profile/profile_cubit.dart';
 import '../../common/constants/app_text_styles.dart';
 import 'widgets/profile_content.dart';
 import 'widgets/profile_page_title.dart';
 
+@RoutePage()
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({this.profile = const None(), super.key});
+
+  final Option<Profile> profile;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -16,7 +22,10 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
-    context.read<ProfileCubit>().loadProfile();
+    // The profile is the user's own
+    if (widget.profile.isNone()) {
+      context.read<ProfileCubit>().loadProfile();
+    }
     super.initState();
   }
 
@@ -25,27 +34,30 @@ class _ProfilePageState extends State<ProfilePage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const ProfilePageTitle(showEditingIcon: true),
+            ProfilePageTitle(showEditingIcon: widget.profile.isNone()),
             Expanded(
               child: SafeArea(
                 top: false,
-                child: BlocBuilder<ProfileCubit, ProfileState>(
-                  builder: (context, profile) => switch (profile) {
-                    ProfileData(:final data) => SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: ProfileContent(profile: data),
-                      ),
-                    ProfileError e => Center(
-                        child: Text(
-                          e.error,
-                          style: AppTextStyles.caption,
-                          textAlign: TextAlign.center,
+                child: widget.profile.match(
+                  () => BlocBuilder<ProfileCubit, ProfileState>(
+                    builder: (context, profile) => switch (profile) {
+                      ProfileData(:final data) => SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: ProfileContent(profile: data),
                         ),
-                      ),
-                    _ => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                  },
+                      ProfileError e => Center(
+                          child: Text(
+                            e.error,
+                            style: AppTextStyles.caption,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      _ => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                    },
+                  ),
+                  (p) => ProfileContent(profile: p),
                 ),
               ),
             ),

@@ -1,7 +1,7 @@
 abstract class Paths {
   static const _base = 'https://iu-alumni-backend.onrender.com';
 
-  static const events = '$_base/events/events';
+  static const events = '$_base/events';
   static String eventWithId(String eid) => '$events/$eid';
 
   static const _auth = '$_base/auth';
@@ -9,4 +9,5 @@ abstract class Paths {
 
   static const _profile = '$_base/profile';
   static const myProfile = '$_profile/me';
+  static const allProfiles = '$_profile/all';
 }

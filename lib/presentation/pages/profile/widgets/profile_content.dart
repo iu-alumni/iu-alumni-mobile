@@ -10,7 +10,7 @@ class ProfileContent extends StatelessWidget {
 
   final Profile profile;
 
-  static const _horPadding = const EdgeInsets.symmetric(horizontal: 40);
+  static const _horPadding = EdgeInsets.symmetric(horizontal: 40);
 
   @override
   Widget build(BuildContext context) => Column(
@@ -41,6 +41,17 @@ class ProfileContent extends StatelessWidget {
                   title: 'Biography',
                   child: Text(
                     bio,
+                    style: AppTextStyles.body,
+                  ),
+                ),
+              ),
+            if (profile.location case final location?)
+              Padding(
+                padding: _horPadding,
+                child: TitledItem(
+                  title: 'Location',
+                  child: Text(
+                    location,
                     style: AppTextStyles.body,
                   ),
                 ),
