@@ -12,7 +12,6 @@ import 'package:latlong2/latlong.dart';
 import '../../../application/models/coordinates.dart';
 import '../../../application/repositories/map/map_repository.dart';
 import '../../blocs/users_location/users_location_cubit.dart';
-import '../../common/constants/app_colors.dart';
 import '../../common/models/loaded_state.dart';
 import '../../common/widgets/button.dart';
 import '../../router/app_router.gr.dart';
@@ -92,9 +91,11 @@ class _MapPageState extends State<MapPage> {
           Marker(
             point: LatLng(point.lat, point.lng),
             child: AppButton(
-              buttonStyle: AppButtonStyle.text,
-              onTap: () => context.pushRoute(ProfileRoute(profile: Option.of(p))),
-              child: const Icon(Icons.person, color: AppColors.primary),
+              borderRadius: BorderRadius.circular(48),
+              onTap: () => context.pushRoute(
+                ProfileRoute(profile: Option.of(p)),
+              ),
+              child: const Icon(Icons.person, color: Colors.white),
             ),
             width: 48,
             height: 48,

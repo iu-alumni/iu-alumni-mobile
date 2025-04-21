@@ -41,6 +41,11 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
     _cubit.update((e) => e.copyWith(location: location));
   }
 
+  void _onSave() {
+    context.read<ProfileEditingCubit>().save();
+    context.maybePop();
+  }
+
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -128,12 +133,16 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
                 buttonStyle: AppButtonStyle.input,
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(
-                    widget.profile.location ?? 'No location',
-                    style: AppTextStyles.buttonText.copyWith(
-                      color: widget.profile.location == null
-                          ? AppColors.blueGray
-                          : Colors.black,
+                  child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+                    buildWhen: (p, c) =>
+                        p.map((p) => p.location) != c.map((p) => p.location),
+                    builder: (context, ep) => Text(
+                      ep.toNullable()?.location ?? 'No location',
+                      style: AppTextStyles.buttonText.copyWith(
+                        color: widget.profile.location == null
+                            ? AppColors.blueGray
+                            : Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -145,6 +154,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
           Padding(
             padding: _horPadding,
             child: AppButton(
+              onTap: _onSave,
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: Text(
@@ -153,10 +163,6 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              onTap: () {
-                context.read<ProfileEditingCubit>().save();
-                context.maybePop();
-              },
             ),
           ),
           const SizedBox(height: RootPage.navigationBarHeight + 16),
