@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$EventModel {
   String get eventId => throw _privateConstructorUsedError;
+  UserStatus get userStatus => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError; // TODO
   String? get coverBytes => throw _privateConstructorUsedError; // TODO
@@ -40,6 +41,7 @@ abstract class $EventModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String eventId,
+      UserStatus userStatus,
       String? title,
       String? description,
       String? coverBytes,
@@ -48,6 +50,7 @@ abstract class $EventModelCopyWith<$Res> {
       DateTime occurringAt,
       bool onlineEvent});
 
+  $UserStatusCopyWith<$Res> get userStatus;
   $CostModelCopyWith<$Res> get cost;
 }
 
@@ -67,6 +70,7 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
   @override
   $Res call({
     Object? eventId = null,
+    Object? userStatus = null,
     Object? title = freezed,
     Object? description = freezed,
     Object? coverBytes = freezed,
@@ -80,6 +84,10 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
           ? _value.eventId
           : eventId // ignore: cast_nullable_to_non_nullable
               as String,
+      userStatus: null == userStatus
+          ? _value.userStatus
+          : userStatus // ignore: cast_nullable_to_non_nullable
+              as UserStatus,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -115,6 +123,16 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
+  $UserStatusCopyWith<$Res> get userStatus {
+    return $UserStatusCopyWith<$Res>(_value.userStatus, (value) {
+      return _then(_value.copyWith(userStatus: value) as $Val);
+    });
+  }
+
+  /// Create a copy of EventModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
   $CostModelCopyWith<$Res> get cost {
     return $CostModelCopyWith<$Res>(_value.cost, (value) {
       return _then(_value.copyWith(cost: value) as $Val);
@@ -132,6 +150,7 @@ abstract class _$$EventModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String eventId,
+      UserStatus userStatus,
       String? title,
       String? description,
       String? coverBytes,
@@ -140,6 +159,8 @@ abstract class _$$EventModelImplCopyWith<$Res>
       DateTime occurringAt,
       bool onlineEvent});
 
+  @override
+  $UserStatusCopyWith<$Res> get userStatus;
   @override
   $CostModelCopyWith<$Res> get cost;
 }
@@ -158,6 +179,7 @@ class __$$EventModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? eventId = null,
+    Object? userStatus = null,
     Object? title = freezed,
     Object? description = freezed,
     Object? coverBytes = freezed,
@@ -171,6 +193,10 @@ class __$$EventModelImplCopyWithImpl<$Res>
           ? _value.eventId
           : eventId // ignore: cast_nullable_to_non_nullable
               as String,
+      userStatus: null == userStatus
+          ? _value.userStatus
+          : userStatus // ignore: cast_nullable_to_non_nullable
+              as UserStatus,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -208,6 +234,7 @@ class __$$EventModelImplCopyWithImpl<$Res>
 class _$EventModelImpl implements _EventModel {
   const _$EventModelImpl(
       {required this.eventId,
+      required this.userStatus,
       required this.title,
       required this.description,
       required this.coverBytes,
@@ -218,6 +245,8 @@ class _$EventModelImpl implements _EventModel {
 
   @override
   final String eventId;
+  @override
+  final UserStatus userStatus;
   @override
   final String? title;
   @override
@@ -237,7 +266,7 @@ class _$EventModelImpl implements _EventModel {
 
   @override
   String toString() {
-    return 'EventModel(eventId: $eventId, title: $title, description: $description, coverBytes: $coverBytes, location: $location, cost: $cost, occurringAt: $occurringAt, onlineEvent: $onlineEvent)';
+    return 'EventModel(eventId: $eventId, userStatus: $userStatus, title: $title, description: $description, coverBytes: $coverBytes, location: $location, cost: $cost, occurringAt: $occurringAt, onlineEvent: $onlineEvent)';
   }
 
   @override
@@ -246,6 +275,8 @@ class _$EventModelImpl implements _EventModel {
         (other.runtimeType == runtimeType &&
             other is _$EventModelImpl &&
             (identical(other.eventId, eventId) || other.eventId == eventId) &&
+            (identical(other.userStatus, userStatus) ||
+                other.userStatus == userStatus) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -261,8 +292,8 @@ class _$EventModelImpl implements _EventModel {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, eventId, title, description,
-      coverBytes, location, cost, occurringAt, onlineEvent);
+  int get hashCode => Object.hash(runtimeType, eventId, userStatus, title,
+      description, coverBytes, location, cost, occurringAt, onlineEvent);
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -276,6 +307,7 @@ class _$EventModelImpl implements _EventModel {
 abstract class _EventModel implements EventModel {
   const factory _EventModel(
       {required final String eventId,
+      required final UserStatus userStatus,
       required final String? title,
       required final String? description,
       required final String? coverBytes,
@@ -286,6 +318,8 @@ abstract class _EventModel implements EventModel {
 
   @override
   String get eventId;
+  @override
+  UserStatus get userStatus;
   @override
   String? get title;
   @override

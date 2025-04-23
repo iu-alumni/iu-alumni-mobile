@@ -7,6 +7,7 @@ import '../../../data/events/events_gateway.dart';
 import '../../mappers/event_mapper.dart';
 import '../../models/cost.dart';
 import '../../models/event.dart';
+import '../../models/user_status.dart';
 import 'events_repository.dart';
 
 class EventsRepositoryImpl implements EventsRepository {
@@ -19,17 +20,17 @@ class EventsRepositoryImpl implements EventsRepository {
   EventModel? _modifiedEvent;
 
   @override
-  Future<Iterable<EventModel>> getEvents() async {
-    await _loadEvents();
+  Future<Iterable<EventModel>> getEvents(Option<String> myId) async {
+    await _loadEvents(myId);
     return _cache!.values;
   }
 
-  Future<void> _loadEvents({bool refresh = false}) async {
+  Future<void> _loadEvents(Option<String> myId, {bool refresh = false}) async {
     if (!refresh && _cache != null) {
       return;
     }
     final data = await _gateway.loadEvents();
-    final eventModels = data.map(EventMapper.eventFromData);
+    final eventModels = data.map(EventMapper.eventFromData(myId.toNullable()));
     // Fill the cache
     _cache?.clear();
     _cache ??= {};
@@ -42,6 +43,7 @@ class EventsRepositoryImpl implements EventsRepository {
   EventModel createEvent() {
     final event = EventModel(
       eventId: _uuid.v4(),
+      userStatus: const UserStatus.author(),
       title: null,
       description: null,
       coverBytes: null,
@@ -80,7 +82,6 @@ class EventsRepositoryImpl implements EventsRepository {
 
   @override
   Future<void> save() async {
-    await _loadEvents();
     final event = _modifiedEvent;
     if (event == null) {
       // Nothing modified, so nothing to save
@@ -91,16 +92,36 @@ class EventsRepositoryImpl implements EventsRepository {
   }
 
   @override
-  Future<Option<EventModel>> getOneEvent(String eventId) async {
-    await _loadEvents();
+  Future<Option<EventModel>> getOneEvent(
+    String eventId,
+    Option<String> myId,
+  ) async {
+    await _loadEvents(myId);
     return Option.fromNullable(_cache![eventId]);
   }
 
   @override
   Future<void> deleteEvent(String eventId) async {
-    await _loadEvents();
-    _cache!.remove(eventId);
+    final deletedModel = _cache!.remove(eventId);
     // TODO show an error in case of failure
     final success = await _gateway.deleteEvent(eventId);
+    if (!success && deletedModel != null) {
+      // Return the deleted event back if it wasn't deleted
+      _cache?[eventId] = deletedModel;
+    }
+  }
+
+  @override
+  Future<EventModel> participate(String eventId, String myId) async {
+    final success = await _gateway.participate(eventId, myId);
+    if (_cache?[eventId] case final EventModel event when success) {
+      if (event.userStatus case UserNotAuthor status) {
+        _cache?[eventId] = event.copyWith(
+          userStatus: status.copyWith(participant: success),
+        );
+      }
+    }
+    await _loadEvents(Option.of(myId));
+    return _cache![eventId]!;
   }
 }

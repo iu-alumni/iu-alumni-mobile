@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/events/events_repository.dart';
+import '../../../application/repositories/users/users_repository.dart';
 import '../../blocs/one_event/one_event_cubit.dart';
 import 'widgets/event_content.dart';
 
@@ -19,6 +20,7 @@ class EventPage extends StatefulWidget implements AutoRouteWrapper {
   Widget wrappedRoute(BuildContext context) => BlocProvider(
         create: (context) => OneEventCubit(
           context.read<EventsRepository>(),
+          context.read<UsersRepository>(),
         ),
         child: this,
       );

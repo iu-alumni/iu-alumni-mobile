@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../application/models/cost.dart';
 import '../../../../application/models/event.dart';
+import '../../../../application/models/user_status.dart';
 import '../../../../util/currency_formatter.dart';
 import '../../../../util/num_formatter.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
@@ -89,6 +90,8 @@ class _Cover extends StatelessWidget {
     context.read<OneEventCubit>().loadEvent(event.eventId);
   }
 
+  void _imIn(BuildContext context) => context.read<OneEventCubit>().imIn();
+
   @override
   Widget build(BuildContext context) => EventCover(
         imageBytes: event.coverBytes,
@@ -100,12 +103,22 @@ class _Cover extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Text(
-                'Edit',
+                switch (event.userStatus) {
+                  UserAuthor() => 'Edit',
+                  UserNotAuthor(:final participant) when participant =>
+                    'I won\'t come',
+                  UserNotAuthor() => 'I\'m in!',
+                },
                 style: AppTextStyles.buttonText,
                 textAlign: TextAlign.center,
               ),
             ),
-            onTap: () => _edit(context),
+            onTap: () => switch (event.userStatus) {
+              UserAuthor() => _edit(context),
+              // TODO remove the user from participants
+              UserNotAuthor(:final participant) when participant => null,
+              UserNotAuthor() => _imIn(context),
+            },
           ),
         ),
       );

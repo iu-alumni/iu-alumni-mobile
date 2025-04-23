@@ -61,11 +61,16 @@ class _AuthPageState extends State<AuthPage> {
                   const SizedBox(height: 160),
                   Text('Sing In', style: AppTextStyles.h3),
                   const SizedBox(height: 16),
+                  // TODO append the @innopolis.university automatically
+                  // Requires backend test accounts update
                   AppTextField(
                     initialText: null,
                     onChange: (text) => _login = text,
                     hintText: 'email@innopolis.university',
                     inputType: TextInputType.emailAddress,
+                    validate: (email) => email.contains('@innopolis.university')
+                        ? null
+                        : 'The email must contain "@innopolis.university"',
                   ),
                   const SizedBox(height: 16),
                   AppTextField(

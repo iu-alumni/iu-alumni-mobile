@@ -60,4 +60,15 @@ class EventsGatewayImpl implements EventsGateway {
         );
         return true;
       }, (e, _) => '$e').match((_) => false, identity).run();
+
+  @override
+  Future<bool> participate(String eventId, String userId) =>
+      TaskEither.tryCatch(() async {
+        await _dio.post(
+          Paths.participants(eventId),
+          options: _optionsManager.opts(),
+          queryParameters: {'participant_id': userId},
+        );
+        return true;
+      }, (e, _) => '$e').match((_) => false, identity).run();
 }

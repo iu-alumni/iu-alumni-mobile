@@ -13,7 +13,7 @@ import 'db_manager.dart';
 class DbManagerImpl extends DbManager {
   sqflite.Database? _db;
 
-  static const _searchLimit = 5;
+  static const _searchLimit = 10;
   static const _dbName = 'world_cities.db';
 
   Future<void> _copyDb(String path) async {

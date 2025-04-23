@@ -43,7 +43,7 @@ class _EventCardState extends State<EventCard> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  // TODO do something with empty titles like default title 
+                  // TODO do something with empty titles like default title
                   widget.event.title ?? 'Untitled',
                   style: AppTextStyles.h6.copyWith(color: widget.textColor),
                 ),
@@ -67,10 +67,13 @@ class _EventCardState extends State<EventCard> {
                     children: [
                       Icon(Icons.location_pin, color: widget.textColor),
                       const SizedBox(width: 4),
-                      Text(
-                        location,
-                        style: AppTextStyles.caption.copyWith(
-                          color: _secondaryTextColor,
+                      Expanded(
+                        child: Text(
+                          location,
+                          style: AppTextStyles.caption.copyWith(
+                            color: _secondaryTextColor,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],

@@ -3,9 +3,9 @@ import 'package:fpdart/fpdart.dart';
 import '../../models/event.dart';
 
 abstract interface class EventsRepository {
-  Future<Iterable<EventModel>> getEvents();
+  Future<Iterable<EventModel>> getEvents(Option<String> myId);
 
-  Future<Option<EventModel>> getOneEvent(String eventId);
+  Future<Option<EventModel>> getOneEvent(String eventId, Option<String> myId);
 
   EventModel createEvent();
 
@@ -14,4 +14,6 @@ abstract interface class EventsRepository {
   Future<void> deleteEvent(String eventId);
 
   Future<void> save();
+
+  Future<EventModel> participate(String eventId, String myId);
 }

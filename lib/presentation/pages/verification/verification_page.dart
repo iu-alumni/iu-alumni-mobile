@@ -33,6 +33,7 @@ class VerificationPage extends StatefulWidget implements AutoRouteWrapper {
       );
 }
 
+// TODO verification page flow must change, not production ready
 class _VerificationPageState extends State<VerificationPage> {
   late final _formatter = DateFormat('d.MM.yyyy');
   late final VerificationCubit _verificationCubit;

@@ -11,7 +11,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../../application/models/coordinates.dart';
 import '../../../application/repositories/map/map_repository.dart';
-import '../../blocs/users_location/users_location_cubit.dart';
+import '../../blocs/pin_locations/pin_locations_cubit.dart';
 import '../../common/models/loaded_state.dart';
 import '../../common/widgets/button.dart';
 import '../../router/app_router.gr.dart';
@@ -30,7 +30,7 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     _mapController = MapController();
     SchedulerBinding.instance.addPostFrameCallback(
-      (_) => context.read<UsersLocationCubit>().update(),
+      (_) => context.read<PinLocationsCubit>().update(),
     );
     super.initState();
   }
@@ -42,8 +42,12 @@ class _MapPageState extends State<MapPage> {
   }
 
   List<Coordinates> _locations(Coordinates x, int n, double r) {
+    // This function is AI-generated!!! I hope it works
     if (n <= 0) {
       return [];
+    }
+    if (n == 1) {
+      return [x];
     }
 
     // Earth's radius in kilometers (approximate)
@@ -81,6 +85,14 @@ class _MapPageState extends State<MapPage> {
     return points;
   }
 
+  void _onPinTap(MapPin pin) => switch (pin) {
+        ProfilePin(:final profile) => context.pushRoute(
+            ProfileRoute(profile: Option.of(profile)),
+          ),
+        EventPin(:final event) =>
+          context.pushRoute(EventRoute(eventId: event.eventId)),
+      };
+
   List<Marker> _markers(MapInfo info) {
     final _list = <Marker>[];
     for (final e in info.entries) {
@@ -92,10 +104,11 @@ class _MapPageState extends State<MapPage> {
             point: LatLng(point.lat, point.lng),
             child: AppButton(
               borderRadius: BorderRadius.circular(48),
-              onTap: () => context.pushRoute(
-                ProfileRoute(profile: Option.of(p)),
-              ),
-              child: const Icon(Icons.person, color: Colors.white),
+              onTap: () => _onPinTap(p),
+              child: switch (p) {
+                ProfilePin() => const Icon(Icons.person, color: Colors.white),
+                EventPin() => const Icon(Icons.event, color: Colors.white),
+              },
             ),
             width: 48,
             height: 48,
@@ -112,15 +125,16 @@ class _MapPageState extends State<MapPage> {
         body: FlutterMap(
           mapController: _mapController,
           options: const MapOptions(
-            initialCenter: LatLng(55.755793, 37.617134),
-            initialZoom: 5,
+            // Innopolis LatLng
+            initialCenter: LatLng(55.752117, 48.744552),
+            initialZoom: 3,
           ),
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               userAgentPackageName: 'com.example.ui_alumni_mobile',
             ),
-            BlocBuilder<UsersLocationCubit, UsersLocationState>(
+            BlocBuilder<PinLocationsCubit, PinLocationsState>(
               builder: (context, mapInfo) => MarkerClusterLayerWidget(
                 options: MarkerClusterLayerOptions(
                   size: const Size(48, 48),

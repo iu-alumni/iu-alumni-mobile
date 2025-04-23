@@ -3,16 +3,22 @@ import 'package:fpdart/fpdart.dart';
 
 import '../../../application/models/event.dart';
 import '../../../application/repositories/events/events_repository.dart';
+import '../../../application/repositories/users/users_repository.dart';
 
 typedef OneEventState = Option<EventModel>;
 
 class OneEventCubit extends Cubit<OneEventState> {
-  OneEventCubit(this._repository) : super(const None());
+  OneEventCubit(this._repository, this._usersRepository) : super(const None());
 
   final EventsRepository _repository;
+  final UsersRepository _usersRepository;
 
   void loadEvent(String uid) async {
-    final event = await _repository.getOneEvent(uid);
+    final myProfile = await _usersRepository.loadMe();
+    final event = await _repository.getOneEvent(
+      uid,
+      myProfile.map((p) => p.profileId),
+    );
     emit(event);
   }
 
@@ -27,7 +33,7 @@ class OneEventCubit extends Cubit<OneEventState> {
     // _repository.modifyEvent(newState);
     emit(newState);
   }
-  
+
   void delete() {
     state.map((s) => s.eventId).map(_repository.deleteEvent);
   }
@@ -36,4 +42,19 @@ class OneEventCubit extends Cubit<OneEventState> {
     state.map(_repository.modifyEvent);
     await _repository.save();
   }
+
+  Future<void> imIn() async => state.map(
+        (s) async {
+          final myProfile = await _usersRepository.loadMe();
+          return myProfile.map(
+            (p) async {
+              final event = await _repository.participate(
+                s.eventId,
+                p.profileId,
+              );
+              emit(Option.of(event));
+            },
+          );
+        },
+      );
 }

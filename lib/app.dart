@@ -10,8 +10,8 @@ import 'application/repositories/events/events_repository.dart';
 import 'application/repositories/events/events_repository_impl.dart';
 import 'application/repositories/map/map_repository.dart';
 import 'application/repositories/map/map_repository_impl.dart';
-import 'application/repositories/profile/profile_repository.dart';
-import 'application/repositories/profile/profile_repository_impl.dart';
+import 'application/repositories/users/users_repository.dart';
+import 'application/repositories/users/users_repository_impl.dart';
 import 'data/auth/auth_gateway.dart';
 import 'data/auth/auth_gateway_impl.dart';
 import 'data/common/dio_options_manager.dart';
@@ -102,10 +102,11 @@ class App extends StatelessWidget {
               context.read<AuthGateway>(),
             ),
           ),
-          RepositoryProvider<ProfileRepository>(
-            create: (context) => ProfileRepositoryImpl(
+          RepositoryProvider<UsersRepository>(
+            create: (context) => UsersRepositoryImpl(
               context.read<ProfileGateway>(),
               context.read<TokenProvider>(),
+              context.read<UsersGateway>(),
             ),
           ),
           RepositoryProvider(
@@ -117,13 +118,15 @@ class App extends StatelessWidget {
           RepositoryProvider<MapRepository>(
             create: (context) => MapRepositoryImpl(
               context.read<DbManager>(),
-              context.read<UsersGateway>(),
+              context.read<UsersRepository>(),
+              context.read<EventsRepository>(),
             ),
           ),
           // --- BLOCs ---
           BlocProvider(
             create: (context) => EventsListCubit(
               context.read<EventsRepository>(),
+              context.read<UsersRepository>(),
             ),
           ),
         ],
