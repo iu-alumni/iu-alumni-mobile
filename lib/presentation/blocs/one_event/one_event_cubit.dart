@@ -29,8 +29,7 @@ class OneEventCubit extends Cubit<OneEventState> {
 
   void modify(EventModel Function(EventModel) withPrev) {
     final newState = state.map(withPrev);
-    // TODO
-    // _repository.modifyEvent(newState);
+    newState.map(_repository.modifyEvent);
     emit(newState);
   }
 
@@ -43,7 +42,7 @@ class OneEventCubit extends Cubit<OneEventState> {
     await _repository.save();
   }
 
-  Future<void> imIn() async => state.map(
+  Future<void> participate() async => state.map(
         (s) async {
           final myProfile = await _usersRepository.loadMe();
           return myProfile.map(

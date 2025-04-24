@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../../data/db/db_manager.dart';
 import '../../../data/token/token_provider.dart';
 import '../../common/widgets/alumni_logo.dart';
@@ -19,6 +20,7 @@ class AppLoadingPage extends StatefulWidget implements AutoRouteWrapper {
         create: (context) => AppLoadingManager(
           context.read<TokenProvider>(),
           context.read<DbManager>(),
+          context.read<Reporter>(),
         ),
         child: this,
       );

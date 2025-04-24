@@ -10,6 +10,8 @@ import 'application/repositories/events/events_repository.dart';
 import 'application/repositories/events/events_repository_impl.dart';
 import 'application/repositories/map/map_repository.dart';
 import 'application/repositories/map/map_repository_impl.dart';
+import 'application/repositories/reporter/reporter.dart';
+import 'application/repositories/reporter/reporter_impl.dart';
 import 'application/repositories/users/users_repository.dart';
 import 'application/repositories/users/users_repository_impl.dart';
 import 'data/auth/auth_gateway.dart';
@@ -29,6 +31,7 @@ import 'data/users/users_gateway_impl.dart';
 import 'presentation/blocs/events_list/events_list_cubit.dart';
 import 'presentation/common/constants/app_colors.dart';
 import 'presentation/managers/app_loading_manager.dart';
+import 'presentation/router/app_observer.dart';
 import 'presentation/router/app_router.dart';
 
 class App extends StatelessWidget {
@@ -109,10 +112,14 @@ class App extends StatelessWidget {
               context.read<UsersGateway>(),
             ),
           ),
+          RepositoryProvider<Reporter>(
+            create: (context) => ReporterImpl(context.read<UsersRepository>()),
+          ),
           RepositoryProvider(
             create: (context) => AppLoadingManager(
               context.read<TokenProvider>(),
               context.read<DbManager>(),
+              context.read<Reporter>(),
             ),
           ),
           RepositoryProvider<MapRepository>(
@@ -130,15 +137,21 @@ class App extends StatelessWidget {
             ),
           ),
         ],
-        child: MaterialApp.router(
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: AppColors.primary,
-              surface: Colors.white,
+        child: Builder(
+          builder: (context) => MaterialApp.router(
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: AppColors.primary,
+                surface: Colors.white,
+              ),
+              useMaterial3: true,
             ),
-            useMaterial3: true,
+            routerConfig: AppRouter().config(
+              navigatorObservers: () => [
+                AppObserver(context.read<Reporter>()),
+              ],
+            ),
           ),
-          routerConfig: AppRouter().config(),
         ),
       );
 }

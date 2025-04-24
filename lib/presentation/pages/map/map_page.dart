@@ -10,7 +10,10 @@ import 'package:fpdart/fpdart.dart' hide State;
 import 'package:latlong2/latlong.dart';
 
 import '../../../application/models/coordinates.dart';
+import '../../../application/models/event.dart';
+import '../../../application/models/profile.dart';
 import '../../../application/repositories/map/map_repository.dart';
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/pin_locations/pin_locations_cubit.dart';
 import '../../common/models/loaded_state.dart';
 import '../../common/widgets/button.dart';
@@ -85,12 +88,19 @@ class _MapPageState extends State<MapPage> {
     return points;
   }
 
+  void _openProfile(Profile profile) {
+    context.read<Reporter>().reportOpenProfile(profile, AppLocation.mapTab);
+    context.pushRoute(ProfileRoute(profile: Option.of(profile)));
+  }
+
+  void _openEvent(EventModel event) {
+    context.read<Reporter>().reportOpenEvent(event, AppLocation.mapTab);
+    context.pushRoute(EventRoute(eventId: event.eventId));
+  }
+
   void _onPinTap(MapPin pin) => switch (pin) {
-        ProfilePin(:final profile) => context.pushRoute(
-            ProfileRoute(profile: Option.of(profile)),
-          ),
-        EventPin(:final event) =>
-          context.pushRoute(EventRoute(eventId: event.eventId)),
+        ProfilePin(:final profile) => _openProfile(profile),
+        EventPin(:final event) => _openEvent(event),
       };
 
   List<Marker> _markers(MapInfo info) {

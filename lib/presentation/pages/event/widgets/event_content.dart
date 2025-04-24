@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,8 +8,10 @@ import 'package:intl/intl.dart';
 import '../../../../application/models/cost.dart';
 import '../../../../application/models/event.dart';
 import '../../../../application/models/user_status.dart';
+import '../../../../application/repositories/reporter/reporter.dart';
 import '../../../../util/currency_formatter.dart';
 import '../../../../util/num_formatter.dart';
+import '../../../blocs/one_event/event_participate_cubit.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/button.dart';
@@ -37,7 +40,10 @@ class _EventViewingContentState extends State<EventViewingContent> {
     final desc = widget.event.description;
     return Column(
       children: [
-        _Cover(event: widget.event),
+        BlocProvider(
+          create: (_) => EventParticipateCubit(),
+          child: _Cover(event: widget.event),
+        ),
         const SizedBox(height: 40),
         ...[
           if (desc != null && desc.isNotEmpty)
@@ -90,35 +96,59 @@ class _Cover extends StatelessWidget {
     context.read<OneEventCubit>().loadEvent(event.eventId);
   }
 
-  void _imIn(BuildContext context) => context.read<OneEventCubit>().imIn();
+  void _participate(BuildContext context) {
+    context.read<Reporter>().reportParticipate(event, AppLocation.eventScreen);
+    context.read<EventParticipateCubit>().showLoading();
+    context.read<OneEventCubit>().participate();
+  }
 
   @override
-  Widget build(BuildContext context) => EventCover(
-        imageBytes: event.coverBytes,
-        title: event.title,
-        location: event.location,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: AppButton(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Text(
-                switch (event.userStatus) {
-                  UserAuthor() => 'Edit',
-                  UserNotAuthor(:final participant) when participant =>
-                    'I won\'t come',
-                  UserNotAuthor() => 'I\'m in!',
-                },
-                style: AppTextStyles.buttonText,
-                textAlign: TextAlign.center,
+  Widget build(BuildContext context) =>
+      BlocListener<OneEventCubit, OneEventState>(
+        listener: (context, event) {
+          context.read<EventParticipateCubit>().finishedLoading();
+        },
+        child: EventCover(
+          imageBytes: event.coverBytes,
+          title: event.title,
+          location: event.location,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: AppButton(
+              buttonStyle: switch (event.userStatus) {
+                UserNotAuthor(:final participant) when participant =>
+                  AppButtonStyle.destructive,
+                _ => AppButtonStyle.primary,
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: BlocBuilder<EventParticipateCubit, bool>(
+                  builder: (context, isLoading) => isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          switch (event.userStatus) {
+                            UserAuthor() => 'Edit',
+                            UserNotAuthor(:final participant)
+                                when participant =>
+                              'I won\'t come',
+                            UserNotAuthor() => 'Participate',
+                          },
+                          style: AppTextStyles.buttonText,
+                          textAlign: TextAlign.center,
+                        ),
+                ),
               ),
+              onTap: () => switch (event.userStatus) {
+                UserAuthor() => _edit(context),
+                // TODO remove the user from participants
+                UserNotAuthor(:final participant) when participant => null,
+                UserNotAuthor() => _participate(context),
+              },
             ),
-            onTap: () => switch (event.userStatus) {
-              UserAuthor() => _edit(context),
-              // TODO remove the user from participants
-              UserNotAuthor(:final participant) when participant => null,
-              UserNotAuthor() => _imIn(context),
-            },
           ),
         ),
       );

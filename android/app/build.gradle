@@ -42,3 +42,7 @@ android {
 flutter {
     source = "../.."
 }
+
+configurations {
+   all*.exclude group: 'com.yandex.android', module: 'mobmetricalib-identifiers'
+}

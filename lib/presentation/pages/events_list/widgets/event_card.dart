@@ -1,8 +1,11 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../application/models/event.dart';
+import '../../../../application/repositories/reporter/reporter.dart';
 import '../../../../util/gap.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../router/app_router.gr.dart';
@@ -27,6 +30,13 @@ class _EventCardState extends State<EventCard> {
   late final _formatter = DateFormat('hh:mm dd.MM.yyyy');
   late final _secondaryTextColor = widget.textColor.withValues(alpha: 0.8);
 
+  void _openEvent() {
+    context
+        .read<Reporter>()
+        .reportOpenEvent(widget.event, AppLocation.eventsTab);
+    context.pushRoute(EventRoute(eventId: widget.event.eventId));
+  }
+
   @override
   Widget build(BuildContext context) => Material(
         color: widget.cardColor,
@@ -34,9 +44,7 @@ class _EventCardState extends State<EventCard> {
         shadowColor: Colors.black26,
         elevation: 4,
         child: InkWell(
-          onTap: () => context.pushRoute(
-            EventRoute(eventId: widget.event.eventId),
-          ),
+          onTap: _openEvent,
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
