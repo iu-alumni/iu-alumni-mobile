@@ -16,15 +16,22 @@ class EventsGatewayImpl implements EventsGateway {
   final DioOptionsManager _optionsManager;
 
   @override
-  Future<void> addEvent(EventRequestDataModel event) =>
-      TaskOption.tryCatch(() async {
+  Future<Option<String>> addEvent(EventRequestDataModel event) async {
+    final result = await TaskEither.tryCatch(
+      () async {
         final data = jsonEncode(event.toJson());
-        await _dio.post(
+        final response = await _dio.post(
           Paths.events,
           data: data,
           options: _optionsManager.opts(),
         );
-      }).run();
+        final json = response.data as Map<String, dynamic>;
+        return json['id'] as String;
+      },
+      (e, _) => '$e',
+    ).run();
+    return result.toOption();
+  }
 
   @override
   Future<Iterable<EventDataModel>> loadEvents() =>
@@ -40,17 +47,23 @@ class EventsGatewayImpl implements EventsGateway {
           .run();
 
   @override
-  Future<bool> deleteEvent(String eventId) => TaskEither.tryCatch(() async {
+  Future<bool> deleteEvent(String eventId) async {
+    final result = await TaskEither.tryCatch(
+      () async {
         await _dio.delete(
           Paths.eventWithId(eventId),
           options: _optionsManager.opts(),
         );
-        return true;
-      }, (e, _) => '$e').match((_) => false, identity).run();
+      },
+      (e, _) => '$e',
+    ).run();
+    return result.isRight();
+  }
 
   @override
-  Future<bool> updateEvent(String eventId, EventRequestDataModel event) =>
-      TaskEither.tryCatch(() async {
+  Future<bool> updateEvent(String eventId, EventRequestDataModel event) async {
+    final result = await TaskEither.tryCatch(
+      () async {
         final requestModel = event.toJson();
         requestModel['datetime'] = null;
         await _dio.put(
@@ -58,17 +71,24 @@ class EventsGatewayImpl implements EventsGateway {
           options: _optionsManager.opts(),
           data: jsonEncode(requestModel),
         );
-        return true;
-      }, (e, _) => '$e').match((_) => false, identity).run();
+      },
+      (e, _) => '$e',
+    ).run();
+    return result.isRight();
+  }
 
   @override
-  Future<bool> participate(String eventId, String userId) =>
-      TaskEither.tryCatch(() async {
+  Future<bool> participate(String eventId, String userId) async {
+    final result = await TaskEither.tryCatch(
+      () async {
         await _dio.post(
           Paths.participants(eventId),
           options: _optionsManager.opts(),
           queryParameters: {'participant_id': userId},
         );
-        return true;
-      }, (e, _) => '$e').match((_) => false, identity).run();
+      },
+      (e, _) => '$e',
+    ).run();
+    return result.isRight();
+  }
 }

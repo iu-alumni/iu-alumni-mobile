@@ -1,4 +1,3 @@
-import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +10,7 @@ import '../../../../application/models/user_status.dart';
 import '../../../../application/repositories/reporter/reporter.dart';
 import '../../../../util/currency_formatter.dart';
 import '../../../../util/num_formatter.dart';
+import '../../../blocs/models/one_event_state.dart';
 import '../../../blocs/one_event/event_participate_cubit.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';

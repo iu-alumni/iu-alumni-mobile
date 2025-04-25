@@ -32,19 +32,18 @@ class _AuthPageState extends State<AuthPage> {
 
   void _auth() => context.read<AuthCubit>().authorize(_login, _password);
 
+  void _register() => context.pushRoute(
+        VerificationRoute(
+          initialEmail: _login,
+          initialPassword: _password,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) => BlocListener<AuthCubit, LoadedState>(
         listener: (context, state) {
           if (state case LoadedStateData()) {
             context.replaceRoute(const RootRoute());
-          }
-          if (state case LoadedStateError()) {
-            context.pushRoute(
-              VerificationRoute(
-                initialEmail: _login,
-                initialPassword: _password,
-              ),
-            );
           }
         },
         child: Scaffold(
@@ -58,52 +57,66 @@ class _AuthPageState extends State<AuthPage> {
                 children: [
                   const SizedBox(height: 80),
                   const AlumniLogo(),
-                  const SizedBox(height: 160),
+                  const SizedBox(height: 80),
                   Text('Sing In', style: AppTextStyles.h3),
                   const SizedBox(height: 16),
-                  // TODO append the @innopolis.university automatically
-                  // Requires backend test accounts update
-                  AppTextField(
-                    initialText: null,
-                    onChange: (text) => _login = text,
-                    hintText: 'email@innopolis.university',
-                    inputType: TextInputType.emailAddress,
-                    validate: (email) => email.contains('@innopolis.university')
-                        ? null
-                        : 'The email must contain "@innopolis.university"',
+                  BlocBuilder<AuthCubit, LoadedState>(
+                    buildWhen: (p, c) =>
+                        p is LoadedStateError != c is LoadedStateError,
+                    builder: (context, state) => AppTextField(
+                      initialText: null,
+                      onChange: (text) => _login = text,
+                      hintText: 'Innopolis Email',
+                      inputType: TextInputType.emailAddress,
+                    ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   AppTextField(
                     initialText: null,
                     onChange: (text) => _password = text,
-                    hintText: 'password',
+                    hintText: 'Password',
                     inputType: TextInputType.visiblePassword,
                     obscureText: true,
                     maxLines: 1,
                   ),
+                  const _ErrorText(),
                   const SizedBox(height: 16),
                   AppButton(
                     onTap: _auth,
                     child: Padding(
                       padding: const EdgeInsets.all(24),
                       child: BlocBuilder<AuthCubit, LoadedState>(
-                          builder: (context, state) {
-                        if (state case LoadedStateLoading()) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
+                        builder: (context, state) {
+                          if (state case LoadedStateLoading()) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            );
+                          }
+                          return Text(
+                            'Sign in',
+                            style: AppTextStyles.buttonText,
+                            textAlign: TextAlign.center,
                           );
-                        }
-                        return Text(
-                          'Continue',
-                          style: AppTextStyles.buttonText,
-                          textAlign: TextAlign.center,
-                        );
-                      }),
+                        },
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
+                  AppButton(
+                    onTap: _register,
+                    buttonStyle: AppButtonStyle.secondary,
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text(
+                        'Register',
+                        style: AppTextStyles.buttonText,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   AppButton(
                     onTap: _auth,
                     buttonStyle: AppButtonStyle.text,
@@ -122,6 +135,32 @@ class _AuthPageState extends State<AuthPage> {
               ),
             ),
           ),
+        ),
+      );
+}
+
+class _ErrorText extends StatelessWidget {
+  const _ErrorText();
+
+  @override
+  Widget build(BuildContext context) => BlocBuilder<AuthCubit, LoadedState>(
+        buildWhen: (p, c) => p is LoadedStateError != c is LoadedStateError,
+        builder: (context, state) => AnimatedSize(
+          duration: const Duration(milliseconds: 250),
+          child: switch (state) {
+            LoadedStateError(:final error) => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 8),
+                  Text(
+                    error,
+                    style: AppTextStyles.caption,
+                  )
+                ],
+              ),
+            _ => const SizedBox(),
+          },
         ),
       );
 }

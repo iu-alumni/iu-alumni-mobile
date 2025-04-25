@@ -4,7 +4,7 @@ import '../../models/event.dart';
 import '../../models/profile.dart';
 
 abstract class MapRepository {
-  Future<MapInfo> getUsersOnMap();
+  Future<MapInfo> getPinsOnMap();
 
   Future<List<CityLocation>> suggestions(String city);
 }

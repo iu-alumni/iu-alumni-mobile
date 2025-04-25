@@ -1,5 +1,6 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../util/logger.dart';
@@ -30,12 +31,14 @@ class ReporterImpl extends Reporter with WidgetsBindingObserver {
     AppLocation appLocation = AppLocation.none,
   }) async {
     final myProfile = await _usersRepository.loadMe();
-    AppMetrica.reportEventWithMap('ui_alumni_mobile_event', {
-      'user_id': myProfile.match(() => 'NONE', (p) => p.profileId),
-      if (_representAppLocation(appLocation) case final location?)
-        'app_location': location,
-      'payload': payload,
-    });
+    if (!kDebugMode) {
+      AppMetrica.reportEventWithMap('ui_alumni_mobile_event', {
+        'user_id': myProfile.match(() => 'NONE', (p) => p.profileId),
+        if (_representAppLocation(appLocation) case final location?)
+          'app_location': location,
+        'payload': payload,
+      });
+    }
     logger.d(
       'Reported an event on ${_representAppLocation(appLocation)}.\nAuthorized: ${myProfile.isSome()}.\nPayload $payload.',
     );

@@ -67,28 +67,37 @@ class EventsRepositoryImpl implements EventsRepository {
     _modifiedEvent = event;
   }
 
-  Future<void> _mutateAndSave(EventModel event) async {
-    final isOldEvent = _cache!.containsKey(event.eventId);
-    _cache![event.eventId] = event;
+  Future<bool> _mutateAndSave(EventModel event) async {
+    // _cache![event.eventId] = event;
     final eventRequest = EventMapper.eventRequestFromModel(event);
-    if (isOldEvent) {
-      // TODO show an error if not suceeded
+    // Has event already been in the created ever (otherwise it is new)
+    if (_cache!.containsKey(event.eventId)) {
       final success = await _gateway.updateEvent(event.eventId, eventRequest);
+      if (success) {
+        // Update the event in the cache on success
+        _cache![event.eventId] = event;
+      }
+      return success;
     } else {
       // Event not found in the cache, so it is a new event
-      await _gateway.addEvent(eventRequest);
+      final newId = await _gateway.addEvent(eventRequest);
+      // Update the event ID by the one server responded
+      newId.map((eid) {
+        _cache![event.eventId] = event.copyWith(eventId: eid);
+      });
+      return newId.isSome();
     }
   }
 
   @override
-  Future<void> save() async {
+  Future<bool> save() async {
     final event = _modifiedEvent;
     if (event == null) {
       // Nothing modified, so nothing to save
-      return;
+      return true;
     }
     _modifiedEvent = null;
-    _mutateAndSave(_fixEvent(event));
+    return _mutateAndSave(_fixEvent(event));
   }
 
   @override

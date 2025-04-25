@@ -15,6 +15,7 @@ import '../../../application/models/profile.dart';
 import '../../../application/repositories/map/map_repository.dart';
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/pin_locations/pin_locations_cubit.dart';
+import '../../common/constants/app_colors.dart';
 import '../../common/models/loaded_state.dart';
 import '../../common/widgets/button.dart';
 import '../../router/app_router.gr.dart';
@@ -106,7 +107,7 @@ class _MapPageState extends State<MapPage> {
   List<Marker> _markers(MapInfo info) {
     final _list = <Marker>[];
     for (final e in info.entries) {
-      final locs = _locations(e.key, e.value.length, 1);
+      final locs = _locations(e.key, e.value.length, 2);
       for (final (i, p) in e.value.indexed) {
         final point = locs[i];
         _list.add(
@@ -172,18 +173,18 @@ class _ClusterMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-          color: Colors.blue[200],
+          color: AppColors.lightPrimary,
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.blue,
+            color: AppColors.primary,
             width: 3,
           ),
         ),
         child: Center(
           child: Text(
             markersLength,
-            style: TextStyle(
-              color: Colors.blue[900],
+            style: const TextStyle(
+              color: AppColors.darkGray,
               fontWeight: FontWeight.w700,
               fontSize: 18,
             ),

@@ -11,10 +11,10 @@ class PinLocationsCubit extends Cubit<PinLocationsState> {
   final MapRepository _mapRepository;
 
   void update() async {
-    if (state is! LoadedStateInit) {
-      return;
-    }
-    final mapInfo = await _mapRepository.getUsersOnMap();
+    // if (state is! LoadedStateInit) {
+    //   return;
+    // }
+    final mapInfo = await _mapRepository.getPinsOnMap();
     emit(LoadedState.data(mapInfo));
   }
 }

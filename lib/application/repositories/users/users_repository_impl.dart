@@ -33,13 +33,14 @@ class UsersRepositoryImpl extends UsersRepository {
   @override
   Future<void> update(Profile profile) async {
     final oldProfile = _me;
-    _me = profile;
     final success = await _profileGateway.update(profile);
-    // TODO update all profiles list
-    // TODO Make sure the map screen refreshes too
     if (!success) {
       // TODO return an error
       _me = oldProfile;
+    } else {
+      _me = profile;
+      _users?.removeWhere((p) => p.profileId == oldProfile?.profileId);
+      _users?.add(profile);
     }
   }
 

@@ -9,11 +9,25 @@ class AuthCubit extends Cubit<LoadedState> {
 
   final AuthRepository _authRepository;
 
+  String? _validateEmail(String email) => email.contains('@innopolis.')
+      ? null
+      : 'The email must have the "innopolis" mail server';
+
   Future<void> authorize(String login, String password) async {
+    final error = _validateEmail(login);
+    if (error != null) {
+      emit(LoadedState.error(error));
+      return;
+    }
     emit(const LoadedState.loading());
     final result = await _authRepository.authorize(login, password);
-    // await Future.delayed(const Duration(seconds: 1));
-    // final result = Either<String, Unit>.of(unit);
-    emit(result.match(LoadedState.error, (_) => const LoadedState.data(unit)));
+    emit(
+      result.match(
+        (_) => const LoadedState.error(
+          'If you are an alumnus and haven\'t created an account in this app, proceed with registration',
+        ),
+        (_) => const LoadedState.data(unit),
+      ),
+    );
   }
 }

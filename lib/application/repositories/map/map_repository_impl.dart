@@ -41,40 +41,6 @@ class MapRepositoryImpl extends MapRepository {
     return _map;
   }
 
-  // Map<CityLocation, List<MapPin>> _locationsMapFromProfiles(
-  //   Iterable<Profile> profiles,
-  // ) {
-  //   final _map = <CityLocation, List<MapPin>>{};
-  //   for (final p in profiles) {
-  //     final location = p.location;
-  //     if (location == null) {
-  //       continue;
-  //     }
-  //     final cityLocation = _cityLocationFromStr(location);
-  //     if (cityLocation == null) {
-  //       logger.d('$location could not be transformed to the city location');
-  //       continue;
-  //     }
-  //     final profilePin = ProfilePin(p);
-  //     if (_map.containsKey(cityLocation)) {
-  //       _map[cityLocation]?.add(profilePin);
-  //     } else {
-  //       _map[cityLocation] = [profilePin];
-  //     }
-  //   }
-  //   return _map;
-  // }
-
-  // Map<CityLocation, List<MapPin>> _locationMapFromEvents(
-  //   Iterable<EventModel> events,
-  // ) {
-  //   final _map = <CityLocation, List<MapPin>>{};
-  //   for (final e in events) {
-  //     final location = e.location;
-  //     if (location == null) {}
-  //   }
-  // }
-
   Future<MapInfo> _buildMapInfo(
     Map<CityLocation, List<MapPin>> locationsMap,
   ) async {
@@ -96,20 +62,19 @@ class MapRepositoryImpl extends MapRepository {
   }
 
   @override
-  Future<MapInfo> getUsersOnMap() async {
+  Future<MapInfo> getPinsOnMap() async {
     final users = await _usersRepository.getAllUsers();
     final myProfile = await _usersRepository.loadMe();
     final events = await _eventsRepository.getEvents(
       myProfile.map((p) => p.profileId),
     );
-    return _buildMapInfo(
-      _locationMapFrom([
-        for (final u in users)
-          if (u.location case final l?) (l, ProfilePin(u)),
-        for (final e in events)
-          if (e.location case final l?) (l, EventPin(e)),
-      ]),
-    );
+    final locations = _locationMapFrom([
+      for (final u in users)
+        if (u.location case final l?) (l, ProfilePin(u)),
+      for (final e in events)
+        if (e.location case final l?) (l, EventPin(e)),
+    ]);
+    return _buildMapInfo(locations);
   }
 
   @override

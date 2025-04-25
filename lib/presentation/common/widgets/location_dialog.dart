@@ -10,19 +10,25 @@ import 'app_text_field.dart';
 import 'button.dart';
 
 class LocationDialog extends StatelessWidget {
-  const LocationDialog({super.key});
+  const LocationDialog({required this.previousWasNone, super.key});
 
-  static Future<String?> show(BuildContext context) => showDialog<String>(
+  final bool previousWasNone;
+
+  static Future<String?> show(
+    BuildContext context, [
+    bool previousWasNone = false,
+  ]) =>
+      showDialog<String>(
         context: context,
         builder: (_) => BlocProvider(
           create: (context) => LocationSuggestionsCubit(
             context.read<MapRepository>(),
           ),
-          child: const LocationDialog(),
+          child: LocationDialog(previousWasNone: previousWasNone),
         ),
       );
 
-  void _onTap(BuildContext context, String option) => context.maybePop(option);
+  void _onTap(BuildContext context, String? option) => context.maybePop(option);
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -31,7 +37,7 @@ class LocationDialog extends StatelessWidget {
           child: Material(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 16),
                 Padding(
@@ -45,9 +51,11 @@ class LocationDialog extends StatelessWidget {
                 ),
                 BlocBuilder<LocationSuggestionsCubit, LocationSuggestionsState>(
                   builder: (context, sugs) => switch (sugs) {
-                    LoadedStateLoading() => const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: CircularProgressIndicator(),
+                    LoadedStateLoading() => const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
                     LoadedStateData(:final data) => Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,6 +79,19 @@ class LocationDialog extends StatelessWidget {
                     _ => const SizedBox(),
                   },
                 ),
+                if (!previousWasNone)
+                  AppButton(
+                    buttonStyle: AppButtonStyle.text,
+                    onTap: () => _onTap(context, null),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        'Set to none',
+                        textAlign: TextAlign.start,
+                        style: AppTextStyles.body,
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 16),
               ],
             ),

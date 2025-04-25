@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/events/events_repository.dart';
 import '../../../application/repositories/users/users_repository.dart';
+import '../../blocs/models/one_event_state.dart';
 import '../../blocs/one_event/one_event_cubit.dart';
 import 'widgets/event_content.dart';
 
@@ -36,7 +37,7 @@ class _EventPageState extends State<EventPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: BlocBuilder<OneEventCubit, OneEventState>(
-          builder: (context, eventState) => eventState.match(
+          builder: (context, eventState) => eventState.event.match(
             () => const Center(child: CircularProgressIndicator()),
             (event) => SafeArea(
               top: false,

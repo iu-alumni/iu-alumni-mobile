@@ -17,6 +17,7 @@ class EditingTitle extends StatelessWidget {
           initialText: context
               .read<OneEventCubit>()
               .state
+              .event
               .map((s) => s.title)
               .match(() => '', identity),
           onChange: (text) => context

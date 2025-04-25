@@ -7,6 +7,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../application/models/event.dart';
+import '../../../blocs/models/one_event_state.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/button.dart';
@@ -37,8 +38,8 @@ class EditingCover extends StatelessWidget {
         .modify((event) => event.copyWith(coverBytes: encoded));
   }
 
-  bool _buildWhen(Option<EventModel> p, Option<EventModel> c) =>
-      switch ((p, c)) {
+  bool _buildWhen(OneEventState p, OneEventState c) =>
+      switch ((p.event, c.event)) {
         (
           final Some<EventModel> ps,
           final Some<EventModel> cs,
@@ -51,8 +52,8 @@ class EditingCover extends StatelessWidget {
   Widget build(BuildContext context) =>
       BlocBuilder<OneEventCubit, OneEventState>(
         buildWhen: _buildWhen,
-        builder: (context, event) => EventCover(
-          imageBytes: event.toNullable()?.coverBytes,
+        builder: (context, state) => EventCover(
+          imageBytes: state.event.toNullable()?.coverBytes,
           child: Align(
             alignment: Alignment.center,
             child: Padding(

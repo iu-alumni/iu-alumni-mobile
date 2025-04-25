@@ -11,7 +11,7 @@ class AppTextField extends StatefulWidget {
     this.inputType,
     this.obscureText = false,
     this.maxLines,
-    this.validate,
+    // this.errorText,
     super.key,
   });
 
@@ -21,7 +21,7 @@ class AppTextField extends StatefulWidget {
   final TextInputType? inputType;
   final bool obscureText;
   final int? maxLines;
-  final String? Function(String)? validate;
+  // final String? errorText;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -32,7 +32,6 @@ class _AppTextFieldState extends State<AppTextField> {
   late final _focusNode = FocusNode();
 
   late var _textObscured = widget.obscureText;
-  String? _errorText;
 
   @override
   void initState() {
@@ -52,10 +51,6 @@ class _AppTextFieldState extends State<AppTextField> {
   void _onChange() {
     final text = _controller.text;
     widget.onChange(text);
-    final newError = widget.validate?.call(text);
-    if (newError != _errorText) {
-      setState(() => _errorText = newError);
-    }
   }
 
   @override
@@ -76,7 +71,7 @@ class _AppTextFieldState extends State<AppTextField> {
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(4),
           ),
-          errorText: _errorText,
+          // errorText: widget.errorText,
           suffixIcon: widget.obscureText
               ? IconButton(
                   onPressed: () => setState(

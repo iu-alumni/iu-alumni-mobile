@@ -6,6 +6,7 @@ import 'package:fpdart/fpdart.dart' hide State;
 import '../../../application/repositories/events/events_repository.dart';
 import '../../../application/repositories/users/users_repository.dart';
 import '../../blocs/events_list/events_list_cubit.dart';
+import '../../blocs/models/one_event_state.dart';
 import '../../blocs/one_event/one_event_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
@@ -42,7 +43,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
   }
 
   void _save() async {
-    await _oneEventCubit.commit();
+    await _oneEventCubit.save();
     if (!context.mounted) {
       return;
     }
@@ -51,7 +52,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       // If the ID was unknown originally, the event is newly created and exists
       // only in the OneEventCubit. This ID should be utilized to add it from
       // the repository after committing
-      () => _oneEventCubit.state.map(
+      () => _oneEventCubit.state.event.map(
         (thisEvent) => eventsListCubit.add(thisEvent.eventId),
       ),
       // If the ID is known, it is an existing event, so update it
@@ -69,44 +70,47 @@ class _EventEditingPageState extends State<EventEditingPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         resizeToAvoidBottomInset: true,
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: AppButton(
-                  onTap: _save,
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Text(
-                      widget.eventId.match(() => 'Post event', (_) => 'Done'),
-                      style: AppTextStyles.buttonText,
-                      textAlign: TextAlign.center,
+        bottomNavigationBar: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: AppButton(
+                    onTap: _save,
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text(
+                        widget.eventId.match(() => 'Post event', (_) => 'Done'),
+                        style: AppTextStyles.buttonText,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              ...widget.eventId.match(
-                () => [],
-                (_) => [
-                  const SizedBox(width: 8),
-                  AppButton(
-                    onTap: _delete,
-                    buttonStyle: AppButtonStyle.text,
-                    child: const Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Icon(Icons.delete, color: AppColors.error),
+                ...widget.eventId.match(
+                  () => [],
+                  (_) => [
+                    const SizedBox(width: 8),
+                    AppButton(
+                      onTap: _delete,
+                      buttonStyle: AppButtonStyle.text,
+                      child: const Padding(
+                        padding: EdgeInsets.all(24),
+                        child: Icon(Icons.delete, color: AppColors.error),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         body: BlocBuilder<OneEventCubit, OneEventState>(
-          buildWhen: (p, c) => p.isNone() != c.isNone(),
-          builder: (context, eventState) => eventState.match(
+          buildWhen: (p, c) => p.event.isNone() != c.event.isNone(),
+          builder: (context, eventState) => eventState.event.match(
             () => const Center(child: CircularProgressIndicator()),
             (event) => const SafeArea(
               top: false,

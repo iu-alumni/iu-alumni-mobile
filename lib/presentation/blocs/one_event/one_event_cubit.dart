@@ -4,11 +4,17 @@ import 'package:fpdart/fpdart.dart';
 import '../../../application/models/event.dart';
 import '../../../application/repositories/events/events_repository.dart';
 import '../../../application/repositories/users/users_repository.dart';
-
-typedef OneEventState = Option<EventModel>;
+import '../../common/models/loaded_state.dart';
+import '../models/one_event_state.dart';
 
 class OneEventCubit extends Cubit<OneEventState> {
-  OneEventCubit(this._repository, this._usersRepository) : super(const None());
+  OneEventCubit(this._repository, this._usersRepository)
+      : super(
+          OneEventState(
+            saveState: const LoadedState.init(),
+            event: const None(),
+          ),
+        );
 
   final EventsRepository _repository;
   final UsersRepository _usersRepository;
@@ -19,30 +25,38 @@ class OneEventCubit extends Cubit<OneEventState> {
       uid,
       myProfile.map((p) => p.profileId),
     );
-    emit(event);
+    emit(state.copyWith(event: event));
   }
 
   void createEvent() {
     final newEvent = _repository.createEvent();
-    emit(Option.of(newEvent));
+    emit(state.copyWith(event: Option.of(newEvent)));
   }
 
   void modify(EventModel Function(EventModel) withPrev) {
-    final newState = state.map(withPrev);
-    newState.map(_repository.modifyEvent);
-    emit(newState);
+    final newEvent = state.event.map(withPrev);
+    newEvent.map(_repository.modifyEvent);
+    emit(state.copyWith(event: newEvent));
   }
 
   void delete() {
-    state.map((s) => s.eventId).map(_repository.deleteEvent);
+    state.event.map((s) => s.eventId).map(_repository.deleteEvent);
   }
 
-  Future<void> commit() async {
-    state.map(_repository.modifyEvent);
-    await _repository.save();
+  Future<void> save() async {
+    state.event.map(_repository.modifyEvent);
+    emit(state.copyWith(saveState: const LoadedState.loading()));
+    final success = await _repository.save();
+    emit(
+      state.copyWith(
+        saveState: success
+            ? const LoadedState.data(unit)
+            : const LoadedState.error('Could not save the event'),
+      ),
+    );
   }
 
-  Future<void> participate() async => state.map(
+  Future<void> participate() async => state.event.map(
         (s) async {
           final myProfile = await _usersRepository.loadMe();
           return myProfile.map(
@@ -51,7 +65,7 @@ class OneEventCubit extends Cubit<OneEventState> {
                 s.eventId,
                 p.profileId,
               );
-              emit(Option.of(event));
+              emit(state.copyWith(event: Option.of(event)));
             },
           );
         },

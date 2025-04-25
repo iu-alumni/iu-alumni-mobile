@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 
 import '../../../../application/models/profile.dart';
 import '../../../blocs/profile/profile_editing_cubit.dart';
@@ -33,8 +34,8 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
     super.initState();
   }
 
-  void _showLocationPicker(BuildContext context) async {
-    final location = await LocationDialog.show(context);
+  void _showLocationPicker(BuildContext context, bool currentIsNone) async {
+    final location = await LocationDialog.show(context, currentIsNone);
     if (!context.mounted) {
       return;
     }
@@ -139,14 +140,24 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
                     builder: (context, ep) => Text(
                       ep.toNullable()?.location ?? 'No location',
                       style: AppTextStyles.buttonText.copyWith(
-                        color: widget.profile.location == null
-                            ? AppColors.blueGray
-                            : Colors.black,
+                        color: switch (ep) {
+                          Some(value: Profile(location: final _?)) =>
+                            Colors.black,
+                          _ => AppColors.blueGray,
+                        },
                       ),
                     ),
                   ),
                 ),
-                onTap: () => _showLocationPicker(context),
+                onTap: () => _showLocationPicker(
+                  context,
+                  context
+                          .read<ProfileEditingCubit>()
+                          .state
+                          .map((p) => p.location)
+                          .toNullable() ==
+                      null,
+                ),
               ),
             ),
           ),
