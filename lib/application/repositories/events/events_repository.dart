@@ -16,4 +16,6 @@ abstract interface class EventsRepository {
   Future<bool> save();
 
   Future<EventModel> participate(String eventId, String myId);
+  
+  Future<EventModel> leave(String eventId, String myId);
 }

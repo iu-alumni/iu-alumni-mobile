@@ -6,6 +6,7 @@ abstract class Reporter {
   void reportOpenEvent(EventModel event, AppLocation location);
   void reportOpenProfile(Profile profile, AppLocation location);
   void reportParticipate(EventModel event, AppLocation location);
+  void reportLeave(EventModel event, AppLocation location);
 
   void reportNavigation(
     NavAction action,

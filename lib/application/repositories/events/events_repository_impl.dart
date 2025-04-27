@@ -133,4 +133,18 @@ class EventsRepositoryImpl implements EventsRepository {
     await _loadEvents(Option.of(myId));
     return _cache![eventId]!;
   }
+
+  @override
+  Future<EventModel> leave(String eventId, String myId) async {
+    final success = await _gateway.leave(eventId, myId);
+    if (_cache?[eventId] case final EventModel event when success) {
+      if (event.userStatus case UserNotAuthor status) {
+        _cache?[eventId] = event.copyWith(
+          userStatus: status.copyWith(participant: !success),
+        );
+      }
+    }
+    await _loadEvents(Option.of(myId));
+    return _cache![eventId]!;
+  }
 }

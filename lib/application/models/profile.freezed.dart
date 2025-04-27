@@ -32,6 +32,9 @@ mixin _$Profile {
   String? get biography => throw _privateConstructorUsedError;
   @JsonKey(name: 'show_location')
   bool get showLocation => throw _privateConstructorUsedError;
+  @JsonKey(name: 'telegram_alias')
+  String? get telegramAlias => throw _privateConstructorUsedError;
+  String? get avatar => throw _privateConstructorUsedError;
 
   /// Serializes this Profile to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -54,7 +57,9 @@ abstract class $ProfileCopyWith<$Res> {
       @JsonKey(name: 'graduation_year') String graduationYear,
       String? location,
       String? biography,
-      @JsonKey(name: 'show_location') bool showLocation});
+      @JsonKey(name: 'show_location') bool showLocation,
+      @JsonKey(name: 'telegram_alias') String? telegramAlias,
+      String? avatar});
 }
 
 /// @nodoc
@@ -79,6 +84,8 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
     Object? location = freezed,
     Object? biography = freezed,
     Object? showLocation = null,
+    Object? telegramAlias = freezed,
+    Object? avatar = freezed,
   }) {
     return _then(_value.copyWith(
       profileId: null == profileId
@@ -109,6 +116,14 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
           ? _value.showLocation
           : showLocation // ignore: cast_nullable_to_non_nullable
               as bool,
+      telegramAlias: freezed == telegramAlias
+          ? _value.telegramAlias
+          : telegramAlias // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -127,7 +142,9 @@ abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
       @JsonKey(name: 'graduation_year') String graduationYear,
       String? location,
       String? biography,
-      @JsonKey(name: 'show_location') bool showLocation});
+      @JsonKey(name: 'show_location') bool showLocation,
+      @JsonKey(name: 'telegram_alias') String? telegramAlias,
+      String? avatar});
 }
 
 /// @nodoc
@@ -150,6 +167,8 @@ class __$$ProfileImplCopyWithImpl<$Res>
     Object? location = freezed,
     Object? biography = freezed,
     Object? showLocation = null,
+    Object? telegramAlias = freezed,
+    Object? avatar = freezed,
   }) {
     return _then(_$ProfileImpl(
       profileId: null == profileId
@@ -180,6 +199,14 @@ class __$$ProfileImplCopyWithImpl<$Res>
           ? _value.showLocation
           : showLocation // ignore: cast_nullable_to_non_nullable
               as bool,
+      telegramAlias: freezed == telegramAlias
+          ? _value.telegramAlias
+          : telegramAlias // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -194,7 +221,9 @@ class _$ProfileImpl implements _Profile {
       @JsonKey(name: 'graduation_year') required this.graduationYear,
       required this.location,
       required this.biography,
-      @JsonKey(name: 'show_location') required this.showLocation});
+      @JsonKey(name: 'show_location') required this.showLocation,
+      @JsonKey(name: 'telegram_alias') required this.telegramAlias,
+      required this.avatar});
 
   factory _$ProfileImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileImplFromJson(json);
@@ -218,10 +247,15 @@ class _$ProfileImpl implements _Profile {
   @override
   @JsonKey(name: 'show_location')
   final bool showLocation;
+  @override
+  @JsonKey(name: 'telegram_alias')
+  final String? telegramAlias;
+  @override
+  final String? avatar;
 
   @override
   String toString() {
-    return 'Profile(profileId: $profileId, firstName: $firstName, lastName: $lastName, graduationYear: $graduationYear, location: $location, biography: $biography, showLocation: $showLocation)';
+    return 'Profile(profileId: $profileId, firstName: $firstName, lastName: $lastName, graduationYear: $graduationYear, location: $location, biography: $biography, showLocation: $showLocation, telegramAlias: $telegramAlias, avatar: $avatar)';
   }
 
   @override
@@ -242,13 +276,16 @@ class _$ProfileImpl implements _Profile {
             (identical(other.biography, biography) ||
                 other.biography == biography) &&
             (identical(other.showLocation, showLocation) ||
-                other.showLocation == showLocation));
+                other.showLocation == showLocation) &&
+            (identical(other.telegramAlias, telegramAlias) ||
+                other.telegramAlias == telegramAlias) &&
+            (identical(other.avatar, avatar) || other.avatar == avatar));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, profileId, firstName, lastName,
-      graduationYear, location, biography, showLocation);
+      graduationYear, location, biography, showLocation, telegramAlias, avatar);
 
   /// Create a copy of Profile
   /// with the given fields replaced by the non-null parameter values.
@@ -274,8 +311,9 @@ abstract class _Profile implements Profile {
       @JsonKey(name: 'graduation_year') required final String graduationYear,
       required final String? location,
       required final String? biography,
-      @JsonKey(name: 'show_location')
-      required final bool showLocation}) = _$ProfileImpl;
+      @JsonKey(name: 'show_location') required final bool showLocation,
+      @JsonKey(name: 'telegram_alias') required final String? telegramAlias,
+      required final String? avatar}) = _$ProfileImpl;
 
   factory _Profile.fromJson(Map<String, dynamic> json) = _$ProfileImpl.fromJson;
 
@@ -298,6 +336,11 @@ abstract class _Profile implements Profile {
   @override
   @JsonKey(name: 'show_location')
   bool get showLocation;
+  @override
+  @JsonKey(name: 'telegram_alias')
+  String? get telegramAlias;
+  @override
+  String? get avatar;
 
   /// Create a copy of Profile
   /// with the given fields replaced by the non-null parameter values.

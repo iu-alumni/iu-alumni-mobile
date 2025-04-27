@@ -49,12 +49,10 @@ class EventsGatewayImpl implements EventsGateway {
   @override
   Future<bool> deleteEvent(String eventId) async {
     final result = await TaskEither.tryCatch(
-      () async {
-        await _dio.delete(
-          Paths.eventWithId(eventId),
-          options: _optionsManager.opts(),
-        );
-      },
+      () => _dio.delete(
+        Paths.eventWithId(eventId),
+        options: _optionsManager.opts(),
+      ),
       (e, _) => '$e',
     ).run();
     return result.isRight();
@@ -80,13 +78,24 @@ class EventsGatewayImpl implements EventsGateway {
   @override
   Future<bool> participate(String eventId, String userId) async {
     final result = await TaskEither.tryCatch(
-      () async {
-        await _dio.post(
-          Paths.participants(eventId),
-          options: _optionsManager.opts(),
-          queryParameters: {'participant_id': userId},
-        );
-      },
+      () => _dio.post(
+        Paths.participants(eventId),
+        options: _optionsManager.opts(),
+        queryParameters: {'participant_id': userId},
+      ),
+      (e, _) => '$e',
+    ).run();
+    return result.isRight();
+  }
+
+  @override
+  Future<bool> leave(String eventId, String userId) async {
+    final result = await TaskEither.tryCatch(
+      () => _dio.post(
+        Paths.participants(eventId),
+        options: _optionsManager.opts(),
+        queryParameters: {'participant_id': userId},
+      ),
       (e, _) => '$e',
     ).run();
     return result.isRight();

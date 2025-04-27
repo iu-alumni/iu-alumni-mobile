@@ -164,6 +164,19 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
           const SizedBox(height: 16),
           Padding(
             padding: _horPadding,
+            child: TitledItem(
+              title: 'Telegram',
+              child: AppTextField(
+                initialText: widget.profile.telegramAlias,
+                onChange: (alias) => context
+                    .read<ProfileEditingCubit>()
+                    .update((p) => p.copyWith(telegramAlias: alias)),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: _horPadding,
             child: AppButton(
               onTap: _onSave,
               child: Padding(

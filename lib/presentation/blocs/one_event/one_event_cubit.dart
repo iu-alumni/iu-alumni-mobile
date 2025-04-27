@@ -70,4 +70,19 @@ class OneEventCubit extends Cubit<OneEventState> {
           );
         },
       );
+
+  Future<void> leave() async => state.event.map(
+        (s) async {
+          final myProfile = await _usersRepository.loadMe();
+          return myProfile.map(
+            (p) async {
+              final event = await _repository.leave(
+                s.eventId,
+                p.profileId,
+              );
+              emit(state.copyWith(event: Option.of(event)));
+            },
+          );
+        },
+      );
 }

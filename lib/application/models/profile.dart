@@ -13,6 +13,8 @@ class Profile with _$Profile {
     required String? location,
     required String? biography,
     @JsonKey(name: 'show_location') required bool showLocation,
+    @JsonKey(name: 'telegram_alias') required String? telegramAlias,
+    required String? avatar,
   }) = _Profile;
 
   factory Profile.fromJson(Map<String, dynamic> json) =>

@@ -102,6 +102,12 @@ class _Cover extends StatelessWidget {
     context.read<OneEventCubit>().participate();
   }
 
+  void _leave(BuildContext context) {
+    context.read<Reporter>().reportLeave(event, AppLocation.eventScreen);
+    context.read<EventParticipateCubit>().showLoading();
+    context.read<OneEventCubit>().leave();
+  }
+
   @override
   Widget build(BuildContext context) =>
       BlocListener<OneEventCubit, OneEventState>(
@@ -144,8 +150,8 @@ class _Cover extends StatelessWidget {
               ),
               onTap: () => switch (event.userStatus) {
                 UserAuthor() => _edit(context),
-                // TODO remove the user from participants
-                UserNotAuthor(:final participant) when participant => null,
+                UserNotAuthor(:final participant) when participant =>
+                  _leave(context),
                 UserNotAuthor() => _participate(context),
               },
             ),

@@ -1,5 +1,4 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
@@ -111,6 +110,13 @@ class ReporterImpl extends Reporter with WidgetsBindingObserver {
   @override
   void reportParticipate(EventModel event, AppLocation location) => _report(
         action: 'participate_tap',
+        appLocation: location,
+        payload: {'event_id': event.eventId},
+      );
+
+  @override
+  void reportLeave(EventModel event, AppLocation location) => _report(
+        action: 'leave_tap',
         appLocation: location,
         payload: {'event_id': event.eventId},
       );

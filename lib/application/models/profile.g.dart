@@ -15,6 +15,8 @@ _$ProfileImpl _$$ProfileImplFromJson(Map<String, dynamic> json) =>
       location: json['location'] as String?,
       biography: json['biography'] as String?,
       showLocation: json['show_location'] as bool,
+      telegramAlias: json['telegram_alias'] as String?,
+      avatar: json['avatar'] as String?,
     );
 
 Map<String, dynamic> _$$ProfileImplToJson(_$ProfileImpl instance) =>
@@ -26,4 +28,6 @@ Map<String, dynamic> _$$ProfileImplToJson(_$ProfileImpl instance) =>
       'location': instance.location,
       'biography': instance.biography,
       'show_location': instance.showLocation,
+      'telegram_alias': instance.telegramAlias,
+      'avatar': instance.avatar,
     };

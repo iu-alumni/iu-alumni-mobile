@@ -1,7 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../application/models/profile.dart';
+import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
+import '../../../common/widgets/button.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
 
@@ -47,6 +52,40 @@ class ProfileContent extends StatelessWidget {
                 child: Text(
                   location,
                   style: AppTextStyles.body,
+                ),
+              ),
+            if (profile.telegramAlias case final telegram?)
+              TitledItem(
+                title: 'Telegram',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: AppButton(
+                        buttonStyle: AppButtonStyle.text,
+                        child: Text(
+                          '@$telegram',
+                          style: AppTextStyles.body.copyWith(
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                        onTap: () => Clipboard.setData(
+                          ClipboardData(text: telegram),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    IconButton(
+                      onPressed: () => launchUrl(
+                        Uri.parse('https://t.me/$telegram'),
+                        mode: LaunchMode.externalApplication,
+                      ),
+                      icon: const Icon(
+                        Icons.open_in_new,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
           ].expand(

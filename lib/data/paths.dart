@@ -4,6 +4,7 @@ abstract class Paths {
   static const events = '$_base/events/';
   static String eventWithId(String eid) => '$events$eid';
   static String participants(String eid) => '${eventWithId(eid)}/participants';
+  static String leave(String eid) => '${eventWithId(eid)}/participants/remove';
 
   static const _auth = '$_base/auth';
   static const login = '$_auth/login';
