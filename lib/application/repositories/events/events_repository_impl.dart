@@ -67,7 +67,7 @@ class EventsRepositoryImpl implements EventsRepository {
     _modifiedEvent = event;
   }
 
-  Future<bool> _mutateAndSave(EventModel event) async {
+  Future<Option<String>> _mutateAndSave(EventModel event) async {
     // _cache![event.eventId] = event;
     final eventRequest = EventMapper.eventRequestFromModel(event);
     // Has event already been in the created ever (otherwise it is new)
@@ -76,25 +76,28 @@ class EventsRepositoryImpl implements EventsRepository {
       if (success) {
         // Update the event in the cache on success
         _cache![event.eventId] = event;
+        // When modified, the event ID stays the same
+        return Option.of(event.eventId);
       }
-      return success;
+      // The event modification was not successful, none for the error state
+      return const None();
     } else {
       // Event not found in the cache, so it is a new event
       final newId = await _gateway.addEvent(eventRequest);
-      // Update the event ID by the one server responded
+      // Update the event ID by the one server responded with
       newId.map((eid) {
-        _cache![event.eventId] = event.copyWith(eventId: eid);
+        _cache![eid] = event.copyWith(eventId: eid);
       });
-      return newId.isSome();
+      return newId;
     }
   }
 
   @override
-  Future<bool> save() async {
+  Future<Option<String>> save() async {
     final event = _modifiedEvent;
     if (event == null) {
       // Nothing modified, so nothing to save
-      return true;
+      return const None();
     }
     _modifiedEvent = null;
     return _mutateAndSave(_fixEvent(event));

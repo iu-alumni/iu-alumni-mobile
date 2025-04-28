@@ -29,6 +29,7 @@ import 'data/token/token_provider_impl.dart';
 import 'data/users/users_gateway.dart';
 import 'data/users/users_gateway_impl.dart';
 import 'presentation/blocs/events_list/events_list_cubit.dart';
+import 'presentation/blocs/profile/profile_cubit.dart';
 import 'presentation/common/constants/app_colors.dart';
 import 'presentation/managers/app_loading_manager.dart';
 import 'presentation/router/app_observer.dart';
@@ -135,6 +136,9 @@ class App extends StatelessWidget {
               context.read<EventsRepository>(),
               context.read<UsersRepository>(),
             ),
+          ),
+          BlocProvider(
+            create: (ctx) => ProfileCubit(ctx.read<UsersRepository>()),
           ),
         ],
         child: Builder(

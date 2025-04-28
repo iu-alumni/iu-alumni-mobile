@@ -11,7 +11,6 @@ class AppTextField extends StatefulWidget {
     this.inputType,
     this.obscureText = false,
     this.maxLines,
-    // this.errorText,
     super.key,
   });
 
@@ -21,7 +20,6 @@ class AppTextField extends StatefulWidget {
   final TextInputType? inputType;
   final bool obscureText;
   final int? maxLines;
-  // final String? errorText;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -32,11 +30,13 @@ class _AppTextFieldState extends State<AppTextField> {
   late final _focusNode = FocusNode();
 
   late var _textObscured = widget.obscureText;
+  late var _focused = false;
 
   @override
   void initState() {
     _controller = TextEditingController(text: widget.initialText);
     _controller.addListener(_onChange);
+    _focusNode.addListener(_onFocusChange);
     super.initState();
   }
 
@@ -44,6 +44,7 @@ class _AppTextFieldState extends State<AppTextField> {
   void dispose() {
     _controller.removeListener(_onChange);
     _controller.dispose();
+    _focusNode.removeListener(_onFocusChange);
     _focusNode.dispose();
     super.dispose();
   }
@@ -52,6 +53,8 @@ class _AppTextFieldState extends State<AppTextField> {
     final text = _controller.text;
     widget.onChange(text);
   }
+
+  void _onFocusChange() => setState(() => _focused = _focusNode.hasFocus);
 
   @override
   Widget build(BuildContext context) => TextField(
@@ -71,9 +74,22 @@ class _AppTextFieldState extends State<AppTextField> {
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(4),
           ),
-          // errorText: widget.errorText,
-          suffixIcon: widget.obscureText
-              ? IconButton(
+          suffixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedScale(
+                scale: _focused ? 1 : 0,
+                duration: const Duration(milliseconds: 250),
+                child: IconButton(
+                  onPressed: _controller.clear,
+                  icon: const Icon(
+                    Icons.clear,
+                    color: AppColors.blueGray,
+                  ),
+                ),
+              ),
+              if (widget.obscureText)
+                IconButton(
                   onPressed: () => setState(
                     () => _textObscured = !_textObscured,
                   ),
@@ -82,7 +98,8 @@ class _AppTextFieldState extends State<AppTextField> {
                     color: AppColors.blueGray,
                   ),
                 )
-              : null,
+            ],
+          ),
         ),
       );
 }

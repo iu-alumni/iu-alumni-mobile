@@ -2,8 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../application/repositories/map/map_repository.dart';
-import '../../../application/repositories/users/users_repository.dart';
-import '../../blocs/profile/profile_cubit.dart';
 import '../../blocs/root/root_page_cubit.dart';
 import '../../blocs/pin_locations/pin_locations_cubit.dart';
 import '../../common/constants/app_colors.dart';
@@ -24,9 +22,6 @@ class RootPage extends StatefulWidget implements AutoRouteWrapper {
   Widget wrappedRoute(BuildContext context) => MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => RootPageCubit()),
-          BlocProvider(
-            create: (ctx) => ProfileCubit(ctx.read<UsersRepository>()),
-          ),
           BlocProvider(
             create: (context) => PinLocationsCubit(
               context.read<MapRepository>(),

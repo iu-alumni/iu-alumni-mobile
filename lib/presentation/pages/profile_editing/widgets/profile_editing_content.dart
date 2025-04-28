@@ -1,17 +1,16 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fpdart/fpdart.dart' hide State;
 
 import '../../../../application/models/profile.dart';
+import '../../../blocs/models/profile_editing_state.dart';
 import '../../../blocs/profile/profile_editing_cubit.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
+import '../../../common/models/loaded_state.dart';
 import '../../../common/widgets/app_text_field.dart';
 import '../../../common/widgets/button.dart';
 import '../../../common/widgets/location_dialog.dart';
 import '../../../common/widgets/titled_item.dart';
-import '../../root/root_page.dart';
 import '../../verification/widgets/year_picker.dart';
 
 class ProfileEditingContent extends StatefulWidget {
@@ -40,11 +39,6 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
       return;
     }
     _cubit.update((e) => e.copyWith(location: location));
-  }
-
-  void _onSave() {
-    context.read<ProfileEditingCubit>().save();
-    context.maybePop();
   }
 
   @override
@@ -86,8 +80,8 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
               title: 'Graduation year',
               child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
                 buildWhen: (p, c) =>
-                    p.map((p) => p.graduationYear) !=
-                    c.map((p) => p.graduationYear),
+                    p.profile.map((p) => p.graduationYear) !=
+                    c.profile.map((p) => p.graduationYear),
                 builder: (context, ep) => AppButton(
                   buttonStyle: AppButtonStyle.input,
                   onTap: () async {
@@ -99,7 +93,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Text(
-                      ep.match(
+                      ep.profile.match(
                         () => widget.profile.graduationYear,
                         (s) => s.graduationYear,
                       ),
@@ -136,15 +130,14 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
                   padding: const EdgeInsets.all(16),
                   child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
                     buildWhen: (p, c) =>
-                        p.map((p) => p.location) != c.map((p) => p.location),
+                        p.profile.map((p) => p.location) !=
+                        c.profile.map((p) => p.location),
                     builder: (context, ep) => Text(
-                      ep.toNullable()?.location ?? 'No location',
+                      ep.profile.toNullable()?.location ?? 'No location',
                       style: AppTextStyles.buttonText.copyWith(
-                        color: switch (ep) {
-                          Some(value: Profile(location: final _?)) =>
-                            Colors.black,
-                          _ => AppColors.blueGray,
-                        },
+                        color: ep.profile.toNullable()?.location == null
+                            ? AppColors.blueGray
+                            : Colors.black,
                       ),
                     ),
                   ),
@@ -154,6 +147,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
                   context
                           .read<ProfileEditingCubit>()
                           .state
+                          .profile
                           .map((p) => p.location)
                           .toNullable() ==
                       null,
@@ -175,21 +169,57 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
             ),
           ),
           const SizedBox(height: 16),
+          const _ErrorText(),
           Padding(
             padding: _horPadding,
             child: AppButton(
-              onTap: _onSave,
+              onTap: context.read<ProfileEditingCubit>().save,
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text(
-                  'Done',
-                  style: AppTextStyles.buttonText,
-                  textAlign: TextAlign.center,
+                child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+                  buildWhen: (p, c) => p.saveState != c.saveState,
+                  builder: (context, state) => switch (state.saveState) {
+                    LoadedStateLoading() => const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                    _ => Text(
+                        'Done',
+                        style: AppTextStyles.buttonText,
+                        textAlign: TextAlign.center,
+                      ),
+                  },
                 ),
               ),
             ),
           ),
-          const SizedBox(height: RootPage.navigationBarHeight + 16),
+          const SizedBox(height: 16),
         ],
+      );
+}
+
+class _ErrorText extends StatelessWidget {
+  const _ErrorText();
+
+  @override
+  Widget build(BuildContext context) =>
+      BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+        buildWhen: (p, c) => p.saveState != c.saveState,
+        builder: (context, state) => AnimatedSize(
+          duration: const Duration(milliseconds: 250),
+          child: switch (state.saveState) {
+            LoadedStateError(:final error) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 40)
+                    .copyWith(top: 0),
+                child: Text(
+                  error,
+                  style: AppTextStyles.caption,
+                  textAlign: TextAlign.start,
+                ),
+              ),
+            _ => const SizedBox(),
+          },
+        ),
       );
 }

@@ -18,7 +18,7 @@ class UsersRepositoryImpl extends UsersRepository {
   final TokenProvider _tokenProvider;
 
   Profile? _me;
-  List<Profile>? _users;
+  Map<String, Profile>? _users;
 
   @override
   Future<Option<Profile>> loadMe() async {
@@ -31,17 +31,13 @@ class UsersRepositoryImpl extends UsersRepository {
   }
 
   @override
-  Future<void> update(Profile profile) async {
-    final oldProfile = _me;
+  Future<bool> update(Profile profile) async {
     final success = await _profileGateway.update(profile);
-    if (!success) {
-      // TODO return an error
-      _me = oldProfile;
-    } else {
+    if (success) {
       _me = profile;
-      _users?.removeWhere((p) => p.profileId == oldProfile?.profileId);
-      _users?.add(profile);
+      _users?[profile.profileId] = profile;
     }
+    return success;
   }
 
   @override
@@ -51,12 +47,12 @@ class UsersRepositoryImpl extends UsersRepository {
   }
 
   @override
-  Future<List<Profile>> getAllUsers() async {
-    if (_users case final list?) {
-      return list;
+  Future<Iterable<Profile>> getAllUsers() async {
+    if (_users case final map?) {
+      return map.values;
     }
     final users = await _usersGateway.getAllUsers();
-    _users = users;
+    _users = {for (final u in users) u.profileId: u};
     return users;
   }
 }

@@ -92,7 +92,7 @@ class EventsGatewayImpl implements EventsGateway {
   Future<bool> leave(String eventId, String userId) async {
     final result = await TaskEither.tryCatch(
       () => _dio.post(
-        Paths.participants(eventId),
+        Paths.leave(eventId),
         options: _optionsManager.opts(),
         queryParameters: {'participant_id': userId},
       ),

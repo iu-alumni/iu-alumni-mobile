@@ -15,7 +15,7 @@ class AuthGatewayImpl implements AuthGateway {
 
   @override
   Future<Either<String, Unit>> authorize(String email, String password) =>
-      TaskEither<String, Unit>.tryCatch(
+      TaskEither<String, Either<String, Unit>>.tryCatch(
         () async {
           final response = await _dio.post(
             Paths.login,
@@ -25,12 +25,12 @@ class AuthGatewayImpl implements AuthGateway {
           final data = response.data as Map<String, dynamic>;
           if (data['access_token'] case final token?) {
             _tokenManager.set(token);
-            return unit;
+            return Either.of(unit);
           }
-          return data['detail'] ?? 'Unknown Error';
+          return Left(data['detail'] ?? 'Unknown Error');
         },
         (e, _) => '$e',
-      ).run();
+      ).flatMap(TaskEither.fromEither).run();
 
   @override
   Future<Either<String, Unit>> verify(
@@ -39,7 +39,7 @@ class AuthGatewayImpl implements AuthGateway {
     String graduationYear,
     String firstName,
   ) =>
-      TaskEither<String, Unit>.tryCatch(
+      TaskEither<String, Either<String, Unit>>.tryCatch(
         () async {
           final response = await _dio.post(
             Paths.verify,
@@ -54,10 +54,10 @@ class AuthGatewayImpl implements AuthGateway {
           final data = response.data as Map<String, dynamic>;
           if (data['access_token'] case final token?) {
             _tokenManager.set(token);
-            return unit;
+            return Either.of(unit);
           }
-          return data['detail'] ?? 'Unknown Error';
+          return Left(data['detail'] ?? 'Unknown Error');
         },
         (e, _) => '$e',
-      ).run();
+      ).flatMap(TaskEither.fromEither).run();
 }

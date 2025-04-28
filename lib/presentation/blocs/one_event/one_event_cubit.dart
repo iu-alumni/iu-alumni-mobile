@@ -13,6 +13,7 @@ class OneEventCubit extends Cubit<OneEventState> {
           OneEventState(
             saveState: const LoadedState.init(),
             event: const None(),
+            userStatusLoading: false,
           ),
         );
 
@@ -44,28 +45,40 @@ class OneEventCubit extends Cubit<OneEventState> {
   }
 
   Future<void> save() async {
-    state.event.map(_repository.modifyEvent);
     emit(state.copyWith(saveState: const LoadedState.loading()));
-    final success = await _repository.save();
+    state.event.map(_repository.modifyEvent);
+    final newId = await _repository.save();
     emit(
       state.copyWith(
-        saveState: success
-            ? const LoadedState.data(unit)
-            : const LoadedState.error('Could not save the event'),
+        saveState: newId.match(
+          () => const LoadedState.error('Could not save the event'),
+          (_) => const LoadedState.data(unit),
+        ),
+        event: newId.match(
+          () => state.event,
+          (id) => state.event.map((e) => e.copyWith(eventId: id)),
+        ),
       ),
     );
   }
 
   Future<void> participate() async => state.event.map(
         (s) async {
+          emit(state.copyWith(userStatusLoading: true));
           final myProfile = await _usersRepository.loadMe();
-          return myProfile.map(
+          return myProfile.match(
+            () => emit(state.copyWith(userStatusLoading: false)),
             (p) async {
               final event = await _repository.participate(
                 s.eventId,
                 p.profileId,
               );
-              emit(state.copyWith(event: Option.of(event)));
+              emit(
+                state.copyWith(
+                  event: Option.of(event),
+                  userStatusLoading: false,
+                ),
+              );
             },
           );
         },
@@ -73,14 +86,21 @@ class OneEventCubit extends Cubit<OneEventState> {
 
   Future<void> leave() async => state.event.map(
         (s) async {
+          emit(state.copyWith(userStatusLoading: true));
           final myProfile = await _usersRepository.loadMe();
-          return myProfile.map(
+          return myProfile.match(
+            () => emit(state.copyWith(userStatusLoading: false)),
             (p) async {
               final event = await _repository.leave(
                 s.eventId,
                 p.profileId,
               );
-              emit(state.copyWith(event: Option.of(event)));
+              emit(
+                state.copyWith(
+                  event: Option.of(event),
+                  userStatusLoading: false,
+                ),
+              );
             },
           );
         },

@@ -23,8 +23,8 @@ class AuthCubit extends Cubit<LoadedState> {
     final result = await _authRepository.authorize(login, password);
     emit(
       result.match(
-        (_) => const LoadedState.error(
-          'If you are an alumnus and haven\'t created an account in this app, proceed with registration',
+        (e) => const LoadedState.error(
+          'If you are an alumnus and haven\'t created an account in this app yet, proceed with registration',
         ),
         (_) => const LoadedState.data(unit),
       ),

@@ -7,16 +7,18 @@ import '../models/verification_state.dart';
 class VerificationCubit extends Cubit<VerificationState> {
   VerificationCubit(this._authRepository)
       : super(
-          VerificationState(
-            verification: const LoadedState.init(),
-          ),
+          VerificationState(verification: const LoadedState.init()),
         );
 
   final AuthRepository _authRepository;
 
-  String? _verifyEmail(String email) => email.contains('@innopolis.')
+  String? _validateEmail(String email) => email.contains('@innopolis.')
       ? null
       : 'The email must have the "innopolis" mail server';
+
+  String? _validatePassword(String pass) => pass.length < 8
+      ? 'The password needs to contain at least 8 characters'
+      : null;
 
   (String, String, String, String)? _verificationData() => switch ((
         state.email,
@@ -40,7 +42,11 @@ class VerificationCubit extends Cubit<VerificationState> {
       );
       return;
     }
-    if (_verifyEmail(data.$1) case final error?) {
+    if (_validateEmail(data.$1) case final error?) {
+      emit(state.copyWith(verification: LoadedState.error(error)));
+      return;
+    }
+    if (_validatePassword(data.$2) case final error?) {
       emit(state.copyWith(verification: LoadedState.error(error)));
       return;
     }

@@ -19,8 +19,10 @@ abstract class EventMapper {
             coverBytes: data.cover,
             location: data.location,
             // TODO update
-            cost:
-                CostModel(number: data.cost.toDouble(), currency: Currency.rub),
+            cost: CostModel(
+              number: data.cost.toDouble(),
+              currency: Currency.rub,
+            ),
             occurringAt: data.datetime,
             onlineEvent: data.isOnline,
           );

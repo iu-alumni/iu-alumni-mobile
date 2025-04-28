@@ -11,5 +11,6 @@ class OneEventState with _$OneEventState {
   const factory OneEventState({
     required LoadedState<Unit> saveState,
     required Option<EventModel> event,
+    required bool userStatusLoading,
   }) = _OneEventState;
 }

@@ -48,7 +48,7 @@ class ProfilePageTitle extends StatelessWidget {
                 ),
                 onPressed: () {
                   context.read<ProfileCubit>().logout();
-                  context.replaceRoute(const AuthRoute());
+                  context.router.replaceAll([const AuthRoute()]);
                 },
                 icon: const Icon(
                   Icons.logout,

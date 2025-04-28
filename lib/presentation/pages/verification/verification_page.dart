@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/auth/auth_repository.dart';
@@ -42,7 +43,15 @@ class _VerificationPageState extends State<VerificationPage> {
   @override
   void initState() {
     _verificationCubit = context.read<VerificationCubit>();
+    SchedulerBinding.instance.addPostFrameCallback((_) => _initCubit());
     super.initState();
+  }
+
+  void _initCubit() {
+    _verificationCubit.setEmail(widget.initialEmail);
+    if (widget.initialPassword case final pass?) {
+      _verificationCubit.setPassword(pass);
+    }
   }
 
   void _pickGradYear() async {
@@ -57,7 +66,7 @@ class _VerificationPageState extends State<VerificationPage> {
       BlocListener<VerificationCubit, VerificationState>(
         listener: (context, state) {
           if (state.verification case LoadedStateData()) {
-            context.replaceRoute(const RootRoute());
+            context.router.replaceAll([const RootRoute()]);
           }
         },
         child: Scaffold(
@@ -162,9 +171,6 @@ class _ErrorText extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<VerificationCubit, VerificationState>(
-        buildWhen: (p, c) =>
-            p.verification is LoadedStateError !=
-            c.verification is LoadedStateError,
         builder: (context, state) => AnimatedSize(
           duration: const Duration(milliseconds: 250),
           child: switch (state.verification) {

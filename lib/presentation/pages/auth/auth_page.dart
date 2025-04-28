@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/auth/auth_repository.dart';
 import '../../blocs/auth/auth_cubit.dart';
-import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/models/loaded_state.dart';
 import '../../common/widgets/alumni_logo.dart';
@@ -43,7 +42,7 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) => BlocListener<AuthCubit, LoadedState>(
         listener: (context, state) {
           if (state case LoadedStateData()) {
-            context.replaceRoute(const RootRoute());
+            context.router.replaceAll([const RootRoute()]);
           }
         },
         child: Scaffold(
@@ -116,21 +115,21 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  AppButton(
-                    onTap: _auth,
-                    buttonStyle: AppButtonStyle.text,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text(
-                        'Forgot password?',
-                        style: AppTextStyles.buttonText.copyWith(
-                          color: AppColors.darkGray,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
+                  // const SizedBox(height: 8),
+                  // AppButton(
+                  //   onTap: _auth,
+                  //   buttonStyle: AppButtonStyle.text,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(24),
+                  //     child: Text(
+                  //       'Forgot password?',
+                  //       style: AppTextStyles.buttonText.copyWith(
+                  //         color: AppColors.darkGray,
+                  //       ),
+                  //       textAlign: TextAlign.center,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -144,7 +143,6 @@ class _ErrorText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<AuthCubit, LoadedState>(
-        buildWhen: (p, c) => p is LoadedStateError != c is LoadedStateError,
         builder: (context, state) => AnimatedSize(
           duration: const Duration(milliseconds: 250),
           child: switch (state) {

@@ -26,22 +26,22 @@ class EventsListCubit extends Cubit<EventsListState> {
   }
 
   // The same as [update] but adds the event right away to save some time
-  Future<void> add(String eventId) async {
-    if (state case EventsListData currState) {
-      final myProfile = await _usersRepository.loadMe();
-      final maybeEvent = await _eventsRepository.getOneEvent(
-        eventId,
-        myProfile.map((p) => p.profileId),
-      );
-      maybeEvent.map(
-        (event) => emit(
-          currState.copyWith(
-            data: currState.data.add(event),
-          ),
-        ),
-      );
-    }
-  }
+  // Future<void> add(String eventId) async {
+  //   if (state case EventsListData currState) {
+  //     final myProfile = await _usersRepository.loadMe();
+  //     final maybeEvent = await _eventsRepository.getOneEvent(
+  //       eventId,
+  //       myProfile.map((p) => p.profileId),
+  //     );
+  //     maybeEvent.map(
+  //       (event) => emit(
+  //         currState.copyWith(
+  //           data: currState.data.add(event),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 
   void remove(String eventId) {
     if (state case EventsListData currState) {
