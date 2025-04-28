@@ -46,5 +46,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Users can select profile images and event covers</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Users can shoot profile images and event covers</string>
 </dict>
 </plist>
