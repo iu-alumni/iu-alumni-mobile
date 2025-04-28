@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,9 +19,11 @@ class LocationDialog extends StatelessWidget {
     BuildContext context, [
     bool previousWasNone = false,
   ]) =>
-      showDialog<String>(
+      showModalBottomSheet<String>(
         context: context,
-        builder: (_) => BlocProvider(
+        backgroundColor: Colors.white,
+        useSafeArea: true,
+        builder: (context) => BlocProvider(
           create: (context) => LocationSuggestionsCubit(
             context.read<MapRepository>(),
           ),
@@ -31,10 +34,12 @@ class LocationDialog extends StatelessWidget {
   void _onTap(BuildContext context, String? option) => context.maybePop(option);
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Material(
+  Widget build(BuildContext context) => Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: Material(
+          type: MaterialType.transparency,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,

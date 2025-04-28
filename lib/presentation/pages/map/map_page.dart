@@ -143,7 +143,7 @@ class _MapPageState extends State<MapPage> {
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.ui_alumni_mobile',
+              userAgentPackageName: 'com.innopolis.alumni',
             ),
             BlocBuilder<PinLocationsCubit, PinLocationsState>(
               builder: (context, mapInfo) => MarkerClusterLayerWidget(

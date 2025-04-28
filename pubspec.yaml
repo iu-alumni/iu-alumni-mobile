@@ -44,6 +44,7 @@ dev_dependencies:
   freezed: ^2.5.8
   json_serializable: ^6.9.3
   flutter_gen_runner: ^5.9.0
+  flutter_launcher_icons: ^0.14.3
 
 flutter:
   uses-material-design: true
@@ -53,3 +54,13 @@ flutter:
     - assets/icons/
     - assets/icons/map/
     - assets/dbs/
+
+flutter_launcher_icons:
+  image_path: "assets/icons/iualumni_icon.png"
+  android: true
+  min_sdk_android: 24
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icons/iualumni_icon_trans.png"
+  ios: true
+  remove_alpha_ios: true
+  background_color_ios: "#FFFFFF"

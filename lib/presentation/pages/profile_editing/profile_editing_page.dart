@@ -45,28 +45,32 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
           _ => null,
         },
         child: Scaffold(
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const ProfilePageTitle(personal: false),
-              Expanded(
-                child: SafeArea(
-                  top: false,
-                  child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
-                    // Rebuild only on the model appearance
-                    buildWhen: (p, c) =>
-                        p.profile.isNone() != c.profile.isNone(),
-                    builder: (context, profile) => profile.profile.match(
-                      () => const Center(child: CircularProgressIndicator()),
-                      (p) => SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: ProfileEditingContent(profile: p),
+          body: SafeArea(
+            bottom: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const ProfilePageTitle(personal: false),
+                Expanded(
+                  child: SafeArea(
+                    top: false,
+                    child:
+                        BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+                      // Rebuild only on the model appearance
+                      buildWhen: (p, c) =>
+                          p.profile.isNone() != c.profile.isNone(),
+                      builder: (context, profile) => profile.profile.match(
+                        () => const Center(child: CircularProgressIndicator()),
+                        (p) => SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: ProfileEditingContent(profile: p),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );

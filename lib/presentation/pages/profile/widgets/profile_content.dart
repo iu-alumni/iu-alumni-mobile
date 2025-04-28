@@ -19,7 +19,7 @@ class ProfileContent extends StatelessWidget {
   final Profile profile;
   final bool personal;
 
-  static const _horPadding = EdgeInsets.symmetric(horizontal: 40);
+  static const _horPadding = EdgeInsets.symmetric(horizontal: 24);
 
   @override
   Widget build(BuildContext context) => Column(

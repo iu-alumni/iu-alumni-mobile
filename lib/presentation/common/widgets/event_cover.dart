@@ -81,9 +81,12 @@ class EventCover extends StatelessWidget {
                     children: [
                       Icon(Icons.location_pin, color: secondaryWhite),
                       const SizedBox(width: 8),
-                      Text(
-                        maybeLocation ?? 'location',
-                        style: AppTextStyles.h4.copyWith(color: secondaryWhite),
+                      Expanded(
+                        child: Text(
+                          maybeLocation ?? 'location',
+                          style:
+                              AppTextStyles.h4.copyWith(color: secondaryWhite),
+                        ),
                       ),
                     ],
                   ),

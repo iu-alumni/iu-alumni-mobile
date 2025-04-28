@@ -23,7 +23,7 @@ class ProfileEditingContent extends StatefulWidget {
 }
 
 class _ProfileEditingContentState extends State<ProfileEditingContent> {
-  static const _horPadding = EdgeInsets.symmetric(horizontal: 40);
+  static const _horPadding = EdgeInsets.symmetric(horizontal: 24);
 
   late final ProfileEditingCubit _cubit;
 

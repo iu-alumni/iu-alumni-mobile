@@ -1,4 +1,4 @@
-package com.example.ui_alumni_mobile
+package com.innopolis.alumni
 
 import io.flutter.embedding.android.FlutterActivity
 
