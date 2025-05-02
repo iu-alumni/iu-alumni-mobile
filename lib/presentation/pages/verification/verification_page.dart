@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/auth/auth_repository.dart';
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/models/verification_state.dart';
 import '../../blocs/verification/verification_cubit.dart';
 import '../../common/constants/app_colors.dart';
@@ -31,7 +32,10 @@ class VerificationPage extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider(
-        create: (ctx) => VerificationCubit(ctx.read<AuthRepository>()),
+        create: (ctx) => VerificationCubit(
+          ctx.read<AuthRepository>(),
+          ctx.read<Reporter>(),
+        ),
         child: this,
       );
 }

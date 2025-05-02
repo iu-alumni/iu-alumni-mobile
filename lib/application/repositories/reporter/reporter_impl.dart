@@ -18,24 +18,30 @@ class ReporterImpl extends Reporter with WidgetsBindingObserver {
   DateTime? _startTime;
 
   String? _representAppLocation(AppLocation al) => switch (al) {
-        AppLocation.eventScreen => 'event_screen',
         AppLocation.eventsTab => 'events_tab',
         AppLocation.mapTab => 'map_tab',
+        AppLocation.profileScreen => 'profile_screen',
+        AppLocation.profileEditingScreen => 'profile_editing_screen',
+        AppLocation.eventScreen => 'event_screen',
+        AppLocation.eventEditingScreen => 'event_editing_screen',
+        AppLocation.authScreen => 'auth_screen',
+        AppLocation.verificationScreen => 'verification_screen',
         AppLocation.none => null,
       };
 
   void _report({
     required String action,
-    required Map<String, Object> payload,
+    Map<String, Object>? payload,
     AppLocation appLocation = AppLocation.none,
   }) async {
     final myProfile = await _usersRepository.loadMe();
     if (!kDebugMode) {
       AppMetrica.reportEventWithMap('ui_alumni_mobile_event', {
         'user_id': myProfile.match(() => 'NONE', (p) => p.profileId),
+        'timestamp': '${DateTime.now()}',
         if (_representAppLocation(appLocation) case final location?)
           'app_location': location,
-        'payload': payload,
+        if (payload != null) 'payload': payload,
       });
     }
     logger.d(
@@ -139,5 +145,83 @@ class ReporterImpl extends Reporter with WidgetsBindingObserver {
           if (previousRoute case final route?) 'prev_route': route,
           if (newRoute case final route?) 'new_route': route,
         },
+      );
+
+  @override
+  void reportAuthError(String description, AppLocation location) => _report(
+        action: 'auth_error',
+        appLocation: location,
+        payload: {'description': description},
+      );
+
+  @override
+  void reportAuthSuccessful(AppLocation location) => _report(
+        action: 'auth_success',
+        appLocation: location,
+      );
+
+  @override
+  void reportCreateEventTap(AppLocation location) => _report(
+        action: 'create_event_tap',
+        appLocation: location,
+      );
+
+  @override
+  void reportDeleteEvent(EventModel event, AppLocation location) => _report(
+        action: 'delete_event',
+        appLocation: location,
+        payload: {'event_id': event.eventId},
+      );
+
+  @override
+  void reportEditEventTap(EventModel event, AppLocation location) => _report(
+        action: 'edit_event',
+        appLocation: location,
+        payload: {'event_id': event.eventId},
+      );
+
+  @override
+  void reportSaveEvent(EventModel event, AppLocation location) => _report(
+        action: 'save_event',
+        appLocation: location,
+        payload: {'event_id': event.eventId},
+      );
+
+  @override
+  void reportSaveProfileChanges(AppLocation location) => _report(
+        action: 'save_profile_changes',
+        appLocation: location,
+      );
+
+  @override
+  void reportTabChanged(String tabName) => _report(
+        action: 'tab_changed',
+        payload: {'tab': tabName},
+      );
+
+  @override
+  void reportUserTelegramCopy(Profile profile, AppLocation location) => _report(
+        action: 'copy_user_telegram',
+        appLocation: location,
+        payload: {'user_id': profile.profileId},
+      );
+
+  @override
+  void reportUserTelegramOpen(Profile profile, AppLocation location) => _report(
+        action: 'open_user_telegram',
+        appLocation: location,
+        payload: {'user_id': profile.profileId},
+      );
+
+  @override
+  void reportEditProfileTap(AppLocation location) => _report(
+        action: 'edit_profile_tap',
+        appLocation: location,
+      );
+
+  @override
+  void reportUnauthorize(AppLocation location) => _report(
+        action: 'unauthorize',
+        appLocation: location,
       );
 }

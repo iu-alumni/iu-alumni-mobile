@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
 import '../../blocs/models/profile_editing_state.dart';
 import '../../blocs/profile/profile_cubit.dart';
@@ -19,7 +20,10 @@ class ProfileEditingPage extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider(
-        create: (ctx) => ProfileEditingCubit(ctx.read<UsersRepository>()),
+        create: (ctx) => ProfileEditingCubit(
+          ctx.read<UsersRepository>(),
+          ctx.read<Reporter>(),
+        ),
         child: this,
       );
 }

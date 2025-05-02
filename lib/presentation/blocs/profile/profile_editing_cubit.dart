@@ -2,12 +2,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 
 import '../../../application/models/profile.dart';
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
 import '../../common/models/loaded_state.dart';
 import '../models/profile_editing_state.dart';
 
 class ProfileEditingCubit extends Cubit<ProfileEditingState> {
-  ProfileEditingCubit(this._repository)
+  ProfileEditingCubit(this._repository, this._reporter)
       : super(
           ProfileEditingState(
             profile: const None(),
@@ -16,6 +17,7 @@ class ProfileEditingCubit extends Cubit<ProfileEditingState> {
         );
 
   final UsersRepository _repository;
+  final Reporter _reporter;
 
   void update(Profile Function(Profile) fun) => emit(
         state.copyWith(profile: state.profile.map(fun)),
@@ -27,6 +29,7 @@ class ProfileEditingCubit extends Cubit<ProfileEditingState> {
   }
 
   void save() => state.profile.map((p) async {
+        _reporter.reportSaveProfileChanges(AppLocation.profileEditingScreen);
         emit(state.copyWith(saveState: const LoadedState.loading()));
         final success = await _repository.update(p);
         emit(

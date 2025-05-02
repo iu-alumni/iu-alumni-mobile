@@ -81,10 +81,9 @@ class _Cover extends StatelessWidget {
   final EventModel event;
 
   void _edit(BuildContext context) async {
+    context.read<Reporter>().reportEditEventTap(event, AppLocation.eventScreen);
     await context.pushRoute(
-      EventEditingRoute(
-        eventId: Option.of(event.eventId),
-      ),
+      EventEditingRoute(eventId: Option.of(event.eventId)),
     );
     if (!context.mounted) {
       return;
@@ -92,15 +91,10 @@ class _Cover extends StatelessWidget {
     context.read<OneEventCubit>().loadEvent(event.eventId);
   }
 
-  void _participate(BuildContext context) {
-    context.read<Reporter>().reportParticipate(event, AppLocation.eventScreen);
-    context.read<OneEventCubit>().participate();
-  }
+  void _participate(BuildContext context) =>
+      context.read<OneEventCubit>().participate();
 
-  void _leave(BuildContext context) {
-    context.read<Reporter>().reportLeave(event, AppLocation.eventScreen);
-    context.read<OneEventCubit>().leave();
-  }
+  void _leave(BuildContext context) => context.read<OneEventCubit>().leave();
 
   @override
   Widget build(BuildContext context) => EventCover(

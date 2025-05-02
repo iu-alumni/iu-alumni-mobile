@@ -1,16 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 
 import '../../../application/repositories/auth/auth_repository.dart';
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../common/models/loaded_state.dart';
 import '../models/verification_state.dart';
 
 class VerificationCubit extends Cubit<VerificationState> {
-  VerificationCubit(this._authRepository)
+  VerificationCubit(this._authRepository, this._reporter)
       : super(
           VerificationState(verification: const LoadedState.init()),
         );
 
   final AuthRepository _authRepository;
+  final Reporter _reporter;
 
   String? _validateEmail(String email) => email.contains('@innopolis.')
       ? null
@@ -43,10 +46,12 @@ class VerificationCubit extends Cubit<VerificationState> {
       return;
     }
     if (_validateEmail(data.$1) case final error?) {
+      _reporter.reportAuthError(error, AppLocation.verificationScreen);
       emit(state.copyWith(verification: LoadedState.error(error)));
       return;
     }
     if (_validatePassword(data.$2) case final error?) {
+      _reporter.reportAuthError(error, AppLocation.verificationScreen);
       emit(state.copyWith(verification: LoadedState.error(error)));
       return;
     }
@@ -60,8 +65,15 @@ class VerificationCubit extends Cubit<VerificationState> {
     emit(
       state.copyWith(
         verification: result.match(
-          (_) => const LoadedState.error('Could not verify you'),
-          LoadedState.data,
+          (_) {
+            final error = 'Could not verify you';
+            _reporter.reportAuthError(error, AppLocation.verificationScreen);
+            return LoadedState.error(error);
+          },
+          (_) {
+            _reporter.reportAuthSuccessful(AppLocation.verificationScreen);
+            return const LoadedState.data(unit);
+          },
         ),
       ),
     );

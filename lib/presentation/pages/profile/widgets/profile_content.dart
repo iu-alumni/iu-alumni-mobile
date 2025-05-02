@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../application/models/profile.dart';
+import '../../../../application/repositories/reporter/reporter.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/button.dart';
@@ -20,6 +22,29 @@ class ProfileContent extends StatelessWidget {
   final bool personal;
 
   static const _horPadding = EdgeInsets.symmetric(horizontal: 24);
+
+  void _openTelegram(BuildContext context) {
+    context.read<Reporter>().reportUserTelegramOpen(
+          profile,
+          AppLocation.profileScreen,
+        );
+    if (profile.telegramAlias case final tg?) {
+      launchUrl(
+        Uri.parse('https://t.me/$tg'),
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  }
+
+  void _copyTelegram(BuildContext context) {
+    context.read<Reporter>().reportUserTelegramCopy(
+          profile,
+          AppLocation.profileScreen,
+        );
+    if (profile.telegramAlias case final tg?) {
+      Clipboard.setData(ClipboardData(text: tg));
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Column(
@@ -68,25 +93,28 @@ class ProfileContent extends StatelessWidget {
                             decoration: TextDecoration.underline,
                           ),
                         ),
-                        onTap: () => Clipboard.setData(
-                          ClipboardData(text: telegram),
-                        ),
+                        onTap: () => _copyTelegram(context),
                       ),
                     ),
                     const SizedBox(width: 2),
-                    IconButton(
-                      onPressed: () => launchUrl(
-                        Uri.parse('https://t.me/$telegram'),
-                        mode: LaunchMode.externalApplication,
-                      ),
-                      icon: const Icon(
-                        Icons.open_in_new,
-                        color: AppColors.primary,
+                    AppButton(
+                      buttonStyle: AppButtonStyle.text,
+                      onTap: () => _openTelegram(context),
+                      child: const Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Icon(
+                          Icons.open_in_new,
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
+            // AppButton(onTap: () => launchUrl(
+            //             Uri.parse(''),
+            //             mode: LaunchMode.externalApplication,
+            //           ), child: child,),
           ].expand(
             (e) => [
               const SizedBox(height: 16),

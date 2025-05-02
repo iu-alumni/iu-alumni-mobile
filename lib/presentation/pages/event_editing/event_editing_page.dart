@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 
 import '../../../application/repositories/events/events_repository.dart';
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
 import '../../blocs/events_list/events_list_cubit.dart';
 import '../../blocs/models/one_event_state.dart';
@@ -28,6 +29,7 @@ class EventEditingPage extends StatefulWidget implements AutoRouteWrapper {
         create: (context) => OneEventCubit(
           context.read<EventsRepository>(),
           context.read<UsersRepository>(),
+          context.read<Reporter>(),
         ),
         child: this,
       );

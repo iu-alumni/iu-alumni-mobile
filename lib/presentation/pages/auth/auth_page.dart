@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/auth/auth_repository.dart';
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/auth/auth_cubit.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/models/loaded_state.dart';
@@ -20,7 +21,10 @@ class AuthPage extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider(
-        create: (context) => AuthCubit(context.read<AuthRepository>()),
+        create: (context) => AuthCubit(
+          context.read<AuthRepository>(),
+          context.read<Reporter>(),
+        ),
         child: this,
       );
 }

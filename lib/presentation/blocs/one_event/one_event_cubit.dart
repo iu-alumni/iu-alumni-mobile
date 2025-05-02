@@ -3,12 +3,13 @@ import 'package:fpdart/fpdart.dart';
 
 import '../../../application/models/event.dart';
 import '../../../application/repositories/events/events_repository.dart';
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
 import '../../common/models/loaded_state.dart';
 import '../models/one_event_state.dart';
 
 class OneEventCubit extends Cubit<OneEventState> {
-  OneEventCubit(this._repository, this._usersRepository)
+  OneEventCubit(this._repository, this._usersRepository, this._reporter)
       : super(
           OneEventState(
             saveState: const LoadedState.init(),
@@ -19,6 +20,7 @@ class OneEventCubit extends Cubit<OneEventState> {
 
   final EventsRepository _repository;
   final UsersRepository _usersRepository;
+  final Reporter _reporter;
 
   void loadEvent(String uid) async {
     final myProfile = await _usersRepository.loadMe();
@@ -41,10 +43,22 @@ class OneEventCubit extends Cubit<OneEventState> {
   }
 
   void delete() {
+    state.event.map(
+      (event) => _reporter.reportDeleteEvent(
+        event,
+        AppLocation.eventEditingScreen,
+      ),
+    );
     state.event.map((s) => s.eventId).map(_repository.deleteEvent);
   }
 
   Future<void> save() async {
+    state.event.map(
+      (event) => _reporter.reportSaveEvent(
+        event,
+        AppLocation.eventEditingScreen,
+      ),
+    );
     emit(state.copyWith(saveState: const LoadedState.loading()));
     state.event.map(_repository.modifyEvent);
     final newId = await _repository.save();
@@ -64,6 +78,7 @@ class OneEventCubit extends Cubit<OneEventState> {
 
   Future<void> participate() async => state.event.map(
         (s) async {
+          _reporter.reportParticipate(s, AppLocation.eventScreen);
           emit(state.copyWith(userStatusLoading: true));
           final myProfile = await _usersRepository.loadMe();
           return myProfile.match(
@@ -86,6 +101,7 @@ class OneEventCubit extends Cubit<OneEventState> {
 
   Future<void> leave() async => state.event.map(
         (s) async {
+          _reporter.reportLeave(s, AppLocation.eventScreen);
           emit(state.copyWith(userStatusLoading: true));
           final myProfile = await _usersRepository.loadMe();
           return myProfile.match(
