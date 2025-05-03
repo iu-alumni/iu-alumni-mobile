@@ -15,6 +15,7 @@ class OneEventCubit extends Cubit<OneEventState> {
             saveState: const LoadedState.init(),
             event: const None(),
             userStatusLoading: false,
+            participants: const LoadedState.init(),
           ),
         );
 
@@ -22,7 +23,7 @@ class OneEventCubit extends Cubit<OneEventState> {
   final UsersRepository _usersRepository;
   final Reporter _reporter;
 
-  void loadEvent(String uid) async {
+  Future<void> loadEvent(String uid) async {
     final myProfile = await _usersRepository.loadMe();
     final event = await _repository.getOneEvent(
       uid,
@@ -30,6 +31,14 @@ class OneEventCubit extends Cubit<OneEventState> {
     );
     emit(state.copyWith(event: event));
   }
+
+  void loadParticipants() => state.event.map((e) async {
+        emit(state.copyWith(participants: const LoadedState.loading()));
+        final participants = await _usersRepository.getUsersByIds(
+          e.participantsIds,
+        );
+        emit(state.copyWith(participants: LoadedState.data(participants)));
+      });
 
   void createEvent() {
     final newEvent = _repository.createEvent();

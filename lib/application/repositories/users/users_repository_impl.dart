@@ -55,4 +55,16 @@ class UsersRepositoryImpl extends UsersRepository {
     _users = {for (final u in users) u.profileId: u};
     return users;
   }
+
+  @override
+  Future<Iterable<Profile>> getUsersByIds(Iterable<String> ids) async {
+    final unknownIds = ids
+        .where(
+          (pid) => !(_users?.containsKey(pid) ?? false),
+        )
+        .toList();
+    final unknownProfiles = await _usersGateway.getUsersByIds(unknownIds);
+    final unknownMap = {for (final p in unknownProfiles) p.profileId: p};
+    return ids.map((pid) => _users?[pid] ?? unknownMap[pid]).nonNulls;
+  }
 }

@@ -22,6 +22,14 @@ class $AssetsDbsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/iualumni_icon.png
+  AssetGenImage get iualumniIcon =>
+      const AssetGenImage('assets/icons/iualumni_icon.png');
+
+  /// File path: assets/icons/iualumni_icon_trans.png
+  AssetGenImage get iualumniIconTrans =>
+      const AssetGenImage('assets/icons/iualumni_icon_trans.png');
+
   /// Directory path: assets/icons/map
   $AssetsIconsMapGen get map => const $AssetsIconsMapGen();
 
@@ -30,7 +38,7 @@ class $AssetsIconsGen {
       const AssetGenImage('assets/icons/map_point.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [mapPoint];
+  List<AssetGenImage> get values => [iualumniIcon, iualumniIconTrans, mapPoint];
 }
 
 class $AssetsImagesGen {

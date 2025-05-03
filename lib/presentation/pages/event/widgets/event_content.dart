@@ -17,6 +17,7 @@ import '../../../common/widgets/button.dart';
 import '../../../common/widgets/event_cover.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../../router/app_router.gr.dart';
+import 'participants_card.dart';
 
 class EventViewingContent extends StatefulWidget {
   const EventViewingContent({required this.event, super.key});
@@ -40,29 +41,30 @@ class _EventViewingContentState extends State<EventViewingContent> {
     return Column(
       children: [
         _Cover(event: widget.event),
-        const SizedBox(height: 40),
+        const SizedBox(height: 16),
         ...[
+          const ParticipantsCard(),
           if (desc != null && desc.isNotEmpty)
             _Item(
               icon: Icons.description_outlined,
               name: 'Description',
-              content: widget.event.description ?? '',
+              content: Left(widget.event.description ?? ''),
             ),
           if (location != null && location.isNotEmpty)
             _Item(
               icon: Icons.location_pin,
               name: 'Location',
-              content: location,
+              content: Left(location),
             ),
           _Item(
             icon: Icons.attach_money_outlined,
             name: 'Cost',
-            content: _costToStr(widget.event.cost),
+            content: Left(_costToStr(widget.event.cost)),
           ),
           _Item(
             icon: Icons.watch_later_outlined,
             name: 'When',
-            content: _formatter.format(widget.event.occurringAt),
+            content: Left(_formatter.format(widget.event.occurringAt)),
           ),
         ].map(
           (w) => Padding(
@@ -146,17 +148,20 @@ class _Item extends StatelessWidget {
   const _Item({required this.name, required this.content, required this.icon});
 
   final String name;
-  final String content;
+  final Either<String, Widget> content;
   final IconData icon;
 
   @override
   Widget build(BuildContext context) => TitledItem(
         title: name,
         icon: icon,
-        child: Text(
-          content,
-          style: AppTextStyles.body,
-          textAlign: TextAlign.start,
+        child: content.match(
+          (text) => Text(
+            text,
+            style: AppTextStyles.body,
+            textAlign: TextAlign.start,
+          ),
+          identity,
         ),
       );
 }

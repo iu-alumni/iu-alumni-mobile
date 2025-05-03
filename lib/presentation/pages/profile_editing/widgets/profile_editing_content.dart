@@ -80,12 +80,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
             },
             builder: (context, ep) {
               final p = ep.profile.toNullable() ?? widget.profile;
-              return ProfilePic(
-                firstName: p.firstName,
-                lastName: p.lastName,
-                imageBytes: p.avatar,
-                edit: _updateAvatar,
-              );
+              return ProfilePic(profile: p, edit: _updateAvatar);
             },
           ),
           const SizedBox(height: 16),

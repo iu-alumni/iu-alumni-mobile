@@ -1,3 +1,5 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+
 import '../../data/models/event_data_model.dart';
 import '../../data/models/event_request_data_model.dart';
 import '../models/cost.dart';
@@ -25,6 +27,7 @@ abstract class EventMapper {
             ),
             occurringAt: data.datetime,
             onlineEvent: data.isOnline,
+            participantsIds: data.participantsIds.toISet(),
           );
 
   static EventRequestDataModel eventRequestFromModel(EventModel model) =>

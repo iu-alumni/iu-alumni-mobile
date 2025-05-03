@@ -32,20 +32,37 @@ class EventPage extends StatefulWidget implements AutoRouteWrapper {
 class _EventPageState extends State<EventPage> {
   @override
   void initState() {
-    context.read<OneEventCubit>().loadEvent(widget.eventId);
+    _loadEventData();
     super.initState();
   }
 
+  void _loadEventData() async {
+    await context.read<OneEventCubit>().loadEvent(widget.eventId);
+    // if (!context.mounted) {
+    //   return;
+    // }
+    // context.read<OneEventCubit>().loadParticipants();
+  }
+
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: BlocBuilder<OneEventCubit, OneEventState>(
-          builder: (context, eventState) => eventState.event.match(
-            () => const Center(child: CircularProgressIndicator()),
-            (event) => SafeArea(
-              top: false,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: EventViewingContent(event: event),
+  Widget build(BuildContext context) =>
+      BlocListener<OneEventCubit, OneEventState>(
+        listenWhen: (p, c) =>
+            p.event.map((e) => e.participantsIds) !=
+            c.event.map((e) => e.participantsIds),
+        listener: (context, _) =>
+            context.read<OneEventCubit>().loadParticipants(),
+        child: Scaffold(
+          body: BlocBuilder<OneEventCubit, OneEventState>(
+            buildWhen: (p, c) => p.event != c.event,
+            builder: (context, eventState) => eventState.event.match(
+              () => const Center(child: CircularProgressIndicator()),
+              (event) => SafeArea(
+                top: false,
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: EventViewingContent(event: event),
+                ),
               ),
             ),
           ),

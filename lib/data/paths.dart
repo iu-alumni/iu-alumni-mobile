@@ -10,7 +10,7 @@ abstract class Paths {
   static const login = '$_auth/login';
   static const verify = '$_auth/verify-graduate';
 
-  static const _profile = '$_base/profile';
-  static const myProfile = '$_profile/me';
-  static const allProfiles = '$_profile/all';
+  static const profile = '$_base/profile';
+  static const myProfile = '$profile/me';
+  static const allProfiles = '$profile/all';
 }

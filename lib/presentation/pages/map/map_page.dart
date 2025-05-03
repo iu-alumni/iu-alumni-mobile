@@ -116,9 +116,7 @@ class _MapPageState extends State<MapPage> {
             point: LatLng(point.lat, point.lng),
             child: switch (p) {
               ProfilePin(:final profile) => ProfilePic(
-                  firstName: profile.firstName,
-                  lastName: profile.lastName,
-                  imageBytes: profile.avatar,
+                  profile: profile,
                   onTap: () => _onPinTap(p),
                   size: 48,
                 ),

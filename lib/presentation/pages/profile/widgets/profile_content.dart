@@ -52,11 +52,7 @@ class ProfileContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 40),
-          ProfilePic(
-            firstName: profile.firstName,
-            lastName: profile.lastName,
-            imageBytes: profile.avatar,
-          ),
+          ProfilePic(profile: profile),
           const SizedBox(height: 16),
           Text(
             '${profile.firstName.trim()} ${profile.lastName.trim()}',

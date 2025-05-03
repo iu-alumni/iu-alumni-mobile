@@ -2,23 +2,20 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import '../../../application/models/profile.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 
 class ProfilePic extends StatelessWidget {
   const ProfilePic({
-    required this.firstName,
-    super.key,
-    this.imageBytes,
-    this.lastName,
+    required this.profile,
     this.edit,
     this.onTap,
     this.size,
+    super.key,
   });
 
-  final String? imageBytes;
-  final String firstName;
-  final String? lastName;
+  final Profile profile;
   // null means the image is not edited and the editing overlay is not shown
   final void Function()? edit;
   // On tap action. Editing creates an overlay disallowing the `onTap` action
@@ -40,7 +37,7 @@ class ProfilePic extends StatelessWidget {
             borderRadius: BorderRadius.circular(radius),
             child: InkWell(
               onTap: onTap,
-              child: switch (imageBytes) {
+              child: switch (profile.avatar) {
                 final image? => Image.memory(
                     base64Decode(image),
                     width: imgSize,
@@ -55,7 +52,7 @@ class ProfilePic extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        '${firstName.characters.first}${lastName?.characters.first ?? ""}',
+                        '${profile.firstName.characters.first}${profile.lastName.characters.first}',
                         style: AppTextStyles.h2.copyWith(fontSize: radius),
                       ),
                     ),

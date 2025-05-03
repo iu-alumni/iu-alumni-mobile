@@ -95,12 +95,6 @@ class App extends StatelessWidget {
             ),
           ),
           // --- REPOSITORIES ---
-          RepositoryProvider<EventsRepository>(
-            create: (context) => EventsRepositoryImpl(
-              context.read<Uuid>(),
-              context.read<EventsGateway>(),
-            ),
-          ),
           RepositoryProvider<AuthRepository>(
             create: (context) => AuthRepositoryImpl(
               context.read<AuthGateway>(),
@@ -111,6 +105,13 @@ class App extends StatelessWidget {
               context.read<ProfileGateway>(),
               context.read<TokenProvider>(),
               context.read<UsersGateway>(),
+            ),
+          ),
+          RepositoryProvider<EventsRepository>(
+            create: (context) => EventsRepositoryImpl(
+              context.read<Uuid>(),
+              context.read<EventsGateway>(),
+              context.read<UsersRepository>(),
             ),
           ),
           RepositoryProvider<Reporter>(

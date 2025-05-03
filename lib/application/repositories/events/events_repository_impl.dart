@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
 
@@ -8,13 +9,15 @@ import '../../mappers/event_mapper.dart';
 import '../../models/cost.dart';
 import '../../models/event.dart';
 import '../../models/user_status.dart';
+import '../users/users_repository.dart';
 import 'events_repository.dart';
 
 class EventsRepositoryImpl implements EventsRepository {
-  EventsRepositoryImpl(this._uuid, this._gateway);
+  EventsRepositoryImpl(this._uuid, this._gateway, this._usersRepository);
 
   final Uuid _uuid;
   final EventsGateway _gateway;
+  final UsersRepository _usersRepository;
 
   Map<String, EventModel>? _cache;
   EventModel? _modifiedEvent;
@@ -51,6 +54,7 @@ class EventsRepositoryImpl implements EventsRepository {
       cost: const CostModel(number: 0, currency: Currency.rub),
       occurringAt: DateTime.now().add(const Duration(days: 1)),
       onlineEvent: false,
+      participantsIds: const ISet.empty(),
     );
     _modifiedEvent = event;
     return event;
@@ -68,7 +72,6 @@ class EventsRepositoryImpl implements EventsRepository {
   }
 
   Future<Option<String>> _mutateAndSave(EventModel event) async {
-    // _cache![event.eventId] = event;
     final eventRequest = EventMapper.eventRequestFromModel(event);
     // Has event already been in the created ever (otherwise it is new)
     if (_cache!.containsKey(event.eventId)) {
@@ -84,9 +87,15 @@ class EventsRepositoryImpl implements EventsRepository {
     } else {
       // Event not found in the cache, so it is a new event
       final newId = await _gateway.addEvent(eventRequest);
+      // Load personal profile to add the ID of the creator
+      final myProfile = await _usersRepository.loadMe();
       // Update the event ID by the one server responded with
       newId.map((eid) {
-        _cache![eid] = event.copyWith(eventId: eid);
+        _cache![eid] = event.copyWith(
+          eventId: eid,
+          participantsIds:
+              [if (myProfile case Some(:final value)) value.profileId].toISet(),
+        );
       });
       return newId;
     }
@@ -130,6 +139,7 @@ class EventsRepositoryImpl implements EventsRepository {
       if (event.userStatus case UserNotAuthor status) {
         _cache?[eventId] = event.copyWith(
           userStatus: status.copyWith(participant: success),
+          participantsIds: event.participantsIds.add(myId),
         );
       }
     }
@@ -144,6 +154,7 @@ class EventsRepositoryImpl implements EventsRepository {
       if (event.userStatus case UserNotAuthor status) {
         _cache?[eventId] = event.copyWith(
           userStatus: status.copyWith(participant: !success),
+          participantsIds: event.participantsIds.remove(myId),
         );
       }
     }

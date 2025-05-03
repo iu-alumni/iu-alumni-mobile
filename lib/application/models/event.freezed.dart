@@ -25,6 +25,7 @@ mixin _$EventModel {
   CostModel get cost => throw _privateConstructorUsedError;
   DateTime get occurringAt => throw _privateConstructorUsedError;
   bool get onlineEvent => throw _privateConstructorUsedError;
+  ISet<String> get participantsIds => throw _privateConstructorUsedError;
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -48,7 +49,8 @@ abstract class $EventModelCopyWith<$Res> {
       String? location,
       CostModel cost,
       DateTime occurringAt,
-      bool onlineEvent});
+      bool onlineEvent,
+      ISet<String> participantsIds});
 
   $UserStatusCopyWith<$Res> get userStatus;
   $CostModelCopyWith<$Res> get cost;
@@ -78,6 +80,7 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
     Object? cost = null,
     Object? occurringAt = null,
     Object? onlineEvent = null,
+    Object? participantsIds = null,
   }) {
     return _then(_value.copyWith(
       eventId: null == eventId
@@ -116,6 +119,10 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
           ? _value.onlineEvent
           : onlineEvent // ignore: cast_nullable_to_non_nullable
               as bool,
+      participantsIds: null == participantsIds
+          ? _value.participantsIds
+          : participantsIds // ignore: cast_nullable_to_non_nullable
+              as ISet<String>,
     ) as $Val);
   }
 
@@ -157,7 +164,8 @@ abstract class _$$EventModelImplCopyWith<$Res>
       String? location,
       CostModel cost,
       DateTime occurringAt,
-      bool onlineEvent});
+      bool onlineEvent,
+      ISet<String> participantsIds});
 
   @override
   $UserStatusCopyWith<$Res> get userStatus;
@@ -187,6 +195,7 @@ class __$$EventModelImplCopyWithImpl<$Res>
     Object? cost = null,
     Object? occurringAt = null,
     Object? onlineEvent = null,
+    Object? participantsIds = null,
   }) {
     return _then(_$EventModelImpl(
       eventId: null == eventId
@@ -225,6 +234,10 @@ class __$$EventModelImplCopyWithImpl<$Res>
           ? _value.onlineEvent
           : onlineEvent // ignore: cast_nullable_to_non_nullable
               as bool,
+      participantsIds: null == participantsIds
+          ? _value.participantsIds
+          : participantsIds // ignore: cast_nullable_to_non_nullable
+              as ISet<String>,
     ));
   }
 }
@@ -241,7 +254,8 @@ class _$EventModelImpl implements _EventModel {
       required this.location,
       required this.cost,
       required this.occurringAt,
-      required this.onlineEvent});
+      required this.onlineEvent,
+      required this.participantsIds});
 
   @override
   final String eventId;
@@ -263,10 +277,12 @@ class _$EventModelImpl implements _EventModel {
   final DateTime occurringAt;
   @override
   final bool onlineEvent;
+  @override
+  final ISet<String> participantsIds;
 
   @override
   String toString() {
-    return 'EventModel(eventId: $eventId, userStatus: $userStatus, title: $title, description: $description, coverBytes: $coverBytes, location: $location, cost: $cost, occurringAt: $occurringAt, onlineEvent: $onlineEvent)';
+    return 'EventModel(eventId: $eventId, userStatus: $userStatus, title: $title, description: $description, coverBytes: $coverBytes, location: $location, cost: $cost, occurringAt: $occurringAt, onlineEvent: $onlineEvent, participantsIds: $participantsIds)';
   }
 
   @override
@@ -288,12 +304,24 @@ class _$EventModelImpl implements _EventModel {
             (identical(other.occurringAt, occurringAt) ||
                 other.occurringAt == occurringAt) &&
             (identical(other.onlineEvent, onlineEvent) ||
-                other.onlineEvent == onlineEvent));
+                other.onlineEvent == onlineEvent) &&
+            const DeepCollectionEquality()
+                .equals(other.participantsIds, participantsIds));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, eventId, userStatus, title,
-      description, coverBytes, location, cost, occurringAt, onlineEvent);
+  int get hashCode => Object.hash(
+      runtimeType,
+      eventId,
+      userStatus,
+      title,
+      description,
+      coverBytes,
+      location,
+      cost,
+      occurringAt,
+      onlineEvent,
+      const DeepCollectionEquality().hash(participantsIds));
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -314,7 +342,8 @@ abstract class _EventModel implements EventModel {
       required final String? location,
       required final CostModel cost,
       required final DateTime occurringAt,
-      required final bool onlineEvent}) = _$EventModelImpl;
+      required final bool onlineEvent,
+      required final ISet<String> participantsIds}) = _$EventModelImpl;
 
   @override
   String get eventId;
@@ -334,6 +363,8 @@ abstract class _EventModel implements EventModel {
   DateTime get occurringAt;
   @override
   bool get onlineEvent;
+  @override
+  ISet<String> get participantsIds;
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.

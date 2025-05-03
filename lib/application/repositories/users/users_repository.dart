@@ -8,4 +8,5 @@ abstract class UsersRepository {
   void logout();
 
   Future<Iterable<Profile>> getAllUsers();
+  Future<Iterable<Profile>> getUsersByIds(Iterable<String> ids);
 }
