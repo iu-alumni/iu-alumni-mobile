@@ -10,4 +10,6 @@ abstract interface class EventsGateway {
   Future<bool> deleteEvent(String eventId);
   Future<bool> participate(String eventId, String userId);
   Future<bool> leave(String eventId, String userId);
+  Future<Iterable<EventDataModel>> eventsIOwn();
+  Future<Iterable<EventDataModel>> eventsWhereParticipate(String userId);
 }

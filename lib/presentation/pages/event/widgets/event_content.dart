@@ -12,6 +12,7 @@ import '../../../../util/currency_formatter.dart';
 import '../../../../util/num_formatter.dart';
 import '../../../blocs/models/one_event_state.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
+import '../../../blocs/profile/profile_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/button.dart';
 import '../../../common/widgets/event_cover.dart';
@@ -93,10 +94,19 @@ class _Cover extends StatelessWidget {
     context.read<OneEventCubit>().loadEvent(event.eventId);
   }
 
-  void _participate(BuildContext context) =>
-      context.read<OneEventCubit>().participate();
+  void _participate(BuildContext context) async {
+    final profileCubit = context.read<ProfileCubit>();
+    await context.read<OneEventCubit>().participate();
+    // Mark this one is updated
+    profileCubit.updateParticipatedEvents();
+  }
 
-  void _leave(BuildContext context) => context.read<OneEventCubit>().leave();
+  void _leave(BuildContext context) async {
+    final profileCubit = context.read<ProfileCubit>();
+    await context.read<OneEventCubit>().leave();
+    // Mark this one is updated
+    profileCubit.updateParticipatedEvents();
+  }
 
   @override
   Widget build(BuildContext context) => EventCover(

@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 
 import '../../../application/models/profile.dart';
+import '../../blocs/models/profile_state.dart';
 import '../../blocs/profile/profile_cubit.dart';
 import '../../common/constants/app_text_styles.dart';
+import '../../common/models/loaded_state.dart';
 import 'widgets/profile_content.dart';
 import 'widgets/profile_page_title.dart';
 
@@ -30,41 +32,50 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ProfilePageTitle(personal: widget.profile.isNone()),
-            Expanded(
-              child: SafeArea(
-                top: false,
-                child: widget.profile.match(
-                  () => BlocBuilder<ProfileCubit, ProfileState>(
-                    builder: (context, profile) => switch (profile) {
-                      ProfileData(:final data) => SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          child: ProfileContent(
-                            profile: data,
-                            personal: true,
+  Widget build(BuildContext context) =>
+      BlocListener<ProfileCubit, ProfileState>(
+        listenWhen: (p, c) => p.profile != c.profile,
+        listener: (context, state) {
+          context.read<ProfileCubit>().loadOwnedEvents();
+          context.read<ProfileCubit>().loadParticipatedEvents();
+        },
+        child: Scaffold(
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ProfilePageTitle(personal: widget.profile.isNone()),
+              Expanded(
+                child: SafeArea(
+                  top: false,
+                  child: widget.profile.match(
+                    () => BlocBuilder<ProfileCubit, ProfileState>(
+                      buildWhen: (p, c) => p.profile != c.profile,
+                      builder: (context, profile) => switch (profile.profile) {
+                        LoadedStateData(:final data) => SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            child: ProfileContent(
+                              profile: data,
+                              personal: true,
+                            ),
                           ),
-                        ),
-                      ProfileError e => Center(
-                          child: Text(
-                            e.error,
-                            style: AppTextStyles.caption,
-                            textAlign: TextAlign.center,
+                        LoadedStateError e => Center(
+                            child: Text(
+                              e.error,
+                              style: AppTextStyles.caption,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                      _ => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                    },
+                        _ => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                      },
+                    ),
+                    (p) => ProfileContent(profile: p, personal: false),
                   ),
-                  (p) => ProfileContent(profile: p, personal: false),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
 }

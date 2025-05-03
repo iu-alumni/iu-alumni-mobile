@@ -9,6 +9,7 @@ import '../../../application/repositories/users/users_repository.dart';
 import '../../blocs/events_list/events_list_cubit.dart';
 import '../../blocs/models/one_event_state.dart';
 import '../../blocs/one_event/one_event_cubit.dart';
+import '../../blocs/profile/profile_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/models/loaded_state.dart';
@@ -53,12 +54,21 @@ class _EventEditingPageState extends State<EventEditingPage> {
 
   void _updateAndLeave() {
     final eventsListCubit = context.read<EventsListCubit>();
+    final profileCubit = context.read<ProfileCubit>();
     widget.eventId.match(
       // If the ID was unknown originally, the event is newly created and exists
       // only in the OneEventCubit. Update the events list from the repository
-      eventsListCubit.loadEvents,
+      () async {
+        await eventsListCubit.loadEvents();
+        // Mark this one is updated
+        profileCubit.updateOwnedEvents();
+      },
       // If the ID is known, it is an existing event, so update it
-      eventsListCubit.update,
+      (eid) async {
+        await eventsListCubit.update(eid);
+        // Mark this one is updated
+        profileCubit.updateOwnedEvents();
+      },
     );
     context.maybePop();
   }

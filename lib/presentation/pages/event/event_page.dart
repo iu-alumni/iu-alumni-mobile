@@ -32,16 +32,8 @@ class EventPage extends StatefulWidget implements AutoRouteWrapper {
 class _EventPageState extends State<EventPage> {
   @override
   void initState() {
-    _loadEventData();
+    context.read<OneEventCubit>().loadEvent(widget.eventId);
     super.initState();
-  }
-
-  void _loadEventData() async {
-    await context.read<OneEventCubit>().loadEvent(widget.eventId);
-    // if (!context.mounted) {
-    //   return;
-    // }
-    // context.read<OneEventCubit>().loadParticipants();
   }
 
   @override

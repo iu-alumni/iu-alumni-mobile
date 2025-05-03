@@ -2,6 +2,9 @@ abstract class Paths {
   static const _base = 'https://iu-alumni-backend.onrender.com';
 
   static const events = '$_base/events/';
+  static const eventsOwner = '${events}owner';
+  static String eventsWhereParticipant(String uid) =>
+      '${events}participant/$uid';
   static String eventWithId(String eid) => '$events$eid';
   static String participants(String eid) => '${eventWithId(eid)}/participants';
   static String leave(String eid) => '${eventWithId(eid)}/participants/remove';

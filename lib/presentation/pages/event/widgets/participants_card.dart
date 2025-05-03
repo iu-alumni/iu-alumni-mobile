@@ -50,7 +50,8 @@ class ParticipantsCard extends StatelessWidget {
                                 ProfilePic(profile: p, size: 48),
                             ],
                           ),
-                        _ => const Center(
+                        _ => const Align(
+                            alignment: Alignment.centerLeft,
                             child: CircularProgressIndicator(
                               color: AppColors.blueGray,
                             ),

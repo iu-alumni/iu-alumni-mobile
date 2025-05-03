@@ -5,6 +5,10 @@ import '../../models/event.dart';
 abstract interface class EventsRepository {
   Future<Iterable<EventModel>> getEvents(Option<String> myId);
 
+  Future<Iterable<EventModel>> getEventsIOwn(Option<String> myId);
+
+  Future<Iterable<EventModel>> getEventsIParticipateIn(String myId);
+
   Future<Option<EventModel>> getOneEvent(String eventId, Option<String> myId);
 
   EventModel createEvent();
@@ -16,6 +20,6 @@ abstract interface class EventsRepository {
   Future<Option<String>> save();
 
   Future<EventModel> participate(String eventId, String myId);
-  
+
   Future<EventModel> leave(String eventId, String myId);
 }

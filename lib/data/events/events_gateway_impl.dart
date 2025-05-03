@@ -100,4 +100,30 @@ class EventsGatewayImpl implements EventsGateway {
     ).run();
     return result.isRight();
   }
+
+  @override
+  Future<Iterable<EventDataModel>> eventsIOwn() =>
+      TaskEither.tryCatch(() async {
+        final resp = await _dio.get(
+          Paths.eventsOwner,
+          options: _optionsManager.opts(),
+        );
+        final list = resp.data as List;
+        return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
+      }, (e, _) => '$e')
+          .match<Iterable<EventDataModel>>((_) => [], identity)
+          .run();
+
+  @override
+  Future<Iterable<EventDataModel>> eventsWhereParticipate(String userId) =>
+      TaskEither.tryCatch(() async {
+        final resp = await _dio.get(
+          Paths.eventsWhereParticipant(userId),
+          options: _optionsManager.opts(),
+        );
+        final list = resp.data as List;
+        return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
+      }, (e, _) => '$e')
+          .match<Iterable<EventDataModel>>((_) => [], identity)
+          .run();
 }

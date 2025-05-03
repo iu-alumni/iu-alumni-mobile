@@ -139,7 +139,10 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (ctx) => ProfileCubit(ctx.read<UsersRepository>()),
+            create: (ctx) => ProfileCubit(
+              ctx.read<UsersRepository>(),
+              ctx.read<EventsRepository>(),
+            ),
           ),
         ],
         child: Builder(

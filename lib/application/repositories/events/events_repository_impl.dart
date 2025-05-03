@@ -20,6 +20,8 @@ class EventsRepositoryImpl implements EventsRepository {
   final UsersRepository _usersRepository;
 
   Map<String, EventModel>? _cache;
+  Set<String>? _owned;
+  Set<String>? _participated;
   EventModel? _modifiedEvent;
 
   @override
@@ -36,9 +38,18 @@ class EventsRepositoryImpl implements EventsRepository {
     final eventModels = data.map(EventMapper.eventFromData(myId.toNullable()));
     // Fill the cache
     _cache?.clear();
+    _owned?.clear();
+    _participated?.clear();
     _cache ??= {};
+    _owned ??= {};
+    _participated ??= {};
     for (final e in eventModels) {
       _cache![e.eventId] = e;
+      if (e.userStatus case UserAuthor()) {
+        _owned!.add(e.eventId);
+      } else if (e.userStatus case UserNotAuthor(participant: true)) {
+        _participated!.add(e.eventId);
+      }
     }
   }
 
@@ -93,9 +104,11 @@ class EventsRepositoryImpl implements EventsRepository {
       newId.map((eid) {
         _cache![eid] = event.copyWith(
           eventId: eid,
-          participantsIds:
-              [if (myProfile case Some(:final value)) value.profileId].toISet(),
+          participantsIds: [
+            if (myProfile case Some(:final value)) value.profileId,
+          ].toISet(),
         );
+        _owned!.add(eid);
       });
       return newId;
     }
@@ -129,6 +142,7 @@ class EventsRepositoryImpl implements EventsRepository {
     if (!success && deletedModel != null) {
       // Return the deleted event back if it wasn't deleted
       _cache?[eventId] = deletedModel;
+      _owned?.remove(eventId);
     }
   }
 
@@ -141,6 +155,7 @@ class EventsRepositoryImpl implements EventsRepository {
           userStatus: status.copyWith(participant: success),
           participantsIds: event.participantsIds.add(myId),
         );
+        _participated?.add(eventId);
       }
     }
     await _loadEvents(Option.of(myId));
@@ -156,9 +171,32 @@ class EventsRepositoryImpl implements EventsRepository {
           userStatus: status.copyWith(participant: !success),
           participantsIds: event.participantsIds.remove(myId),
         );
+        _participated?.remove(eventId);
       }
     }
     await _loadEvents(Option.of(myId));
     return _cache![eventId]!;
+  }
+
+  @override
+  Future<Iterable<EventModel>> getEventsIOwn(Option<String> myId) async {
+    if (_owned case final owned?) {
+      if (_cache case final events?) {
+        return events.values.where((e) => owned.contains(e.eventId));
+      }
+    }
+    final data = await _gateway.eventsIOwn();
+    return data.map(EventMapper.eventFromData(myId.toNullable()));
+  }
+
+  @override
+  Future<Iterable<EventModel>> getEventsIParticipateIn(String myId) async {
+    if (_participated case final participated?) {
+      if (_cache case final events?) {
+        return events.values.where((e) => participated.contains(e.eventId));
+      }
+    }
+    final data = await _gateway.eventsWhereParticipate(myId);
+    return data.map(EventMapper.eventFromData(myId));
   }
 }

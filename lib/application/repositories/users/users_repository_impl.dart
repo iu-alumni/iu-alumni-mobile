@@ -63,8 +63,11 @@ class UsersRepositoryImpl extends UsersRepository {
           (pid) => !(_users?.containsKey(pid) ?? false),
         )
         .toList();
-    final unknownProfiles = await _usersGateway.getUsersByIds(unknownIds);
-    final unknownMap = {for (final p in unknownProfiles) p.profileId: p};
+    Map<String, Profile> unknownMap = {};
+    if (unknownIds.isNotEmpty) {
+      final unknownProfiles = await _usersGateway.getUsersByIds(unknownIds);
+      unknownMap = {for (final p in unknownProfiles) p.profileId: p};
+    }
     return ids.map((pid) => _users?[pid] ?? unknownMap[pid]).nonNulls;
   }
 }

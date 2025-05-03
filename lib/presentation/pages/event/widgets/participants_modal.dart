@@ -89,8 +89,7 @@ class _ParticipantItem extends StatelessWidget {
                       ),
                       textAlign: TextAlign.start,
                     ),
-                    if (p.location case final location?) ...[
-                      const SizedBox(height: 2),
+                    if (p.location case final location?)
                       Text(
                         location,
                         style: AppTextStyles.h6.copyWith(
@@ -98,7 +97,6 @@ class _ParticipantItem extends StatelessWidget {
                         ),
                         textAlign: TextAlign.start,
                       ),
-                    ],
                   ],
                 ),
               ),

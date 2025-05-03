@@ -85,7 +85,8 @@ class OneEventCubit extends Cubit<OneEventState> {
     );
   }
 
-  Future<void> participate() async => state.event.map(
+  Future<void> participate() => state.event.match(
+        () async {},
         (s) async {
           _reporter.reportParticipate(s, AppLocation.eventScreen);
           emit(state.copyWith(userStatusLoading: true));
@@ -108,7 +109,8 @@ class OneEventCubit extends Cubit<OneEventState> {
         },
       );
 
-  Future<void> leave() async => state.event.map(
+  Future<void> leave() => state.event.match(
+        () async {},
         (s) async {
           _reporter.reportLeave(s, AppLocation.eventScreen);
           emit(state.copyWith(userStatusLoading: true));
