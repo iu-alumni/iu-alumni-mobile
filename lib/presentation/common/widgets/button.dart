@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/app_colors.dart';
 
-enum AppButtonStyle { primary, secondary, text, input }
+enum AppButtonStyle { primary, secondary, text, input, destructive }
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -20,6 +20,7 @@ class AppButton extends StatelessWidget {
 
   Color get _buttonColor => switch (buttonStyle) {
         AppButtonStyle.primary => AppColors.primary,
+        AppButtonStyle.destructive => AppColors.destructive,
         AppButtonStyle.secondary => AppColors.darkGray,
         AppButtonStyle.text => Colors.transparent,
         AppButtonStyle.input => AppColors.lightGray,
