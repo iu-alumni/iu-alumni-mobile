@@ -114,10 +114,23 @@ class ProfileContent extends StatelessWidget {
                   ],
                 ),
               ),
-            // AppButton(onTap: () => launchUrl(
-            //             Uri.parse(''),
-            //             mode: LaunchMode.externalApplication,
-            //           ), child: child,),
+            if (personal) ...[
+              AppButton(
+                buttonStyle: AppButtonStyle.secondary,
+                onTap: () => launchUrl(
+                  Uri.parse('https://t.me/IU_Alumni_Notification_Bot'),
+                  mode: LaunchMode.externalApplication,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    'Share feedback',
+                    style: AppTextStyles.buttonText,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ]
           ].expand(
             (e) => [
               const SizedBox(height: 16),
