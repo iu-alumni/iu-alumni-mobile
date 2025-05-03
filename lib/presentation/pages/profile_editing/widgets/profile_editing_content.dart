@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../application/models/profile.dart';
 import '../../../blocs/models/profile_editing_state.dart';
@@ -10,6 +14,7 @@ import '../../../common/models/loaded_state.dart';
 import '../../../common/widgets/app_text_field.dart';
 import '../../../common/widgets/button.dart';
 import '../../../common/widgets/location_dialog.dart';
+import '../../../common/widgets/profile_pic.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../verification/widgets/year_picker.dart';
 
@@ -41,11 +46,49 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
     _cubit.update((e) => e.copyWith(location: location));
   }
 
+  void _updateAvatar() async {
+    final image = await context
+        .read<ImagePicker>()
+        .pickImage(source: ImageSource.gallery);
+    if (image == null || !context.mounted) {
+      return;
+    }
+    final bytes = await image.readAsBytes();
+    final compressed = await FlutterImageCompress.compressWithList(
+      bytes,
+      quality: 90,
+    );
+    final encoded = base64Encode(compressed);
+    if (!context.mounted) {
+      return;
+    }
+    _cubit.update((p) => p.copyWith(avatar: encoded));
+  }
+
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 40),
+          BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+            buildWhen: (pr, cu) {
+              final p = pr.profile.toNullable();
+              final c = cu.profile.toNullable();
+              return p?.lastName != c?.lastName ||
+                  p?.firstName != c?.firstName ||
+                  p?.avatar != c?.avatar;
+            },
+            builder: (context, ep) {
+              final p = ep.profile.toNullable() ?? widget.profile;
+              return ProfilePic(
+                firstName: p.firstName,
+                lastName: p.lastName,
+                imageBytes: p.avatar,
+                edit: _updateAvatar,
+              );
+            },
+          ),
+          const SizedBox(height: 16),
           Padding(
             padding: _horPadding,
             child: TitledItem(

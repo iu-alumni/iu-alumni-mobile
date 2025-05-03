@@ -18,6 +18,7 @@ import '../../blocs/pin_locations/pin_locations_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/models/loaded_state.dart';
 import '../../common/widgets/button.dart';
+import '../../common/widgets/profile_pic.dart';
 import '../../router/app_router.gr.dart';
 
 class MapPage extends StatefulWidget {
@@ -113,14 +114,20 @@ class _MapPageState extends State<MapPage> {
         _list.add(
           Marker(
             point: LatLng(point.lat, point.lng),
-            child: AppButton(
-              borderRadius: BorderRadius.circular(48),
-              onTap: () => _onPinTap(p),
-              child: switch (p) {
-                ProfilePin() => const Icon(Icons.person, color: Colors.white),
-                EventPin() => const Icon(Icons.event, color: Colors.white),
-              },
-            ),
+            child: switch (p) {
+              ProfilePin(:final profile) => ProfilePic(
+                  firstName: profile.firstName,
+                  lastName: profile.lastName,
+                  imageBytes: profile.avatar,
+                  onTap: () => _onPinTap(p),
+                  size: 48,
+                ),
+              EventPin() => AppButton(
+                  borderRadius: BorderRadius.circular(48),
+                  onTap: () => _onPinTap(p),
+                  child: const Icon(Icons.event, color: Colors.white),
+                ),
+            },
             width: 48,
             height: 48,
             alignment: Alignment.center,

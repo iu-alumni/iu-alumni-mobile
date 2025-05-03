@@ -8,6 +8,7 @@ import '../../../../application/repositories/reporter/reporter.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/button.dart';
+import '../../../common/widgets/profile_pic.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
 
@@ -51,6 +52,12 @@ class ProfileContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 40),
+          ProfilePic(
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            imageBytes: profile.avatar,
+          ),
+          const SizedBox(height: 16),
           Text(
             '${profile.firstName.trim()} ${profile.lastName.trim()}',
             style: AppTextStyles.h3,
