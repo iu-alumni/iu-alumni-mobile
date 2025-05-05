@@ -10,6 +10,7 @@ part 'profile_state.freezed.dart';
 @freezed
 class ProfileState with _$ProfileState {
   const factory ProfileState({
+    required bool myOwn,
     required LoadedState<Profile> profile,
     required LoadedState<IList<EventModel>> ownedEvents,
     required LoadedState<IList<EventModel>> participatedEvents,

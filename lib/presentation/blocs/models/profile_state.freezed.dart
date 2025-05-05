@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ProfileState {
+  bool get myOwn => throw _privateConstructorUsedError;
   LoadedState<Profile> get profile => throw _privateConstructorUsedError;
   LoadedState<IList<EventModel>> get ownedEvents =>
       throw _privateConstructorUsedError;
@@ -36,7 +37,8 @@ abstract class $ProfileStateCopyWith<$Res> {
       _$ProfileStateCopyWithImpl<$Res, ProfileState>;
   @useResult
   $Res call(
-      {LoadedState<Profile> profile,
+      {bool myOwn,
+      LoadedState<Profile> profile,
       LoadedState<IList<EventModel>> ownedEvents,
       LoadedState<IList<EventModel>> participatedEvents});
 
@@ -60,11 +62,16 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? myOwn = null,
     Object? profile = null,
     Object? ownedEvents = null,
     Object? participatedEvents = null,
   }) {
     return _then(_value.copyWith(
+      myOwn: null == myOwn
+          ? _value.myOwn
+          : myOwn // ignore: cast_nullable_to_non_nullable
+              as bool,
       profile: null == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
@@ -122,7 +129,8 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {LoadedState<Profile> profile,
+      {bool myOwn,
+      LoadedState<Profile> profile,
       LoadedState<IList<EventModel>> ownedEvents,
       LoadedState<IList<EventModel>> participatedEvents});
 
@@ -147,11 +155,16 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? myOwn = null,
     Object? profile = null,
     Object? ownedEvents = null,
     Object? participatedEvents = null,
   }) {
     return _then(_$ProfileStateImpl(
+      myOwn: null == myOwn
+          ? _value.myOwn
+          : myOwn // ignore: cast_nullable_to_non_nullable
+              as bool,
       profile: null == profile
           ? _value.profile
           : profile // ignore: cast_nullable_to_non_nullable
@@ -172,10 +185,13 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
 
 class _$ProfileStateImpl implements _ProfileState {
   const _$ProfileStateImpl(
-      {required this.profile,
+      {required this.myOwn,
+      required this.profile,
       required this.ownedEvents,
       required this.participatedEvents});
 
+  @override
+  final bool myOwn;
   @override
   final LoadedState<Profile> profile;
   @override
@@ -185,7 +201,7 @@ class _$ProfileStateImpl implements _ProfileState {
 
   @override
   String toString() {
-    return 'ProfileState(profile: $profile, ownedEvents: $ownedEvents, participatedEvents: $participatedEvents)';
+    return 'ProfileState(myOwn: $myOwn, profile: $profile, ownedEvents: $ownedEvents, participatedEvents: $participatedEvents)';
   }
 
   @override
@@ -193,6 +209,7 @@ class _$ProfileStateImpl implements _ProfileState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ProfileStateImpl &&
+            (identical(other.myOwn, myOwn) || other.myOwn == myOwn) &&
             (identical(other.profile, profile) || other.profile == profile) &&
             (identical(other.ownedEvents, ownedEvents) ||
                 other.ownedEvents == ownedEvents) &&
@@ -202,7 +219,7 @@ class _$ProfileStateImpl implements _ProfileState {
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, profile, ownedEvents, participatedEvents);
+      Object.hash(runtimeType, myOwn, profile, ownedEvents, participatedEvents);
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -215,11 +232,14 @@ class _$ProfileStateImpl implements _ProfileState {
 
 abstract class _ProfileState implements ProfileState {
   const factory _ProfileState(
-          {required final LoadedState<Profile> profile,
+          {required final bool myOwn,
+          required final LoadedState<Profile> profile,
           required final LoadedState<IList<EventModel>> ownedEvents,
           required final LoadedState<IList<EventModel>> participatedEvents}) =
       _$ProfileStateImpl;
 
+  @override
+  bool get myOwn;
   @override
   LoadedState<Profile> get profile;
   @override

@@ -49,6 +49,8 @@ class _EventEditingPageState extends State<EventEditingPage> {
   void _delete() {
     _oneEventCubit.delete();
     widget.eventId.map(context.read<EventsListCubit>().remove);
+    // Mark this one is updated
+    context.read<ProfileCubit>().updateOwnedEvents();
     context.router.popUntilRoot();
   }
 

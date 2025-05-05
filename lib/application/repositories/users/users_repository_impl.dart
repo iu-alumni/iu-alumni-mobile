@@ -3,6 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import '../../../data/profile_gateway/profile_gateway.dart';
 import '../../../data/token/token_provider.dart';
 import '../../../data/users/users_gateway.dart';
+import '../../../util/logger.dart';
 import '../../models/profile.dart';
 import 'users_repository.dart';
 
@@ -26,7 +27,11 @@ class UsersRepositoryImpl extends UsersRepository {
       return Option.of(profile);
     }
     final profile = await _profileGateway.loadProfile();
-    profile.map((p) => _me = p);
+    profile.map((p) {
+      _me = p;
+      _users ??= {};
+      _users?[p.profileId] = p;
+    });
     return profile.toOption();
   }
 
@@ -58,16 +63,16 @@ class UsersRepositoryImpl extends UsersRepository {
 
   @override
   Future<Iterable<Profile>> getUsersByIds(Iterable<String> ids) async {
-    final unknownIds = ids
-        .where(
-          (pid) => !(_users?.containsKey(pid) ?? false),
-        )
-        .toList();
-    Map<String, Profile> unknownMap = {};
+    final unknownIds = switch (_users) {
+      final us? => ids.where((pid) => !us.containsKey(pid)).toList(),
+      _ => const <String>[],
+    };
+    logger.d('Loading these unknown users by ID: $unknownIds');
     if (unknownIds.isNotEmpty) {
       final unknownProfiles = await _usersGateway.getUsersByIds(unknownIds);
-      unknownMap = {for (final p in unknownProfiles) p.profileId: p};
+      _users ??= {};
+      _users?.addAll({for (final up in unknownProfiles) up.profileId: up});
     }
-    return ids.map((pid) => _users?[pid] ?? unknownMap[pid]).nonNulls;
+    return ids.map((pid) => _users?[pid]).nonNulls;
   }
 }

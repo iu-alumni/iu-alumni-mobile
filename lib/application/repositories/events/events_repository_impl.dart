@@ -5,6 +5,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../data/events/events_gateway.dart';
+import '../../../util/logger.dart';
 import '../../mappers/event_mapper.dart';
 import '../../models/cost.dart';
 import '../../models/event.dart';
@@ -25,16 +26,22 @@ class EventsRepositoryImpl implements EventsRepository {
   EventModel? _modifiedEvent;
 
   @override
-  Future<Iterable<EventModel>> getEvents(Option<String> myId) async {
-    await _loadEvents(myId);
+  Future<Iterable<EventModel>> getEvents() async {
+    await _loadEvents();
     return _cache!.values;
   }
 
-  Future<void> _loadEvents(Option<String> myId, {bool refresh = false}) async {
+  Future<Option<String>> _myId() async {
+    final me = await _usersRepository.loadMe();
+    return me.map((p) => p.profileId);
+  }
+
+  Future<void> _loadEvents({bool refresh = false}) async {
     if (!refresh && _cache != null) {
       return;
     }
     final data = await _gateway.loadEvents();
+    final myId = await _myId();
     final eventModels = data.map(EventMapper.eventFromData(myId.toNullable()));
     // Fill the cache
     _cache?.clear();
@@ -126,11 +133,8 @@ class EventsRepositoryImpl implements EventsRepository {
   }
 
   @override
-  Future<Option<EventModel>> getOneEvent(
-    String eventId,
-    Option<String> myId,
-  ) async {
-    await _loadEvents(myId);
+  Future<Option<EventModel>> getOneEvent(String eventId) async {
+    await _loadEvents();
     return Option.fromNullable(_cache![eventId]);
   }
 
@@ -147,56 +151,81 @@ class EventsRepositoryImpl implements EventsRepository {
   }
 
   @override
-  Future<EventModel> participate(String eventId, String myId) async {
-    final success = await _gateway.participate(eventId, myId);
-    if (_cache?[eventId] case final EventModel event when success) {
-      if (event.userStatus case UserNotAuthor status) {
-        _cache?[eventId] = event.copyWith(
-          userStatus: status.copyWith(participant: success),
-          participantsIds: event.participantsIds.add(myId),
-        );
-        _participated?.add(eventId);
+  Future<Option<EventModel>> participate(String eventId) async {
+    final maybeMyId = await _myId();
+    if (maybeMyId case Some(value: final myId)) {
+      final success = await _gateway.participate(eventId, myId);
+      if (_cache?[eventId] case final EventModel event when success) {
+        if (event.userStatus case UserNotAuthor status) {
+          _cache?[eventId] = event.copyWith(
+            userStatus: status.copyWith(participant: success),
+            participantsIds: event.participantsIds.add(myId),
+          );
+          _participated?.add(eventId);
+        }
       }
+      await _loadEvents();
+      return Option.tryCatch(() => _cache![eventId]!);
     }
-    await _loadEvents(Option.of(myId));
-    return _cache![eventId]!;
+    return const None();
   }
 
   @override
-  Future<EventModel> leave(String eventId, String myId) async {
-    final success = await _gateway.leave(eventId, myId);
-    if (_cache?[eventId] case final EventModel event when success) {
-      if (event.userStatus case UserNotAuthor status) {
-        _cache?[eventId] = event.copyWith(
-          userStatus: status.copyWith(participant: !success),
-          participantsIds: event.participantsIds.remove(myId),
-        );
-        _participated?.remove(eventId);
+  Future<Option<EventModel>> leave(String eventId) async {
+    final maybeMyId = await _myId();
+    if (maybeMyId case Some(value: final myId)) {
+      final success = await _gateway.leave(eventId, myId);
+      if (_cache?[eventId] case final EventModel event when success) {
+        if (event.userStatus case UserNotAuthor status) {
+          _cache?[eventId] = event.copyWith(
+            userStatus: status.copyWith(participant: !success),
+            participantsIds: event.participantsIds.remove(myId),
+          );
+          _participated?.remove(eventId);
+        }
       }
+      await _loadEvents();
+      return Option.of(_cache![eventId]!);
     }
-    await _loadEvents(Option.of(myId));
-    return _cache![eventId]!;
+    return const None();
   }
 
   @override
-  Future<Iterable<EventModel>> getEventsIOwn(Option<String> myId) async {
+  Future<Iterable<EventModel>> getEventsIOwn() async {
     if (_owned case final owned?) {
       if (_cache case final events?) {
         return events.values.where((e) => owned.contains(e.eventId));
       }
     }
     final data = await _gateway.eventsIOwn();
+    final myId = await _myId();
     return data.map(EventMapper.eventFromData(myId.toNullable()));
   }
 
+  // @override
+  // Future<Iterable<EventModel>> getEventsIParticipateIn() async {
+  //   if (_participated case final participated?) {
+  //     if (_cache case final events?) {
+  //       return events.values.where((e) => participated.contains(e.eventId));
+  //     }
+  //   }
+  //   final mid = await _myId();
+  //   return mid.match(() => const [], getEventsWhereParticipate);
+  // }
+
   @override
-  Future<Iterable<EventModel>> getEventsIParticipateIn(String myId) async {
-    if (_participated case final participated?) {
-      if (_cache case final events?) {
-        return events.values.where((e) => participated.contains(e.eventId));
+  Future<Iterable<EventModel>> getEventsWhereParticipate(String uid) async {
+    final mid = await _myId();
+    if (mid.match(() => false, (myId) => myId == uid)) {
+      if (_participated case final participated?) {
+        if (_cache case final events?) {
+          logger.d('Using cache to fetch events where the user participated');
+          return events.values.where((e) => participated.contains(e.eventId));
+        }
       }
     }
-    final data = await _gateway.eventsWhereParticipate(myId);
-    return data.map(EventMapper.eventFromData(myId));
+    logger.d('Loading participated events for $uid');
+    final data = await _gateway.eventsWhereParticipate(uid);
+    return data.map(EventMapper.eventFromData(uid));
   }
 }

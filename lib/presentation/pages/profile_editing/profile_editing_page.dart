@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
 import '../../blocs/models/profile_editing_state.dart';
-import '../../blocs/profile/profile_cubit.dart';
 import '../../blocs/profile/profile_editing_cubit.dart';
 import '../../common/models/loaded_state.dart';
 import '../profile/widgets/profile_page_title.dart';
@@ -35,17 +34,12 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
     super.initState();
   }
 
-  void _updateAndLeave() {
-    context.read<ProfileCubit>().loadProfile();
-    context.maybePop();
-  }
-
   @override
   Widget build(BuildContext context) =>
       BlocListener<ProfileEditingCubit, ProfileEditingState>(
         listenWhen: (p, c) => p.saveState != c.saveState,
         listener: (context, state) => switch (state.saveState) {
-          LoadedStateData() => _updateAndLeave(),
+          LoadedStateData() => context.maybePop(),
           _ => null,
         },
         child: Scaffold(
@@ -54,7 +48,7 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const ProfilePageTitle(personal: false),
+                const ProfilePageTitle(),
                 Expanded(
                   child: SafeArea(
                     top: false,

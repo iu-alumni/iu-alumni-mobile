@@ -3,13 +3,15 @@ import 'package:fpdart/fpdart.dart';
 import '../../models/event.dart';
 
 abstract interface class EventsRepository {
-  Future<Iterable<EventModel>> getEvents(Option<String> myId);
+  Future<Iterable<EventModel>> getEvents();
 
-  Future<Iterable<EventModel>> getEventsIOwn(Option<String> myId);
+  Future<Iterable<EventModel>> getEventsIOwn();
 
-  Future<Iterable<EventModel>> getEventsIParticipateIn(String myId);
+  // Future<Iterable<EventModel>> getEventsIParticipateIn();
 
-  Future<Option<EventModel>> getOneEvent(String eventId, Option<String> myId);
+  Future<Iterable<EventModel>> getEventsWhereParticipate(String uid);
+
+  Future<Option<EventModel>> getOneEvent(String eventId);
 
   EventModel createEvent();
 
@@ -19,7 +21,7 @@ abstract interface class EventsRepository {
 
   Future<Option<String>> save();
 
-  Future<EventModel> participate(String eventId, String myId);
+  Future<Option<EventModel>> participate(String eventId);
 
-  Future<EventModel> leave(String eventId, String myId);
+  Future<Option<EventModel>> leave(String eventId);
 }

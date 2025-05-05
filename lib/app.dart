@@ -135,7 +135,6 @@ class App extends StatelessWidget {
           BlocProvider(
             create: (context) => EventsListCubit(
               context.read<EventsRepository>(),
-              context.read<UsersRepository>(),
             ),
           ),
           BlocProvider(

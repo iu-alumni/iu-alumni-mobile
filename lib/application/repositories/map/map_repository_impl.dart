@@ -64,10 +64,7 @@ class MapRepositoryImpl extends MapRepository {
   @override
   Future<MapInfo> getPinsOnMap() async {
     final users = await _usersRepository.getAllUsers();
-    final myProfile = await _usersRepository.loadMe();
-    final events = await _eventsRepository.getEvents(
-      myProfile.map((p) => p.profileId),
-    );
+    final events = await _eventsRepository.getEvents();
     final locations = _locationMapFrom([
       for (final u in users)
         if (u.location case final l?) (l, ProfilePin(u)),

@@ -18,6 +18,7 @@ import '../../../common/widgets/profile_pic.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
 import 'event_card.dart';
+import 'open_bot_card.dart';
 
 class ProfileContent extends StatelessWidget {
   const ProfileContent({
@@ -138,28 +139,10 @@ class ProfileContent extends StatelessWidget {
               ),
             if (personal) const _OwnedEvents(),
             const _ParticipatedEvents(),
-            if (personal) ...[
-              Padding(
-                padding: _horPadding,
-                child: AppButton(
-                  buttonStyle: AppButtonStyle.secondary,
-                  onTap: () => launchUrl(
-                    Uri.parse('https://t.me/IU_Alumni_Notification_Bot'),
-                    mode: LaunchMode.externalApplication,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Text(
-                      'Share feedback',
-                      style: AppTextStyles.buttonText,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ),
-            ]
+            if (personal)
+              const Padding(padding: _horPadding, child: OpenBotCard()),
           ].expand(
-            (e) => [const SizedBox(height: 16), e],
+            (e) => [const SizedBox(height: 24), e],
           ),
           const SizedBox(height: RootPage.navigationBarHeight + 16),
         ],
@@ -180,7 +163,7 @@ class _ParticipatedEvents extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  'You did not participate in any events',
+                  'Empty here 😢',
                   style: AppTextStyles.caption,
                   textAlign: TextAlign.center,
                 ),
@@ -197,9 +180,11 @@ class _ParticipatedEvents extends StatelessWidget {
                   ),
                 ),
               ),
-            _ => const Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(color: AppColors.blueGray),
+            _ => const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: CircularProgressIndicator(color: AppColors.blueGray),
+                ),
               ),
           },
         ),
@@ -220,7 +205,7 @@ class _OwnedEvents extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  'You have not created any events',
+                  'You have not created any events yet',
                   style: AppTextStyles.caption,
                   textAlign: TextAlign.center,
                 ),

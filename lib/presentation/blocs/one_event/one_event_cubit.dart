@@ -24,11 +24,7 @@ class OneEventCubit extends Cubit<OneEventState> {
   final Reporter _reporter;
 
   Future<void> loadEvent(String uid) async {
-    final myProfile = await _usersRepository.loadMe();
-    final event = await _repository.getOneEvent(
-      uid,
-      myProfile.map((p) => p.profileId),
-    );
+    final event = await _repository.getOneEvent(uid);
     emit(state.copyWith(event: event));
   }
 
@@ -94,13 +90,10 @@ class OneEventCubit extends Cubit<OneEventState> {
           return myProfile.match(
             () => emit(state.copyWith(userStatusLoading: false)),
             (p) async {
-              final event = await _repository.participate(
-                s.eventId,
-                p.profileId,
-              );
+              final event = await _repository.participate(s.eventId);
               emit(
                 state.copyWith(
-                  event: Option.of(event),
+                  event: event.match(() => state.event, Option.of),
                   userStatusLoading: false,
                 ),
               );
@@ -118,13 +111,10 @@ class OneEventCubit extends Cubit<OneEventState> {
           return myProfile.match(
             () => emit(state.copyWith(userStatusLoading: false)),
             (p) async {
-              final event = await _repository.leave(
-                s.eventId,
-                p.profileId,
-              );
+              final event = await _repository.leave(s.eventId);
               emit(
                 state.copyWith(
-                  event: Option.of(event),
+                  event: event.match(() => state.event, Option.of),
                   userStatusLoading: false,
                 ),
               );

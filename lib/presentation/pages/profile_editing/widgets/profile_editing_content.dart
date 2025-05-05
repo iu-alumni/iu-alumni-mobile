@@ -83,7 +83,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
               return ProfilePic(profile: p, edit: _updateAvatar);
             },
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Padding(
             padding: _horPadding,
             child: TitledItem(
@@ -97,7 +97,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Padding(
             padding: _horPadding,
             child: TitledItem(
@@ -111,7 +111,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Padding(
             padding: _horPadding,
             child: TitledItem(
@@ -143,7 +143,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Padding(
             padding: _horPadding,
             child: TitledItem(
@@ -157,7 +157,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Padding(
             padding: _horPadding,
             child: TitledItem(
@@ -193,7 +193,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Padding(
             padding: _horPadding,
             child: TitledItem(
@@ -206,7 +206,7 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           const _ErrorText(),
           Padding(
             padding: _horPadding,
