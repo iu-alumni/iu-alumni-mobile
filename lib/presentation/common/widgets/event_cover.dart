@@ -26,7 +26,7 @@ class EventCover extends StatelessWidget {
     final secondaryWhite = Colors.white.withValues(alpha: 0.5);
     return Stack(
       children: [
-        if (imageBytes case final bytes?)
+        if (imageBytes case final bytes? when bytes.isNotEmpty)
           Positioned.fill(
             child: Image.memory(
               base64Decode(bytes),

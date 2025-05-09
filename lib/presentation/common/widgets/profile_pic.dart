@@ -38,7 +38,7 @@ class ProfilePic extends StatelessWidget {
             child: InkWell(
               onTap: onTap,
               child: switch (profile.avatar) {
-                final image? => Image.memory(
+                final image? when image.isNotEmpty => Image.memory(
                     base64Decode(image),
                     width: imgSize,
                     height: imgSize,

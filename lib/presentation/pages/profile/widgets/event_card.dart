@@ -30,7 +30,7 @@ class EventCard extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: switch (event.coverBytes) {
-                    final image? =>
+                    final image? when image.isNotEmpty =>
                       Image.memory(base64Decode(image), fit: BoxFit.cover),
                     _ => const ColoredBox(color: AppColors.darkGray),
                   },
@@ -65,11 +65,13 @@ class EventCard extends StatelessWidget {
                                 color: Colors.white70,
                               ),
                               const SizedBox(width: 2),
-                              Text(
-                                location,
-                                style: AppTextStyles.smallBody
-                                    .copyWith(color: Colors.white70),
-                              )
+                              Expanded(
+                                child: Text(
+                                  location,
+                                  style: AppTextStyles.smallBody
+                                      .copyWith(color: Colors.white70),
+                                ),
+                              ),
                             ],
                           ),
                       ],
