@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../application/repositories/map/map_repository.dart';
 import '../../../application/repositories/profile/profile_repository.dart';
 import '../../blocs/profile/profile_cubit.dart';
 import '../../blocs/root/root_page_cubit.dart';
+import '../../blocs/users_location/users_location_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../events_list/events_list_page.dart';
 import '../map/map_page.dart';
@@ -24,6 +26,11 @@ class RootPage extends StatefulWidget implements AutoRouteWrapper {
           BlocProvider(create: (_) => RootPageCubit()),
           BlocProvider(
             create: (ctx) => ProfileCubit(ctx.read<ProfileRepository>()),
+          ),
+          BlocProvider(
+            create: (context) => UsersLocationCubit(
+              context.read<MapRepository>(),
+            ),
           ),
         ],
         child: this,

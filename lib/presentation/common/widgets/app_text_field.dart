@@ -5,8 +5,8 @@ import '../constants/app_text_styles.dart';
 
 class AppTextField extends StatefulWidget {
   const AppTextField({
-    required this.initialText,
     required this.onChange,
+    required this.initialText,
     this.hintText = '',
     this.inputType,
     this.obscureText = false,
@@ -28,6 +28,8 @@ class AppTextField extends StatefulWidget {
 class _AppTextFieldState extends State<AppTextField> {
   late final TextEditingController _controller;
   late final _focusNode = FocusNode();
+
+  late var _textObscured = widget.obscureText;
 
   @override
   void initState() {
@@ -54,11 +56,8 @@ class _AppTextFieldState extends State<AppTextField> {
         controller: _controller,
         focusNode: _focusNode,
         maxLines: widget.maxLines,
-        onTapUpOutside: (e) {
-          print(e.kind);
-          _focusNode.unfocus();
-        },
-        obscureText: widget.obscureText,
+        onTapUpOutside: (e) => _focusNode.unfocus(),
+        obscureText: _textObscured,
         style: AppTextStyles.body,
         keyboardType: widget.inputType,
         decoration: InputDecoration(
@@ -70,6 +69,17 @@ class _AppTextFieldState extends State<AppTextField> {
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(4),
           ),
+          suffixIcon: widget.obscureText
+              ? IconButton(
+                  onPressed: () => setState(
+                    () => _textObscured = !_textObscured,
+                  ),
+                  icon: Icon(
+                    _textObscured ? Icons.visibility : Icons.visibility_off,
+                    color: AppColors.blueGray,
+                  ),
+                )
+              : null,
         ),
       );
 }

@@ -8,22 +8,24 @@ import '../../../common/constants/app_text_styles.dart';
 import '../../../router/app_router.gr.dart';
 
 class ProfilePageTitle extends StatelessWidget {
-  const ProfilePageTitle({required this.showEditingIcon, super.key});
+  const ProfilePageTitle({required this.personal, super.key});
 
-  final bool showEditingIcon;
+  final bool personal;
 
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Profile',
-              style: AppTextStyles.h2,
-              textAlign: TextAlign.start,
+            Expanded(
+              child: Text(
+                'Profile',
+                style: AppTextStyles.h2,
+                textAlign: TextAlign.start,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            if (showEditingIcon)
+            if (personal) ...[
               IconButton.filled(
                 style: const ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(AppColors.primary),
@@ -38,9 +40,22 @@ class ProfilePageTitle extends StatelessWidget {
                   Icons.edit_outlined,
                   color: Colors.white,
                 ),
-              )
-            else
-              const SizedBox(),
+              ),
+              const SizedBox(width: 8),
+              IconButton.filled(
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(AppColors.error),
+                ),
+                onPressed: () {
+                  context.read<ProfileCubit>().logout();
+                  context.replaceRoute(const AuthRoute());
+                },
+                icon: const Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+              ),
+            ]
           ],
         ),
       );

@@ -9,6 +9,16 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsDbsGen {
+  const $AssetsDbsGen();
+
+  /// File path: assets/dbs/world_cities.db
+  String get worldCities => 'assets/dbs/world_cities.db';
+
+  /// List of all assets
+  List<String> get values => [worldCities];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -47,6 +57,7 @@ class $AssetsIconsMapGen {
 class Assets {
   const Assets._();
 
+  static const $AssetsDbsGen dbs = $AssetsDbsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }

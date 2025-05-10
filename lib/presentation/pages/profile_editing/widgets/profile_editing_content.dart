@@ -1,13 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../application/models/profile.dart';
 import '../../../blocs/profile/profile_editing_cubit.dart';
+import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/app_text_field.dart';
 import '../../../common/widgets/button.dart';
+import '../../../common/widgets/location_dialog.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
 import '../../verification/widgets/year_picker.dart';
@@ -32,6 +33,19 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
     super.initState();
   }
 
+  void _showLocationPicker(BuildContext context) async {
+    final location = await LocationDialog.show(context);
+    if (!context.mounted) {
+      return;
+    }
+    _cubit.update((e) => e.copyWith(location: location));
+  }
+
+  void _onSave() {
+    context.read<ProfileEditingCubit>().save();
+    context.maybePop();
+  }
+
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -40,11 +54,27 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
           Padding(
             padding: _horPadding,
             child: TitledItem(
-              title: 'Name',
+              title: 'First Name',
               child: AppTextField(
                 initialText: widget.profile.firstName,
-                onChange: (nn) =>
-                    _cubit.update((p) => p.copyWith(firstName: nn)),
+                hintText: 'Ivan',
+                onChange: (nn) => _cubit.update(
+                  (p) => p.copyWith(firstName: nn),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: _horPadding,
+            child: TitledItem(
+              title: 'Last Name',
+              child: AppTextField(
+                initialText: widget.profile.lastName,
+                hintText: 'Ivanov',
+                onChange: (nn) => _cubit.update(
+                  (p) => p.copyWith(lastName: nn),
+                ),
               ),
             ),
           ),
@@ -81,34 +111,58 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
             ),
           ),
           const SizedBox(height: 16),
-          if (widget.profile.biography case final bio?)
-            Padding(
-              padding: _horPadding,
-              child: TitledItem(
-                title: 'Biography',
-                child: AppTextField(
-                  initialText: bio,
-                  onChange: (nb) => _cubit.update(
-                    (p) => p.copyWith(biography: nb),
-                  ),
+          Padding(
+            padding: _horPadding,
+            child: TitledItem(
+              title: 'Biography',
+              child: AppTextField(
+                initialText: widget.profile.biography,
+                hintText: 'What is on your mind?',
+                onChange: (nb) => _cubit.update(
+                  (p) => p.copyWith(biography: nb),
                 ),
               ),
             ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: _horPadding,
+            child: TitledItem(
+              title: 'Location',
+              child: AppButton(
+                buttonStyle: AppButtonStyle.input,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+                    buildWhen: (p, c) =>
+                        p.map((p) => p.location) != c.map((p) => p.location),
+                    builder: (context, ep) => Text(
+                      ep.toNullable()?.location ?? 'No location',
+                      style: AppTextStyles.buttonText.copyWith(
+                        color: widget.profile.location == null
+                            ? AppColors.blueGray
+                            : Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () => _showLocationPicker(context),
+              ),
+            ),
+          ),
           const SizedBox(height: 16),
           Padding(
             padding: _horPadding,
             child: AppButton(
+              onTap: _onSave,
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: Text(
                   'Done',
                   style: AppTextStyles.buttonText,
+                  textAlign: TextAlign.center,
                 ),
               ),
-              onTap: () {
-                context.read<ProfileEditingCubit>().save();
-                context.maybePop();
-              },
             ),
           ),
           const SizedBox(height: RootPage.navigationBarHeight + 16),

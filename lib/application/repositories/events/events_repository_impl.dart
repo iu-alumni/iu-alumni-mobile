@@ -44,7 +44,7 @@ class EventsRepositoryImpl implements EventsRepository {
       eventId: _uuid.v4(),
       title: null,
       description: null,
-      coverUrl: null,
+      coverBytes: null,
       location: null,
       cost: const CostModel(number: 0, currency: Currency.rub),
       occurringAt: DateTime.now().add(const Duration(days: 1)),
@@ -70,7 +70,8 @@ class EventsRepositoryImpl implements EventsRepository {
     _cache![event.eventId] = event;
     final eventRequest = EventMapper.eventRequestFromModel(event);
     if (isOldEvent) {
-      // TODO update an event
+      // TODO show an error if not suceeded
+      final success = await _gateway.updateEvent(event.eventId, eventRequest);
     } else {
       // Event not found in the cache, so it is a new event
       await _gateway.addEvent(eventRequest);
@@ -94,11 +95,12 @@ class EventsRepositoryImpl implements EventsRepository {
     await _loadEvents();
     return Option.fromNullable(_cache![eventId]);
   }
-  
+
   @override
   Future<void> deleteEvent(String eventId) async {
     await _loadEvents();
     _cache!.remove(eventId);
-    // TODO call delete event
+    // TODO show an error in case of failure
+    final success = await _gateway.deleteEvent(eventId);
   }
 }
