@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/map/map_repository.dart';
 import '../../blocs/location_suggestions/location_suggestions_cubit.dart';
+import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../models/loaded_state.dart';
 import 'app_text_field.dart';
@@ -15,14 +16,14 @@ class LocationDialog extends StatelessWidget {
 
   final bool previousWasNone;
 
+  static const _padding = EdgeInsets.symmetric(horizontal: 24, vertical: 16);
+
   static Future<String?> show(
     BuildContext context, [
     bool previousWasNone = false,
   ]) =>
-      showModalBottomSheet<String>(
+      showCupertinoModalPopup<String>(
         context: context,
-        backgroundColor: Colors.white,
-        useSafeArea: true,
         builder: (context) => BlocProvider(
           create: (context) => LocationSuggestionsCubit(
             context.read<MapRepository>(),
@@ -34,71 +35,102 @@ class LocationDialog extends StatelessWidget {
   void _onTap(BuildContext context, String? option) => context.maybePop(option);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: Material(
-          type: MaterialType.transparency,
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: AppTextField(
-                    initialText: null,
-                    hintText: 'Enter a city',
-                    onChange: context.read<LocationSuggestionsCubit>().suggest,
-                    maxLines: 1,
-                  ),
-                ),
-                BlocBuilder<LocationSuggestionsCubit, LocationSuggestionsState>(
-                  builder: (context, sugs) => switch (sugs) {
-                    LoadedStateLoading() => const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(16),
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    LoadedStateData(:final data) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(height: 8),
-                          for (final option in data)
-                            AppButton(
-                              buttonStyle: AppButtonStyle.text,
-                              onTap: () => _onTap(context, option),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Text(
-                                  option,
-                                  textAlign: TextAlign.start,
-                                  style: AppTextStyles.body,
-                                ),
+  Widget build(BuildContext context) => SafeArea(
+        bottom: false,
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: Material(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 16),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        // 16 + 8 around the text = 24 horizontal
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: AppButton(
+                          buttonStyle: AppButtonStyle.text,
+                          onTap: context.maybePop,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 6,
+                            ),
+                            child: Text(
+                              'Close',
+                              style: AppTextStyles.buttonText.copyWith(
+                                color: AppColors.primary,
                               ),
                             ),
-                        ],
-                      ),
-                    _ => const SizedBox(),
-                  },
-                ),
-                if (!previousWasNone)
-                  AppButton(
-                    buttonStyle: AppButtonStyle.text,
-                    onTap: () => _onTap(context, null),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        'Set to none',
-                        textAlign: TextAlign.start,
-                        style: AppTextStyles.body,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                const SizedBox(height: 16),
-              ],
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: AppTextField(
+                        initialText: null,
+                        hintText: 'Enter a city',
+                        onChange:
+                            context.read<LocationSuggestionsCubit>().suggest,
+                        maxLines: 1,
+                      ),
+                    ),
+                    BlocBuilder<LocationSuggestionsCubit,
+                        LocationSuggestionsState>(
+                      builder: (context, sugs) => switch (sugs) {
+                        LoadedStateLoading() => const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(24),
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        LoadedStateData(:final data) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const SizedBox(height: 8),
+                              for (final option in data)
+                                AppButton(
+                                  buttonStyle: AppButtonStyle.text,
+                                  onTap: () => _onTap(context, option),
+                                  child: Padding(
+                                    padding: _padding,
+                                    child: Text(
+                                      option,
+                                      textAlign: TextAlign.start,
+                                      style: AppTextStyles.body,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        _ => const SizedBox(),
+                      },
+                    ),
+                    if (!previousWasNone)
+                      AppButton(
+                        buttonStyle: AppButtonStyle.text,
+                        onTap: () => _onTap(context, null),
+                        child: Padding(
+                          padding: _padding,
+                          child: Text(
+                            'Set to none',
+                            textAlign: TextAlign.start,
+                            style: AppTextStyles.body,
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

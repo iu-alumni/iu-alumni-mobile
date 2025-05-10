@@ -67,9 +67,10 @@ class MapRepositoryImpl extends MapRepository {
     final events = await _eventsRepository.getEvents();
     final locations = _locationMapFrom([
       for (final u in users)
-        if (u.location case final l?) (l, ProfilePin(u)),
+        if (u.location case final l? when u.showLocation && l.isNotEmpty)
+          (l, ProfilePin(u)),
       for (final e in events)
-        if (e.location case final l?) (l, EventPin(e)),
+        if (e.location case final l? when l.isNotEmpty) (l, EventPin(e)),
     ]);
     return _buildMapInfo(locations);
   }

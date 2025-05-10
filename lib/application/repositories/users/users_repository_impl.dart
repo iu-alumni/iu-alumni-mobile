@@ -29,8 +29,6 @@ class UsersRepositoryImpl extends UsersRepository {
     final profile = await _profileGateway.loadProfile();
     profile.map((p) {
       _me = p;
-      _users ??= {};
-      _users?[p.profileId] = p;
     });
     return profile.toOption();
   }
@@ -48,6 +46,7 @@ class UsersRepositoryImpl extends UsersRepository {
   @override
   void logout() {
     _me = null;
+    _users?.clear();
     _tokenProvider.clear();
   }
 

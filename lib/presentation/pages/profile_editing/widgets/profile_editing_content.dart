@@ -11,6 +11,7 @@ import '../../../blocs/profile/profile_editing_cubit.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/models/loaded_state.dart';
+import '../../../common/widgets/app_switch.dart';
 import '../../../common/widgets/app_text_field.dart';
 import '../../../common/widgets/button.dart';
 import '../../../common/widgets/location_dialog.dart';
@@ -162,34 +163,62 @@ class _ProfileEditingContentState extends State<ProfileEditingContent> {
             padding: _horPadding,
             child: TitledItem(
               title: 'Location',
-              child: AppButton(
-                buttonStyle: AppButtonStyle.input,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
-                    buildWhen: (p, c) =>
-                        p.profile.map((p) => p.location) !=
-                        c.profile.map((p) => p.location),
-                    builder: (context, ep) => Text(
-                      ep.profile.toNullable()?.location ?? 'No location',
-                      style: AppTextStyles.buttonText.copyWith(
-                        color: ep.profile.toNullable()?.location == null
-                            ? AppColors.blueGray
-                            : Colors.black,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppButton(
+                    buttonStyle: AppButtonStyle.input,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child:
+                          BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+                        buildWhen: (p, c) =>
+                            p.profile.map((p) => p.location) !=
+                            c.profile.map((p) => p.location),
+                        builder: (context, ep) => Text(
+                          ep.profile.toNullable()?.location ?? 'No location',
+                          style: AppTextStyles.buttonText.copyWith(
+                            color: ep.profile.toNullable()?.location == null
+                                ? AppColors.blueGray
+                                : Colors.black,
+                          ),
+                        ),
                       ),
                     ),
+                    onTap: () => _showLocationPicker(
+                      context,
+                      context
+                              .read<ProfileEditingCubit>()
+                              .state
+                              .profile
+                              .map((p) => p.location)
+                              .toNullable() ==
+                          null,
+                    ),
                   ),
-                ),
-                onTap: () => _showLocationPicker(
-                  context,
-                  context
-                          .read<ProfileEditingCubit>()
-                          .state
-                          .profile
-                          .map((p) => p.location)
-                          .toNullable() ==
-                      null,
-                ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+                        buildWhen: (p, c) =>
+                            p.profile.map((p) => p.showLocation) !=
+                            c.profile.map((p) => p.showLocation),
+                        builder: (context, ep) => AppSwitch(
+                          value: ep.profile
+                              .match(() => false, (p) => p.showLocation),
+                          onTap: (_) =>
+                              context.read<ProfileEditingCubit>().update(
+                                    (p) => p.copyWith(
+                                      showLocation: !p.showLocation,
+                                    ),
+                                  ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text('Show my location', style: AppTextStyles.body),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
