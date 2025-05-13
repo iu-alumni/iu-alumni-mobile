@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/events_list/events_list_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
@@ -26,6 +27,7 @@ class _EventsListPageState extends State<EventsListPage> {
 
   @override
   Widget build(BuildContext context) => SafeArea(
+        bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -61,15 +63,18 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24)
-            .copyWith(top: 16, bottom: 8),
+            .copyWith(top: 40, bottom: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Events', style: AppTextStyles.h2),
             AppButton(
-              onTap: () => context.pushRoute(
-                EventEditingRoute(eventId: const None()),
-              ),
+              onTap: () {
+                context
+                    .read<Reporter>()
+                    .reportCreateEventTap(AppLocation.eventsTab);
+                context.pushRoute(EventEditingRoute(eventId: const None()));
+              },
               borderRadius: BorderRadius.circular(24),
               child: const Padding(
                 padding: EdgeInsets.all(12),

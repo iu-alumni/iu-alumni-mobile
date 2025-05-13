@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 import 'package:intl/intl.dart';
 
+import '../../../blocs/models/one_event_state.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
@@ -46,8 +47,8 @@ class _EditingDateState extends State<EditingDate> {
             child: InkWell(
               onTap: () => _selectDate(context),
               child: BlocBuilder<OneEventCubit, OneEventState>(
-                builder: (context, event) => Text(
-                  event
+                builder: (context, state) => Text(
+                  state.event
                       .map((e) => _formatter.format(e.occurringAt))
                       .match(() => '', identity),
                   style: AppTextStyles.body,

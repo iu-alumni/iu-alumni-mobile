@@ -17,6 +17,7 @@ class EditingDesc extends StatelessWidget {
           initialText: context
               .read<OneEventCubit>()
               .state
+              .event
               .map((s) => s.description)
               .match(() => '', identity),
           onChange: (text) => context

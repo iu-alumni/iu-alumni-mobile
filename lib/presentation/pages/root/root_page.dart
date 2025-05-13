@@ -1,9 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../application/repositories/profile/profile_repository.dart';
-import '../../blocs/profile/profile_cubit.dart';
+import '../../../application/repositories/map/map_repository.dart';
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/root/root_page_cubit.dart';
+import '../../blocs/pin_locations/pin_locations_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../events_list/events_list_page.dart';
 import '../map/map_page.dart';
@@ -23,7 +24,9 @@ class RootPage extends StatefulWidget implements AutoRouteWrapper {
         providers: [
           BlocProvider(create: (_) => RootPageCubit()),
           BlocProvider(
-            create: (ctx) => ProfileCubit(ctx.read<ProfileRepository>()),
+            create: (context) => PinLocationsCubit(
+              context.read<MapRepository>(),
+            ),
           ),
         ],
         child: this,
@@ -35,10 +38,10 @@ class _RootPageState extends State<RootPage> {
   late final Widget _mapPage = const MapPage();
   late final Widget _profilePage = const ProfilePage();
 
-  late final _icons = [
-    (true, Icons.location_pin, RootPageState.mapPage),
-    (false, Icons.calendar_month, RootPageState.eventsListPage),
-    (true, Icons.person, RootPageState.profilePage),
+  late final _tabs = [
+    (true, Icons.location_pin, RootPageState.mapPage, 'map'),
+    (false, Icons.calendar_month, RootPageState.eventsListPage, 'events'),
+    (true, Icons.person, RootPageState.profilePage, 'profile'),
   ]
       .map(
         (d) => Padding(
@@ -47,6 +50,7 @@ class _RootPageState extends State<RootPage> {
             small: d.$1,
             icon: d.$2,
             page: d.$3,
+            tabName: d.$4,
           ),
         ),
       )
@@ -71,7 +75,7 @@ class _RootPageState extends State<RootPage> {
               bottom: 80,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: _icons,
+                children: _tabs,
               ),
             )
           ],
@@ -84,11 +88,13 @@ class _NavButton extends StatelessWidget {
     required this.small,
     required this.icon,
     required this.page,
+    required this.tabName,
   });
 
   final bool small;
   final IconData icon;
   final RootPageState page;
+  final String tabName;
 
   @override
   Widget build(BuildContext context) =>
@@ -100,7 +106,10 @@ class _NavButton extends StatelessWidget {
           ),
           duration: const Duration(milliseconds: 300),
           child: IconButton(
-            onPressed: () => context.read<RootPageCubit>().navigateTo(page),
+            onPressed: () {
+              context.read<Reporter>().reportTabChanged(tabName);
+              context.read<RootPageCubit>().navigateTo(page);
+            },
             icon: Icon(
               icon,
               color: Colors.white,

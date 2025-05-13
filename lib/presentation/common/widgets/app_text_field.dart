@@ -5,8 +5,8 @@ import '../constants/app_text_styles.dart';
 
 class AppTextField extends StatefulWidget {
   const AppTextField({
-    required this.initialText,
     required this.onChange,
+    required this.initialText,
     this.hintText = '',
     this.inputType,
     this.obscureText = false,
@@ -29,10 +29,14 @@ class _AppTextFieldState extends State<AppTextField> {
   late final TextEditingController _controller;
   late final _focusNode = FocusNode();
 
+  late var _textObscured = widget.obscureText;
+  late var _focused = false;
+
   @override
   void initState() {
     _controller = TextEditingController(text: widget.initialText);
     _controller.addListener(_onChange);
+    _focusNode.addListener(_onFocusChange);
     super.initState();
   }
 
@@ -40,6 +44,7 @@ class _AppTextFieldState extends State<AppTextField> {
   void dispose() {
     _controller.removeListener(_onChange);
     _controller.dispose();
+    _focusNode.removeListener(_onFocusChange);
     _focusNode.dispose();
     super.dispose();
   }
@@ -49,16 +54,15 @@ class _AppTextFieldState extends State<AppTextField> {
     widget.onChange(text);
   }
 
+  void _onFocusChange() => setState(() => _focused = _focusNode.hasFocus);
+
   @override
   Widget build(BuildContext context) => TextField(
         controller: _controller,
         focusNode: _focusNode,
         maxLines: widget.maxLines,
-        onTapUpOutside: (e) {
-          print(e.kind);
-          _focusNode.unfocus();
-        },
-        obscureText: widget.obscureText,
+        onTapUpOutside: (e) => _focusNode.unfocus(),
+        obscureText: _textObscured,
         style: AppTextStyles.body,
         keyboardType: widget.inputType,
         decoration: InputDecoration(
@@ -69,6 +73,32 @@ class _AppTextFieldState extends State<AppTextField> {
           border: OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(4),
+          ),
+          suffixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedScale(
+                scale: _focused ? 1 : 0,
+                duration: const Duration(milliseconds: 250),
+                child: IconButton(
+                  onPressed: _controller.clear,
+                  icon: const Icon(
+                    Icons.clear,
+                    color: AppColors.blueGray,
+                  ),
+                ),
+              ),
+              if (widget.obscureText)
+                IconButton(
+                  onPressed: () => setState(
+                    () => _textObscured = !_textObscured,
+                  ),
+                  icon: Icon(
+                    _textObscured ? Icons.visibility : Icons.visibility_off,
+                    color: AppColors.blueGray,
+                  ),
+                )
+            ],
           ),
         ),
       );

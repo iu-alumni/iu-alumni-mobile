@@ -5,6 +5,7 @@ import 'package:fpdart/fpdart.dart';
 import '../../../../application/models/cost.dart';
 import '../../../../util/currency_formatter.dart';
 import '../../../../util/num_formatter.dart';
+import '../../../blocs/models/one_event_state.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/widgets/app_text_field.dart';
@@ -33,6 +34,7 @@ class EditingCost extends StatelessWidget {
     final initialCost = context
         .read<OneEventCubit>()
         .state
+        .event
         .map((e) => e.cost.number.format)
         .match(() => '', identity);
     return TitledItem(
@@ -69,8 +71,8 @@ class EditingCost extends StatelessWidget {
                   vertical: 20,
                 ),
                 child: BlocBuilder<OneEventCubit, OneEventState>(
-                  builder: (context, event) {
-                    final curr = event
+                  builder: (context, state) {
+                    final curr = state.event
                         .map((e) => e.cost.currency.format)
                         .match(() => '', identity);
                     return Text(curr);
