@@ -1,50 +1,21 @@
-import 'dart:io';
-
-import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
-import 'package:path/path.dart';
 import '../../application/models/city_location.dart';
 import '../../application/models/coordinates.dart';
-import '../../gen/assets.gen.dart';
-import '../../util/logger.dart';
+import 'db_loader.dart';
 import 'db_manager.dart';
 
 class DbManagerImpl extends DbManager {
+  final _dbLoader = DbLoader();
+
   sqflite.Database? _db;
 
   static const _searchLimit = 10;
-  static const _dbName = 'world_cities.db';
-
-  Future<void> _copyDb(String path) async {
-    try {
-      await Directory(dirname(path)).create(recursive: true);
-    } catch (e) {
-      logger.e(e);
-    }
-    final data = await rootBundle.load(Assets.dbs.worldCities);
-    final bytes = data.buffer.asUint8List(
-      data.offsetInBytes,
-      data.lengthInBytes,
-    );
-    await File(path).writeAsBytes(bytes, flush: true);
-  }
-
-  Future<void> _openDb() async {
-    final databasesPath = await sqflite.getDatabasesPath();
-    final path = join(databasesPath, _dbName);
-    final exists = await sqflite.databaseExists(path);
-    if (!exists) {
-      logger.d('Copying the database cause it does not exist yet');
-      await _copyDb(path);
-      logger.d('Database copying finished');
-    }
-    logger.d('Opening the database');
-    _db = await sqflite.openDatabase(path, readOnly: true);
-  }
 
   @override
-  Future<void> init() => _openDb();
+  Future<void> init() async {
+    _db = await _dbLoader.loadDb();
+  }
 
   @override
   void dispose() async {
