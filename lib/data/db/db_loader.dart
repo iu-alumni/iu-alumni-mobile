@@ -14,10 +14,8 @@ import '../../util/logger.dart';
 class DbLoader {
   static const _dbName = 'world_cities.db';
 
-  get url => null;
-
   Future<Database> loadDb() {
-    if (kIsWeb) {
+    if (kIsWeb || kIsWasm) {
       return _loadWeb();
     }
     return _loadMobile();
