@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/map/map_repository.dart';
 import '../../blocs/location_suggestions/location_suggestions_cubit.dart';
-import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../models/loaded_state.dart';
 import 'app_text_field.dart';
+import 'back_button.dart';
 import 'button.dart';
 
 class LocationDialog extends StatelessWidget {
@@ -49,28 +49,9 @@ class LocationDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 16),
-                    Align(
+                    const Align(
                       alignment: Alignment.topLeft,
-                      child: Padding(
-                        // 16 + 8 around the text = 24 horizontal
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: AppButton(
-                          buttonStyle: AppButtonStyle.text,
-                          onTap: context.maybePop,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 6,
-                            ),
-                            child: Text(
-                              'Close',
-                              style: AppTextStyles.buttonText.copyWith(
-                                color: AppColors.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      child: AppSmallButton(text: 'Close'),
                     ),
                     const SizedBox(height: 16),
                     Padding(

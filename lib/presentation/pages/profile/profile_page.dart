@@ -60,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const ProfilePageTitle(),
+              ProfilePageTitle(showBackButton: widget.profile.isSome()),
               Expanded(
                 child: SafeArea(
                   top: false,

@@ -6,11 +6,14 @@ import '../../../../application/repositories/reporter/reporter.dart';
 import '../../../blocs/models/profile_state.dart';
 import '../../../blocs/profile/profile_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
+import '../../../common/widgets/back_button.dart';
 import '../../../common/widgets/button.dart';
 import '../../../router/app_router.gr.dart';
 
 class ProfilePageTitle extends StatelessWidget {
-  const ProfilePageTitle({super.key});
+  const ProfilePageTitle({required this.showBackButton, super.key});
+
+  final bool showBackButton;
 
   void _editTap(BuildContext context) async {
     context.read<Reporter>().reportEditProfileTap(AppLocation.profileScreen);
@@ -35,39 +38,48 @@ class ProfilePageTitle extends StatelessWidget {
             vertical: 40,
           ).copyWith(bottom: 0),
           child: BlocBuilder<ProfileCubit, ProfileState>(
-            builder: (context, state) => Row(
+            builder: (context, state) => Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: Text(
-                    'Profile',
-                    style: AppTextStyles.h2,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                if (state.myOwn) ...[
-                  AppButton(
-                    borderRadius: BorderRadius.circular(24),
-                    onTap: () => _editTap(context),
-                    child: const Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Icon(
-                        Icons.edit_outlined,
-                        color: Colors.white,
+                if (showBackButton) ...[
+                  const AppSmallButton(),
+                  const SizedBox(height: 8),
+                ],
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Profile',
+                        style: AppTextStyles.h2,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  AppButton(
-                    buttonStyle: AppButtonStyle.destructive,
-                    borderRadius: BorderRadius.circular(24),
-                    onTap: () => _logout(context),
-                    child: const Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Icon(Icons.logout, color: Colors.white),
-                    ),
-                  ),
-                ]
+                    if (state.myOwn) ...[
+                      AppButton(
+                        borderRadius: BorderRadius.circular(24),
+                        onTap: () => _editTap(context),
+                        child: const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Icon(
+                            Icons.edit_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      AppButton(
+                        buttonStyle: AppButtonStyle.destructive,
+                        borderRadius: BorderRadius.circular(24),
+                        onTap: () => _logout(context),
+                        child: const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Icon(Icons.logout, color: Colors.white),
+                        ),
+                      ),
+                    ]
+                  ],
+                ),
               ],
             ),
           ),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../constants/app_text_styles.dart';
+import 'back_button.dart';
 
 class EventCover extends StatelessWidget {
   const EventCover({
@@ -61,6 +62,11 @@ class EventCover extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 24),
+              const Align(
+                alignment: Alignment.topLeft,
+                child: AppSmallButton(),
+              ),
+              const SizedBox(height: 16),
               Padding(
                 padding: horPadding,
                 child: Opacity(

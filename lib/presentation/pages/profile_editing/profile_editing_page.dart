@@ -48,7 +48,7 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const ProfilePageTitle(),
+                const ProfilePageTitle(showBackButton: true),
                 Expanded(
                   child: SafeArea(
                     top: false,

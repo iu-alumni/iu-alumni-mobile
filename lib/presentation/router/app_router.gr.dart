@@ -175,7 +175,9 @@ class ProfileRoute extends _i10.PageRouteInfo<ProfileRouteArgs> {
       final args = data.argsAs<ProfileRouteArgs>(
         orElse: () => const ProfileRouteArgs(),
       );
-      return _i6.ProfilePage(profile: args.profile, key: args.key);
+      return _i10.WrappedRoute(
+        child: _i6.ProfilePage(profile: args.profile, key: args.key),
+      );
     },
   );
 }
