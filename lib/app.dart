@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'application/repositories/auth/auth_repository.dart';
 import 'application/repositories/auth/auth_repository_impl.dart';
@@ -11,7 +12,7 @@ import 'application/repositories/events/events_repository_impl.dart';
 import 'application/repositories/map/map_repository.dart';
 import 'application/repositories/map/map_repository_impl.dart';
 import 'application/repositories/reporter/reporter.dart';
-import 'application/repositories/reporter/reporter_impl.dart';
+import 'application/repositories/reporter/reporter_mock.dart';
 import 'application/repositories/users/users_repository.dart';
 import 'application/repositories/users/users_repository_impl.dart';
 import 'data/auth/auth_gateway.dart';
@@ -32,7 +33,7 @@ import 'presentation/blocs/events_list/events_list_cubit.dart';
 import 'presentation/blocs/profile/profile_cubit.dart';
 import 'presentation/common/constants/app_colors.dart';
 import 'presentation/managers/app_loading_manager.dart';
-import 'presentation/router/app_observer.dart';
+import 'presentation/router/always_root_route.dart';
 import 'presentation/router/app_router.dart';
 
 class App extends StatelessWidget {
@@ -43,11 +44,13 @@ class App extends StatelessWidget {
         providers: [
           // --- SERVICES ---
           RepositoryProvider(create: (_) => const FlutterSecureStorage()),
+          RepositoryProvider(create: (_) => SharedPreferencesAsync()),
           RepositoryProvider(create: (_) => ImagePicker()),
           RepositoryProvider<DbManager>(create: (_) => DbManagerImpl()),
           RepositoryProvider(
             create: (context) => TokenManager(
               context.read<FlutterSecureStorage>(),
+              context.read<SharedPreferencesAsync>(),
             ),
           ),
           RepositoryProvider<TokenProvider>(
@@ -114,9 +117,11 @@ class App extends StatelessWidget {
               context.read<UsersRepository>(),
             ),
           ),
-          RepositoryProvider<Reporter>(
-            create: (context) => ReporterImpl(context.read<UsersRepository>()),
-          ),
+          // RepositoryProvider<Reporter>(
+          //   create: (context) => ReporterImpl(context.read<UsersRepository>()),
+          // ),
+          // TODO delete when moving to mobile
+          RepositoryProvider<Reporter>(create: (context) => ReporterMock()),
           RepositoryProvider(
             create: (context) => AppLoadingManager(
               context.read<TokenProvider>(),
@@ -145,20 +150,26 @@ class App extends StatelessWidget {
           ),
         ],
         child: Builder(
-          builder: (context) => MaterialApp.router(
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: AppColors.primary,
-                surface: Colors.white,
+          builder: (context) {
+            final router = AppRouter();
+            return MaterialApp.router(
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(
+                  seedColor: AppColors.primary,
+                  surface: Colors.white,
+                ),
+                useMaterial3: true,
               ),
-              useMaterial3: true,
-            ),
-            routerConfig: AppRouter().config(
-              navigatorObservers: () => [
-                AppObserver(context.read<Reporter>()),
-              ],
-            ),
-          ),
+              // routerConfig: AppRouter().config(
+              //   navigatorObservers: () => [
+              //     AppObserver(context.read<Reporter>()),
+              //   ],
+              // ),
+              routerDelegate: router.delegate(),
+              routeInformationProvider: AlwaysRootRouteInformationProvider(),
+              routeInformationParser: router.defaultRouteParser(),
+            );
+          },
         ),
       );
 }
