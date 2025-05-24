@@ -3,11 +3,11 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "dc051d47585cf228642aaf41cc44b381",
+const RESOURCES = {"flutter_bootstrap.js": "a71a9a5a1e826a7bd17ef20a2e93a3ae",
 "version.json": "f281bbdb3b654f37040f14ebcfcdd35c",
 "index.html": "bb079f6c226a79bc005222432b7c3f7b",
 "/": "bb079f6c226a79bc005222432b7c3f7b",
-"main.dart.js": "dcedb832625621daad1ee81b7c7a92f5",
+"main.dart.js": "9b1828b7617df86363ae24aed2567f09",
 "sqlite3.wasm": "fe0b5f7d20d0d900508725319188a9a8",
 "flutter.js": "76f08d47ff9f5715220992f993002504",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
@@ -1742,7 +1742,7 @@ const RESOURCES = {"flutter_bootstrap.js": "dc051d47585cf228642aaf41cc44b381",
 "venv/lib/python3.13/site-packages/pip/__pip-runner__.py": "bb55361353457fd4f30a353cb2331163",
 "venv/lib/python3.13/site-packages/pip/__main__.py": "a56e19f54a80e824d64e8f72c9ee78e8",
 "assets/AssetManifest.json": "9316417b9ca751bcff328bd8a6e88f10",
-"assets/NOTICES": "d847953bb16c560efcef7c19ae899f1b",
+"assets/NOTICES": "3e6d8c1b4425977025ba0b3e23514a67",
 "assets/FontManifest.json": "7b2a36307916a9721811788013e65289",
 "assets/AssetManifest.bin.json": "4d35ff10f3372be98d9fb78590cfa06c",
 "assets/packages/flutter_map/lib/assets/flutter_map_logo.png": "208d63cc917af9713fc9572bd5c09362",
