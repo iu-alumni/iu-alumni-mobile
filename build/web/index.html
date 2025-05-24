@@ -39,7 +39,7 @@
     const WebApp = window.Telegram.WebApp;
     const BackButton = WebApp.BackButton;
     BackButton.show();
-    console.log('script worked', BackButton.isVisible);
+    BackButton.onClick(window.history.back);
   </script>
 </body>
 </html>
