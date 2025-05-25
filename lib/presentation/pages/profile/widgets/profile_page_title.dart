@@ -42,7 +42,13 @@ class ProfilePageTitle extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (showBackButton) ...[
-                  const AppSmallButton(),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Transform.translate(
+                      offset: const Offset(-16, 0),
+                      child: const AppSmallButton(),
+                    ),
+                  ),
                   const SizedBox(height: 8),
                 ],
                 Row(

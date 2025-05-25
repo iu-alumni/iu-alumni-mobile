@@ -8,7 +8,10 @@ import 'map_repository.dart';
 
 class MapRepositoryImpl extends MapRepository {
   MapRepositoryImpl(
-      this._dbManager, this._usersRepository, this._eventsRepository);
+    this._dbManager,
+    this._usersRepository,
+    this._eventsRepository,
+  );
 
   final DbManager _dbManager;
   final UsersRepository _usersRepository;
