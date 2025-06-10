@@ -22,8 +22,9 @@ import 'data/db/db_manager.dart';
 import 'data/db/db_manager_impl.dart';
 import 'data/events/events_gateway.dart';
 import 'data/events/events_gateway_impl.dart';
-import 'data/profile_gateway/profile_gateway.dart';
-import 'data/profile_gateway/profile_gateway_impl.dart';
+import 'data/profile/profile_gateway.dart';
+import 'data/profile/profile_gateway_impl.dart';
+import 'data/secrets/secrets_manager.dart';
 import 'data/token/token_manager.dart';
 import 'data/token/token_provider.dart';
 import 'data/token/token_provider_impl.dart';
@@ -32,7 +33,6 @@ import 'data/users/users_gateway_impl.dart';
 import 'presentation/blocs/events_list/events_list_cubit.dart';
 import 'presentation/blocs/profile/profile_cubit.dart';
 import 'presentation/common/constants/app_colors.dart';
-import 'presentation/managers/app_loading_manager.dart';
 import 'presentation/router/always_root_route.dart';
 import 'presentation/router/app_router.dart';
 
@@ -43,6 +43,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) => MultiBlocProvider(
         providers: [
           // --- SERVICES ---
+          RepositoryProvider(create: (_) => SecretsManager()),
           RepositoryProvider(create: (_) => const FlutterSecureStorage()),
           RepositoryProvider(create: (_) => SharedPreferencesAsync()),
           RepositoryProvider(create: (_) => ImagePicker()),
@@ -51,6 +52,7 @@ class App extends StatelessWidget {
             create: (context) => TokenManager(
               context.read<FlutterSecureStorage>(),
               context.read<SharedPreferencesAsync>(),
+              context.read<SecretsManager>(),
             ),
           ),
           RepositoryProvider<TokenProvider>(
@@ -76,6 +78,7 @@ class App extends StatelessWidget {
             create: (context) => EventsGatewayImpl(
               context.read<Dio>(),
               context.read<DioOptionsManager>(),
+              context.read<SecretsManager>(),
             ),
           ),
           RepositoryProvider<AuthGateway>(
@@ -83,18 +86,21 @@ class App extends StatelessWidget {
               context.read<Dio>(),
               context.read<TokenManager>(),
               context.read<DioOptionsManager>(),
+              context.read<SecretsManager>(),
             ),
           ),
           RepositoryProvider<ProfileGateway>(
             create: (context) => ProfileGatewayImpl(
               context.read<Dio>(),
               context.read<DioOptionsManager>(),
+              context.read<SecretsManager>(),
             ),
           ),
           RepositoryProvider<UsersGateway>(
             create: (context) => UsersGatewayImpl(
               context.read<Dio>(),
               context.read<DioOptionsManager>(),
+              context.read<SecretsManager>(),
             ),
           ),
           // --- REPOSITORIES ---
@@ -122,13 +128,14 @@ class App extends StatelessWidget {
           // ),
           // TODO delete when moving to mobile
           RepositoryProvider<Reporter>(create: (context) => ReporterMock()),
-          RepositoryProvider(
-            create: (context) => AppLoadingManager(
-              context.read<TokenProvider>(),
-              context.read<DbManager>(),
-              context.read<Reporter>(),
-            ),
-          ),
+          // RepositoryProvider(
+          //   create: (context) => AppLoadingManager(
+          //     context.read<TokenProvider>(),
+          //     context.read<DbManager>(),
+          //     context.read<Reporter>(),
+          //     context.read<SecretsManager>(),
+          //   ),
+          // ),
           RepositoryProvider<MapRepository>(
             create: (context) => MapRepositoryImpl(
               context.read<DbManager>(),

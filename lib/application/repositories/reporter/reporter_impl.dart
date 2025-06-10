@@ -2,6 +2,7 @@ import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../../data/secrets/secrets_manager.dart';
 import '../../../util/logger.dart';
 import '../../models/event.dart';
 import '../../models/profile.dart';
@@ -9,11 +10,12 @@ import '../users/users_repository.dart';
 import 'reporter.dart';
 
 class ReporterImpl extends Reporter with WidgetsBindingObserver {
-  ReporterImpl(this._usersRepository);
+  ReporterImpl(this._usersRepository, this._secretsManager);
 
   final UsersRepository _usersRepository;
+  final SecretsManager _secretsManager;
 
-  static const _appMetricaKey = String.fromEnvironment('app_metrica_key');
+  // static const _appMetricaKey = String.fromEnvironment('app_metrica_key');
 
   DateTime? _startTime;
 
@@ -83,7 +85,7 @@ class ReporterImpl extends Reporter with WidgetsBindingObserver {
     // Mark the session start
     _sessionStarted();
     try {
-      AppMetrica.activate(const AppMetricaConfig(_appMetricaKey));
+      AppMetrica.activate(AppMetricaConfig(_secretsManager.appMetricaKey!));
     } catch (e) {
       logger.e(e);
     }

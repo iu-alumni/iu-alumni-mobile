@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 
-import '../../../data/profile_gateway/profile_gateway.dart';
+import '../../../data/profile/profile_gateway.dart';
 import '../../../data/token/token_provider.dart';
 import '../../../data/users/users_gateway.dart';
 import '../../../util/logger.dart';

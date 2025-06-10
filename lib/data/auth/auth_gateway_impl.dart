@@ -3,22 +3,29 @@ import 'package:fpdart/fpdart.dart';
 
 import '../common/dio_options_manager.dart';
 import '../paths.dart';
+import '../secrets/secrets_manager.dart';
 import '../token/token_manager.dart';
 import 'auth_gateway.dart';
 
 class AuthGatewayImpl implements AuthGateway {
-  AuthGatewayImpl(this._dio, this._tokenManager, this._dioOptionsManager);
+  AuthGatewayImpl(
+    this._dio,
+    this._tokenManager,
+    this._dioOptionsManager,
+    this._secretsManager,
+  );
 
   final TokenManager _tokenManager;
   final Dio _dio;
   final DioOptionsManager _dioOptionsManager;
+  final SecretsManager _secretsManager;
 
   @override
   Future<Either<String, Unit>> authorize(String email, String password) =>
       TaskEither<String, Either<String, Unit>>.tryCatch(
         () async {
           final response = await _dio.post(
-            Paths.login,
+            Paths.login(_secretsManager.hostPath),
             data: {'email': email, 'password': password},
             options: _dioOptionsManager.opts(withToken: false),
           );
@@ -42,7 +49,7 @@ class AuthGatewayImpl implements AuthGateway {
       TaskEither<String, Either<String, Unit>>.tryCatch(
         () async {
           final response = await _dio.post(
-            Paths.verify,
+            Paths.verify(_secretsManager.hostPath),
             data: {
               'email': email,
               'password': password,

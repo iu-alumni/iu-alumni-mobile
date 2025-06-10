@@ -2,27 +2,29 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_encrypt_plus/flutter_encrypt_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../util/logger.dart';
+import '../secrets/secrets_manager.dart';
 
 class TokenManager {
-  TokenManager(this._secureStorage, this._sharedPrefs);
+  TokenManager(this._secureStorage, this._sharedPrefs, this._secretsManager);
 
-  static const _tokenKey = 'ui-alumni-access-token';
-  static const _webSalt = String.fromEnvironment('ui_alumni_web_salt');
+  static const _tokenKey = 'iu-alumni-access-token';
 
   final FlutterSecureStorage _secureStorage;
   final SharedPreferencesAsync _sharedPrefs;
+  final SecretsManager _secretsManager;
 
   Option<String> _token = const None();
 
   Future<Option<String>> _tokenWeb() async {
-    final token = await _sharedPrefs.getString(_tokenKey);
-    return Option.fromNullable(token).map(
-      (t) => encrypt.decodeString(t, _webSalt),
-    );
+    final maybeToken = await _sharedPrefs.getString(_tokenKey);
+    return Option.Do((mb) {
+      final salt = mb(Option.fromNullable(_secretsManager.webSalt));
+      final token = mb(Option.fromNullable(maybeToken));
+      return encrypt.decodeString(token, salt);
+    });
   }
 
   Future<Option<String>> _tokenMobile() async =>
@@ -31,15 +33,20 @@ class TokenManager {
   Future<void> init() async {
     final fun = kIsWeb || kIsWasm ? _tokenWeb : _tokenMobile;
     _token = await fun();
-    logger.d("TOKEN STORED: $token");
+    logger.d('TOKEN STORED: $token');
   }
 
   Option<String> get token => _token;
 
   void _setWeb(String value) {
-    final encr = encrypt.encodeString(value, _webSalt);
+    final salt = _secretsManager.webSalt;
+    if (salt == null) {
+      logger.e('SALT wan\'t found in env');
+      return;
+    }
+    final encr = encrypt.encodeString(value, salt);
     _sharedPrefs.setString(_tokenKey, encr);
-    logger.d("TOKEN SET: $value, encr as $encr");
+    logger.d('TOKEN SET: $value, encr as $encr');
   }
 
   void _setMobile(String value) {
