@@ -9,28 +9,14 @@ typedef EventsListData = LoadedStateData<IList<EventModel>>;
 typedef EventsListError = LoadedStateError<IList<EventModel>>;
 
 class EventsListCubit extends Cubit<EventsListState> {
-  EventsListCubit(this._repository) : super(const EventsListState.init());
+  EventsListCubit(this._eventsRepository) : super(const EventsListState.init());
 
-  final EventsRepository _repository;
+  final EventsRepository _eventsRepository;
 
   Future<void> loadEvents() async {
     emit(const EventsListState.loading());
-    final events = await _repository.getEvents();
+    final events = await _eventsRepository.getEvents();
     emit(EventsListState.data(IList(events)));
-  }
-
-  // The same as [update] but adds the event right away to save some time
-  Future<void> add(String eventId) async {
-    if (state case EventsListData currState) {
-      final maybeEvent = await _repository.getOneEvent(eventId);
-      maybeEvent.map(
-        (event) => emit(
-          currState.copyWith(
-            data: currState.data.add(event),
-          ),
-        ),
-      );
-    }
   }
 
   void remove(String eventId) {
@@ -45,7 +31,7 @@ class EventsListCubit extends Cubit<EventsListState> {
 
   Future<void> update(String eventId) async {
     if (state case EventsListData currState) {
-      final maybeEvent = await _repository.getOneEvent(eventId);
+      final maybeEvent = await _eventsRepository.getOneEvent(eventId);
       maybeEvent.map((event) {
         final index = currState.data.indexWhere((e) => e.eventId == eventId);
         final newEvents = switch (index) {

@@ -17,13 +17,15 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$EventModel {
   String get eventId => throw _privateConstructorUsedError;
+  UserStatus get userStatus => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError; // TODO
-  String? get coverUrl => throw _privateConstructorUsedError; // TODO
+  String? get coverBytes => throw _privateConstructorUsedError; // TODO
   String? get location => throw _privateConstructorUsedError;
   CostModel get cost => throw _privateConstructorUsedError;
   DateTime get occurringAt => throw _privateConstructorUsedError;
   bool get onlineEvent => throw _privateConstructorUsedError;
+  ISet<String> get participantsIds => throw _privateConstructorUsedError;
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -40,14 +42,17 @@ abstract class $EventModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String eventId,
+      UserStatus userStatus,
       String? title,
       String? description,
-      String? coverUrl,
+      String? coverBytes,
       String? location,
       CostModel cost,
       DateTime occurringAt,
-      bool onlineEvent});
+      bool onlineEvent,
+      ISet<String> participantsIds});
 
+  $UserStatusCopyWith<$Res> get userStatus;
   $CostModelCopyWith<$Res> get cost;
 }
 
@@ -67,19 +72,25 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
   @override
   $Res call({
     Object? eventId = null,
+    Object? userStatus = null,
     Object? title = freezed,
     Object? description = freezed,
-    Object? coverUrl = freezed,
+    Object? coverBytes = freezed,
     Object? location = freezed,
     Object? cost = null,
     Object? occurringAt = null,
     Object? onlineEvent = null,
+    Object? participantsIds = null,
   }) {
     return _then(_value.copyWith(
       eventId: null == eventId
           ? _value.eventId
           : eventId // ignore: cast_nullable_to_non_nullable
               as String,
+      userStatus: null == userStatus
+          ? _value.userStatus
+          : userStatus // ignore: cast_nullable_to_non_nullable
+              as UserStatus,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -88,9 +99,9 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      coverUrl: freezed == coverUrl
-          ? _value.coverUrl
-          : coverUrl // ignore: cast_nullable_to_non_nullable
+      coverBytes: freezed == coverBytes
+          ? _value.coverBytes
+          : coverBytes // ignore: cast_nullable_to_non_nullable
               as String?,
       location: freezed == location
           ? _value.location
@@ -108,7 +119,21 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
           ? _value.onlineEvent
           : onlineEvent // ignore: cast_nullable_to_non_nullable
               as bool,
+      participantsIds: null == participantsIds
+          ? _value.participantsIds
+          : participantsIds // ignore: cast_nullable_to_non_nullable
+              as ISet<String>,
     ) as $Val);
+  }
+
+  /// Create a copy of EventModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserStatusCopyWith<$Res> get userStatus {
+    return $UserStatusCopyWith<$Res>(_value.userStatus, (value) {
+      return _then(_value.copyWith(userStatus: value) as $Val);
+    });
   }
 
   /// Create a copy of EventModel
@@ -132,14 +157,18 @@ abstract class _$$EventModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String eventId,
+      UserStatus userStatus,
       String? title,
       String? description,
-      String? coverUrl,
+      String? coverBytes,
       String? location,
       CostModel cost,
       DateTime occurringAt,
-      bool onlineEvent});
+      bool onlineEvent,
+      ISet<String> participantsIds});
 
+  @override
+  $UserStatusCopyWith<$Res> get userStatus;
   @override
   $CostModelCopyWith<$Res> get cost;
 }
@@ -158,19 +187,25 @@ class __$$EventModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? eventId = null,
+    Object? userStatus = null,
     Object? title = freezed,
     Object? description = freezed,
-    Object? coverUrl = freezed,
+    Object? coverBytes = freezed,
     Object? location = freezed,
     Object? cost = null,
     Object? occurringAt = null,
     Object? onlineEvent = null,
+    Object? participantsIds = null,
   }) {
     return _then(_$EventModelImpl(
       eventId: null == eventId
           ? _value.eventId
           : eventId // ignore: cast_nullable_to_non_nullable
               as String,
+      userStatus: null == userStatus
+          ? _value.userStatus
+          : userStatus // ignore: cast_nullable_to_non_nullable
+              as UserStatus,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -179,9 +214,9 @@ class __$$EventModelImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      coverUrl: freezed == coverUrl
-          ? _value.coverUrl
-          : coverUrl // ignore: cast_nullable_to_non_nullable
+      coverBytes: freezed == coverBytes
+          ? _value.coverBytes
+          : coverBytes // ignore: cast_nullable_to_non_nullable
               as String?,
       location: freezed == location
           ? _value.location
@@ -199,6 +234,10 @@ class __$$EventModelImplCopyWithImpl<$Res>
           ? _value.onlineEvent
           : onlineEvent // ignore: cast_nullable_to_non_nullable
               as bool,
+      participantsIds: null == participantsIds
+          ? _value.participantsIds
+          : participantsIds // ignore: cast_nullable_to_non_nullable
+              as ISet<String>,
     ));
   }
 }
@@ -208,23 +247,27 @@ class __$$EventModelImplCopyWithImpl<$Res>
 class _$EventModelImpl implements _EventModel {
   const _$EventModelImpl(
       {required this.eventId,
+      required this.userStatus,
       required this.title,
       required this.description,
-      required this.coverUrl,
+      required this.coverBytes,
       required this.location,
       required this.cost,
       required this.occurringAt,
-      required this.onlineEvent});
+      required this.onlineEvent,
+      required this.participantsIds});
 
   @override
   final String eventId;
+  @override
+  final UserStatus userStatus;
   @override
   final String? title;
   @override
   final String? description;
 // TODO
   @override
-  final String? coverUrl;
+  final String? coverBytes;
 // TODO
   @override
   final String? location;
@@ -234,10 +277,12 @@ class _$EventModelImpl implements _EventModel {
   final DateTime occurringAt;
   @override
   final bool onlineEvent;
+  @override
+  final ISet<String> participantsIds;
 
   @override
   String toString() {
-    return 'EventModel(eventId: $eventId, title: $title, description: $description, coverUrl: $coverUrl, location: $location, cost: $cost, occurringAt: $occurringAt, onlineEvent: $onlineEvent)';
+    return 'EventModel(eventId: $eventId, userStatus: $userStatus, title: $title, description: $description, coverBytes: $coverBytes, location: $location, cost: $cost, occurringAt: $occurringAt, onlineEvent: $onlineEvent, participantsIds: $participantsIds)';
   }
 
   @override
@@ -246,23 +291,37 @@ class _$EventModelImpl implements _EventModel {
         (other.runtimeType == runtimeType &&
             other is _$EventModelImpl &&
             (identical(other.eventId, eventId) || other.eventId == eventId) &&
+            (identical(other.userStatus, userStatus) ||
+                other.userStatus == userStatus) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.coverUrl, coverUrl) ||
-                other.coverUrl == coverUrl) &&
+            (identical(other.coverBytes, coverBytes) ||
+                other.coverBytes == coverBytes) &&
             (identical(other.location, location) ||
                 other.location == location) &&
             (identical(other.cost, cost) || other.cost == cost) &&
             (identical(other.occurringAt, occurringAt) ||
                 other.occurringAt == occurringAt) &&
             (identical(other.onlineEvent, onlineEvent) ||
-                other.onlineEvent == onlineEvent));
+                other.onlineEvent == onlineEvent) &&
+            const DeepCollectionEquality()
+                .equals(other.participantsIds, participantsIds));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, eventId, title, description,
-      coverUrl, location, cost, occurringAt, onlineEvent);
+  int get hashCode => Object.hash(
+      runtimeType,
+      eventId,
+      userStatus,
+      title,
+      description,
+      coverBytes,
+      location,
+      cost,
+      occurringAt,
+      onlineEvent,
+      const DeepCollectionEquality().hash(participantsIds));
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -276,22 +335,26 @@ class _$EventModelImpl implements _EventModel {
 abstract class _EventModel implements EventModel {
   const factory _EventModel(
       {required final String eventId,
+      required final UserStatus userStatus,
       required final String? title,
       required final String? description,
-      required final String? coverUrl,
+      required final String? coverBytes,
       required final String? location,
       required final CostModel cost,
       required final DateTime occurringAt,
-      required final bool onlineEvent}) = _$EventModelImpl;
+      required final bool onlineEvent,
+      required final ISet<String> participantsIds}) = _$EventModelImpl;
 
   @override
   String get eventId;
+  @override
+  UserStatus get userStatus;
   @override
   String? get title;
   @override
   String? get description; // TODO
   @override
-  String? get coverUrl; // TODO
+  String? get coverBytes; // TODO
   @override
   String? get location;
   @override
@@ -300,6 +363,8 @@ abstract class _EventModel implements EventModel {
   DateTime get occurringAt;
   @override
   bool get onlineEvent;
+  @override
+  ISet<String> get participantsIds;
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.

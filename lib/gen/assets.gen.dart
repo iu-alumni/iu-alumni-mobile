@@ -9,8 +9,26 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsDbsGen {
+  const $AssetsDbsGen();
+
+  /// File path: assets/dbs/world_cities.db
+  String get worldCities => 'assets/dbs/world_cities.db';
+
+  /// List of all assets
+  List<String> get values => [worldCities];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
+
+  /// File path: assets/icons/iualumni_icon.png
+  AssetGenImage get iualumniIcon =>
+      const AssetGenImage('assets/icons/iualumni_icon.png');
+
+  /// File path: assets/icons/iualumni_icon_trans.png
+  AssetGenImage get iualumniIconTrans =>
+      const AssetGenImage('assets/icons/iualumni_icon_trans.png');
 
   /// Directory path: assets/icons/map
   $AssetsIconsMapGen get map => const $AssetsIconsMapGen();
@@ -20,7 +38,7 @@ class $AssetsIconsGen {
       const AssetGenImage('assets/icons/map_point.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [mapPoint];
+  List<AssetGenImage> get values => [iualumniIcon, iualumniIconTrans, mapPoint];
 }
 
 class $AssetsImagesGen {
@@ -47,6 +65,7 @@ class $AssetsIconsMapGen {
 class Assets {
   const Assets._();
 
+  static const $AssetsDbsGen dbs = $AssetsDbsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }

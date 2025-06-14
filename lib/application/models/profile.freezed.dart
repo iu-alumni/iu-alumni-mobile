@@ -20,6 +20,8 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Profile {
+  @JsonKey(name: 'id')
+  String get profileId => throw _privateConstructorUsedError;
   @JsonKey(name: 'first_name')
   String get firstName => throw _privateConstructorUsedError;
   @JsonKey(name: 'last_name')
@@ -30,6 +32,9 @@ mixin _$Profile {
   String? get biography => throw _privateConstructorUsedError;
   @JsonKey(name: 'show_location')
   bool get showLocation => throw _privateConstructorUsedError;
+  @JsonKey(name: 'telegram_alias')
+  String? get telegramAlias => throw _privateConstructorUsedError;
+  String? get avatar => throw _privateConstructorUsedError;
 
   /// Serializes this Profile to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,12 +51,15 @@ abstract class $ProfileCopyWith<$Res> {
       _$ProfileCopyWithImpl<$Res, Profile>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'first_name') String firstName,
+      {@JsonKey(name: 'id') String profileId,
+      @JsonKey(name: 'first_name') String firstName,
       @JsonKey(name: 'last_name') String lastName,
       @JsonKey(name: 'graduation_year') String graduationYear,
       String? location,
       String? biography,
-      @JsonKey(name: 'show_location') bool showLocation});
+      @JsonKey(name: 'show_location') bool showLocation,
+      @JsonKey(name: 'telegram_alias') String? telegramAlias,
+      String? avatar});
 }
 
 /// @nodoc
@@ -69,14 +77,21 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? profileId = null,
     Object? firstName = null,
     Object? lastName = null,
     Object? graduationYear = null,
     Object? location = freezed,
     Object? biography = freezed,
     Object? showLocation = null,
+    Object? telegramAlias = freezed,
+    Object? avatar = freezed,
   }) {
     return _then(_value.copyWith(
+      profileId: null == profileId
+          ? _value.profileId
+          : profileId // ignore: cast_nullable_to_non_nullable
+              as String,
       firstName: null == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
@@ -101,6 +116,14 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
           ? _value.showLocation
           : showLocation // ignore: cast_nullable_to_non_nullable
               as bool,
+      telegramAlias: freezed == telegramAlias
+          ? _value.telegramAlias
+          : telegramAlias // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -113,12 +136,15 @@ abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'first_name') String firstName,
+      {@JsonKey(name: 'id') String profileId,
+      @JsonKey(name: 'first_name') String firstName,
       @JsonKey(name: 'last_name') String lastName,
       @JsonKey(name: 'graduation_year') String graduationYear,
       String? location,
       String? biography,
-      @JsonKey(name: 'show_location') bool showLocation});
+      @JsonKey(name: 'show_location') bool showLocation,
+      @JsonKey(name: 'telegram_alias') String? telegramAlias,
+      String? avatar});
 }
 
 /// @nodoc
@@ -134,14 +160,21 @@ class __$$ProfileImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? profileId = null,
     Object? firstName = null,
     Object? lastName = null,
     Object? graduationYear = null,
     Object? location = freezed,
     Object? biography = freezed,
     Object? showLocation = null,
+    Object? telegramAlias = freezed,
+    Object? avatar = freezed,
   }) {
     return _then(_$ProfileImpl(
+      profileId: null == profileId
+          ? _value.profileId
+          : profileId // ignore: cast_nullable_to_non_nullable
+              as String,
       firstName: null == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
@@ -166,6 +199,14 @@ class __$$ProfileImplCopyWithImpl<$Res>
           ? _value.showLocation
           : showLocation // ignore: cast_nullable_to_non_nullable
               as bool,
+      telegramAlias: freezed == telegramAlias
+          ? _value.telegramAlias
+          : telegramAlias // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -174,16 +215,22 @@ class __$$ProfileImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ProfileImpl implements _Profile {
   _$ProfileImpl(
-      {@JsonKey(name: 'first_name') required this.firstName,
+      {@JsonKey(name: 'id') required this.profileId,
+      @JsonKey(name: 'first_name') required this.firstName,
       @JsonKey(name: 'last_name') required this.lastName,
       @JsonKey(name: 'graduation_year') required this.graduationYear,
       required this.location,
       required this.biography,
-      @JsonKey(name: 'show_location') required this.showLocation});
+      @JsonKey(name: 'show_location') required this.showLocation,
+      @JsonKey(name: 'telegram_alias') required this.telegramAlias,
+      required this.avatar});
 
   factory _$ProfileImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileImplFromJson(json);
 
+  @override
+  @JsonKey(name: 'id')
+  final String profileId;
   @override
   @JsonKey(name: 'first_name')
   final String firstName;
@@ -200,10 +247,15 @@ class _$ProfileImpl implements _Profile {
   @override
   @JsonKey(name: 'show_location')
   final bool showLocation;
+  @override
+  @JsonKey(name: 'telegram_alias')
+  final String? telegramAlias;
+  @override
+  final String? avatar;
 
   @override
   String toString() {
-    return 'Profile(firstName: $firstName, lastName: $lastName, graduationYear: $graduationYear, location: $location, biography: $biography, showLocation: $showLocation)';
+    return 'Profile(profileId: $profileId, firstName: $firstName, lastName: $lastName, graduationYear: $graduationYear, location: $location, biography: $biography, showLocation: $showLocation, telegramAlias: $telegramAlias, avatar: $avatar)';
   }
 
   @override
@@ -211,6 +263,8 @@ class _$ProfileImpl implements _Profile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ProfileImpl &&
+            (identical(other.profileId, profileId) ||
+                other.profileId == profileId) &&
             (identical(other.firstName, firstName) ||
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
@@ -222,13 +276,16 @@ class _$ProfileImpl implements _Profile {
             (identical(other.biography, biography) ||
                 other.biography == biography) &&
             (identical(other.showLocation, showLocation) ||
-                other.showLocation == showLocation));
+                other.showLocation == showLocation) &&
+            (identical(other.telegramAlias, telegramAlias) ||
+                other.telegramAlias == telegramAlias) &&
+            (identical(other.avatar, avatar) || other.avatar == avatar));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, firstName, lastName,
-      graduationYear, location, biography, showLocation);
+  int get hashCode => Object.hash(runtimeType, profileId, firstName, lastName,
+      graduationYear, location, biography, showLocation, telegramAlias, avatar);
 
   /// Create a copy of Profile
   /// with the given fields replaced by the non-null parameter values.
@@ -248,16 +305,21 @@ class _$ProfileImpl implements _Profile {
 
 abstract class _Profile implements Profile {
   factory _Profile(
-      {@JsonKey(name: 'first_name') required final String firstName,
+      {@JsonKey(name: 'id') required final String profileId,
+      @JsonKey(name: 'first_name') required final String firstName,
       @JsonKey(name: 'last_name') required final String lastName,
       @JsonKey(name: 'graduation_year') required final String graduationYear,
       required final String? location,
       required final String? biography,
-      @JsonKey(name: 'show_location')
-      required final bool showLocation}) = _$ProfileImpl;
+      @JsonKey(name: 'show_location') required final bool showLocation,
+      @JsonKey(name: 'telegram_alias') required final String? telegramAlias,
+      required final String? avatar}) = _$ProfileImpl;
 
   factory _Profile.fromJson(Map<String, dynamic> json) = _$ProfileImpl.fromJson;
 
+  @override
+  @JsonKey(name: 'id')
+  String get profileId;
   @override
   @JsonKey(name: 'first_name')
   String get firstName;
@@ -274,6 +336,11 @@ abstract class _Profile implements Profile {
   @override
   @JsonKey(name: 'show_location')
   bool get showLocation;
+  @override
+  @JsonKey(name: 'telegram_alias')
+  String? get telegramAlias;
+  @override
+  String? get avatar;
 
   /// Create a copy of Profile
   /// with the given fields replaced by the non-null parameter values.

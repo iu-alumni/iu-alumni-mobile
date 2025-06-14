@@ -6,21 +6,39 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",
-            "program": "lib/main.dart"
+            "program": "lib/main.dart",
+            // "args": [
+            //     "--dart-define",
+            //     "app_metrica_key=5ee0f3f7-ee27-42cb-8cc3-6952dc5ada6b",
+            //     "--dart-define",
+            //     "ui_alumni_web_salt=iu~alumni~token~salt~1",
+            // ],
         },
         {
             "name": "PROFILE",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
-            "program": "lib/main.dart"
+            "program": "lib/main.dart",
+            // "args": [
+            //     "--dart-define",
+            //     "app_metrica_key=5ee0f3f7-ee27-42cb-8cc3-6952dc5ada6b",
+            //     "--dart-define",
+            //     "ui_alumni_web_saltiu~alumni~token~salt~1",
+            // ],
         },
         {
             "name": "RELEASE",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",
-            "program": "lib/main.dart"
+            "program": "lib/main.dart",
+            // "args": [
+            //     "--dart-define",
+            //     "app_metrica_key=5ee0f3f7-ee27-42cb-8cc3-6952dc5ada6b",
+            //     "--dart-define",
+            //     "ui_alumni_web_saltiu~alumni~token~salt~1",
+            // ],
         }
     ]
 }

@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../constants/app_text_styles.dart';
+import 'back_button.dart';
 
 class EventCover extends StatelessWidget {
   const EventCover({
     required this.child,
+    required this.imageBytes,
     this.title,
     this.location,
     super.key,
@@ -13,6 +17,7 @@ class EventCover extends StatelessWidget {
   final String? title;
   final String? location;
   final Widget child;
+  final String? imageBytes;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +27,13 @@ class EventCover extends StatelessWidget {
     final secondaryWhite = Colors.white.withValues(alpha: 0.5);
     return Stack(
       children: [
-        // TODO cover image
-        const Positioned.fill(child: ColoredBox(color: Colors.black38)),
+        if (imageBytes case final bytes? when bytes.isNotEmpty)
+          Positioned.fill(
+            child: Image.memory(
+              base64Decode(bytes),
+              fit: BoxFit.cover,
+            ),
+          ),
         Positioned.fill(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,6 +62,11 @@ class EventCover extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 24),
+              const Align(
+                alignment: Alignment.topLeft,
+                child: AppSmallButton(),
+              ),
+              const SizedBox(height: 16),
               Padding(
                 padding: horPadding,
                 child: Opacity(
@@ -72,9 +87,12 @@ class EventCover extends StatelessWidget {
                     children: [
                       Icon(Icons.location_pin, color: secondaryWhite),
                       const SizedBox(width: 8),
-                      Text(
-                        maybeLocation ?? 'location',
-                        style: AppTextStyles.h4.copyWith(color: secondaryWhite),
+                      Expanded(
+                        child: Text(
+                          maybeLocation ?? 'location',
+                          style:
+                              AppTextStyles.h4.copyWith(color: secondaryWhite),
+                        ),
                       ),
                     ],
                   ),
