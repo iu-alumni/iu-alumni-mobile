@@ -19,6 +19,30 @@ class $AssetsDbsGen {
   List<String> get values => [worldCities];
 }
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/Montserrat-Bold.ttf
+  String get montserratBold => 'assets/fonts/Montserrat-Bold.ttf';
+
+  /// File path: assets/fonts/Montserrat-ExtraBold.ttf
+  String get montserratExtraBold => 'assets/fonts/Montserrat-ExtraBold.ttf';
+
+  /// File path: assets/fonts/Montserrat-Medium.ttf
+  String get montserratMedium => 'assets/fonts/Montserrat-Medium.ttf';
+
+  /// File path: assets/fonts/Montserrat-SemiBold.ttf
+  String get montserratSemiBold => 'assets/fonts/Montserrat-SemiBold.ttf';
+
+  /// List of all assets
+  List<String> get values => [
+    montserratBold,
+    montserratExtraBold,
+    montserratMedium,
+    montserratSemiBold,
+  ];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -44,8 +68,8 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/Alumni.svg
-  String get alumni => 'assets/images/Alumni.svg';
+  /// File path: assets/images/alumni.svg
+  String get alumni => 'assets/images/alumni.svg';
 
   /// List of all assets
   List<String> get values => [alumni];
@@ -65,9 +89,14 @@ class $AssetsIconsMapGen {
 class Assets {
   const Assets._();
 
+  static const String aEnv = '.env';
   static const $AssetsDbsGen dbs = $AssetsDbsGen();
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+
+  /// List of all assets
+  static List<String> get values => [aEnv];
 }
 
 class AssetGenImage {

@@ -165,7 +165,9 @@ class App extends StatelessWidget {
                   seedColor: AppColors.primary,
                   surface: Colors.white,
                 ),
+                fontFamily: 'Montserrat',
                 useMaterial3: true,
+                splashFactory: NoSplash.splashFactory,
               ),
               // routerConfig: AppRouter().config(
               //   navigatorObservers: () => [

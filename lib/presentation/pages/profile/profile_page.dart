@@ -5,13 +5,17 @@ import 'package:fpdart/fpdart.dart' hide State;
 
 import '../../../application/models/profile.dart';
 import '../../../application/repositories/events/events_repository.dart';
+import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
 import '../../blocs/models/profile_state.dart';
 import '../../blocs/profile/profile_cubit.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/models/loaded_state.dart';
+import '../../common/widgets/app_button.dart';
+import '../../common/widgets/app_loader.dart';
+import '../../common/widgets/app_scaffold.dart';
+import '../../router/app_router.gr.dart';
 import 'widgets/profile_content.dart';
-import 'widgets/profile_page_title.dart';
 
 @RoutePage()
 class ProfilePage extends StatefulWidget implements AutoRouteWrapper {
@@ -48,46 +52,74 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
+  void _editTap(BuildContext context) async {
+    context.read<Reporter>().reportEditProfileTap(AppLocation.profileScreen);
+    await context.pushRoute(const ProfileEditingRoute());
+    if (context.mounted) {
+      context.read<ProfileCubit>().updateProfileData();
+    }
+  }
+
+  void _logout(BuildContext context) async {
+    context.read<Reporter>().reportUnauthorize(AppLocation.profileScreen);
+    context.read<ProfileCubit>().logout();
+    context.router.replaceAll([const AuthRoute()]);
+  }
+
   @override
   Widget build(BuildContext context) =>
-      BlocListener<ProfileCubit, ProfileState>(
+      BlocConsumer<ProfileCubit, ProfileState>(
         listenWhen: (p, c) => p.profile != c.profile,
         listener: (context, state) {
           _cubit.loadOwnedEvents();
           _cubit.loadParticipatedEvents();
         },
-        child: Scaffold(
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ProfilePageTitle(showBackButton: widget.profile.isSome()),
-              Expanded(
-                child: SafeArea(
-                  top: false,
-                  child: BlocBuilder<ProfileCubit, ProfileState>(
-                    buildWhen: (p, c) => p.profile != c.profile,
-                    builder: (context, profile) => switch (profile.profile) {
-                      LoadedStateData(:final data) => SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          child: ProfileContent(
-                            profile: data,
-                            personal: profile.myOwn,
-                          ),
-                        ),
-                      LoadedStateError e => Center(
-                          child: Text(
-                            e.error,
-                            style: AppTextStyles.caption,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      _ => const Center(child: CircularProgressIndicator()),
-                    },
+        builder: (context, state) => AppScaffold(
+          title: 'Profile',
+          leadingButton: state.myOwn
+              ? AppButton(
+                  is48Height: true,
+                  buttonStyle: AppButtonStyle.secondary,
+                  onTap: () => _logout(context),
+                  child: Text(
+                    'Logout',
+                    style: AppTextStyles.actionM.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              : null,
+          actions: [
+            if (state.myOwn)
+              AppButton(
+                is48Height: true,
+                onTap: () => _editTap(context),
+                child: Text(
+                  'Edit',
+                  style: AppTextStyles.actionSB.copyWith(
+                    color: Colors.white,
                   ),
                 ),
               ),
-            ],
-          ),
+          ],
+          body: switch (state.profile) {
+            LoadedStateData(:final data) => ProfileContent(
+                profile: data,
+                personal: state.myOwn,
+              ).build(context),
+            LoadedStateError e => AppChildBody(
+                child: Center(
+                  child: Text(
+                    e.error,
+                    style: AppTextStyles.caption,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            _ => const AppChildBody(
+                child: Center(child: AppLoader(inCard: true)),
+              ),
+          },
         ),
       );
 }

@@ -10,7 +10,7 @@ import '../../../../application/models/event.dart';
 import '../../../blocs/models/one_event_state.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
-import '../../../common/widgets/button.dart';
+import '../../../common/widgets/app_button.dart';
 import '../../../common/widgets/event_cover.dart';
 
 class EditingCover extends StatelessWidget {
@@ -54,22 +54,13 @@ class EditingCover extends StatelessWidget {
         buildWhen: _buildWhen,
         builder: (context, state) => EventCover(
           imageBytes: state.event.toNullable()?.coverBytes,
-          child: Align(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: AppButton(
-                onTap: () => _pickCover(context),
-                buttonStyle: AppButtonStyle.secondary,
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    'Choose cover',
-                    style: AppTextStyles.buttonText,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
+          child: AppButton(
+            onTap: () => _pickCover(context),
+            buttonStyle: AppButtonStyle.secondary,
+            child: Text(
+              'Choose cover',
+              style: AppTextStyles.actionSB.copyWith(color: Colors.white),
+              textAlign: TextAlign.center,
             ),
           ),
         ),

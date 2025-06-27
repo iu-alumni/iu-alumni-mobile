@@ -6,7 +6,7 @@ import '../../../blocs/models/one_event_state.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
-import '../../../common/widgets/button.dart';
+import '../../../common/widgets/app_button.dart';
 import '../../../common/widgets/location_dialog.dart';
 import '../../../common/widgets/titled_item.dart';
 
@@ -34,18 +34,15 @@ class EditingLocation extends StatelessWidget {
           child: _location(event).match(
             () => const SizedBox(),
             (current) => TitledItem(
-              icon: Icons.location_pin,
+              // icon: Icons.location_pin,
               title: 'Location',
               child: AppButton(
-                buttonStyle: AppButtonStyle.input,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    current ?? 'No location',
-                    style: AppTextStyles.buttonText.copyWith(
-                      color:
-                          current == null ? AppColors.blueGray : Colors.black,
-                    ),
+                buttonStyle: AppButtonStyle.gray,
+                child: Text(
+                  current ?? 'No location',
+                  style: AppTextStyles.actionSB.copyWith(
+                    color:
+                        current == null ? AppColors.gray50 : AppColors.darkGray,
                   ),
                 ),
                 onTap: () => _showLocationPicker(context, current == null),

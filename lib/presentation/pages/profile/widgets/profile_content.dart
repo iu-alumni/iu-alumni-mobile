@@ -13,24 +13,25 @@ import '../../../blocs/profile/profile_cubit.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/models/loaded_state.dart';
-import '../../../common/widgets/button.dart';
+import '../../../common/widgets/app_button.dart';
+import '../../../common/widgets/app_loader.dart';
+import '../../../common/widgets/app_scaffold.dart';
+import '../../../common/widgets/event_card.dart';
 import '../../../common/widgets/profile_pic.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
 import 'event_card.dart';
 import 'open_bot_card.dart';
 
-class ProfileContent extends StatelessWidget {
-  const ProfileContent({
-    required this.profile,
-    required this.personal,
-    super.key,
-  });
+const _eventCardWidth = 200.0;
+
+class ProfileContent {
+  ProfileContent({required this.personal, required this.profile});
 
   final Profile profile;
   final bool personal;
 
-  static const _horPadding = EdgeInsets.symmetric(horizontal: 24);
+  static const _horPadding = EdgeInsets.symmetric(horizontal: 16);
 
   void _openTelegram(BuildContext context) {
     context.read<Reporter>().reportUserTelegramOpen(
@@ -55,21 +56,21 @@ class ProfileContent extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+  AppBody build(BuildContext context) => AppListBody(
+        padding: EdgeInsets.zero,
         children: [
-          const SizedBox(height: 40),
+          const SizedBox(height: 24),
           ProfilePic(profile: profile),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           Padding(
             padding: _horPadding,
             child: Text(
               '${profile.firstName.trim()} ${profile.lastName.trim()}',
-              style: AppTextStyles.h3,
+              style: AppTextStyles.subtitle,
               textAlign: TextAlign.center,
             ),
           ),
+          const SizedBox(height: 8),
           Padding(
             padding: _horPadding,
             child: Text(
@@ -109,13 +110,18 @@ class ProfileContent extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Flexible(
+                      Expanded(
                         child: AppButton(
                           buttonStyle: AppButtonStyle.text,
-                          child: Text(
-                            '@$telegram',
-                            style: AppTextStyles.body.copyWith(
-                              decoration: TextDecoration.underline,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '@$telegram',
+                              style: AppTextStyles.body.copyWith(
+                                decoration: TextDecoration.underline,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.start,
                             ),
                           ),
                           onTap: () => _copyTelegram(context),
@@ -171,11 +177,16 @@ class _ParticipatedEvents extends StatelessWidget {
             LoadedStateData<IList<EventModel>>(:final data) =>
               SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                // padding: const EdgeInsets.symmetric(horizontal: 0),
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children:
-                      <Widget>[for (final e in data) EventCard(event: e)].gap(
+                  children: <Widget>[
+                    for (final e in data)
+                      SizedBox(
+                        width: _eventCardWidth,
+                        child: EventCard(event: e),
+                      )
+                  ].gap(
                     const SizedBox(width: 8),
                   ),
                 ),
@@ -183,7 +194,7 @@ class _ParticipatedEvents extends StatelessWidget {
             _ => const Center(
                 child: Padding(
                   padding: EdgeInsets.all(16),
-                  child: CircularProgressIndicator(color: AppColors.blueGray),
+                  child: AppLoader(),
                 ),
               ),
           },
@@ -216,15 +227,20 @@ class _OwnedEvents extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children:
-                      <Widget>[for (final e in data) EventCard(event: e)].gap(
+                  children: <Widget>[
+                    for (final e in data)
+                      SizedBox(
+                        width: _eventCardWidth,
+                        child: EventCard(event: e),
+                      )
+                  ].gap(
                     const SizedBox(width: 8),
                   ),
                 ),
               ),
             _ => const Padding(
                 padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(color: AppColors.blueGray),
+                child: CircularProgressIndicator(color: AppColors.gray50),
               ),
           },
         ),

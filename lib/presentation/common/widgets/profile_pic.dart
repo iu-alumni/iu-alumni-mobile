@@ -47,13 +47,13 @@ class ProfilePic extends StatelessWidget {
                 _ => Container(
                     width: imgSize,
                     height: imgSize,
-                    decoration: const BoxDecoration(
-                      color: AppColors.lightPrimary,
-                    ),
+                    decoration: const BoxDecoration(color: AppColors.gray50),
                     child: Center(
                       child: Text(
                         '${profile.firstName.characters.first}${profile.lastName.characters.first}',
-                        style: AppTextStyles.h2.copyWith(fontSize: radius),
+                        style: AppTextStyles.subtitle.copyWith(
+                          fontSize: radius,
+                        ),
                       ),
                     ),
                   ),

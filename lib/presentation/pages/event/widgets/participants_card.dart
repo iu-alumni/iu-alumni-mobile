@@ -7,7 +7,6 @@ import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/models/loaded_state.dart';
 import '../../../common/widgets/profile_pic.dart';
-import '../../../common/widgets/titled_item.dart';
 import 'participants_modal.dart';
 
 class ParticipantsCard extends StatelessWidget {
@@ -24,46 +23,48 @@ class ParticipantsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Material(
-        color: AppColors.lightGray,
+        color: AppColors.gray90,
         borderRadius: BorderRadius.circular(16),
         child: InkWell(
           onTap: () => _showParticipants(context),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Expanded(
-                  child: TitledItem(
-                    icon: Icons.people,
-                    title: 'Participants',
-                    child: BlocBuilder<OneEventCubit, OneEventState>(
-                      buildWhen: (p, c) => p.participants != c.participants,
-                      builder: (context, state) => switch (state.participants) {
-                        LoadedStateData(:final data) when data.isEmpty => Text(
-                            'An error occurred when loading participants',
-                            style: AppTextStyles.caption,
-                            textAlign: TextAlign.left,
-                          ),
-                        LoadedStateData(:final data) => _StackedRow(
-                            profiles: [
-                              for (final p in data)
-                                ProfilePic(profile: p, size: 48),
-                            ],
-                          ),
-                        _ => const Align(
-                            alignment: Alignment.centerLeft,
-                            child: CircularProgressIndicator(
-                              color: AppColors.blueGray,
-                            ),
-                          )
-                      },
-                    ),
+                  child: Text(
+                    'Participants',
+                    style: AppTextStyles.subtitle,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                ),
+                BlocBuilder<OneEventCubit, OneEventState>(
+                  buildWhen: (p, c) => p.participants != c.participants,
+                  builder: (context, state) => switch (state.participants) {
+                    LoadedStateData(:final data) when data.isEmpty =>
+                      const Icon(
+                        Icons.error_rounded,
+                        color: AppColors.error,
+                      ),
+                    LoadedStateData(:final data) => _StackedRow(
+                        profiles: [
+                          for (final p in data)
+                            ProfilePic(profile: p, size: 48),
+                        ],
+                      ),
+                    _ => const Align(
+                        alignment: Alignment.centerLeft,
+                        child: CircularProgressIndicator(
+                          color: AppColors.gray50,
+                        ),
+                      )
+                  },
                 ),
                 const SizedBox(width: 8),
                 const Icon(
                   Icons.arrow_forward_ios_outlined,
-                  color: AppColors.blueGray,
+                  color: AppColors.gray50,
                 ),
               ],
             ),
@@ -79,13 +80,16 @@ class _StackedRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (profiles.isEmpty) {
+      return const SizedBox();
+    }
     final widgets = profiles.length <= 6
         ? profiles
         : [
             ...profiles.take(5),
             DecoratedBox(
               decoration: BoxDecoration(
-                color: AppColors.blueGray,
+                color: AppColors.darkGray,
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Text(
@@ -95,7 +99,8 @@ class _StackedRow extends StatelessWidget {
             ),
           ];
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxHeight: 48),
+      constraints:
+          BoxConstraints(maxHeight: 48, maxWidth: 36 + widgets.length * 12),
       child: Stack(
         children: [
           ...[

@@ -60,7 +60,16 @@ flutter:
     - assets/icons/
     - assets/icons/map/
     - assets/dbs/
+    - assets/fonts/
     - .env
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-ExtraBold.ttf
+        - asset: assets/fonts/Montserrat-Medium.ttf
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
 
 flutter_launcher_icons:
   image_path: "assets/icons/iualumni_icon.png"

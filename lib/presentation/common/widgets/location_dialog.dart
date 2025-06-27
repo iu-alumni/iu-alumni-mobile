@@ -8,15 +8,13 @@ import '../../blocs/location_suggestions/location_suggestions_cubit.dart';
 import '../constants/app_text_styles.dart';
 import '../models/loaded_state.dart';
 import 'app_text_field.dart';
-import 'back_button.dart';
-import 'button.dart';
+import 'nav_button.dart';
+import 'app_button.dart';
 
 class LocationDialog extends StatelessWidget {
   const LocationDialog({required this.previousWasNone, super.key});
 
   final bool previousWasNone;
-
-  static const _padding = EdgeInsets.symmetric(horizontal: 24, vertical: 16);
 
   static Future<String?> show(
     BuildContext context, [
@@ -49,13 +47,16 @@ class LocationDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 16),
-                    const Align(
-                      alignment: Alignment.topLeft,
-                      child: AppSmallButton(text: 'Close'),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: NavButton(content: NavButtonContent.close),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: AppTextField(
                         initialText: null,
                         hintText: 'Enter a city',
@@ -69,7 +70,7 @@ class LocationDialog extends StatelessWidget {
                       builder: (context, sugs) => switch (sugs) {
                         LoadedStateLoading() => const Center(
                             child: Padding(
-                              padding: EdgeInsets.all(24),
+                              padding: EdgeInsets.all(16),
                               child: CircularProgressIndicator(),
                             ),
                           ),
@@ -81,13 +82,10 @@ class LocationDialog extends StatelessWidget {
                                 AppButton(
                                   buttonStyle: AppButtonStyle.text,
                                   onTap: () => _onTap(context, option),
-                                  child: Padding(
-                                    padding: _padding,
-                                    child: Text(
-                                      option,
-                                      textAlign: TextAlign.start,
-                                      style: AppTextStyles.body,
-                                    ),
+                                  child: Text(
+                                    option,
+                                    textAlign: TextAlign.start,
+                                    style: AppTextStyles.body,
                                   ),
                                 ),
                             ],
@@ -99,13 +97,10 @@ class LocationDialog extends StatelessWidget {
                       AppButton(
                         buttonStyle: AppButtonStyle.text,
                         onTap: () => _onTap(context, null),
-                        child: Padding(
-                          padding: _padding,
-                          child: Text(
-                            'Set to none',
-                            textAlign: TextAlign.start,
-                            style: AppTextStyles.body,
-                          ),
+                        child: Text(
+                          'Set to none',
+                          textAlign: TextAlign.start,
+                          style: AppTextStyles.body,
                         ),
                       ),
                     const SizedBox(height: 16),

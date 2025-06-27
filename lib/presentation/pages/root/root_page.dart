@@ -6,6 +6,7 @@ import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/root/root_page_cubit.dart';
 import '../../blocs/pin_locations/pin_locations_cubit.dart';
 import '../../common/constants/app_colors.dart';
+import '../../common/widgets/app_button.dart';
 import '../events_list/events_list_page.dart';
 import '../map/map_page.dart';
 import '../profile/profile_page.dart';
@@ -14,7 +15,7 @@ import '../profile/profile_page.dart';
 class RootPage extends StatefulWidget implements AutoRouteWrapper {
   const RootPage({super.key});
 
-  static const navigationBarHeight = 144;
+  static const navigationBarHeight = 56;
 
   @override
   State<RootPage> createState() => _RootPageState();
@@ -39,83 +40,71 @@ class _RootPageState extends State<RootPage> {
   late final Widget _profilePage = const ProfilePage();
 
   late final _tabs = [
-    (true, Icons.location_pin, RootPageState.mapPage, 'map'),
-    (false, Icons.calendar_month, RootPageState.eventsListPage, 'events'),
-    (true, Icons.person, RootPageState.profilePage, 'profile'),
+    (Icons.location_pin, RootPageState.mapPage, 'map'),
+    (Icons.calendar_month, RootPageState.eventsListPage, 'events'),
+    (Icons.person, RootPageState.profilePage, 'profile'),
   ]
       .map(
-        (d) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: _NavButton(
-            small: d.$1,
-            icon: d.$2,
-            page: d.$3,
-            tabName: d.$4,
+        (d) => Expanded(
+          child: BlocBuilder<RootPageCubit, RootPageState>(
+            builder: (context, currentPage) => AppButton(
+              padding: EdgeInsets.zero,
+              buttonStyle: currentPage == d.$2
+                  ? AppButtonStyle.primary
+                  : AppButtonStyle.secondary,
+              onTap: () {
+                context.read<Reporter>().reportTabChanged(d.$3);
+                context.read<RootPageCubit>().navigateTo(d.$2);
+              },
+              child: Transform.scale(
+                scale: 4,
+                child: Icon(d.$1, color: Colors.white, size: 8),
+              ),
+            ),
           ),
         ),
       )
       .toList();
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: BlocBuilder<RootPageCubit, RootPageState>(
-                builder: (context, page) => switch (page) {
-                  RootPageState.eventsListPage => _eventsPage,
-                  RootPageState.mapPage => _mapPage,
-                  RootPageState.profilePage => _profilePage,
-                },
-              ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: _tabs,
-              ),
-            )
-          ],
-        ),
-      );
-}
-
-class _NavButton extends StatelessWidget {
-  const _NavButton({
-    required this.small,
-    required this.icon,
-    required this.page,
-    required this.tabName,
-  });
-
-  final bool small;
-  final IconData icon;
-  final RootPageState page;
-  final String tabName;
-
-  @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<RootPageCubit, RootPageState>(
-        builder: (context, currentPage) => AnimatedContainer(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.elliptical(16, 16)),
-            color: currentPage == page ? AppColors.primary : AppColors.darkGray,
-          ),
-          duration: const Duration(milliseconds: 300),
-          child: IconButton(
-            onPressed: () {
-              context.read<Reporter>().reportTabChanged(tabName);
-              context.read<RootPageCubit>().navigateTo(page);
-            },
-            icon: Icon(
-              icon,
-              color: Colors.white,
-              size: small ? 36 : 64,
+  Widget build(BuildContext context) => Stack(
+        children: [
+          Positioned.fill(
+            child: BlocBuilder<RootPageCubit, RootPageState>(
+              builder: (context, page) => switch (page) {
+                RootPageState.eventsListPage => _eventsPage,
+                RootPageState.mapPage => _mapPage,
+                RootPageState.profilePage => _profilePage,
+              },
             ),
           ),
-        ),
+          Positioned.fill(
+            top: null,
+            child: SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 8,
+                ),
+                child: SizedBox(
+                  height: 48,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: AppColors.darkGray,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Row(
+                        children: _tabs,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
       );
 }

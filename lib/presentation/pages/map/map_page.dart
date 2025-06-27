@@ -17,7 +17,7 @@ import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/pin_locations/pin_locations_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/models/loaded_state.dart';
-import '../../common/widgets/button.dart';
+import '../../common/widgets/app_button.dart';
 import '../../common/widgets/profile_pic.dart';
 import '../../router/app_router.gr.dart';
 
@@ -106,12 +106,12 @@ class _MapPageState extends State<MapPage> {
       };
 
   List<Marker> _markers(MapInfo info) {
-    final _list = <Marker>[];
+    final list = <Marker>[];
     for (final e in info.entries) {
       final locs = _locations(e.key, e.value.length, 2);
       for (final (i, p) in e.value.indexed) {
         final point = locs[i];
-        _list.add(
+        list.add(
           Marker(
             point: LatLng(point.lat, point.lng),
             child: switch (p) {
@@ -121,7 +121,6 @@ class _MapPageState extends State<MapPage> {
                   size: 48,
                 ),
               EventPin() => AppButton(
-                  borderRadius: BorderRadius.circular(48),
                   onTap: () => _onPinTap(p),
                   child: const Icon(Icons.event, color: Colors.white),
                 ),
@@ -133,7 +132,7 @@ class _MapPageState extends State<MapPage> {
         );
       }
     }
-    return _list;
+    return list;
   }
 
   @override
@@ -176,9 +175,9 @@ class _ClusterMarker extends StatelessWidget {
   final String markersLength;
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => DecoratedBox(
         decoration: BoxDecoration(
-          color: AppColors.lightPrimary,
+          color: AppColors.gray90,
           shape: BoxShape.circle,
           border: Border.all(
             color: AppColors.primary,

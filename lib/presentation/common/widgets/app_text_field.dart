@@ -67,12 +67,16 @@ class _AppTextFieldState extends State<AppTextField> {
         keyboardType: widget.inputType,
         decoration: InputDecoration(
           hintText: widget.hintText,
-          hintStyle: AppTextStyles.body.copyWith(color: AppColors.blueGray),
-          fillColor: AppColors.lightGray,
-          filled: true,
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(4),
+          hintStyle: AppTextStyles.body.copyWith(color: AppColors.gray50),
+          border: WidgetStateInputBorder.resolveWith(
+            (state) => OutlineInputBorder(
+              borderSide: BorderSide(
+                color: state.contains(WidgetState.focused)
+                    ? AppColors.darkGray
+                    : AppColors.gray80,
+              ),
+              borderRadius: BorderRadius.circular(24),
+            ),
           ),
           suffixIcon: Row(
             mainAxisSize: MainAxisSize.min,
@@ -84,7 +88,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   onPressed: _controller.clear,
                   icon: const Icon(
                     Icons.clear,
-                    color: AppColors.blueGray,
+                    color: AppColors.gray50,
                   ),
                 ),
               ),
@@ -95,7 +99,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   ),
                   icon: Icon(
                     _textObscured ? Icons.visibility : Icons.visibility_off,
-                    color: AppColors.blueGray,
+                    color: AppColors.gray50,
                   ),
                 )
             ],

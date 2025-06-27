@@ -14,7 +14,7 @@ import '../../../blocs/models/one_event_state.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../blocs/profile/profile_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
-import '../../../common/widgets/button.dart';
+import '../../../common/widgets/app_button.dart';
 import '../../../common/widgets/event_cover.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../../router/app_router.gr.dart';
@@ -69,7 +69,7 @@ class _EventViewingContentState extends State<EventViewingContent> {
           ),
         ].map(
           (w) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: w,
           ),
         ),
@@ -112,36 +112,33 @@ class _Cover extends StatelessWidget {
   Widget build(BuildContext context) => EventCover(
         imageBytes: event.coverBytes,
         title: event.title,
-        location: event.location,
+        // location: event.location,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: AppButton(
             buttonStyle: switch (event.userStatus) {
               UserNotAuthor(:final participant) when participant =>
-                AppButtonStyle.destructive,
+                AppButtonStyle.secondary,
               _ => AppButtonStyle.primary,
             },
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: BlocBuilder<OneEventCubit, OneEventState>(
-                buildWhen: (p, c) => p.userStatusLoading != c.userStatusLoading,
-                builder: (context, state) => state.userStatusLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      )
-                    : Text(
-                        switch (event.userStatus) {
-                          UserAuthor() => 'Edit',
-                          UserNotAuthor(:final participant) when participant =>
-                            'I won\'t come',
-                          UserNotAuthor() => 'Participate',
-                        },
-                        style: AppTextStyles.buttonText,
-                        textAlign: TextAlign.center,
+            child: BlocBuilder<OneEventCubit, OneEventState>(
+              buildWhen: (p, c) => p.userStatusLoading != c.userStatusLoading,
+              builder: (context, state) => state.userStatusLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
                       ),
-              ),
+                    )
+                  : Text(
+                      switch (event.userStatus) {
+                        UserAuthor() => 'Edit',
+                        UserNotAuthor(:final participant) when participant =>
+                          'I won\'t come',
+                        UserNotAuthor() => 'Participate',
+                      },
+                      style: AppTextStyles.actionSB,
+                      textAlign: TextAlign.center,
+                    ),
             ),
             onTap: () => switch (event.userStatus) {
               UserAuthor() => _edit(context),
@@ -164,7 +161,7 @@ class _Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) => TitledItem(
         title: name,
-        icon: icon,
+        // icon: icon,
         child: content.match(
           (text) => Text(
             text,
