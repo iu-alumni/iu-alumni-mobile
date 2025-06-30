@@ -64,7 +64,7 @@ class UsersRepositoryImpl extends UsersRepository {
   Future<Iterable<Profile>> getUsersByIds(Iterable<String> ids) async {
     final unknownIds = switch (_users) {
       final us? => ids.where((pid) => !us.containsKey(pid)).toList(),
-      _ => const <String>[],
+      _ => ids.toList(),
     };
     logger.d('Loading these unknown users by ID: $unknownIds');
     if (unknownIds.isNotEmpty) {

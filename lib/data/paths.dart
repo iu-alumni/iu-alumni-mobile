@@ -13,7 +13,9 @@ abstract class Paths {
 
   static String _auth(String? base) => '${base ?? _defaultBase}/auth';
   static String login(String? base) => '${_auth(base)}/login';
-  static String verify(String? base) => '${_auth(base)}/verify-graduate';
+  static String register(String? base) => '${_auth(base)}/register';
+  static String resend(String? base) => '${_auth(base)}/resend-verification';
+  static String verify(String? base) => '${_auth(base)}/verify';
 
   static String profile(String? base) => '${base ?? _defaultBase}/profile';
   static String myProfile(String? base) => '${profile(base)}/me';

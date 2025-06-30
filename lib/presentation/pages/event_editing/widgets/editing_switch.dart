@@ -12,7 +12,7 @@ class EditingSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TitledItem(
-        icon: Icons.video_call,
+        // icon: Icons.video_call,
         title: 'Online event',
         child: Align(
           alignment: Alignment.topLeft,

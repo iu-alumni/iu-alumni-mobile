@@ -6,8 +6,10 @@ import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
 import '../../blocs/models/profile_editing_state.dart';
 import '../../blocs/profile/profile_editing_cubit.dart';
+import '../../common/constants/app_text_styles.dart';
 import '../../common/models/loaded_state.dart';
-import '../profile/widgets/profile_page_title.dart';
+import '../../common/widgets/app_button.dart';
+import '../../common/widgets/app_scaffold.dart';
 import 'widgets/profile_editing_content.dart';
 
 @RoutePage()
@@ -36,40 +38,30 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
 
   @override
   Widget build(BuildContext context) =>
-      BlocListener<ProfileEditingCubit, ProfileEditingState>(
+      BlocConsumer<ProfileEditingCubit, ProfileEditingState>(
         listenWhen: (p, c) => p.saveState != c.saveState,
         listener: (context, state) => switch (state.saveState) {
           LoadedStateData() => context.maybePop(),
           _ => null,
         },
-        child: Scaffold(
-          body: SafeArea(
-            bottom: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const ProfilePageTitle(showBackButton: true),
-                Expanded(
-                  child: SafeArea(
-                    top: false,
-                    child:
-                        BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
-                      // Rebuild only on the model appearance
-                      buildWhen: (p, c) =>
-                          p.profile.isNone() != c.profile.isNone(),
-                      builder: (context, profile) => profile.profile.match(
-                        () => const Center(child: CircularProgressIndicator()),
-                        (p) => SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          child: ProfileEditingContent(profile: p),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+        buildWhen: (p, c) => p.profile.isNone() != c.profile.isNone(),
+        builder: (context, state) => AppScaffold(
+          title: 'Editing profile',
+          actions: [
+            AppButton(
+              is48Height: true,
+              onTap: context.read<ProfileEditingCubit>().save,
+              child: Text(
+                'Save',
+                style: AppTextStyles.actionSB.copyWith(color: Colors.white),
+              ),
             ),
-          ),
+          ],
+          body: state.profile.match(
+              () => const AppChildBody(
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+              (p) => ProfileEditingContent(profile: p).build(context)),
         ),
       );
 }

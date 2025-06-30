@@ -11,7 +11,7 @@ class EditingDesc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TitledItem(
-        icon: Icons.description_outlined,
+        // icon: Icons.description_outlined,
         title: 'Description',
         child: AppTextField(
           initialText: context

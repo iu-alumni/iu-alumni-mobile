@@ -1,9 +1,9 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SecretsManager {
-  late final String? webSalt;
-  late final String? appMetricaKey;
-  late final String? hostPath;
+  String? webSalt;
+  String? appMetricaKey;
+  String? hostPath;
 
   Future<void> init() async {
     await dotenv.load(fileName: '.env');

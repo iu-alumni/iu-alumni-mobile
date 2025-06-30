@@ -5,12 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../application/repositories/auth/auth_repository.dart';
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/auth/auth_cubit.dart';
-import '../../common/constants/app_text_styles.dart';
-import '../../common/models/loaded_state.dart';
+import '../../blocs/code_verification/code_verification_cubit.dart';
+import '../../blocs/registration/registration_cubit.dart';
+import '../../common/constants/app_colors.dart';
 import '../../common/widgets/alumni_logo.dart';
-import '../../common/widgets/app_text_field.dart';
-import '../../common/widgets/button.dart';
-import '../../router/app_router.gr.dart';
+import 'widgets/code_verification_scaffold.dart';
+import 'widgets/registration_scaffold.dart';
+import 'widgets/sign_in_scaffold.dart';
 
 @RoutePage()
 class AuthPage extends StatefulWidget implements AutoRouteWrapper {
@@ -20,149 +21,135 @@ class AuthPage extends StatefulWidget implements AutoRouteWrapper {
   State<AuthPage> createState() => _AuthPageState();
 
   @override
-  Widget wrappedRoute(BuildContext context) => BlocProvider(
-        create: (context) => AuthCubit(
-          context.read<AuthRepository>(),
-          context.read<Reporter>(),
-        ),
+  Widget wrappedRoute(BuildContext context) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => RegistrationCubit(
+              context.read<AuthRepository>(),
+              context.read<Reporter>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => AuthCubit(
+              context.read<AuthRepository>(),
+              context.read<Reporter>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => CodeVerificationCubit(
+              context.read<AuthRepository>(),
+            ),
+          ),
+        ],
         child: this,
       );
 }
 
 class _AuthPageState extends State<AuthPage> {
-  var _login = '';
+  static const _duration = Duration(milliseconds: 600);
+  static const _curve = Curves.easeOutExpo;
+
+  var _email = '';
   var _password = '';
 
-  void _auth() => context.read<AuthCubit>().authorize(_login, _password);
+  late final _registerWidget = ValueNotifier<Widget>(const Placeholder());
+  late final _codeVerificationWidget = CodeVerificationScaffold(back: _back);
 
-  void _register() => context.pushRoute(
-        VerificationRoute(
-          initialEmail: _login,
-          initialPassword: _password,
-        ),
-      );
+  late final _scrollController = ScrollController();
+
+  double _width(BuildContext context) => MediaQuery.of(context).size.width;
 
   @override
-  Widget build(BuildContext context) => BlocListener<AuthCubit, LoadedState>(
-        listener: (context, state) {
-          if (state case LoadedStateData()) {
-            context.router.replaceAll([const RootRoute()]);
-          }
-        },
-        child: Scaffold(
-          body: SafeArea(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.all(16),
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _back() {
+    final width = _width(context);
+    final newOffset = _scrollController.offset - width;
+    if (newOffset >= 0) {
+      _scrollController.animateTo(
+        newOffset - newOffset % width,
+        duration: _duration,
+        curve: _curve,
+      );
+    }
+  }
+
+  void _prepareWidgets(double newOffset, double width) {
+    final index = (newOffset / width).toInt();
+    switch (index) {
+      case 1:
+        _registerWidget.value = RegistrationScaffold(
+          key: ObjectKey((_email, _password)),
+          back: _back,
+          toVerification: _forward,
+          email: _email,
+          password: _password,
+        );
+        break;
+    }
+  }
+
+  void _forward() {
+    final width = _width(context);
+    final rawOffset = _scrollController.offset + width;
+    final newOffset = rawOffset - rawOffset % width;
+
+    _prepareWidgets(newOffset, width);
+
+    _scrollController.animateTo(newOffset, duration: _duration, curve: _curve);
+  }
+
+  @override
+  Widget build(BuildContext context) => Stack(
+        children: [
+          const Positioned.fill(child: ColoredBox(color: AppColors.primary)),
+          Positioned.fill(
+            child: SafeArea(
+              bottom: false,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(height: 80),
-                  const AlumniLogo(),
-                  const SizedBox(height: 80),
-                  Text('Sing In', style: AppTextStyles.h3),
-                  const SizedBox(height: 16),
-                  BlocBuilder<AuthCubit, LoadedState>(
-                    buildWhen: (p, c) =>
-                        p is LoadedStateError != c is LoadedStateError,
-                    builder: (context, state) => AppTextField(
-                      initialText: null,
-                      onChange: (text) => _login = text,
-                      hintText: 'Innopolis Email',
-                      inputType: TextInputType.emailAddress,
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 64),
+                    child: AlumniLogo(),
                   ),
-                  const SizedBox(height: 8),
-                  AppTextField(
-                    initialText: null,
-                    onChange: (text) => _password = text,
-                    hintText: 'Password',
-                    inputType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    maxLines: 1,
-                  ),
-                  const _ErrorText(),
-                  const SizedBox(height: 16),
-                  AppButton(
-                    onTap: _auth,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: BlocBuilder<AuthCubit, LoadedState>(
-                        builder: (context, state) {
-                          if (state case LoadedStateLoading()) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(24),
+                      ),
+                      child: SingleChildScrollView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for (final w in [
+                              SignInScaffold(
+                                sinkEmail: (a) => _email = a,
+                                sinkPassword: (a) => _password = a,
+                                email: () => _email,
+                                password: () => _password,
+                                forward: _forward,
                               ),
-                            );
-                          }
-                          return Text(
-                            'Sign in',
-                            style: AppTextStyles.buttonText,
-                            textAlign: TextAlign.center,
-                          );
-                        },
+                              ValueListenableBuilder(
+                                valueListenable: _registerWidget,
+                                builder: (context, child, _) => child,
+                              ),
+                              _codeVerificationWidget,
+                            ])
+                              SizedBox(width: _width(context), child: w),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  AppButton(
-                    onTap: _register,
-                    buttonStyle: AppButtonStyle.secondary,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text(
-                        'Register',
-                        style: AppTextStyles.buttonText,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  // const SizedBox(height: 8),
-                  // AppButton(
-                  //   onTap: _auth,
-                  //   buttonStyle: AppButtonStyle.text,
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(24),
-                  //     child: Text(
-                  //       'Forgot password?',
-                  //       style: AppTextStyles.buttonText.copyWith(
-                  //         color: AppColors.darkGray,
-                  //       ),
-                  //       textAlign: TextAlign.center,
-                  //     ),
-                  //   ),
-                  // ),
+                  )
                 ],
               ),
             ),
           ),
-        ),
-      );
-}
-
-class _ErrorText extends StatelessWidget {
-  const _ErrorText();
-
-  @override
-  Widget build(BuildContext context) => BlocBuilder<AuthCubit, LoadedState>(
-        builder: (context, state) => AnimatedSize(
-          duration: const Duration(milliseconds: 250),
-          child: switch (state) {
-            LoadedStateError(:final error) => Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 8),
-                  Text(
-                    error,
-                    style: AppTextStyles.caption,
-                  )
-                ],
-              ),
-            _ => const SizedBox(),
-          },
-        ),
+        ],
       );
 }

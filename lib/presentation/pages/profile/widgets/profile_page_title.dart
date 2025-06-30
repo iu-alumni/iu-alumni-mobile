@@ -6,8 +6,7 @@ import '../../../../application/repositories/reporter/reporter.dart';
 import '../../../blocs/models/profile_state.dart';
 import '../../../blocs/profile/profile_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
-import '../../../common/widgets/back_button.dart';
-import '../../../common/widgets/button.dart';
+import '../../../common/widgets/app_button.dart';
 import '../../../router/app_router.gr.dart';
 
 class ProfilePageTitle extends StatelessWidget {
@@ -46,7 +45,7 @@ class ProfilePageTitle extends StatelessWidget {
                     alignment: Alignment.topLeft,
                     child: Transform.translate(
                       offset: const Offset(-16, 0),
-                      child: const AppSmallButton(),
+                      child: const BackButton(),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -56,14 +55,13 @@ class ProfilePageTitle extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'Profile',
-                        style: AppTextStyles.h2,
+                        style: AppTextStyles.largeTitle,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     if (state.myOwn) ...[
                       AppButton(
-                        borderRadius: BorderRadius.circular(24),
                         onTap: () => _editTap(context),
                         child: const Padding(
                           padding: EdgeInsets.all(12),
@@ -75,8 +73,7 @@ class ProfilePageTitle extends StatelessWidget {
                       ),
                       const SizedBox(width: 16),
                       AppButton(
-                        buttonStyle: AppButtonStyle.destructive,
-                        borderRadius: BorderRadius.circular(24),
+                        buttonStyle: AppButtonStyle.secondary,
                         onTap: () => _logout(context),
                         child: const Padding(
                           padding: EdgeInsets.all(12),

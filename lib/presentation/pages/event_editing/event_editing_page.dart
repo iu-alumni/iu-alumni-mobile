@@ -13,7 +13,8 @@ import '../../blocs/profile/profile_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/models/loaded_state.dart';
-import '../../common/widgets/button.dart';
+import '../../common/widgets/app_button.dart';
+import '../../common/widgets/app_loader.dart';
 import 'widgets/event_editing_content.dart';
 
 @RoutePage()
@@ -100,27 +101,24 @@ class _EventEditingPageState extends State<EventEditingPage> {
                       Expanded(
                         child: AppButton(
                           onTap: _oneEventCubit.save,
-                          child: Padding(
-                            padding: const EdgeInsets.all(24),
-                            child: BlocBuilder<OneEventCubit, OneEventState>(
-                              buildWhen: (p, c) => p.saveState != c.saveState,
-                              builder: (context, state) =>
-                                  switch (state.saveState) {
-                                LoadedStateLoading() => const Center(
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
+                          child: BlocBuilder<OneEventCubit, OneEventState>(
+                            buildWhen: (p, c) => p.saveState != c.saveState,
+                            builder: (context, state) =>
+                                switch (state.saveState) {
+                              LoadedStateLoading() => const AppLoader(
+                                  color: Colors.white,
+                                ),
+                              _ => Text(
+                                  widget.eventId.match(
+                                    () => 'Post event',
+                                    (_) => 'Done',
                                   ),
-                                _ => Text(
-                                    widget.eventId.match(
-                                      () => 'Post event',
-                                      (_) => 'Done',
-                                    ),
-                                    style: AppTextStyles.buttonText,
-                                    textAlign: TextAlign.center,
+                                  style: AppTextStyles.actionSB.copyWith(
+                                    color: Colors.white,
                                   ),
-                              },
-                            ),
+                                  textAlign: TextAlign.center,
+                                ),
+                            },
                           ),
                         ),
                       ),
@@ -131,9 +129,9 @@ class _EventEditingPageState extends State<EventEditingPage> {
                           AppButton(
                             onTap: _delete,
                             buttonStyle: AppButtonStyle.text,
-                            child: const Padding(
-                              padding: EdgeInsets.all(24),
-                              child: Icon(Icons.delete, color: AppColors.error),
+                            child: const Icon(
+                              Icons.delete,
+                              color: AppColors.error,
                             ),
                           ),
                         ],

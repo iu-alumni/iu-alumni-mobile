@@ -7,6 +7,7 @@ import '../../../blocs/models/one_event_state.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
+import '../../../common/widgets/app_button.dart';
 import '../../../common/widgets/titled_item.dart';
 
 class EditingDate extends StatefulWidget {
@@ -34,28 +35,19 @@ class _EditingDateState extends State<EditingDate> {
 
   @override
   Widget build(BuildContext context) => TitledItem(
-        icon: Icons.watch_later_outlined,
+        // icon: Icons.watch_later_outlined,
         title: 'When',
-        child: Material(
-          color: AppColors.lightGray,
-          borderRadius: BorderRadius.circular(4),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 16,
-            ),
-            child: InkWell(
-              onTap: () => _selectDate(context),
-              child: BlocBuilder<OneEventCubit, OneEventState>(
-                builder: (context, state) => Text(
-                  state.event
-                      .map((e) => _formatter.format(e.occurringAt))
-                      .match(() => '', identity),
-                  style: AppTextStyles.body,
-                ),
-              ),
+        child: AppButton(
+          buttonStyle: AppButtonStyle.gray,
+          child: BlocBuilder<OneEventCubit, OneEventState>(
+            builder: (context, state) => Text(
+              state.event
+                  .map((e) => _formatter.format(e.occurringAt))
+                  .match(() => '', identity),
+              style: AppTextStyles.body,
             ),
           ),
+          onTap: () => _selectDate(context),
         ),
       );
 }

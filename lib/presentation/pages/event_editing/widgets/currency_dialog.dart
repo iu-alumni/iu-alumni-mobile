@@ -13,6 +13,7 @@ class CurrencyDialog extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Center(
           child: Material(
+            borderRadius: BorderRadius.circular(24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,7 +40,7 @@ class _Currency extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Text(
             currency.format,
-            style: AppTextStyles.body,
+            style: AppTextStyles.actionM,
             textAlign: TextAlign.center,
           ),
         ),

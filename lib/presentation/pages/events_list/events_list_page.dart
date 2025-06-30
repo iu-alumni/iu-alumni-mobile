@@ -5,9 +5,10 @@ import 'package:fpdart/fpdart.dart' hide State;
 
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/events_list/events_list_cubit.dart';
-import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
-import '../../common/widgets/button.dart';
+import '../../common/widgets/app_button.dart';
+import '../../common/widgets/app_loader.dart';
+import '../../common/widgets/app_scaffold.dart';
 import '../../router/app_router.gr.dart';
 import 'widgets/events_list.dart';
 
@@ -26,79 +27,38 @@ class _EventsListPageState extends State<EventsListPage> {
   }
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-        bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const _Header(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Text('Soon', style: AppTextStyles.h3),
+  Widget build(BuildContext context) => AppScaffold(
+        title: 'Events',
+        leadingButton: null,
+        actions: [
+          AppButton(
+            is48Height: true,
+            child: Text(
+              'Create',
+              style: AppTextStyles.actionSB.copyWith(color: Colors.white),
             ),
-            Expanded(
-              child: BlocBuilder<EventsListCubit, EventsListState>(
-                builder: (context, eventsState) => switch (eventsState) {
-                  EventsListData d when d.data.isEmpty => const _CenterText(
-                      text: 'No Events',
-                    ),
-                  EventsListData d => EventsList(events: d.data),
-                  EventsListError e => _CenterText(text: e.error),
-                  _ => const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                      ),
-                    )
-                },
-              ),
-            ),
-          ],
-        ),
-      );
-}
-
-class _Header extends StatelessWidget {
-  const _Header();
-
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24)
-            .copyWith(top: 40, bottom: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Events', style: AppTextStyles.h2),
-            AppButton(
-              onTap: () {
-                context
-                    .read<Reporter>()
-                    .reportCreateEventTap(AppLocation.eventsTab);
-                context.pushRoute(EventEditingRoute(eventId: const None()));
-              },
-              borderRadius: BorderRadius.circular(24),
-              child: const Padding(
-                padding: EdgeInsets.all(12),
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
+            onTap: () {
+              context
+                  .read<Reporter>()
+                  .reportCreateEventTap(AppLocation.eventsTab);
+              context.pushRoute(EventEditingRoute(eventId: const None()));
+            },
+          ),
+        ],
+        body: AppChildBody(
+          padding: EdgeInsets.zero,
+          child: BlocBuilder<EventsListCubit, EventsListState>(
+            builder: (context, eventsState) => switch (eventsState) {
+              EventsListData d when d.data.isEmpty => Center(
+                  child: Text('No events', style: AppTextStyles.caption),
                 ),
-              ),
-            )
-          ],
-        ),
-      );
-}
-
-class _CenterText extends StatelessWidget {
-  const _CenterText({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => Center(
-        child: Text(
-          text,
-          style: AppTextStyles.h3,
+              EventsListData d => EventsList(events: d.data),
+              EventsListError e => Center(
+                  child: Text(e.error, style: AppTextStyles.caption),
+                ),
+              _ => const Center(child: AppLoader(inCard: true)),
+            },
+          ),
         ),
       );
 }

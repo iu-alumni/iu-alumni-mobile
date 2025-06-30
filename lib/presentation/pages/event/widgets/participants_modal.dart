@@ -22,40 +22,47 @@ class ParticipantsModal extends StatelessWidget {
           topRight: Radius.circular(24),
         ),
         clipBehavior: Clip.antiAlias,
-        child: SingleChildScrollView(
-          child: BlocBuilder<OneEventCubit, OneEventState>(
-            buildWhen: (p, c) => p.participants != c.participants,
-            builder: (context, state) => switch (state.participants) {
-              LoadedStateData(:final data) when data.isEmpty => Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    'An error occurred when loading participants',
-                    style: AppTextStyles.caption,
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-              LoadedStateData(:final data) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Text('Participants', style: AppTextStyles.h4),
-                    ),
-                    const SizedBox(height: 8),
-                    for (final p in data) _ParticipantItem(p: p),
-                    const SizedBox(height: 24),
-                  ],
-                ),
-              _ => const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(24),
-                    child: CircularProgressIndicator(
-                      color: AppColors.blueGray,
+        child: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: BlocBuilder<OneEventCubit, OneEventState>(
+              buildWhen: (p, c) => p.participants != c.participants,
+              builder: (context, state) => switch (state.participants) {
+                LoadedStateData(:final data) when data.isEmpty => Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Text(
+                      'An error occurred when loading participants',
+                      style: AppTextStyles.caption,
+                      textAlign: TextAlign.left,
                     ),
                   ),
-                )
-            },
+                LoadedStateData(:final data) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 24),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'Participants',
+                          style: AppTextStyles.subtitle,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      for (final p in data) _ParticipantItem(p: p),
+                      const SizedBox(height: 24),
+                    ],
+                  ),
+                _ => const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(24),
+                      child: CircularProgressIndicator(
+                        color: AppColors.gray50,
+                      ),
+                    ),
+                  )
+              },
+            ),
           ),
         ),
       );
@@ -73,7 +80,7 @@ class _ParticipantItem extends StatelessWidget {
   Widget build(BuildContext context) => InkWell(
         onTap: () => _onTap(context),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Row(
             children: [
               ProfilePic(profile: p, size: 48),
@@ -84,16 +91,14 @@ class _ParticipantItem extends StatelessWidget {
                   children: [
                     Text(
                       '${p.firstName} ${p.lastName}',
-                      style: AppTextStyles.buttonText.copyWith(
-                        color: AppColors.darkGray,
-                      ),
+                      style: AppTextStyles.actionSB,
                       textAlign: TextAlign.start,
                     ),
                     if (p.location case final location?)
                       Text(
                         location,
-                        style: AppTextStyles.h6.copyWith(
-                          color: AppColors.darkGray.withValues(alpha: 0.5),
+                        style: AppTextStyles.caption.copyWith(
+                          color: AppColors.gray50,
                         ),
                         textAlign: TextAlign.start,
                       ),
