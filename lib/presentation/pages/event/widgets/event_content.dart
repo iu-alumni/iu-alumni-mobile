@@ -15,8 +15,8 @@ import '../../../blocs/one_event/one_event_cubit.dart';
 import '../../../blocs/profile/profile_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/app_button.dart';
+import '../../../common/widgets/app_tag.dart';
 import '../../../common/widgets/event_cover.dart';
-import '../../../common/widgets/titled_item.dart';
 import '../../../router/app_router.gr.dart';
 import 'participants_card.dart';
 
@@ -36,46 +36,64 @@ class _EventViewingContentState extends State<EventViewingContent> {
       '${cost.number.format} ${cost.currency.format}';
 
   @override
-  Widget build(BuildContext context) {
-    final location = widget.event.location;
-    final desc = widget.event.description;
-    return Column(
-      children: [
-        _Cover(event: widget.event),
-        const SizedBox(height: 16),
-        ...[
-          const ParticipantsCard(),
-          if (desc != null && desc.isNotEmpty)
-            _Item(
-              icon: Icons.description_outlined,
-              name: 'Description',
-              content: Left(widget.event.description ?? ''),
+  Widget build(BuildContext context) => Column(
+        children: [
+          _Cover(event: widget.event),
+          const SizedBox(height: 16),
+          ...[
+            const ParticipantsCard(),
+            const SizedBox(height: 16),
+            if (widget.event.description case final text?
+                when text.isNotEmpty) ...[
+              Text(text, style: AppTextStyles.body, textAlign: TextAlign.start),
+              const SizedBox(height: 16),
+            ],
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                AppTag(
+                  icon: Icons.date_range,
+                  text: _formatter.format(widget.event.occurringAt),
+                ),
+                if (widget.event.location case final loc? when loc.isNotEmpty)
+                  AppTag(icon: Icons.pin_drop, text: loc),
+                AppTag(
+                  icon: Icons.attach_money,
+                  text: _costToStr(widget.event.cost),
+                ),
+              ],
             ),
-          if (location != null && location.isNotEmpty)
-            _Item(
-              icon: Icons.location_pin,
-              name: 'Location',
-              content: Left(location),
+            // if (desc != null && desc.isNotEmpty)
+            //   _Item(
+            //     icon: Icons.description_outlined,
+            //     name: 'Description',
+            //     content: Left(widget.event.description ?? ''),
+            //   ),
+            // if (location != null && location.isNotEmpty)
+            //   _Item(
+            //     icon: Icons.location_pin,
+            //     name: 'Location',
+            //     content: Left(location),
+            //   ),
+            // _Item(
+            //   icon: Icons.attach_money_outlined,
+            //   name: 'Cost',
+            //   content: Left(_costToStr(widget.event.cost)),
+            // ),
+            // _Item(
+            //   icon: Icons.watch_later_outlined,
+            //   name: 'When',
+            //   content: Left(_formatter.format(widget.event.occurringAt)),
+            // ),
+          ].map(
+            (w) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: w,
             ),
-          _Item(
-            icon: Icons.attach_money_outlined,
-            name: 'Cost',
-            content: Left(_costToStr(widget.event.cost)),
           ),
-          _Item(
-            icon: Icons.watch_later_outlined,
-            name: 'When',
-            content: Left(_formatter.format(widget.event.occurringAt)),
-          ),
-        ].map(
-          (w) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: w,
-          ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }
 
 class _Cover extends StatelessWidget {
@@ -147,28 +165,6 @@ class _Cover extends StatelessWidget {
               UserNotAuthor() => _participate(context),
             },
           ),
-        ),
-      );
-}
-
-class _Item extends StatelessWidget {
-  const _Item({required this.name, required this.content, required this.icon});
-
-  final String name;
-  final Either<String, Widget> content;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) => TitledItem(
-        title: name,
-        // icon: icon,
-        child: content.match(
-          (text) => Text(
-            text,
-            style: AppTextStyles.body,
-            textAlign: TextAlign.start,
-          ),
-          identity,
         ),
       );
 }

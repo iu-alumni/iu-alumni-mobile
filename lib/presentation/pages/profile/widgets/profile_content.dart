@@ -16,11 +16,11 @@ import '../../../common/models/loaded_state.dart';
 import '../../../common/widgets/app_button.dart';
 import '../../../common/widgets/app_loader.dart';
 import '../../../common/widgets/app_scaffold.dart';
+import '../../../common/widgets/app_tag.dart';
 import '../../../common/widgets/event_card.dart';
 import '../../../common/widgets/profile_pic.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
-import 'event_card.dart';
 import 'open_bot_card.dart';
 
 const _eventCardWidth = 200.0;
@@ -73,40 +73,25 @@ class ProfileContent {
           const SizedBox(height: 8),
           Padding(
             padding: _horPadding,
-            child: Text(
-              profile.graduationYear,
-              style: AppTextStyles.body,
-              textAlign: TextAlign.center,
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                if (profile.location case final loc?)
+                  AppTag(icon: Icons.pin_drop, text: loc),
+                AppTag(icon: Icons.school, text: profile.graduationYear),
+              ],
             ),
           ),
           ...[
             if (profile.biography case final bio?)
-              Padding(
-                padding: _horPadding,
-                child: TitledItem(
-                  title: 'Biography',
-                  child: Text(
-                    bio,
-                    style: AppTextStyles.body,
-                  ),
-                ),
-              ),
-            if (profile.location case final location?)
-              Padding(
-                padding: _horPadding,
-                child: TitledItem(
-                  title: 'Location',
-                  child: Text(
-                    location,
-                    style: AppTextStyles.body,
-                  ),
-                ),
-              ),
+              Text(bio, style: AppTextStyles.body),
             if (profile.telegramAlias case final telegram?)
               Padding(
                 padding: _horPadding,
                 child: TitledItem(
-                  title: 'Telegram',
+                  title: 'Telegram alias',
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

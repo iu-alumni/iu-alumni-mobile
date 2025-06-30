@@ -75,32 +75,37 @@ class AppScaffold extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          if (title case final t?)
-                            Padding(
-                              padding: _padding.copyWith(bottom: 24),
-                              child: Text(
-                                t,
-                                style: AppTextStyles.largeTitle,
-                              ),
+                          if (title case final t?) ...[
+                            Text(
+                              t,
+                              style: AppTextStyles.largeTitle,
                             ),
+                            const SizedBox(height: 24),
+                          ],
                           ...children,
                         ],
                       ),
                     ),
                   AppChildBody(:final child, :final padding) => Padding(
-                      padding: padding.copyWith(top: 16),
+                      padding: const EdgeInsets.only(top: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          if (title case final t?)
+                          if (title case final t?) ...[
                             Padding(
-                              padding: _padding.copyWith(bottom: 24),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               child: Text(
                                 t,
                                 style: AppTextStyles.largeTitle,
                               ),
                             ),
-                          Expanded(child: child),
+                            const SizedBox(height: 24),
+                          ],
+                          Expanded(
+                            child: Padding(padding: padding, child: child),
+                          ),
                         ],
                       ),
                     ),

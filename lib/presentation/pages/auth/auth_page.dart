@@ -5,9 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../application/repositories/auth/auth_repository.dart';
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/auth/auth_cubit.dart';
-import '../../blocs/verification/verification_cubit.dart';
+import '../../blocs/code_verification/code_verification_cubit.dart';
+import '../../blocs/registration/registration_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/widgets/alumni_logo.dart';
+import 'widgets/code_verification_scaffold.dart';
 import 'widgets/registration_scaffold.dart';
 import 'widgets/sign_in_scaffold.dart';
 
@@ -22,7 +24,7 @@ class AuthPage extends StatefulWidget implements AutoRouteWrapper {
   Widget wrappedRoute(BuildContext context) => MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => VerificationCubit(
+            create: (context) => RegistrationCubit(
               context.read<AuthRepository>(),
               context.read<Reporter>(),
             ),
@@ -32,7 +34,12 @@ class AuthPage extends StatefulWidget implements AutoRouteWrapper {
               context.read<AuthRepository>(),
               context.read<Reporter>(),
             ),
-          )
+          ),
+          BlocProvider(
+            create: (context) => CodeVerificationCubit(
+              context.read<AuthRepository>(),
+            ),
+          ),
         ],
         child: this,
       );
@@ -46,6 +53,7 @@ class _AuthPageState extends State<AuthPage> {
   var _password = '';
 
   late final _registerWidget = ValueNotifier<Widget>(const Placeholder());
+  late final _codeVerificationWidget = CodeVerificationScaffold(back: _back);
 
   late final _scrollController = ScrollController();
 
@@ -57,22 +65,41 @@ class _AuthPageState extends State<AuthPage> {
     super.dispose();
   }
 
-  void _toggle() {
-    if (_scrollController.offset != 0) {
-      _scrollController.animateTo(0, duration: _duration, curve: _curve);
-      return;
+  void _back() {
+    final width = _width(context);
+    final newOffset = _scrollController.offset - width;
+    if (newOffset >= 0) {
+      _scrollController.animateTo(
+        newOffset - newOffset % width,
+        duration: _duration,
+        curve: _curve,
+      );
     }
-    _registerWidget.value = RegistrationScaffold(
-      key: ObjectKey((_email, _password)),
-      back: _toggle,
-      email: _email,
-      password: _password,
-    );
-    _scrollController.animateTo(
-      _width(context),
-      duration: _duration,
-      curve: _curve,
-    );
+  }
+
+  void _prepareWidgets(double newOffset, double width) {
+    final index = (newOffset / width).toInt();
+    switch (index) {
+      case 1:
+        _registerWidget.value = RegistrationScaffold(
+          key: ObjectKey((_email, _password)),
+          back: _back,
+          toVerification: _forward,
+          email: _email,
+          password: _password,
+        );
+        break;
+    }
+  }
+
+  void _forward() {
+    final width = _width(context);
+    final rawOffset = _scrollController.offset + width;
+    final newOffset = rawOffset - rawOffset % width;
+
+    _prepareWidgets(newOffset, width);
+
+    _scrollController.animateTo(newOffset, duration: _duration, curve: _curve);
   }
 
   @override
@@ -105,12 +132,13 @@ class _AuthPageState extends State<AuthPage> {
                                 sinkPassword: (a) => _password = a,
                                 email: () => _email,
                                 password: () => _password,
-                                register: _toggle,
+                                forward: _forward,
                               ),
                               ValueListenableBuilder(
                                 valueListenable: _registerWidget,
                                 builder: (context, child, _) => child,
                               ),
+                              _codeVerificationWidget,
                             ])
                               SizedBox(width: _width(context), child: w),
                           ],

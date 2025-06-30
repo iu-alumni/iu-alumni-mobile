@@ -17,7 +17,7 @@ class SignInScaffold extends StatefulWidget {
     required this.sinkPassword,
     required this.email,
     required this.password,
-    required this.register,
+    required this.forward,
     super.key,
   });
 
@@ -25,7 +25,7 @@ class SignInScaffold extends StatefulWidget {
   final void Function(String) sinkPassword;
   final String Function() email;
   final String Function() password;
-  final void Function() register;
+  final void Function() forward;
 
   @override
   State<SignInScaffold> createState() => _SignInScaffoldState();
@@ -36,14 +36,6 @@ class _SignInScaffoldState extends State<SignInScaffold> {
         widget.email(),
         widget.password(),
       );
-
-  // void _register() => widget.register();
-  // context.pushRoute(
-  //       VerificationRoute(
-  //         initialEmail: _login,
-  //         initialPassword: _password,
-  //       ),
-  //     );
 
   @override
   Widget build(BuildContext context) => BlocListener<AuthCubit, LoadedState>(
@@ -97,7 +89,7 @@ class _SignInScaffoldState extends State<SignInScaffold> {
             ),
             const SizedBox(height: 8),
             AppButton(
-              onTap: widget.register,
+              onTap: widget.forward,
               buttonStyle: AppButtonStyle.secondary,
               child: Text(
                 'Register',

@@ -38,6 +38,7 @@ class LocationDialog extends StatelessWidget {
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           body: Material(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: SafeArea(
