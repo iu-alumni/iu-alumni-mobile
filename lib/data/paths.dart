@@ -1,5 +1,5 @@
 abstract class Paths {
-  static const _defaultBase = 'https://iu-alumni-backend.onrender.com';
+  static const _defaultBase = 'http://194.164.235.177';
 
   static String events(String? base) => '${base ?? _defaultBase}/events/';
   static String eventsOwner(String? base) => '${events(base)}owner';

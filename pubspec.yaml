@@ -61,7 +61,7 @@ flutter:
     - assets/icons/map/
     - assets/dbs/
     - assets/fonts/
-    - .env
+    # - .env
 
   fonts:
     - family: Montserrat
