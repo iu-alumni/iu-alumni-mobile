@@ -1,4 +1,3 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,26 +16,32 @@ import 'package:ui_alumni_mobile/presentation/router/app_router.gr.dart';
 
 @RoutePage()
 class CityDataPage extends StatelessWidget {
-  const CityDataPage({required this.city, required this.cityData, super.key});
+  const CityDataPage({required this.cityData, required this.coords, super.key});
 
-  final String city;
   final CityData cityData;
+  final NamedCoordinates coords;
 
   @override
   Widget build(BuildContext context) => AppScaffold(
-    title: city,
+    title: coords.city,
     actions: [
       AppButton(
         child: Text(
           'Create an event',
           style: AppTextStyles.actionSB.copyWith(color: Colors.white),
         ),
-        onTap: () {},
+        onTap: () => context.replaceRoute(
+          EventEditingRoute(
+            eventId: const None(),
+            location: Option.of(coords.fullLocation),
+          ),
+        ),
       ),
     ],
     body: AppChildBody(
       padding: EdgeInsets.zero,
       child: Column(
+        spacing: 8,
         children: [
           if (cityData.profiles.isNotEmpty)
             Padding(

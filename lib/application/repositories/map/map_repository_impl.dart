@@ -74,7 +74,11 @@ class MapRepositoryImpl extends MapRepository {
         );
         continue;
       }
-      final namedCoords = NamedCoordinates(coord: coords, name: entry.key.city);
+      final namedCoords = NamedCoordinates(
+        coord: coords,
+        city: entry.key.city,
+        country: entry.key.country,
+      );
       _map[namedCoords] = entry.value;
     }
     return _map;

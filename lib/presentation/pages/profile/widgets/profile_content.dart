@@ -7,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../application/models/event.dart';
 import '../../../../application/models/profile.dart';
 import '../../../../application/repositories/reporter/reporter.dart';
-import '../../../../util/gap.dart';
 import '../../../blocs/models/profile_state.dart';
 import '../../../blocs/profile/profile_cubit.dart';
 import '../../../common/constants/app_colors.dart';
@@ -145,13 +144,15 @@ class _ParticipatedEvents extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             child: Row(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 for (final e in data)
                   SizedBox(
                     width: _eventCardWidth,
                     child: EventCard(event: e),
                   ),
-              ].gap(const SizedBox(width: 8)),
+              ],
             ),
           ),
         _ => const Center(
@@ -185,13 +186,15 @@ class _OwnedEvents extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             child: Row(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 for (final e in data)
                   SizedBox(
                     width: _eventCardWidth,
                     child: EventCard(event: e),
                   ),
-              ].gap(const SizedBox(width: 8)),
+              ],
             ),
           ),
         _ => const Padding(

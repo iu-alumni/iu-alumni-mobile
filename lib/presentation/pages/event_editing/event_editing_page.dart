@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 
@@ -19,9 +20,14 @@ import 'widgets/event_editing_content.dart';
 
 @RoutePage()
 class EventEditingPage extends StatefulWidget implements AutoRouteWrapper {
-  const EventEditingPage({required this.eventId, super.key});
+  const EventEditingPage({
+    required this.eventId,
+    this.location = const None(),
+    super.key,
+  });
 
   final Option<String> eventId;
+  final Option<String> location;
 
   @override
   State<EventEditingPage> createState() => _EventEditingPageState();
@@ -44,6 +50,12 @@ class _EventEditingPageState extends State<EventEditingPage> {
   void initState() {
     _oneEventCubit = context.read<OneEventCubit>();
     widget.eventId.match(_oneEventCubit.createEvent, _oneEventCubit.loadEvent);
+    // Apply the initial location instantly if it was provided
+    widget.location.map(
+      (loc) => SchedulerBinding.instance.addPostFrameCallback(
+        (_) => _oneEventCubit.modify((m) => m.copyWith(location: loc)),
+      ),
+    );
     super.initState();
   }
 

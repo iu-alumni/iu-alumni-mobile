@@ -61,13 +61,14 @@ class _EventCardState extends State<EventCard> {
                 spacing: 6,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (widget.event.title case final title?) ...[
+                  if (widget.event.title case final title?
+                      when title.isNotEmpty) ...[
                     Text(
                       title,
                       style: AppTextStyles.subtitle,
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.ellipsis,
-                      // maxLines: 1,
+                      maxLines: 2,
                     ),
                     // Additional 6px margin
                     const SizedBox(height: 6),
@@ -86,11 +87,13 @@ class _EventCardState extends State<EventCard> {
                             color: Colors.black38,
                           ),
                           overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                         ),
                       ),
                     ],
                   ),
-                  if (widget.event.location case final location?)
+                  if (widget.event.location case final location?
+                      when location.isNotEmpty)
                     Row(
                       children: [
                         const Icon(Icons.location_pin, color: Colors.black38),
@@ -102,6 +105,7 @@ class _EventCardState extends State<EventCard> {
                               color: Colors.black38,
                             ),
                             overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                           ),
                         ),
                       ],

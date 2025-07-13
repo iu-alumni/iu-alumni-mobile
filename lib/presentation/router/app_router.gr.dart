@@ -12,7 +12,7 @@
 import 'package:auto_route/auto_route.dart' as _i13;
 import 'package:flutter/cupertino.dart' as _i15;
 import 'package:flutter/material.dart' as _i16;
-import 'package:fpdart/fpdart.dart' as _i9;
+import 'package:fpdart/fpdart.dart' as _i6;
 import 'package:ui_alumni_mobile/application/models/profile.dart' as _i17;
 import 'package:ui_alumni_mobile/application/repositories/map/map_repository.dart'
     as _i14;
@@ -28,13 +28,13 @@ import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/sign_in_sub_pa
 import 'package:ui_alumni_mobile/presentation/pages/city_data/city_data.dart'
     as _i3;
 import 'package:ui_alumni_mobile/presentation/pages/event/event_page.dart'
-    as _i6;
+    as _i7;
 import 'package:ui_alumni_mobile/presentation/pages/event_editing/event_editing_page.dart'
     as _i5;
 import 'package:ui_alumni_mobile/presentation/pages/profile/profile_page.dart'
-    as _i8;
+    as _i9;
 import 'package:ui_alumni_mobile/presentation/pages/profile_editing/profile_editing_page.dart'
-    as _i7;
+    as _i8;
 import 'package:ui_alumni_mobile/presentation/pages/root/root_page.dart'
     as _i11;
 
@@ -74,13 +74,13 @@ class AuthRoute extends _i13.PageRouteInfo<void> {
 /// [_i3.CityDataPage]
 class CityDataRoute extends _i13.PageRouteInfo<CityDataRouteArgs> {
   CityDataRoute({
-    required String city,
     required _i14.CityData cityData,
+    required _i14.NamedCoordinates coords,
     _i15.Key? key,
     List<_i13.PageRouteInfo>? children,
   }) : super(
          CityDataRoute.name,
-         args: CityDataRouteArgs(city: city, cityData: cityData, key: key),
+         args: CityDataRouteArgs(cityData: cityData, coords: coords, key: key),
          initialChildren: children,
        );
 
@@ -91,8 +91,8 @@ class CityDataRoute extends _i13.PageRouteInfo<CityDataRouteArgs> {
     builder: (data) {
       final args = data.argsAs<CityDataRouteArgs>();
       return _i3.CityDataPage(
-        city: args.city,
         cityData: args.cityData,
+        coords: args.coords,
         key: args.key,
       );
     },
@@ -101,20 +101,20 @@ class CityDataRoute extends _i13.PageRouteInfo<CityDataRouteArgs> {
 
 class CityDataRouteArgs {
   const CityDataRouteArgs({
-    required this.city,
     required this.cityData,
+    required this.coords,
     this.key,
   });
 
-  final String city;
-
   final _i14.CityData cityData;
+
+  final _i14.NamedCoordinates coords;
 
   final _i15.Key? key;
 
   @override
   String toString() {
-    return 'CityDataRouteArgs{city: $city, cityData: $cityData, key: $key}';
+    return 'CityDataRouteArgs{cityData: $cityData, coords: $coords, key: $key}';
   }
 }
 
@@ -138,12 +138,17 @@ class CodeVerificationSubRoute extends _i13.PageRouteInfo<void> {
 /// [_i5.EventEditingPage]
 class EventEditingRoute extends _i13.PageRouteInfo<EventEditingRouteArgs> {
   EventEditingRoute({
-    required _i9.Option<String> eventId,
+    required _i6.Option<String> eventId,
+    _i6.Option<String> location = const _i6.None(),
     _i16.Key? key,
     List<_i13.PageRouteInfo>? children,
   }) : super(
          EventEditingRoute.name,
-         args: EventEditingRouteArgs(eventId: eventId, key: key),
+         args: EventEditingRouteArgs(
+           eventId: eventId,
+           location: location,
+           key: key,
+         ),
          initialChildren: children,
        );
 
@@ -154,27 +159,37 @@ class EventEditingRoute extends _i13.PageRouteInfo<EventEditingRouteArgs> {
     builder: (data) {
       final args = data.argsAs<EventEditingRouteArgs>();
       return _i13.WrappedRoute(
-        child: _i5.EventEditingPage(eventId: args.eventId, key: args.key),
+        child: _i5.EventEditingPage(
+          eventId: args.eventId,
+          location: args.location,
+          key: args.key,
+        ),
       );
     },
   );
 }
 
 class EventEditingRouteArgs {
-  const EventEditingRouteArgs({required this.eventId, this.key});
+  const EventEditingRouteArgs({
+    required this.eventId,
+    this.location = const _i6.None(),
+    this.key,
+  });
 
-  final _i9.Option<String> eventId;
+  final _i6.Option<String> eventId;
+
+  final _i6.Option<String> location;
 
   final _i16.Key? key;
 
   @override
   String toString() {
-    return 'EventEditingRouteArgs{eventId: $eventId, key: $key}';
+    return 'EventEditingRouteArgs{eventId: $eventId, location: $location, key: $key}';
   }
 }
 
 /// generated route for
-/// [_i6.EventPage]
+/// [_i7.EventPage]
 class EventRoute extends _i13.PageRouteInfo<EventRouteArgs> {
   EventRoute({
     required String eventId,
@@ -193,7 +208,7 @@ class EventRoute extends _i13.PageRouteInfo<EventRouteArgs> {
     builder: (data) {
       final args = data.argsAs<EventRouteArgs>();
       return _i13.WrappedRoute(
-        child: _i6.EventPage(eventId: args.eventId, key: args.key),
+        child: _i7.EventPage(eventId: args.eventId, key: args.key),
       );
     },
   );
@@ -213,7 +228,7 @@ class EventRouteArgs {
 }
 
 /// generated route for
-/// [_i7.ProfileEditingPage]
+/// [_i8.ProfileEditingPage]
 class ProfileEditingRoute extends _i13.PageRouteInfo<void> {
   const ProfileEditingRoute({List<_i13.PageRouteInfo>? children})
     : super(ProfileEditingRoute.name, initialChildren: children);
@@ -223,16 +238,16 @@ class ProfileEditingRoute extends _i13.PageRouteInfo<void> {
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      return _i13.WrappedRoute(child: const _i7.ProfileEditingPage());
+      return _i13.WrappedRoute(child: const _i8.ProfileEditingPage());
     },
   );
 }
 
 /// generated route for
-/// [_i8.ProfilePage]
+/// [_i9.ProfilePage]
 class ProfileRoute extends _i13.PageRouteInfo<ProfileRouteArgs> {
   ProfileRoute({
-    _i9.Option<_i17.Profile> profile = const _i9.None(),
+    _i6.Option<_i17.Profile> profile = const _i6.None(),
     _i16.Key? key,
     List<_i13.PageRouteInfo>? children,
   }) : super(
@@ -250,16 +265,16 @@ class ProfileRoute extends _i13.PageRouteInfo<ProfileRouteArgs> {
         orElse: () => const ProfileRouteArgs(),
       );
       return _i13.WrappedRoute(
-        child: _i8.ProfilePage(profile: args.profile, key: args.key),
+        child: _i9.ProfilePage(profile: args.profile, key: args.key),
       );
     },
   );
 }
 
 class ProfileRouteArgs {
-  const ProfileRouteArgs({this.profile = const _i9.None(), this.key});
+  const ProfileRouteArgs({this.profile = const _i6.None(), this.key});
 
-  final _i9.Option<_i17.Profile> profile;
+  final _i6.Option<_i17.Profile> profile;
 
   final _i16.Key? key;
 

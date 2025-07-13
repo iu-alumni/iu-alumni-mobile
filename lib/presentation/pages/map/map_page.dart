@@ -41,12 +41,9 @@ class _MapPageState extends State<MapPage> {
     super.dispose();
   }
 
-  void _open(String cityName, CityData city) {
-    context.read<Reporter>().reportOpenMapLocation(
-      cityName,
-      AppLocation.mapTab,
-    );
-    context.pushRoute(CityDataRoute(city: cityName, cityData: city));
+  void _open(NamedCoordinates nc, CityData city) {
+    context.read<Reporter>().reportOpenMapLocation(nc.city, AppLocation.mapTab);
+    context.pushRoute(CityDataRoute(coords: nc, cityData: city));
   }
 
   List<Marker> _markers(MapInfo info) => [
@@ -68,8 +65,8 @@ class _MapPageState extends State<MapPage> {
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(100),
-                  onTap: () => _open(city.key.name, city.value),
-                  child: Text(city.key.name, style: AppTextStyles.caption),
+                  onTap: () => _open(city.key, city.value),
+                  child: Text(city.key.city, style: AppTextStyles.caption),
                 ),
               ),
             ),

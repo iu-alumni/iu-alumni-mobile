@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../util/gap.dart';
 import '../constants/app_text_styles.dart';
 import 'nav_button.dart';
 
@@ -55,13 +54,14 @@ class AppScaffold extends StatelessWidget {
           Padding(
             padding: _padding,
             child: Row(
+              spacing: 16,
               children: [
                 if (leadingButton case final button?)
                   button
                 else
                   const SizedBox.square(dimension: 48),
                 const Spacer(),
-                ...actions.gapI(const SizedBox(width: 16)),
+                ...actions,
               ],
             ),
           ),

@@ -46,7 +46,11 @@ class App extends StatelessWidget {
       providers: [
         // --- SERVICES ---
         RepositoryProvider(create: (_) => SecretsManager()),
-        RepositoryProvider(create: (_) => const FlutterSecureStorage()),
+        RepositoryProvider(
+          create: (_) => const FlutterSecureStorage(
+            aOptions: AndroidOptions(encryptedSharedPreferences: true),
+          ),
+        ),
         RepositoryProvider(create: (_) => SharedPreferencesAsync()),
         RepositoryProvider(create: (_) => ImagePicker()),
         RepositoryProvider<DbManager>(create: (_) => DbManagerImpl()),

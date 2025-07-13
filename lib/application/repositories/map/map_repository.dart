@@ -18,12 +18,19 @@ class CityData {
 }
 
 class NamedCoordinates extends Equatable {
-  const NamedCoordinates({required this.coord, required this.name});
+  const NamedCoordinates({
+    required this.coord,
+    required this.country,
+    required this.city,
+  });
   final Coordinates coord;
-  final String name;
+  final String country;
+  final String city;
 
   @override
-  List<Object?> get props => [name, coord];
+  List<Object?> get props => [country, city, coord];
+
+  String get fullLocation => '$country, $city';
 }
 
 typedef MapInfo = Map<NamedCoordinates, CityData>;
