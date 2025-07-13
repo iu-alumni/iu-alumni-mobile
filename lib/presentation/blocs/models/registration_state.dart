@@ -6,7 +6,6 @@ part 'registration_state.freezed.dart';
 
 @freezed
 class RegistrationState with _$RegistrationState {
-  const RegistrationState._();
 
   const factory RegistrationState({
     required LoadedState<bool> verification,
@@ -17,4 +16,5 @@ class RegistrationState with _$RegistrationState {
     String? password,
     String? telegram,
   }) = _RegistrationState;
+  const RegistrationState._();
 }

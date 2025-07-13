@@ -12,7 +12,8 @@ part of 'user_status.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$UserStatus {
@@ -20,47 +21,42 @@ mixin _$UserStatus {
   TResult when<TResult extends Object?>({
     required TResult Function() author,
     required TResult Function(String authorId, bool participant) notAuthor,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? author,
     TResult? Function(String authorId, bool participant)? notAuthor,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? author,
     TResult Function(String authorId, bool participant)? notAuthor,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(UserAuthor value) author,
     required TResult Function(UserNotAuthor value) notAuthor,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UserAuthor value)? author,
     TResult? Function(UserNotAuthor value)? notAuthor,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UserAuthor value)? author,
     TResult Function(UserNotAuthor value)? notAuthor,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $UserStatusCopyWith<$Res> {
   factory $UserStatusCopyWith(
-          UserStatus value, $Res Function(UserStatus) then) =
-      _$UserStatusCopyWithImpl<$Res, UserStatus>;
+    UserStatus value,
+    $Res Function(UserStatus) then,
+  ) = _$UserStatusCopyWithImpl<$Res, UserStatus>;
 }
 
 /// @nodoc
@@ -80,8 +76,9 @@ class _$UserStatusCopyWithImpl<$Res, $Val extends UserStatus>
 /// @nodoc
 abstract class _$$UserAuthorImplCopyWith<$Res> {
   factory _$$UserAuthorImplCopyWith(
-          _$UserAuthorImpl value, $Res Function(_$UserAuthorImpl) then) =
-      __$$UserAuthorImplCopyWithImpl<$Res>;
+    _$UserAuthorImpl value,
+    $Res Function(_$UserAuthorImpl) then,
+  ) = __$$UserAuthorImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -89,8 +86,9 @@ class __$$UserAuthorImplCopyWithImpl<$Res>
     extends _$UserStatusCopyWithImpl<$Res, _$UserAuthorImpl>
     implements _$$UserAuthorImplCopyWith<$Res> {
   __$$UserAuthorImplCopyWithImpl(
-      _$UserAuthorImpl _value, $Res Function(_$UserAuthorImpl) _then)
-      : super(_value, _then);
+    _$UserAuthorImpl _value,
+    $Res Function(_$UserAuthorImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of UserStatus
   /// with the given fields replaced by the non-null parameter values.
@@ -185,8 +183,9 @@ abstract class UserAuthor implements UserStatus {
 /// @nodoc
 abstract class _$$UserNotAuthorImplCopyWith<$Res> {
   factory _$$UserNotAuthorImplCopyWith(
-          _$UserNotAuthorImpl value, $Res Function(_$UserNotAuthorImpl) then) =
-      __$$UserNotAuthorImplCopyWithImpl<$Res>;
+    _$UserNotAuthorImpl value,
+    $Res Function(_$UserNotAuthorImpl) then,
+  ) = __$$UserNotAuthorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String authorId, bool participant});
 }
@@ -196,35 +195,39 @@ class __$$UserNotAuthorImplCopyWithImpl<$Res>
     extends _$UserStatusCopyWithImpl<$Res, _$UserNotAuthorImpl>
     implements _$$UserNotAuthorImplCopyWith<$Res> {
   __$$UserNotAuthorImplCopyWithImpl(
-      _$UserNotAuthorImpl _value, $Res Function(_$UserNotAuthorImpl) _then)
-      : super(_value, _then);
+    _$UserNotAuthorImpl _value,
+    $Res Function(_$UserNotAuthorImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of UserStatus
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? authorId = null,
-    Object? participant = null,
-  }) {
-    return _then(_$UserNotAuthorImpl(
-      authorId: null == authorId
-          ? _value.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
-      participant: null == participant
-          ? _value.participant
-          : participant // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+  $Res call({Object? authorId = null, Object? participant = null}) {
+    return _then(
+      _$UserNotAuthorImpl(
+        authorId:
+            null == authorId
+                ? _value.authorId
+                : authorId // ignore: cast_nullable_to_non_nullable
+                    as String,
+        participant:
+            null == participant
+                ? _value.participant
+                : participant // ignore: cast_nullable_to_non_nullable
+                    as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$UserNotAuthorImpl implements UserNotAuthor {
-  const _$UserNotAuthorImpl(
-      {required this.authorId, required this.participant});
+  const _$UserNotAuthorImpl({
+    required this.authorId,
+    required this.participant,
+  });
 
   @override
   final String authorId;
@@ -322,9 +325,10 @@ class _$UserNotAuthorImpl implements UserNotAuthor {
 }
 
 abstract class UserNotAuthor implements UserStatus {
-  const factory UserNotAuthor(
-      {required final String authorId,
-      required final bool participant}) = _$UserNotAuthorImpl;
+  const factory UserNotAuthor({
+    required final String authorId,
+    required final bool participant,
+  }) = _$UserNotAuthorImpl;
 
   String get authorId;
   bool get participant;

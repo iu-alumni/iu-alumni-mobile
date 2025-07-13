@@ -8,7 +8,7 @@ typedef LocationSuggestionsState = LoadedState<List<String>>;
 
 class LocationSuggestionsCubit extends Cubit<LocationSuggestionsState> {
   LocationSuggestionsCubit(this._mapRepository)
-      : super(const LoadedState.init());
+    : super(const LoadedState.init());
 
   final MapRepository _mapRepository;
 
@@ -27,9 +27,9 @@ class LocationSuggestionsCubit extends Cubit<LocationSuggestionsState> {
   }
 
   void Function() _loadSuggestions(String city) => () async {
-        emit(const LoadedState.loading());
-        final sugs = await _mapRepository.suggestions(city);
-        final list = [for (final s in sugs) '${s.country}, ${s.city}'];
-        emit(LoadedState.data(list));
-      };
+    emit(const LoadedState.loading());
+    final sugs = await _mapRepository.suggestions(city);
+    final list = [for (final s in sugs) '${s.country}, ${s.city}'];
+    emit(LoadedState.data(list));
+  };
 }

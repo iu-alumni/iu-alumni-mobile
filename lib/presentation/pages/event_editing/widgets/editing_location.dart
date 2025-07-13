@@ -14,10 +14,10 @@ class EditingLocation extends StatelessWidget {
   const EditingLocation({super.key});
 
   Option<String?> _location(OneEventState state) => state.event.flatMap(
-        (e) => e.onlineEvent ? const None() : Option.of(e.location),
-      );
+    (e) => e.onlineEvent ? const None() : Option.of(e.location),
+  );
 
-  void _showLocationPicker(BuildContext context, bool currentIsNone) async {
+  Future<void> _showLocationPicker(BuildContext context, bool currentIsNone) async {
     final location = await LocationDialog.show(context, currentIsNone);
     if (!context.mounted) {
       return;
@@ -41,8 +41,9 @@ class EditingLocation extends StatelessWidget {
                 child: Text(
                   current ?? 'No location',
                   style: AppTextStyles.actionSB.copyWith(
-                    color:
-                        current == null ? AppColors.gray50 : AppColors.darkGray,
+                    color: current == null
+                        ? AppColors.gray50
+                        : AppColors.darkGray,
                   ),
                 ),
                 onTap: () => _showLocationPicker(context, current == null),

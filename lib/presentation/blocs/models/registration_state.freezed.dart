@@ -12,7 +12,8 @@ part of 'registration_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$RegistrationState {
@@ -34,17 +35,19 @@ mixin _$RegistrationState {
 /// @nodoc
 abstract class $RegistrationStateCopyWith<$Res> {
   factory $RegistrationStateCopyWith(
-          RegistrationState value, $Res Function(RegistrationState) then) =
-      _$RegistrationStateCopyWithImpl<$Res, RegistrationState>;
+    RegistrationState value,
+    $Res Function(RegistrationState) then,
+  ) = _$RegistrationStateCopyWithImpl<$Res, RegistrationState>;
   @useResult
-  $Res call(
-      {LoadedState<bool> verification,
-      String? firstName,
-      String? lastName,
-      int? graduationYear,
-      String? email,
-      String? password,
-      String? telegram});
+  $Res call({
+    LoadedState<bool> verification,
+    String? firstName,
+    String? lastName,
+    int? graduationYear,
+    String? email,
+    String? password,
+    String? telegram,
+  });
 
   $LoadedStateCopyWith<bool, $Res> get verification;
 }
@@ -72,36 +75,46 @@ class _$RegistrationStateCopyWithImpl<$Res, $Val extends RegistrationState>
     Object? password = freezed,
     Object? telegram = freezed,
   }) {
-    return _then(_value.copyWith(
-      verification: null == verification
-          ? _value.verification
-          : verification // ignore: cast_nullable_to_non_nullable
-              as LoadedState<bool>,
-      firstName: freezed == firstName
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      lastName: freezed == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      graduationYear: freezed == graduationYear
-          ? _value.graduationYear
-          : graduationYear // ignore: cast_nullable_to_non_nullable
-              as int?,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-      password: freezed == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String?,
-      telegram: freezed == telegram
-          ? _value.telegram
-          : telegram // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            verification:
+                null == verification
+                    ? _value.verification
+                    : verification // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<bool>,
+            firstName:
+                freezed == firstName
+                    ? _value.firstName
+                    : firstName // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            lastName:
+                freezed == lastName
+                    ? _value.lastName
+                    : lastName // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            graduationYear:
+                freezed == graduationYear
+                    ? _value.graduationYear
+                    : graduationYear // ignore: cast_nullable_to_non_nullable
+                        as int?,
+            email:
+                freezed == email
+                    ? _value.email
+                    : email // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            password:
+                freezed == password
+                    ? _value.password
+                    : password // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            telegram:
+                freezed == telegram
+                    ? _value.telegram
+                    : telegram // ignore: cast_nullable_to_non_nullable
+                        as String?,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of RegistrationState
@@ -118,19 +131,21 @@ class _$RegistrationStateCopyWithImpl<$Res, $Val extends RegistrationState>
 /// @nodoc
 abstract class _$$RegistrationStateImplCopyWith<$Res>
     implements $RegistrationStateCopyWith<$Res> {
-  factory _$$RegistrationStateImplCopyWith(_$RegistrationStateImpl value,
-          $Res Function(_$RegistrationStateImpl) then) =
-      __$$RegistrationStateImplCopyWithImpl<$Res>;
+  factory _$$RegistrationStateImplCopyWith(
+    _$RegistrationStateImpl value,
+    $Res Function(_$RegistrationStateImpl) then,
+  ) = __$$RegistrationStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {LoadedState<bool> verification,
-      String? firstName,
-      String? lastName,
-      int? graduationYear,
-      String? email,
-      String? password,
-      String? telegram});
+  $Res call({
+    LoadedState<bool> verification,
+    String? firstName,
+    String? lastName,
+    int? graduationYear,
+    String? email,
+    String? password,
+    String? telegram,
+  });
 
   @override
   $LoadedStateCopyWith<bool, $Res> get verification;
@@ -140,9 +155,10 @@ abstract class _$$RegistrationStateImplCopyWith<$Res>
 class __$$RegistrationStateImplCopyWithImpl<$Res>
     extends _$RegistrationStateCopyWithImpl<$Res, _$RegistrationStateImpl>
     implements _$$RegistrationStateImplCopyWith<$Res> {
-  __$$RegistrationStateImplCopyWithImpl(_$RegistrationStateImpl _value,
-      $Res Function(_$RegistrationStateImpl) _then)
-      : super(_value, _then);
+  __$$RegistrationStateImplCopyWithImpl(
+    _$RegistrationStateImpl _value,
+    $Res Function(_$RegistrationStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of RegistrationState
   /// with the given fields replaced by the non-null parameter values.
@@ -157,51 +173,60 @@ class __$$RegistrationStateImplCopyWithImpl<$Res>
     Object? password = freezed,
     Object? telegram = freezed,
   }) {
-    return _then(_$RegistrationStateImpl(
-      verification: null == verification
-          ? _value.verification
-          : verification // ignore: cast_nullable_to_non_nullable
-              as LoadedState<bool>,
-      firstName: freezed == firstName
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      lastName: freezed == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      graduationYear: freezed == graduationYear
-          ? _value.graduationYear
-          : graduationYear // ignore: cast_nullable_to_non_nullable
-              as int?,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-      password: freezed == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String?,
-      telegram: freezed == telegram
-          ? _value.telegram
-          : telegram // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$RegistrationStateImpl(
+        verification:
+            null == verification
+                ? _value.verification
+                : verification // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<bool>,
+        firstName:
+            freezed == firstName
+                ? _value.firstName
+                : firstName // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        lastName:
+            freezed == lastName
+                ? _value.lastName
+                : lastName // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        graduationYear:
+            freezed == graduationYear
+                ? _value.graduationYear
+                : graduationYear // ignore: cast_nullable_to_non_nullable
+                    as int?,
+        email:
+            freezed == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        password:
+            freezed == password
+                ? _value.password
+                : password // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        telegram:
+            freezed == telegram
+                ? _value.telegram
+                : telegram // ignore: cast_nullable_to_non_nullable
+                    as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$RegistrationStateImpl extends _RegistrationState {
-  const _$RegistrationStateImpl(
-      {required this.verification,
-      this.firstName,
-      this.lastName,
-      this.graduationYear,
-      this.email,
-      this.password,
-      this.telegram})
-      : super._();
+  const _$RegistrationStateImpl({
+    required this.verification,
+    this.firstName,
+    this.lastName,
+    this.graduationYear,
+    this.email,
+    this.password,
+    this.telegram,
+  }) : super._();
 
   @override
   final LoadedState<bool> verification;
@@ -244,8 +269,16 @@ class _$RegistrationStateImpl extends _RegistrationState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, verification, firstName,
-      lastName, graduationYear, email, password, telegram);
+  int get hashCode => Object.hash(
+    runtimeType,
+    verification,
+    firstName,
+    lastName,
+    graduationYear,
+    email,
+    password,
+    telegram,
+  );
 
   /// Create a copy of RegistrationState
   /// with the given fields replaced by the non-null parameter values.
@@ -254,18 +287,21 @@ class _$RegistrationStateImpl extends _RegistrationState {
   @pragma('vm:prefer-inline')
   _$$RegistrationStateImplCopyWith<_$RegistrationStateImpl> get copyWith =>
       __$$RegistrationStateImplCopyWithImpl<_$RegistrationStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _RegistrationState extends RegistrationState {
-  const factory _RegistrationState(
-      {required final LoadedState<bool> verification,
-      final String? firstName,
-      final String? lastName,
-      final int? graduationYear,
-      final String? email,
-      final String? password,
-      final String? telegram}) = _$RegistrationStateImpl;
+  const factory _RegistrationState({
+    required final LoadedState<bool> verification,
+    final String? firstName,
+    final String? lastName,
+    final int? graduationYear,
+    final String? email,
+    final String? password,
+    final String? telegram,
+  }) = _$RegistrationStateImpl;
   const _RegistrationState._() : super._();
 
   @override

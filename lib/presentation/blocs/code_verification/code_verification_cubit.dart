@@ -6,18 +6,18 @@ import '../models/code_verification_state.dart';
 
 class CodeVerificationCubit extends Cubit<CodeVerificationState> {
   CodeVerificationCubit(this._repo)
-      : super(
-          CodeVerificationState(
-            verification: const LoadedState.init(),
-            resend: const LoadedState.init(),
-            code: '',
-          ),
-        );
+    : super(
+        CodeVerificationState(
+          verification: const LoadedState.init(),
+          resend: const LoadedState.init(),
+          code: '',
+        ),
+      );
 
   final AuthRepository _repo;
 
   bool get _codeIsOk =>
-      state.code.length == 6 && state.code.contains(RegExp(r'[0-9]'));
+      state.code.length == 6 && state.code.contains(RegExp('[0-9]'));
 
   void sinkCode(String code) => emit(state.copyWith(code: code));
 
@@ -27,12 +27,13 @@ class CodeVerificationCubit extends Cubit<CodeVerificationState> {
     }
   }
 
-  void verify() async {
+  Future<void> verify() async {
     if (!_codeIsOk) {
       emit(
         state.copyWith(
-          verification:
-              const LoadedState.error('Verification code is incorrect'),
+          verification: const LoadedState.error(
+            'Verification code is incorrect',
+          ),
         ),
       );
       return;
@@ -40,7 +41,7 @@ class CodeVerificationCubit extends Cubit<CodeVerificationState> {
     _rawVerify();
   }
 
-  void _rawVerify() async {
+  Future<void> _rawVerify() async {
     emit(state.copyWith(verification: const LoadedState.loading()));
     final result = await _repo.verifyCode(state.code);
     emit(
@@ -53,7 +54,7 @@ class CodeVerificationCubit extends Cubit<CodeVerificationState> {
     );
   }
 
-  void resend() async {
+  Future<void> resend() async {
     emit(state.copyWith(resend: const LoadedState.loading()));
     final result = await _repo.sendCode();
     emit(

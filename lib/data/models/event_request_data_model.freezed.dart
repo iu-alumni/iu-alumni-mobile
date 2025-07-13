@@ -12,10 +12,12 @@ part of 'event_request_data_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 EventRequestDataModel _$EventRequestDataModelFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _EventRequestDataModel.fromJson(json);
 }
 
@@ -42,23 +44,27 @@ mixin _$EventRequestDataModel {
 
 /// @nodoc
 abstract class $EventRequestDataModelCopyWith<$Res> {
-  factory $EventRequestDataModelCopyWith(EventRequestDataModel value,
-          $Res Function(EventRequestDataModel) then) =
-      _$EventRequestDataModelCopyWithImpl<$Res, EventRequestDataModel>;
+  factory $EventRequestDataModelCopyWith(
+    EventRequestDataModel value,
+    $Res Function(EventRequestDataModel) then,
+  ) = _$EventRequestDataModelCopyWithImpl<$Res, EventRequestDataModel>;
   @useResult
-  $Res call(
-      {String title,
-      String description,
-      String location,
-      DateTime datetime,
-      int cost,
-      @JsonKey(name: 'is_online') bool isOnline,
-      String? cover});
+  $Res call({
+    String title,
+    String description,
+    String location,
+    DateTime datetime,
+    int cost,
+    @JsonKey(name: 'is_online') bool isOnline,
+    String? cover,
+  });
 }
 
 /// @nodoc
-class _$EventRequestDataModelCopyWithImpl<$Res,
-        $Val extends EventRequestDataModel>
+class _$EventRequestDataModelCopyWithImpl<
+  $Res,
+  $Val extends EventRequestDataModel
+>
     implements $EventRequestDataModelCopyWith<$Res> {
   _$EventRequestDataModelCopyWithImpl(this._value, this._then);
 
@@ -80,36 +86,46 @@ class _$EventRequestDataModelCopyWithImpl<$Res,
     Object? isOnline = null,
     Object? cover = freezed,
   }) {
-    return _then(_value.copyWith(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-      datetime: null == datetime
-          ? _value.datetime
-          : datetime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      cost: null == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
-              as int,
-      isOnline: null == isOnline
-          ? _value.isOnline
-          : isOnline // ignore: cast_nullable_to_non_nullable
-              as bool,
-      cover: freezed == cover
-          ? _value.cover
-          : cover // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            title:
+                null == title
+                    ? _value.title
+                    : title // ignore: cast_nullable_to_non_nullable
+                        as String,
+            description:
+                null == description
+                    ? _value.description
+                    : description // ignore: cast_nullable_to_non_nullable
+                        as String,
+            location:
+                null == location
+                    ? _value.location
+                    : location // ignore: cast_nullable_to_non_nullable
+                        as String,
+            datetime:
+                null == datetime
+                    ? _value.datetime
+                    : datetime // ignore: cast_nullable_to_non_nullable
+                        as DateTime,
+            cost:
+                null == cost
+                    ? _value.cost
+                    : cost // ignore: cast_nullable_to_non_nullable
+                        as int,
+            isOnline:
+                null == isOnline
+                    ? _value.isOnline
+                    : isOnline // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            cover:
+                freezed == cover
+                    ? _value.cover
+                    : cover // ignore: cast_nullable_to_non_nullable
+                        as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -117,29 +133,31 @@ class _$EventRequestDataModelCopyWithImpl<$Res,
 abstract class _$$EventRequestDataModelImplCopyWith<$Res>
     implements $EventRequestDataModelCopyWith<$Res> {
   factory _$$EventRequestDataModelImplCopyWith(
-          _$EventRequestDataModelImpl value,
-          $Res Function(_$EventRequestDataModelImpl) then) =
-      __$$EventRequestDataModelImplCopyWithImpl<$Res>;
+    _$EventRequestDataModelImpl value,
+    $Res Function(_$EventRequestDataModelImpl) then,
+  ) = __$$EventRequestDataModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String title,
-      String description,
-      String location,
-      DateTime datetime,
-      int cost,
-      @JsonKey(name: 'is_online') bool isOnline,
-      String? cover});
+  $Res call({
+    String title,
+    String description,
+    String location,
+    DateTime datetime,
+    int cost,
+    @JsonKey(name: 'is_online') bool isOnline,
+    String? cover,
+  });
 }
 
 /// @nodoc
 class __$$EventRequestDataModelImplCopyWithImpl<$Res>
-    extends _$EventRequestDataModelCopyWithImpl<$Res,
-        _$EventRequestDataModelImpl>
+    extends
+        _$EventRequestDataModelCopyWithImpl<$Res, _$EventRequestDataModelImpl>
     implements _$$EventRequestDataModelImplCopyWith<$Res> {
-  __$$EventRequestDataModelImplCopyWithImpl(_$EventRequestDataModelImpl _value,
-      $Res Function(_$EventRequestDataModelImpl) _then)
-      : super(_value, _then);
+  __$$EventRequestDataModelImplCopyWithImpl(
+    _$EventRequestDataModelImpl _value,
+    $Res Function(_$EventRequestDataModelImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EventRequestDataModel
   /// with the given fields replaced by the non-null parameter values.
@@ -154,50 +172,60 @@ class __$$EventRequestDataModelImplCopyWithImpl<$Res>
     Object? isOnline = null,
     Object? cover = freezed,
   }) {
-    return _then(_$EventRequestDataModelImpl(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-      datetime: null == datetime
-          ? _value.datetime
-          : datetime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      cost: null == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
-              as int,
-      isOnline: null == isOnline
-          ? _value.isOnline
-          : isOnline // ignore: cast_nullable_to_non_nullable
-              as bool,
-      cover: freezed == cover
-          ? _value.cover
-          : cover // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$EventRequestDataModelImpl(
+        title:
+            null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                    as String,
+        description:
+            null == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                    as String,
+        location:
+            null == location
+                ? _value.location
+                : location // ignore: cast_nullable_to_non_nullable
+                    as String,
+        datetime:
+            null == datetime
+                ? _value.datetime
+                : datetime // ignore: cast_nullable_to_non_nullable
+                    as DateTime,
+        cost:
+            null == cost
+                ? _value.cost
+                : cost // ignore: cast_nullable_to_non_nullable
+                    as int,
+        isOnline:
+            null == isOnline
+                ? _value.isOnline
+                : isOnline // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        cover:
+            freezed == cover
+                ? _value.cover
+                : cover // ignore: cast_nullable_to_non_nullable
+                    as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$EventRequestDataModelImpl implements _EventRequestDataModel {
-  _$EventRequestDataModelImpl(
-      {required this.title,
-      required this.description,
-      required this.location,
-      required this.datetime,
-      required this.cost,
-      @JsonKey(name: 'is_online') required this.isOnline,
-      required this.cover});
+  _$EventRequestDataModelImpl({
+    required this.title,
+    required this.description,
+    required this.location,
+    required this.datetime,
+    required this.cost,
+    @JsonKey(name: 'is_online') required this.isOnline,
+    required this.cover,
+  });
 
   factory _$EventRequestDataModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$EventRequestDataModelImplFromJson(json);
@@ -243,8 +271,16 @@ class _$EventRequestDataModelImpl implements _EventRequestDataModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, title, description, location,
-      datetime, cost, isOnline, cover);
+  int get hashCode => Object.hash(
+    runtimeType,
+    title,
+    description,
+    location,
+    datetime,
+    cost,
+    isOnline,
+    cover,
+  );
 
   /// Create a copy of EventRequestDataModel
   /// with the given fields replaced by the non-null parameter values.
@@ -252,26 +288,28 @@ class _$EventRequestDataModelImpl implements _EventRequestDataModel {
   @override
   @pragma('vm:prefer-inline')
   _$$EventRequestDataModelImplCopyWith<_$EventRequestDataModelImpl>
-      get copyWith => __$$EventRequestDataModelImplCopyWithImpl<
-          _$EventRequestDataModelImpl>(this, _$identity);
+  get copyWith =>
+      __$$EventRequestDataModelImplCopyWithImpl<_$EventRequestDataModelImpl>(
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EventRequestDataModelImplToJson(
-      this,
-    );
+    return _$$EventRequestDataModelImplToJson(this);
   }
 }
 
 abstract class _EventRequestDataModel implements EventRequestDataModel {
-  factory _EventRequestDataModel(
-      {required final String title,
-      required final String description,
-      required final String location,
-      required final DateTime datetime,
-      required final int cost,
-      @JsonKey(name: 'is_online') required final bool isOnline,
-      required final String? cover}) = _$EventRequestDataModelImpl;
+  factory _EventRequestDataModel({
+    required final String title,
+    required final String description,
+    required final String location,
+    required final DateTime datetime,
+    required final int cost,
+    @JsonKey(name: 'is_online') required final bool isOnline,
+    required final String? cover,
+  }) = _$EventRequestDataModelImpl;
 
   factory _EventRequestDataModel.fromJson(Map<String, dynamic> json) =
       _$EventRequestDataModelImpl.fromJson;
@@ -297,5 +335,5 @@ abstract class _EventRequestDataModel implements EventRequestDataModel {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EventRequestDataModelImplCopyWith<_$EventRequestDataModelImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  get copyWith => throw _privateConstructorUsedError;
 }

@@ -12,23 +12,23 @@ class EventEditingContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const EditingCover(),
-          const SizedBox(height: 40),
-          ...[
-            const EditingTitle(),
-            const EditingDesc(),
-            const EditingSwitch(),
-            const EditingLocation(),
-            const EditingCost(),
-            const EditingDate(),
-          ].map(
-            (w) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              child: w,
-            ),
-          ),
-        ],
-      );
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      const EditingCover(),
+      const SizedBox(height: 40),
+      ...[
+        const EditingTitle(),
+        const EditingDesc(),
+        const EditingSwitch(),
+        const EditingLocation(),
+        const EditingCost(),
+        const EditingDate(),
+      ].map(
+        (w) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          child: w,
+        ),
+      ),
+    ],
+  );
 }

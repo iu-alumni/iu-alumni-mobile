@@ -20,7 +20,7 @@ class EventsListCubit extends Cubit<EventsListState> {
   }
 
   void remove(String eventId) {
-    if (state case EventsListData currState) {
+    if (state case final EventsListData currState) {
       emit(
         currState.copyWith(
           data: currState.data.removeWhere((e) => e.eventId == eventId),
@@ -30,7 +30,7 @@ class EventsListCubit extends Cubit<EventsListState> {
   }
 
   Future<void> update(String eventId) async {
-    if (state case EventsListData currState) {
+    if (state case final EventsListData currState) {
       final maybeEvent = await _eventsRepository.getOneEvent(eventId);
       maybeEvent.map((event) {
         final index = currState.data.indexWhere((e) => e.eventId == eventId);

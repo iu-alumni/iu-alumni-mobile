@@ -20,18 +20,18 @@ class ReporterImpl extends Reporter with WidgetsBindingObserver {
   DateTime? _startTime;
 
   String? _representAppLocation(AppLocation al) => switch (al) {
-        AppLocation.eventsTab => 'events_tab',
-        AppLocation.mapTab => 'map_tab',
-        AppLocation.profileScreen => 'profile_screen',
-        AppLocation.profileEditingScreen => 'profile_editing_screen',
-        AppLocation.eventScreen => 'event_screen',
-        AppLocation.eventEditingScreen => 'event_editing_screen',
-        AppLocation.authScreen => 'auth_screen',
-        AppLocation.verificationScreen => 'verification_screen',
-        AppLocation.none => null,
-      };
+    AppLocation.eventsTab => 'events_tab',
+    AppLocation.mapTab => 'map_tab',
+    AppLocation.profileScreen => 'profile_screen',
+    AppLocation.profileEditingScreen => 'profile_editing_screen',
+    AppLocation.eventScreen => 'event_screen',
+    AppLocation.eventEditingScreen => 'event_editing_screen',
+    AppLocation.authScreen => 'auth_screen',
+    AppLocation.verificationScreen => 'verification_screen',
+    AppLocation.none => null,
+  };
 
-  void _report({
+  Future<void> _report({
     required String action,
     Map<String, Object>? payload,
     AppLocation appLocation = AppLocation.none,
@@ -53,10 +53,10 @@ class ReporterImpl extends Reporter with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) => switch (state) {
-        AppLifecycleState.resumed => _sessionStarted(),
-        AppLifecycleState.paused => _sessionStopped(),
-        _ => null,
-      };
+    AppLifecycleState.resumed => _sessionStarted(),
+    AppLifecycleState.paused => _sessionStopped(),
+    _ => null,
+  };
 
   void _sessionStarted() {
     _startTime = DateTime.now();
@@ -67,10 +67,7 @@ class ReporterImpl extends Reporter with WidgetsBindingObserver {
     if (_startTime case final start?) {
       final finish = DateTime.now();
       final timeSpent = finish.difference(start).inMilliseconds;
-      _report(
-        action: 'app_time',
-        payload: {'appTimeMS': timeSpent},
-      );
+      _report(action: 'app_time', payload: {'appTimeMS': timeSpent});
       logger.d(
         'Report session stopped at $finish and started at $start. Time spent: $timeSpent seconds',
       );
@@ -93,137 +90,131 @@ class ReporterImpl extends Reporter with WidgetsBindingObserver {
 
   @override
   void reportOpenEvent(EventModel event, AppLocation location) => _report(
-        action: 'event_tap',
-        appLocation: location,
-        payload: {
-          'event_id': event.eventId,
-          if (event.location case final geoLocation?
-              when location == AppLocation.mapTab)
-            'geo_location': geoLocation,
-        },
-      );
+    action: 'event_tap',
+    appLocation: location,
+    payload: {
+      'event_id': event.eventId,
+      if (event.location case final geoLocation?
+          when location == AppLocation.mapTab)
+        'geo_location': geoLocation,
+    },
+  );
 
   @override
   void reportOpenProfile(Profile profile, AppLocation location) => _report(
-        action: 'profile_tap',
-        appLocation: location,
-        payload: {
-          'profile_id': profile.profileId,
-          if (profile.location case final geoLocation?
-              when location == AppLocation.mapTab)
-            'geo_location': geoLocation,
-        },
-      );
+    action: 'profile_tap',
+    appLocation: location,
+    payload: {
+      'profile_id': profile.profileId,
+      if (profile.location case final geoLocation?
+          when location == AppLocation.mapTab)
+        'geo_location': geoLocation,
+    },
+  );
 
   @override
   void reportParticipate(EventModel event, AppLocation location) => _report(
-        action: 'participate_tap',
-        appLocation: location,
-        payload: {'event_id': event.eventId},
-      );
+    action: 'participate_tap',
+    appLocation: location,
+    payload: {'event_id': event.eventId},
+  );
 
   @override
   void reportLeave(EventModel event, AppLocation location) => _report(
-        action: 'leave_tap',
-        appLocation: location,
-        payload: {'event_id': event.eventId},
-      );
+    action: 'leave_tap',
+    appLocation: location,
+    payload: {'event_id': event.eventId},
+  );
 
   String _representAction(NavAction action) => switch (action) {
-        NavAction.pop => 'pop',
-        NavAction.push => 'push',
-        NavAction.replace => 'replace',
-      };
+    NavAction.pop => 'pop',
+    NavAction.push => 'push',
+    NavAction.replace => 'replace',
+  };
 
   @override
   void reportNavigation(
     NavAction action,
     String? previousRoute,
     String? newRoute,
-  ) =>
-      _report(
-        action: 'navigation/${_representAction(action)}',
-        payload: {
-          if (previousRoute case final route?) 'prev_route': route,
-          if (newRoute case final route?) 'new_route': route,
-        },
-      );
+  ) => _report(
+    action: 'navigation/${_representAction(action)}',
+    payload: {
+      if (previousRoute case final route?) 'prev_route': route,
+      if (newRoute case final route?) 'new_route': route,
+    },
+  );
 
   @override
   void reportAuthError(String description, AppLocation location) => _report(
-        action: 'auth_error',
-        appLocation: location,
-        payload: {'description': description},
-      );
+    action: 'auth_error',
+    appLocation: location,
+    payload: {'description': description},
+  );
 
   @override
-  void reportAuthSuccessful(AppLocation location) => _report(
-        action: 'auth_success',
-        appLocation: location,
-      );
+  void reportAuthSuccessful(AppLocation location) =>
+      _report(action: 'auth_success', appLocation: location);
 
   @override
-  void reportCreateEventTap(AppLocation location) => _report(
-        action: 'create_event_tap',
-        appLocation: location,
-      );
+  void reportCreateEventTap(AppLocation location) =>
+      _report(action: 'create_event_tap', appLocation: location);
 
   @override
   void reportDeleteEvent(EventModel event, AppLocation location) => _report(
-        action: 'delete_event',
-        appLocation: location,
-        payload: {'event_id': event.eventId},
-      );
+    action: 'delete_event',
+    appLocation: location,
+    payload: {'event_id': event.eventId},
+  );
 
   @override
   void reportEditEventTap(EventModel event, AppLocation location) => _report(
-        action: 'edit_event',
-        appLocation: location,
-        payload: {'event_id': event.eventId},
-      );
+    action: 'edit_event',
+    appLocation: location,
+    payload: {'event_id': event.eventId},
+  );
 
   @override
   void reportSaveEvent(EventModel event, AppLocation location) => _report(
-        action: 'save_event',
-        appLocation: location,
-        payload: {'event_id': event.eventId},
-      );
+    action: 'save_event',
+    appLocation: location,
+    payload: {'event_id': event.eventId},
+  );
 
   @override
-  void reportSaveProfileChanges(AppLocation location) => _report(
-        action: 'save_profile_changes',
-        appLocation: location,
-      );
+  void reportSaveProfileChanges(AppLocation location) =>
+      _report(action: 'save_profile_changes', appLocation: location);
 
   @override
-  void reportTabChanged(String tabName) => _report(
-        action: 'tab_changed',
-        payload: {'tab': tabName},
-      );
+  void reportTabChanged(String tabName) =>
+      _report(action: 'tab_changed', payload: {'tab': tabName});
 
   @override
   void reportUserTelegramCopy(Profile profile, AppLocation location) => _report(
-        action: 'copy_user_telegram',
-        appLocation: location,
-        payload: {'user_id': profile.profileId},
-      );
+    action: 'copy_user_telegram',
+    appLocation: location,
+    payload: {'user_id': profile.profileId},
+  );
 
   @override
   void reportUserTelegramOpen(Profile profile, AppLocation location) => _report(
-        action: 'open_user_telegram',
-        appLocation: location,
-        payload: {'user_id': profile.profileId},
-      );
+    action: 'open_user_telegram',
+    appLocation: location,
+    payload: {'user_id': profile.profileId},
+  );
 
   @override
-  void reportEditProfileTap(AppLocation location) => _report(
-        action: 'edit_profile_tap',
-        appLocation: location,
-      );
+  void reportEditProfileTap(AppLocation location) =>
+      _report(action: 'edit_profile_tap', appLocation: location);
 
   @override
-  void reportUnauthorize(AppLocation location) => _report(
-        action: 'unauthorize',
-        appLocation: location,
-      );
+  void reportUnauthorize(AppLocation location) =>
+      _report(action: 'unauthorize', appLocation: location);
+
+  @override
+  void reportOpenMapLocation(String cityName, AppLocation location) => _report(
+    action: 'city_tap',
+    appLocation: location,
+    payload: {'city_name': cityName},
+  );
 }

@@ -45,7 +45,10 @@ class ReporterMock extends Reporter {
 
   @override
   void reportNavigation(
-      NavAction action, String? previousRoute, String? newRoute) {
+    NavAction action,
+    String? previousRoute,
+    String? newRoute,
+  ) {
     // TODO: implement reportNavigation
   }
 
@@ -92,5 +95,10 @@ class ReporterMock extends Reporter {
   @override
   void reportUserTelegramOpen(Profile profile, AppLocation location) {
     // TODO: implement reportUserTelegramOpen
+  }
+
+  @override
+  void reportOpenMapLocation(String mapLocation, AppLocation location) {
+    // TODO: implement reportOpenMapLocation
   }
 }

@@ -15,29 +15,24 @@ class UsersGatewayImpl extends UsersGateway {
   final SecretsManager _secretsManager;
 
   @override
-  Future<List<Profile>> getAllUsers() => TaskEither.tryCatch(
-        () async {
-          final response = await _dio.get(
-            Paths.allProfiles(_secretsManager.hostPath),
-            options: _optionsManager.opts(),
-          );
-          final list = response.data as List;
-          return [for (final p in list) Profile.fromJson(p)];
-        },
-        (e, st) => <Profile>[],
-      ).match(identity, identity).run();
+  Future<List<Profile>> getAllUsers() => TaskEither.tryCatch(() async {
+    final response = await _dio.get(
+      Paths.allProfiles(_secretsManager.hostPath),
+      options: _optionsManager.opts(),
+    );
+    final list = response.data as List;
+    return [for (final p in list) Profile.fromJson(p)];
+  }, (e, st) => <Profile>[]).match(identity, identity).run();
 
   @override
-  Future<List<Profile>> getUsersByIds(List<String> ids) => TaskEither.tryCatch(
-        () async {
-          final response = await _dio.get(
-            Paths.profile(_secretsManager.hostPath),
-            options: _optionsManager.opts(),
-            queryParameters: {'user_ids': ids},
-          );
-          final list = response.data as List;
-          return [for (final p in list) Profile.fromJson(p)];
-        },
-        (e, st) => <Profile>[],
-      ).match(identity, identity).run();
+  Future<List<Profile>> getUsersByIds(List<String> ids) =>
+      TaskEither.tryCatch(() async {
+        final response = await _dio.get(
+          Paths.profile(_secretsManager.hostPath),
+          options: _optionsManager.opts(),
+          queryParameters: {'user_ids': ids},
+        );
+        final list = response.data as List;
+        return [for (final p in list) Profile.fromJson(p)];
+      }, (e, st) => <Profile>[]).match(identity, identity).run();
 }

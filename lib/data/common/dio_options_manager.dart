@@ -10,11 +10,10 @@ class DioOptionsManager {
   String? get _token => _tokenProvider.token.toNullable();
 
   Options opts({bool withToken = true}) => Options(
-        headers: {
-          'accept': 'application/json',
-          'Content-Type': 'application/json',
-          if (_token case final tkn? when withToken)
-            'Authorization': 'Bearer $tkn',
-        },
-      );
+    headers: {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+      if (_token case final tkn? when withToken) 'Authorization': 'Bearer $tkn',
+    },
+  );
 }

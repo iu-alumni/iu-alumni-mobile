@@ -41,7 +41,7 @@ class TokenManager {
   void _setWeb(String value) {
     final salt = _secretsManager.webSalt;
     if (salt == null) {
-      logger.e('SALT wan\'t found in env');
+      logger.e("SALT wan't found in env");
       return;
     }
     final encr = encrypt.encodeString(value, salt);

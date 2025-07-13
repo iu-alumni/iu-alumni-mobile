@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 import '../../models/city_location.dart';
 import '../../models/coordinates.dart';
 import '../../models/event.dart';
@@ -9,20 +11,19 @@ abstract class MapRepository {
   Future<List<CityLocation>> suggestions(String city);
 }
 
-sealed class MapPin {
-  const MapPin();
+class CityData {
+  const CityData({required this.events, required this.profiles});
+  final List<Profile> profiles;
+  final List<EventModel> events;
 }
 
-class ProfilePin extends MapPin {
-  const ProfilePin(this.profile);
-  final Profile profile;
+class NamedCoordinates extends Equatable {
+  const NamedCoordinates({required this.coord, required this.name});
+  final Coordinates coord;
+  final String name;
+
+  @override
+  List<Object?> get props => [name, coord];
 }
 
-class EventPin extends MapPin {
-  const EventPin(this.event);
-  final EventModel event;
-}
-
-typedef MapInfo = Map<Coordinates, List<MapPin>>;
-
-
+typedef MapInfo = Map<NamedCoordinates, CityData>;

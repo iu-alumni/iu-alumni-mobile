@@ -23,40 +23,36 @@ class ProfileCubit extends Cubit<ProfileState> {
   final EventsRepository _eventsRepository;
 
   void dispose() => emit(
-        ProfileState(
-          profile: const LoadedState.init(),
-          ownedEvents: const LoadedState.init(),
-          participatedEvents: const LoadedState.init(),
-          myOwn: false,
-        ),
-      );
+    ProfileState(
+      profile: const LoadedState.init(),
+      ownedEvents: const LoadedState.init(),
+      participatedEvents: const LoadedState.init(),
+      myOwn: false,
+    ),
+  );
 
-  void loadProfile(Option<Profile> profile) async {
+  Future<void> loadProfile(Option<Profile> profile) async {
     emit(state.copyWith(profile: const LoadedState.loading()));
     final myProfile = await _usersRepository.loadMe();
-    return emit(profile.match(
-      () => state.copyWith(
-        myOwn: true,
-        profile: myProfile.match(
-          () => const LoadedState.error('Could not load your profile'),
-          LoadedState.data,
+    return emit(
+      profile.match(
+        () => state.copyWith(
+          myOwn: true,
+          profile: myProfile.match(
+            () => const LoadedState.error('Could not load your profile'),
+            LoadedState.data,
+          ),
         ),
+        (p) => switch (myProfile) {
+          Some(value: final mp) when mp.profileId == p.profileId =>
+            state.copyWith(myOwn: true, profile: LoadedState.data(mp)),
+          _ => state.copyWith(myOwn: false, profile: LoadedState.data(p)),
+        },
       ),
-      (p) => switch (myProfile) {
-        Some(value: final mp) when mp.profileId == p.profileId =>
-          state.copyWith(
-            myOwn: true,
-            profile: LoadedState.data(mp),
-          ),
-        _ => state.copyWith(
-            myOwn: false,
-            profile: LoadedState.data(p),
-          ),
-      },
-    ));
+    );
   }
 
-  void updateProfileData() async {
+  Future<void> updateProfileData() async {
     // It is currently reasonable to update the profile data only if it is your
     // own profile
     if (state.myOwn) {
@@ -64,7 +60,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  void loadOwnedEvents() async {
+  Future<void> loadOwnedEvents() async {
     if (!state.myOwn) {
       // No need to download your events if this isn't your account anyway
       return;
@@ -74,7 +70,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(state.copyWith(ownedEvents: LoadedState.data(IList(events))));
   }
 
-  void updateOwnedEvents() async {
+  Future<void> updateOwnedEvents() async {
     if (state.ownedEvents is LoadedStateInit) {
       // Could be loaded later
       return;
@@ -82,19 +78,17 @@ class ProfileCubit extends Cubit<ProfileState> {
     return loadOwnedEvents();
   }
 
-  void loadParticipatedEvents() async {
+  Future<void> loadParticipatedEvents() async {
     emit(state.copyWith(participatedEvents: const LoadedState.loading()));
     final events = await switch (state.profile) {
       LoadedStateData(:final data) =>
         _eventsRepository.getEventsWhereParticipate(data.profileId),
       _ => Future.value(const Iterable<EventModel>.empty()),
     };
-    emit(
-      state.copyWith(participatedEvents: LoadedState.data(IList(events))),
-    );
+    emit(state.copyWith(participatedEvents: LoadedState.data(IList(events))));
   }
 
-  void updateParticipatedEvents() async {
+  Future<void> updateParticipatedEvents() async {
     if (state.participatedEvents is LoadedStateInit) {
       // Could be loaded later
       return;

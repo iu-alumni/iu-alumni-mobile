@@ -18,14 +18,14 @@ class AppLoadingPage extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => RepositoryProvider(
-        create: (context) => AppLoadingManager(
-          context.read<TokenProvider>(),
-          context.read<DbManager>(),
-          context.read<Reporter>(),
-          context.read<SecretsManager>(),
-        ),
-        child: this,
-      );
+    create: (context) => AppLoadingManager(
+      context.read<TokenProvider>(),
+      context.read<DbManager>(),
+      context.read<Reporter>(),
+      context.read<SecretsManager>(),
+    ),
+    child: this,
+  );
 }
 
 class _AppLoadingPageState extends State<AppLoadingPage> {
@@ -37,10 +37,6 @@ class _AppLoadingPageState extends State<AppLoadingPage> {
 
   @override
   Widget build(BuildContext context) => const Scaffold(
-        body: Material(
-          child: Center(
-            child: AlumniLogo(),
-          ),
-        ),
-      );
+    body: Material(child: Center(child: AlumniLogo())),
+  );
 }

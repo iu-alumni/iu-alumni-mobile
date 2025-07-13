@@ -31,9 +31,9 @@ class AuthRepositoryImpl implements AuthRepository {
     if (_registrationEmail case final s?) {
       return _authGateway.sendCode(s);
     }
-    final error = 'Registration email was not saved somehow';
+    const error = 'Registration email was not saved somehow';
     logger.w(error);
-    return Left(error);
+    return const Left(error);
   }
 
   @override
@@ -41,9 +41,9 @@ class AuthRepositoryImpl implements AuthRepository {
     if (_registrationEmail case final s?) {
       return _authGateway.verifyCode(email: s, code: code);
     }
-    final error = 'Registration email was not saved somehow';
+    const error = 'Registration email was not saved somehow';
     logger.w(error);
-    return Left(error);
+    return const Left(error);
   }
 
   @override

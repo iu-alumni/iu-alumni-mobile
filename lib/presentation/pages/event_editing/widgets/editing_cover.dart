@@ -16,10 +16,10 @@ import '../../../common/widgets/event_cover.dart';
 class EditingCover extends StatelessWidget {
   const EditingCover({super.key});
 
-  void _pickCover(BuildContext context) async {
-    final image = await context
-        .read<ImagePicker>()
-        .pickImage(source: ImageSource.gallery);
+  Future<void> _pickCover(BuildContext context) async {
+    final image = await context.read<ImagePicker>().pickImage(
+      source: ImageSource.gallery,
+    );
     if (image == null || !context.mounted) {
       return;
     }
@@ -33,17 +33,14 @@ class EditingCover extends StatelessWidget {
     if (!context.mounted) {
       return;
     }
-    context
-        .read<OneEventCubit>()
-        .modify((event) => event.copyWith(coverBytes: encoded));
+    context.read<OneEventCubit>().modify(
+      (event) => event.copyWith(coverBytes: encoded),
+    );
   }
 
   bool _buildWhen(OneEventState p, OneEventState c) =>
       switch ((p.event, c.event)) {
-        (
-          final Some<EventModel> ps,
-          final Some<EventModel> cs,
-        ) =>
+        (final Some<EventModel> ps, final Some<EventModel> cs) =>
           ps.value.coverBytes != cs.value.coverBytes,
         _ => false,
       };

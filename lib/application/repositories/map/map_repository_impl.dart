@@ -1,7 +1,9 @@
+import 'package:ui_alumni_mobile/application/models/event.dart';
+import 'package:ui_alumni_mobile/application/models/profile.dart';
+
 import '../../../data/db/db_manager.dart';
 import '../../../util/logger.dart';
 import '../../models/city_location.dart';
-import '../../models/coordinates.dart';
 import '../events/events_repository.dart';
 import '../users/users_repository.dart';
 import 'map_repository.dart';
@@ -25,29 +27,42 @@ class MapRepositoryImpl extends MapRepository {
     return CityLocation(data[0], data[1]);
   }
 
-  Map<CityLocation, List<MapPin>> _locationMapFrom(
-    Iterable<(String, MapPin)> entries,
-  ) {
-    final _map = <CityLocation, List<MapPin>>{};
-    for (final (l, o) in entries) {
+  Map<CityLocation, CityData> _locationMapFrom({
+    required Iterable<(String, Profile)> profiles,
+    required Iterable<(String, EventModel)> events,
+  }) {
+    final _map = <CityLocation, CityData>{};
+    for (final (l, o) in profiles) {
       final cityLocation = _cityLocationFromStr(l);
       if (cityLocation == null) {
         logger.d('$l of $o could not be transformed to the city location');
         continue;
       }
       if (_map.containsKey(cityLocation)) {
-        _map[cityLocation]?.add(o);
+        _map[cityLocation]?.profiles.add(o);
       } else {
-        _map[cityLocation] = [o];
+        _map[cityLocation] = CityData(events: [], profiles: [o]);
+      }
+    }
+    for (final (l, o) in events) {
+      final cityLocation = _cityLocationFromStr(l);
+      if (cityLocation == null) {
+        logger.d('$l of $o could not be transformed to the city location');
+        continue;
+      }
+      if (_map.containsKey(cityLocation)) {
+        _map[cityLocation]?.events.add(o);
+      } else {
+        _map[cityLocation] = CityData(events: [o], profiles: []);
       }
     }
     return _map;
   }
 
   Future<MapInfo> _buildMapInfo(
-    Map<CityLocation, List<MapPin>> locationsMap,
+    Map<CityLocation, CityData> locationsMap,
   ) async {
-    final _map = <Coordinates, List<MapPin>>{};
+    final _map = <NamedCoordinates, CityData>{};
     for (final entry in locationsMap.entries) {
       final coords = await _dbManager.coordinates(
         entry.key.country,
@@ -59,7 +74,8 @@ class MapRepositoryImpl extends MapRepository {
         );
         continue;
       }
-      _map[coords] = entry.value;
+      final namedCoords = NamedCoordinates(coord: coords, name: entry.key.city);
+      _map[namedCoords] = entry.value;
     }
     return _map;
   }
@@ -68,13 +84,17 @@ class MapRepositoryImpl extends MapRepository {
   Future<MapInfo> getPinsOnMap() async {
     final users = await _usersRepository.getAllUsers();
     final events = await _eventsRepository.getEvents();
-    final locations = _locationMapFrom([
-      for (final u in users)
-        if (u.location case final l? when u.showLocation && l.isNotEmpty)
-          (l, ProfilePin(u)),
-      for (final e in events)
-        if (e.location case final l? when l.isNotEmpty) (l, EventPin(e)),
-    ]);
+    final locations = _locationMapFrom(
+      profiles: [
+        for (final u in users)
+          if (u.location case final l? when u.showLocation && l.isNotEmpty)
+            (l, u),
+      ],
+      events: [
+        for (final e in events)
+          if (e.location case final l? when l.isNotEmpty) (l, e),
+      ],
+    );
     return _buildMapInfo(locations);
   }
 

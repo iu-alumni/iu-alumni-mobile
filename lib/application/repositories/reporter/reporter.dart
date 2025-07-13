@@ -19,6 +19,7 @@ abstract class Reporter {
   void reportSaveProfileChanges(AppLocation location);
   void reportEditProfileTap(AppLocation location);
   void reportUnauthorize(AppLocation location);
+  void reportOpenMapLocation(String cityName, AppLocation location);
 
   void reportNavigation(
     NavAction action,

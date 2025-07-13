@@ -11,19 +11,18 @@ class EditingTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TitledItem(
-        // icon: Icons.title,
-        title: 'Title',
-        child: AppTextField(
-          initialText: context
-              .read<OneEventCubit>()
-              .state
-              .event
-              .map((s) => s.title)
-              .match(() => '', identity),
-          onChange: (text) => context
-              .read<OneEventCubit>()
-              .modify((e) => e.copyWith(title: text)),
-          hintText: 'How is the event called?',
-        ),
-      );
+    // icon: Icons.title,
+    title: 'Title',
+    child: AppTextField(
+      initialText: context
+          .read<OneEventCubit>()
+          .state
+          .event
+          .map((s) => s.title)
+          .match(() => '', identity),
+      onChange: (text) =>
+          context.read<OneEventCubit>().modify((e) => e.copyWith(title: text)),
+      hintText: 'How is the event called?',
+    ),
+  );
 }

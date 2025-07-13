@@ -10,14 +10,14 @@ import '../models/one_event_state.dart';
 
 class OneEventCubit extends Cubit<OneEventState> {
   OneEventCubit(this._repository, this._usersRepository, this._reporter)
-      : super(
-          OneEventState(
-            saveState: const LoadedState.init(),
-            event: const None(),
-            userStatusLoading: false,
-            participants: const LoadedState.init(),
-          ),
-        );
+    : super(
+        OneEventState(
+          saveState: const LoadedState.init(),
+          event: const None(),
+          userStatusLoading: false,
+          participants: const LoadedState.init(),
+        ),
+      );
 
   final EventsRepository _repository;
   final UsersRepository _usersRepository;
@@ -29,12 +29,12 @@ class OneEventCubit extends Cubit<OneEventState> {
   }
 
   void loadParticipants() => state.event.map((e) async {
-        emit(state.copyWith(participants: const LoadedState.loading()));
-        final participants = await _usersRepository.getUsersByIds(
-          e.participantsIds,
-        );
-        emit(state.copyWith(participants: LoadedState.data(participants)));
-      });
+    emit(state.copyWith(participants: const LoadedState.loading()));
+    final participants = await _usersRepository.getUsersByIds(
+      e.participantsIds,
+    );
+    emit(state.copyWith(participants: LoadedState.data(participants)));
+  });
 
   void createEvent() {
     final newEvent = _repository.createEvent();
@@ -49,20 +49,16 @@ class OneEventCubit extends Cubit<OneEventState> {
 
   void delete() {
     state.event.map(
-      (event) => _reporter.reportDeleteEvent(
-        event,
-        AppLocation.eventEditingScreen,
-      ),
+      (event) =>
+          _reporter.reportDeleteEvent(event, AppLocation.eventEditingScreen),
     );
     state.event.map((s) => s.eventId).map(_repository.deleteEvent);
   }
 
   Future<void> save() async {
     state.event.map(
-      (event) => _reporter.reportSaveEvent(
-        event,
-        AppLocation.eventEditingScreen,
-      ),
+      (event) =>
+          _reporter.reportSaveEvent(event, AppLocation.eventEditingScreen),
     );
     emit(state.copyWith(saveState: const LoadedState.loading()));
     state.event.map(_repository.modifyEvent);
@@ -81,45 +77,39 @@ class OneEventCubit extends Cubit<OneEventState> {
     );
   }
 
-  Future<void> participate() => state.event.match(
-        () async {},
-        (s) async {
-          _reporter.reportParticipate(s, AppLocation.eventScreen);
-          emit(state.copyWith(userStatusLoading: true));
-          final myProfile = await _usersRepository.loadMe();
-          return myProfile.match(
-            () => emit(state.copyWith(userStatusLoading: false)),
-            (p) async {
-              final event = await _repository.participate(s.eventId);
-              emit(
-                state.copyWith(
-                  event: event.match(() => state.event, Option.of),
-                  userStatusLoading: false,
-                ),
-              );
-            },
-          );
-        },
-      );
+  Future<void> participate() => state.event.match(() async {}, (s) async {
+    _reporter.reportParticipate(s, AppLocation.eventScreen);
+    emit(state.copyWith(userStatusLoading: true));
+    final myProfile = await _usersRepository.loadMe();
+    return myProfile.match(
+      () => emit(state.copyWith(userStatusLoading: false)),
+      (p) async {
+        final event = await _repository.participate(s.eventId);
+        emit(
+          state.copyWith(
+            event: event.match(() => state.event, Option.of),
+            userStatusLoading: false,
+          ),
+        );
+      },
+    );
+  });
 
-  Future<void> leave() => state.event.match(
-        () async {},
-        (s) async {
-          _reporter.reportLeave(s, AppLocation.eventScreen);
-          emit(state.copyWith(userStatusLoading: true));
-          final myProfile = await _usersRepository.loadMe();
-          return myProfile.match(
-            () => emit(state.copyWith(userStatusLoading: false)),
-            (p) async {
-              final event = await _repository.leave(s.eventId);
-              emit(
-                state.copyWith(
-                  event: event.match(() => state.event, Option.of),
-                  userStatusLoading: false,
-                ),
-              );
-            },
-          );
-        },
-      );
+  Future<void> leave() => state.event.match(() async {}, (s) async {
+    _reporter.reportLeave(s, AppLocation.eventScreen);
+    emit(state.copyWith(userStatusLoading: true));
+    final myProfile = await _usersRepository.loadMe();
+    return myProfile.match(
+      () => emit(state.copyWith(userStatusLoading: false)),
+      (p) async {
+        final event = await _repository.leave(s.eventId);
+        emit(
+          state.copyWith(
+            event: event.match(() => state.event, Option.of),
+            userStatusLoading: false,
+          ),
+        );
+      },
+    );
+  });
 }

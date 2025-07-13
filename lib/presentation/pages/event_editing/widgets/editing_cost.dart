@@ -15,17 +15,15 @@ import 'currency_dialog.dart';
 class EditingCost extends StatelessWidget {
   const EditingCost({super.key});
 
-  void _selectCurrency(BuildContext context) async {
+  Future<void> _selectCurrency(BuildContext context) async {
     final newCurrency = await showDialog<Currency>(
       context: context,
       builder: (context) => const CurrencyDialog(),
     );
     if (newCurrency != null && context.mounted) {
       context.read<OneEventCubit>().modify(
-            (e) => e.copyWith(
-              cost: e.cost.copyWith(currency: newCurrency),
-            ),
-          );
+        (e) => e.copyWith(cost: e.cost.copyWith(currency: newCurrency)),
+      );
     }
   }
 
@@ -48,16 +46,12 @@ class EditingCost extends StatelessWidget {
               child: AppTextField(
                 initialText: initialCost,
                 hintText: 'Free',
-                inputType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
+                inputType: const TextInputType.numberWithOptions(decimal: true),
                 onChange: (text) => context.read<OneEventCubit>().modify(
-                      (e) => e.copyWith(
-                        cost: e.cost.copyWith(
-                          number: double.tryParse(text) ?? 0,
-                        ),
-                      ),
-                    ),
+                  (e) => e.copyWith(
+                    cost: e.cost.copyWith(number: double.tryParse(text) ?? 0),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 8),

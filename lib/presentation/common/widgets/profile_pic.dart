@@ -28,7 +28,6 @@ class ProfilePic extends StatelessWidget {
     final imgSize = size ?? 90;
     final radius = imgSize / 2;
     return ClipOval(
-      clipBehavior: Clip.antiAlias,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -39,24 +38,22 @@ class ProfilePic extends StatelessWidget {
               onTap: onTap,
               child: switch (profile.avatar) {
                 final image? when image.isNotEmpty => Image.memory(
-                    base64Decode(image),
-                    width: imgSize,
-                    height: imgSize,
-                    fit: BoxFit.cover,
-                  ),
+                  base64Decode(image),
+                  width: imgSize,
+                  height: imgSize,
+                  fit: BoxFit.cover,
+                ),
                 _ => Container(
-                    width: imgSize,
-                    height: imgSize,
-                    decoration: const BoxDecoration(color: AppColors.gray50),
-                    child: Center(
-                      child: Text(
-                        '${profile.firstName.characters.first}${profile.lastName.characters.first}',
-                        style: AppTextStyles.subtitle.copyWith(
-                          fontSize: radius,
-                        ),
-                      ),
+                  width: imgSize,
+                  height: imgSize,
+                  decoration: const BoxDecoration(color: AppColors.gray50),
+                  child: Center(
+                    child: Text(
+                      '${profile.firstName.characters.first}${profile.lastName.characters.first}',
+                      style: AppTextStyles.subtitle.copyWith(fontSize: radius),
                     ),
                   ),
+                ),
               },
             ),
           ),

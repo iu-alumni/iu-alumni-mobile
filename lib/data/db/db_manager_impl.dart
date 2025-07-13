@@ -18,8 +18,8 @@ class DbManagerImpl extends DbManager {
   }
 
   @override
-  void dispose() async {
-    _db?.close();
+  Future<void> dispose() async {
+    await _db?.close();
     _db = null;
   }
 
@@ -48,7 +48,7 @@ class DbManagerImpl extends DbManager {
     final data = await _db?.query(
       'cities_fts',
       columns: ['city', 'country'],
-      where: 'city MATCH ? || \'*\'',
+      where: "city MATCH ? || '*'",
       whereArgs: [city],
       limit: _searchLimit,
     );

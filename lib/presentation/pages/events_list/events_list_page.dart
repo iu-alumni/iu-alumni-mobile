@@ -28,37 +28,35 @@ class _EventsListPageState extends State<EventsListPage> {
 
   @override
   Widget build(BuildContext context) => AppScaffold(
-        title: 'Events',
-        leadingButton: null,
-        actions: [
-          AppButton(
-            is48Height: true,
-            child: Text(
-              'Create',
-              style: AppTextStyles.actionSB.copyWith(color: Colors.white),
-            ),
-            onTap: () {
-              context
-                  .read<Reporter>()
-                  .reportCreateEventTap(AppLocation.eventsTab);
-              context.pushRoute(EventEditingRoute(eventId: const None()));
-            },
-          ),
-        ],
-        body: AppChildBody(
-          padding: EdgeInsets.zero,
-          child: BlocBuilder<EventsListCubit, EventsListState>(
-            builder: (context, eventsState) => switch (eventsState) {
-              EventsListData d when d.data.isEmpty => Center(
-                  child: Text('No events', style: AppTextStyles.caption),
-                ),
-              EventsListData d => EventsList(events: d.data),
-              EventsListError e => Center(
-                  child: Text(e.error, style: AppTextStyles.caption),
-                ),
-              _ => const Center(child: AppLoader(inCard: true)),
-            },
-          ),
+    title: 'Events',
+    leadingButton: null,
+    actions: [
+      AppButton(
+        is48Height: true,
+        child: Text(
+          'Create',
+          style: AppTextStyles.actionSB.copyWith(color: Colors.white),
         ),
-      );
+        onTap: () {
+          context.read<Reporter>().reportCreateEventTap(AppLocation.eventsTab);
+          context.pushRoute(EventEditingRoute(eventId: const None()));
+        },
+      ),
+    ],
+    body: AppChildBody(
+      padding: EdgeInsets.zero,
+      child: BlocBuilder<EventsListCubit, EventsListState>(
+        builder: (context, eventsState) => switch (eventsState) {
+          final EventsListData d when d.data.isEmpty => Center(
+            child: Text('No events', style: AppTextStyles.caption),
+          ),
+          final EventsListData d => EventsList(events: d.data),
+          final EventsListError e => Center(
+            child: Text(e.error, style: AppTextStyles.caption),
+          ),
+          _ => const Center(child: AppLoader(inCard: true)),
+        },
+      ),
+    ),
+  );
 }

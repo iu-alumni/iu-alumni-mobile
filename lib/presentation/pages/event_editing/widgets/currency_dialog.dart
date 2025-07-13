@@ -10,22 +10,21 @@ class CurrencyDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: Material(
-            borderRadius: BorderRadius.circular(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 16),
-                ...Currency.values.map(_Currency.new),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
+    padding: const EdgeInsets.all(16),
+    child: Center(
+      child: Material(
+        borderRadius: BorderRadius.circular(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 16),
+            ...Currency.values.map(_Currency.new),
+            const SizedBox(height: 16),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }
 
 class _Currency extends StatelessWidget {
@@ -35,14 +34,14 @@ class _Currency extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => InkWell(
-        onTap: () => context.maybePop(currency),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: Text(
-            currency.format,
-            style: AppTextStyles.actionM,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
+    onTap: () => context.maybePop(currency),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Text(
+        currency.format,
+        style: AppTextStyles.actionM,
+        textAlign: TextAlign.center,
+      ),
+    ),
+  );
 }

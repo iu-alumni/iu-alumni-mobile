@@ -13,7 +13,7 @@ class TokenProviderImpl extends TokenProvider {
 
   @override
   Option<String> get token => _tokenManager.token;
-  
+
   @override
   void clear() {
     _tokenManager.clear();

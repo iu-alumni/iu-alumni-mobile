@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 
@@ -23,14 +25,14 @@ class AppLoadingManager {
   Future<void> init(BuildContext context) async {
     await _secretsManager.init();
     await _tokenProvider.init();
-    _dbManager.init();
+    unawaited(_dbManager.init());
     _reporter.init();
     if (context.mounted) {
-      context.router.replaceAll([
+      await context.router.replaceAll([
         if (_tokenProvider.token.isNone())
           const AuthRoute()
         else
-          const RootRoute()
+          const RootRoute(),
       ]);
     }
   }

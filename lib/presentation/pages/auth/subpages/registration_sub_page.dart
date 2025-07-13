@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui_alumni_mobile/presentation/router/app_router.gr.dart';
 
 import '../../../blocs/models/registration_state.dart';
 import '../../../blocs/registration/registration_cubit.dart';
@@ -11,13 +13,11 @@ import '../../../common/widgets/app_button.dart';
 import '../../../common/widgets/app_loader.dart';
 import '../../../common/widgets/app_scaffold.dart';
 import '../../../common/widgets/app_text_field.dart';
-import '../../../common/widgets/nav_button.dart';
-import 'year_picker.dart';
+import '../widgets/year_picker.dart';
 
-class RegistrationScaffold extends StatefulWidget {
-  const RegistrationScaffold({
-    required this.back,
-    required this.toVerification,
+@RoutePage()
+class RegistrationSubPage extends StatefulWidget {
+  const RegistrationSubPage({
     required this.email,
     required this.password,
     super.key,
@@ -25,80 +25,77 @@ class RegistrationScaffold extends StatefulWidget {
 
   final String email;
   final String password;
-  final void Function() back;
-  final void Function() toVerification;
 
   @override
-  State<RegistrationScaffold> createState() => _RegistrationScaffoldState();
+  State<RegistrationSubPage> createState() => _RegistrationSubPageState();
 }
 
-class _RegistrationScaffoldState extends State<RegistrationScaffold> {
+class _RegistrationSubPageState extends State<RegistrationSubPage> {
   static const _bottomDesc =
       'You would need to enter a 6-digit code sent to your university mail address. This is the quickest and safest way for us to know you are a real alumnus. If you don’t have access to the mail address, proceed with manual verification';
   static const _topDesc =
       'To retain safe and supportive community, we need to make sure you are a real alumnus';
 
-  late final RegistrationCubit _verificationCubit;
+  late final RegistrationCubit _registrationCubit;
 
   @override
   void initState() {
-    _verificationCubit = context.read<RegistrationCubit>();
-    _verificationCubit.setEmail(widget.email);
-    _verificationCubit.setPassword(widget.password);
+    _registrationCubit = context.read<RegistrationCubit>();
+    _registrationCubit.setEmail(widget.email);
+    _registrationCubit.setPassword(widget.password);
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _verificationCubit.dispose();
-    super.dispose();
-  }
-
-  void _pickGradYear() async {
+  Future<void> _pickGradYear() async {
     final year = await GraduationYearPicker.show(context);
     if (year != null) {
-      _verificationCubit.setGradYear(year);
+      _registrationCubit.setGradYear(year);
     }
   }
 
   void _listen(BuildContext context, RegistrationState state) {
     if (state.verification case LoadedStateData(:final data)) {
       if (data) {
-        widget.back();
+        context.maybePop();
         _showVerificationInitiated();
         return;
       }
-      widget.toVerification();
+      context.pushRoute(const CodeVerificationSubRoute());
     }
   }
 
   void _showVerificationInitiated() => showCupertinoModalPopup(
-        context: context,
-        builder: (context) => Material(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          child: SafeArea(
-            top: false,
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Text(
-                'We will check the provided data and come back with an answer soon! 👀',
-                style: AppTextStyles.subtitle,
-              ),
-            ),
+    context: context,
+    builder: (context) => Material(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Text(
+            'We will check the provided data and come back with an answer soon! 👀',
+            style: AppTextStyles.subtitle,
           ),
         ),
-      );
+      ),
+    ),
+  );
 
   @override
-  Widget build(BuildContext context) =>
-      BlocListener<RegistrationCubit, RegistrationState>(
-        listener: _listen,
-        child: AppScaffold(
-          leadingButton: NavButton(onTap: widget.back),
-          title: 'Register',
-          topSafeArea: false,
-          body: AppListBody(children: [
-            Text(
+  Widget build(BuildContext context) => PopScope(
+    onPopInvokedWithResult: (didPop, result) {
+      if (didPop) {
+        _registrationCubit.toInitial();
+      }
+    },
+    child: BlocListener<RegistrationCubit, RegistrationState>(
+      listener: _listen,
+      child: AppScaffold(
+        title: 'Register',
+        topSafeArea: false,
+        body: AppListBody(
+          children: [
+            const Text(
               _topDesc,
               style: AppTextStyles.body,
               textAlign: TextAlign.start,
@@ -106,7 +103,7 @@ class _RegistrationScaffoldState extends State<RegistrationScaffold> {
             const SizedBox(height: 24),
             AppTextField(
               initialText: null,
-              onChange: _verificationCubit.setFirstName,
+              onChange: _registrationCubit.setFirstName,
               hintText: 'First name',
               inputType: TextInputType.name,
               maxLines: 1,
@@ -114,7 +111,7 @@ class _RegistrationScaffoldState extends State<RegistrationScaffold> {
             const SizedBox(height: 8),
             AppTextField(
               initialText: null,
-              onChange: _verificationCubit.setLastName,
+              onChange: _registrationCubit.setLastName,
               hintText: 'Last name',
               inputType: TextInputType.name,
               maxLines: 1,
@@ -122,7 +119,7 @@ class _RegistrationScaffoldState extends State<RegistrationScaffold> {
             const SizedBox(height: 8),
             AppTextField(
               initialText: widget.email,
-              onChange: _verificationCubit.setEmail,
+              onChange: _registrationCubit.setEmail,
               hintText: 'University email',
               inputType: TextInputType.emailAddress,
               maxLines: 1,
@@ -154,7 +151,7 @@ class _RegistrationScaffoldState extends State<RegistrationScaffold> {
             const SizedBox(height: 8),
             AppTextField(
               initialText: null,
-              onChange: _verificationCubit.setTelegram,
+              onChange: _registrationCubit.setTelegram,
               hintText: 'Telegram alias',
               inputType: TextInputType.text,
               maxLines: 1,
@@ -162,7 +159,7 @@ class _RegistrationScaffoldState extends State<RegistrationScaffold> {
             const SizedBox(height: 8),
             AppTextField(
               initialText: widget.password,
-              onChange: _verificationCubit.setPassword,
+              onChange: _registrationCubit.setPassword,
               hintText: 'Password',
               inputType: TextInputType.visiblePassword,
               obscureText: true,
@@ -177,7 +174,7 @@ class _RegistrationScaffoldState extends State<RegistrationScaffold> {
             ),
             const SizedBox(height: 24),
             AppButton(
-              onTap: _verificationCubit.registerViaEmail,
+              onTap: _registrationCubit.registerViaEmail,
               child: BlocBuilder<RegistrationCubit, RegistrationState>(
                 buildWhen: (p, c) => p.verification != c.verification,
                 builder: (context, verState) {
@@ -186,9 +183,7 @@ class _RegistrationScaffoldState extends State<RegistrationScaffold> {
                   }
                   return Text(
                     'Verify via email',
-                    style: AppTextStyles.actionSB.copyWith(
-                      color: Colors.white,
-                    ),
+                    style: AppTextStyles.actionSB.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   );
                 },
@@ -196,7 +191,7 @@ class _RegistrationScaffoldState extends State<RegistrationScaffold> {
             ),
             const SizedBox(height: 8),
             AppButton(
-              onTap: _verificationCubit.registerManually,
+              onTap: _registrationCubit.registerManually,
               buttonStyle: AppButtonStyle.secondary,
               child: BlocBuilder<RegistrationCubit, RegistrationState>(
                 buildWhen: (p, c) => p.verification != c.verification,
@@ -206,18 +201,18 @@ class _RegistrationScaffoldState extends State<RegistrationScaffold> {
                   }
                   return Text(
                     'Verify manually',
-                    style: AppTextStyles.actionM.copyWith(
-                      color: Colors.white,
-                    ),
+                    style: AppTextStyles.actionM.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   );
                 },
               ),
             ),
             const SizedBox(height: 16),
-          ]),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }
 
 class _ErrorText extends StatelessWidget {
@@ -231,12 +226,12 @@ class _ErrorText extends StatelessWidget {
           duration: const Duration(milliseconds: 250),
           child: switch (state.verification) {
             LoadedStateError(:final error) => Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: Text(
-                  error.trim(),
-                  style: AppTextStyles.caption.copyWith(color: AppColors.error),
-                ),
+              padding: const EdgeInsets.only(top: 24),
+              child: Text(
+                error.trim(),
+                style: AppTextStyles.caption.copyWith(color: AppColors.error),
               ),
+            ),
             _ => const SizedBox(),
           },
         ),

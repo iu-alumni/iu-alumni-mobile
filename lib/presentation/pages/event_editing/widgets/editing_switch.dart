@@ -12,20 +12,20 @@ class EditingSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TitledItem(
-        // icon: Icons.video_call,
-        title: 'Online event',
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: BlocBuilder<OneEventCubit, OneEventState>(
-            builder: (context, eventState) => AppSwitch(
-              value: eventState.event
-                  .map((e) => e.onlineEvent)
-                  .match(() => false, identity),
-              onTap: (_) => context
-                  .read<OneEventCubit>()
-                  .modify((e) => e.copyWith(onlineEvent: !e.onlineEvent)),
-            ),
+    // icon: Icons.video_call,
+    title: 'Online event',
+    child: Align(
+      alignment: Alignment.topLeft,
+      child: BlocBuilder<OneEventCubit, OneEventState>(
+        builder: (context, eventState) => AppSwitch(
+          value: eventState.event
+              .map((e) => e.onlineEvent)
+              .match(() => false, identity),
+          onTap: (_) => context.read<OneEventCubit>().modify(
+            (e) => e.copyWith(onlineEvent: !e.onlineEvent),
           ),
         ),
-      );
+      ),
+    ),
+  );
 }

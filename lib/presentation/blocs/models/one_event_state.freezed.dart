@@ -12,7 +12,8 @@ part of 'one_event_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$OneEventState {
@@ -32,14 +33,16 @@ mixin _$OneEventState {
 /// @nodoc
 abstract class $OneEventStateCopyWith<$Res> {
   factory $OneEventStateCopyWith(
-          OneEventState value, $Res Function(OneEventState) then) =
-      _$OneEventStateCopyWithImpl<$Res, OneEventState>;
+    OneEventState value,
+    $Res Function(OneEventState) then,
+  ) = _$OneEventStateCopyWithImpl<$Res, OneEventState>;
   @useResult
-  $Res call(
-      {LoadedState<Unit> saveState,
-      Option<EventModel> event,
-      bool userStatusLoading,
-      LoadedState<Iterable<Profile>> participants});
+  $Res call({
+    LoadedState<Unit> saveState,
+    Option<EventModel> event,
+    bool userStatusLoading,
+    LoadedState<Iterable<Profile>> participants,
+  });
 
   $LoadedStateCopyWith<Unit, $Res> get saveState;
   $LoadedStateCopyWith<Iterable<Profile>, $Res> get participants;
@@ -65,24 +68,31 @@ class _$OneEventStateCopyWithImpl<$Res, $Val extends OneEventState>
     Object? userStatusLoading = null,
     Object? participants = null,
   }) {
-    return _then(_value.copyWith(
-      saveState: null == saveState
-          ? _value.saveState
-          : saveState // ignore: cast_nullable_to_non_nullable
-              as LoadedState<Unit>,
-      event: null == event
-          ? _value.event
-          : event // ignore: cast_nullable_to_non_nullable
-              as Option<EventModel>,
-      userStatusLoading: null == userStatusLoading
-          ? _value.userStatusLoading
-          : userStatusLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      participants: null == participants
-          ? _value.participants
-          : participants // ignore: cast_nullable_to_non_nullable
-              as LoadedState<Iterable<Profile>>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            saveState:
+                null == saveState
+                    ? _value.saveState
+                    : saveState // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<Unit>,
+            event:
+                null == event
+                    ? _value.event
+                    : event // ignore: cast_nullable_to_non_nullable
+                        as Option<EventModel>,
+            userStatusLoading:
+                null == userStatusLoading
+                    ? _value.userStatusLoading
+                    : userStatusLoading // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            participants:
+                null == participants
+                    ? _value.participants
+                    : participants // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<Iterable<Profile>>,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of OneEventState
@@ -100,8 +110,9 @@ class _$OneEventStateCopyWithImpl<$Res, $Val extends OneEventState>
   @override
   @pragma('vm:prefer-inline')
   $LoadedStateCopyWith<Iterable<Profile>, $Res> get participants {
-    return $LoadedStateCopyWith<Iterable<Profile>, $Res>(_value.participants,
-        (value) {
+    return $LoadedStateCopyWith<Iterable<Profile>, $Res>(_value.participants, (
+      value,
+    ) {
       return _then(_value.copyWith(participants: value) as $Val);
     });
   }
@@ -111,15 +122,17 @@ class _$OneEventStateCopyWithImpl<$Res, $Val extends OneEventState>
 abstract class _$$OneEventStateImplCopyWith<$Res>
     implements $OneEventStateCopyWith<$Res> {
   factory _$$OneEventStateImplCopyWith(
-          _$OneEventStateImpl value, $Res Function(_$OneEventStateImpl) then) =
-      __$$OneEventStateImplCopyWithImpl<$Res>;
+    _$OneEventStateImpl value,
+    $Res Function(_$OneEventStateImpl) then,
+  ) = __$$OneEventStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {LoadedState<Unit> saveState,
-      Option<EventModel> event,
-      bool userStatusLoading,
-      LoadedState<Iterable<Profile>> participants});
+  $Res call({
+    LoadedState<Unit> saveState,
+    Option<EventModel> event,
+    bool userStatusLoading,
+    LoadedState<Iterable<Profile>> participants,
+  });
 
   @override
   $LoadedStateCopyWith<Unit, $Res> get saveState;
@@ -132,8 +145,9 @@ class __$$OneEventStateImplCopyWithImpl<$Res>
     extends _$OneEventStateCopyWithImpl<$Res, _$OneEventStateImpl>
     implements _$$OneEventStateImplCopyWith<$Res> {
   __$$OneEventStateImplCopyWithImpl(
-      _$OneEventStateImpl _value, $Res Function(_$OneEventStateImpl) _then)
-      : super(_value, _then);
+    _$OneEventStateImpl _value,
+    $Res Function(_$OneEventStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of OneEventState
   /// with the given fields replaced by the non-null parameter values.
@@ -145,35 +159,42 @@ class __$$OneEventStateImplCopyWithImpl<$Res>
     Object? userStatusLoading = null,
     Object? participants = null,
   }) {
-    return _then(_$OneEventStateImpl(
-      saveState: null == saveState
-          ? _value.saveState
-          : saveState // ignore: cast_nullable_to_non_nullable
-              as LoadedState<Unit>,
-      event: null == event
-          ? _value.event
-          : event // ignore: cast_nullable_to_non_nullable
-              as Option<EventModel>,
-      userStatusLoading: null == userStatusLoading
-          ? _value.userStatusLoading
-          : userStatusLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      participants: null == participants
-          ? _value.participants
-          : participants // ignore: cast_nullable_to_non_nullable
-              as LoadedState<Iterable<Profile>>,
-    ));
+    return _then(
+      _$OneEventStateImpl(
+        saveState:
+            null == saveState
+                ? _value.saveState
+                : saveState // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<Unit>,
+        event:
+            null == event
+                ? _value.event
+                : event // ignore: cast_nullable_to_non_nullable
+                    as Option<EventModel>,
+        userStatusLoading:
+            null == userStatusLoading
+                ? _value.userStatusLoading
+                : userStatusLoading // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        participants:
+            null == participants
+                ? _value.participants
+                : participants // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<Iterable<Profile>>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$OneEventStateImpl implements _OneEventState {
-  const _$OneEventStateImpl(
-      {required this.saveState,
-      required this.event,
-      required this.userStatusLoading,
-      required this.participants});
+  const _$OneEventStateImpl({
+    required this.saveState,
+    required this.event,
+    required this.userStatusLoading,
+    required this.participants,
+  });
 
   @override
   final LoadedState<Unit> saveState;
@@ -205,7 +226,12 @@ class _$OneEventStateImpl implements _OneEventState {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, saveState, event, userStatusLoading, participants);
+    runtimeType,
+    saveState,
+    event,
+    userStatusLoading,
+    participants,
+  );
 
   /// Create a copy of OneEventState
   /// with the given fields replaced by the non-null parameter values.
@@ -217,12 +243,12 @@ class _$OneEventStateImpl implements _OneEventState {
 }
 
 abstract class _OneEventState implements OneEventState {
-  const factory _OneEventState(
-          {required final LoadedState<Unit> saveState,
-          required final Option<EventModel> event,
-          required final bool userStatusLoading,
-          required final LoadedState<Iterable<Profile>> participants}) =
-      _$OneEventStateImpl;
+  const factory _OneEventState({
+    required final LoadedState<Unit> saveState,
+    required final Option<EventModel> event,
+    required final bool userStatusLoading,
+    required final LoadedState<Iterable<Profile>> participants,
+  }) = _$OneEventStateImpl;
 
   @override
   LoadedState<Unit> get saveState;

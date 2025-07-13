@@ -19,34 +19,31 @@ class EventsGatewayImpl implements EventsGateway {
 
   @override
   Future<Option<String>> addEvent(EventRequestDataModel event) async {
-    final result = await TaskEither.tryCatch(
-      () async {
-        final data = jsonEncode(event.toJson());
-        final response = await _dio.post(
-          Paths.events(_secretsManager.hostPath),
-          data: data,
-          options: _optionsManager.opts(),
-        );
-        final json = response.data as Map<String, dynamic>;
-        return json['id'] as String;
-      },
-      (e, _) => '$e',
-    ).run();
+    final result = await TaskEither.tryCatch(() async {
+      final data = jsonEncode(event.toJson());
+      final response = await _dio.post(
+        Paths.events(_secretsManager.hostPath),
+        data: data,
+        options: _optionsManager.opts(),
+      );
+      final json = response.data as Map<String, dynamic>;
+      return json['id'] as String;
+    }, (e, _) => '$e').run();
     return result.toOption();
   }
 
   @override
-  Future<Iterable<EventDataModel>> loadEvents() =>
-      TaskEither.tryCatch(() async {
-        final resp = await _dio.get(
-          Paths.events(_secretsManager.hostPath),
-          options: _optionsManager.opts(),
-        );
-        final list = resp.data as List;
-        return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
-      }, (e, _) => '$e')
-          .match<Iterable<EventDataModel>>((_) => [], identity)
-          .run();
+  Future<Iterable<EventDataModel>> loadEvents() => TaskEither.tryCatch(
+    () async {
+      final resp = await _dio.get(
+        Paths.events(_secretsManager.hostPath),
+        options: _optionsManager.opts(),
+      );
+      final list = resp.data as List;
+      return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
+    },
+    (e, _) => '$e',
+  ).match<Iterable<EventDataModel>>((_) => [], identity).run();
 
   @override
   Future<bool> deleteEvent(String eventId) async {
@@ -62,18 +59,15 @@ class EventsGatewayImpl implements EventsGateway {
 
   @override
   Future<bool> updateEvent(String eventId, EventRequestDataModel event) async {
-    final result = await TaskEither.tryCatch(
-      () async {
-        final requestModel = event.toJson();
-        requestModel['datetime'] = null;
-        await _dio.put(
-          Paths.eventWithId(_secretsManager.hostPath, eventId),
-          options: _optionsManager.opts(),
-          data: jsonEncode(requestModel),
-        );
-      },
-      (e, _) => '$e',
-    ).run();
+    final result = await TaskEither.tryCatch(() async {
+      final requestModel = event.toJson();
+      requestModel['datetime'] = null;
+      await _dio.put(
+        Paths.eventWithId(_secretsManager.hostPath, eventId),
+        options: _optionsManager.opts(),
+        data: jsonEncode(requestModel),
+      );
+    }, (e, _) => '$e').run();
     return result.isRight();
   }
 
@@ -104,28 +98,29 @@ class EventsGatewayImpl implements EventsGateway {
   }
 
   @override
-  Future<Iterable<EventDataModel>> eventsIOwn() =>
-      TaskEither.tryCatch(() async {
-        final resp = await _dio.get(
-          Paths.eventsOwner(_secretsManager.hostPath),
-          options: _optionsManager.opts(),
-        );
-        final list = resp.data as List;
-        return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
-      }, (e, _) => '$e')
-          .match<Iterable<EventDataModel>>((_) => [], identity)
-          .run();
+  Future<Iterable<EventDataModel>> eventsIOwn() => TaskEither.tryCatch(
+    () async {
+      final resp = await _dio.get(
+        Paths.eventsOwner(_secretsManager.hostPath),
+        options: _optionsManager.opts(),
+      );
+      final list = resp.data as List;
+      return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
+    },
+    (e, _) => '$e',
+  ).match<Iterable<EventDataModel>>((_) => [], identity).run();
 
   @override
   Future<Iterable<EventDataModel>> eventsWhereParticipate(String userId) =>
-      TaskEither.tryCatch(() async {
-        final resp = await _dio.get(
-          Paths.eventsWhereParticipant(_secretsManager.hostPath, userId),
-          options: _optionsManager.opts(),
-        );
-        final list = resp.data as List;
-        return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
-      }, (e, _) => '$e')
-          .match<Iterable<EventDataModel>>((_) => [], identity)
-          .run();
+      TaskEither.tryCatch(
+        () async {
+          final resp = await _dio.get(
+            Paths.eventsWhereParticipant(_secretsManager.hostPath, userId),
+            options: _optionsManager.opts(),
+          );
+          final list = resp.data as List;
+          return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
+        },
+        (e, _) => '$e',
+      ).match<Iterable<EventDataModel>>((_) => [], identity).run();
 }

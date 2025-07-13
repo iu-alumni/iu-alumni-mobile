@@ -10,39 +10,33 @@ class GraduationYearPicker extends StatelessWidget {
   static const _firstYear = 2015;
 
   static Future<int?> show(BuildContext context) async => showDialog<int>(
-        context: context,
-        builder: (_) => const GraduationYearPicker(),
-      );
+    context: context,
+    builder: (_) => const GraduationYearPicker(),
+  );
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Material(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(
-                    DateTime.now().year - _firstYear,
-                    (d) {
-                      final year = _firstYear + d;
-                      return AppButton(
-                        onTap: () => context.maybePop(year),
-                        buttonStyle: AppButtonStyle.text,
-                        child: Text(
-                          '$year',
-                          style: AppTextStyles.actionSB,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+    padding: const EdgeInsets.all(16),
+    child: Center(
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Material(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(DateTime.now().year - _firstYear, (d) {
+                final year = _firstYear + d;
+                return AppButton(
+                  onTap: () => context.maybePop(year),
+                  buttonStyle: AppButtonStyle.text,
+                  child: Text('$year', style: AppTextStyles.actionSB),
+                );
+              }),
             ),
           ),
         ),
-      );
+      ),
+    ),
+  );
 }

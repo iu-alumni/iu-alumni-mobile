@@ -1,4 +1,4 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SecretsManager {
   String? webSalt;
@@ -6,12 +6,15 @@ class SecretsManager {
   String? hostPath;
 
   Future<void> init() async {
-    await dotenv.load(fileName: '.env');
-    webSalt = dotenv.env['iu_alumni_web_salt'] ??
+    // await dotenv.load(fileName: '.env');
+    webSalt =
+        // dotenv.env['iu_alumni_web_salt'] ??
         const String.fromEnvironment('iu_alumni_web_salt');
-    appMetricaKey = dotenv.env['app_metrica_key'] ??
+    appMetricaKey =
+        // dotenv.env['app_metrica_key'] ??
         const String.fromEnvironment('app_metrica_key');
     hostPath =
-        dotenv.env['host_path'] ?? const String.fromEnvironment('host_path');
+        // dotenv.env['host_path'] ??
+        const String.fromEnvironment('host_path');
   }
 }

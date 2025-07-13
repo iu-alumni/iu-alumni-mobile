@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 import 'package:intl/intl.dart';
+import 'package:ui_alumni_mobile/presentation/common/widgets/app_loader.dart';
 
 import '../../../../application/models/cost.dart';
 import '../../../../application/models/event.dart';
@@ -37,63 +38,41 @@ class _EventViewingContentState extends State<EventViewingContent> {
 
   @override
   Widget build(BuildContext context) => Column(
-        children: [
-          _Cover(event: widget.event),
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      _Cover(event: widget.event),
+      const SizedBox(height: 16),
+      ...[
+        const ParticipantsCard(),
+        const SizedBox(height: 16),
+        if (widget.event.description case final text? when text.isNotEmpty) ...[
+          Text(text, style: AppTextStyles.body, textAlign: TextAlign.start),
           const SizedBox(height: 16),
-          ...[
-            const ParticipantsCard(),
-            const SizedBox(height: 16),
-            if (widget.event.description case final text?
-                when text.isNotEmpty) ...[
-              Text(text, style: AppTextStyles.body, textAlign: TextAlign.start),
-              const SizedBox(height: 16),
-            ],
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                AppTag(
-                  icon: Icons.date_range,
-                  text: _formatter.format(widget.event.occurringAt),
-                ),
-                if (widget.event.location case final loc? when loc.isNotEmpty)
-                  AppTag(icon: Icons.pin_drop, text: loc),
-                AppTag(
-                  icon: Icons.attach_money,
-                  text: _costToStr(widget.event.cost),
-                ),
-              ],
-            ),
-            // if (desc != null && desc.isNotEmpty)
-            //   _Item(
-            //     icon: Icons.description_outlined,
-            //     name: 'Description',
-            //     content: Left(widget.event.description ?? ''),
-            //   ),
-            // if (location != null && location.isNotEmpty)
-            //   _Item(
-            //     icon: Icons.location_pin,
-            //     name: 'Location',
-            //     content: Left(location),
-            //   ),
-            // _Item(
-            //   icon: Icons.attach_money_outlined,
-            //   name: 'Cost',
-            //   content: Left(_costToStr(widget.event.cost)),
-            // ),
-            // _Item(
-            //   icon: Icons.watch_later_outlined,
-            //   name: 'When',
-            //   content: Left(_formatter.format(widget.event.occurringAt)),
-            // ),
-          ].map(
-            (w) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: w,
-            ),
-          ),
         ],
-      );
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            AppTag(
+              icon: Icons.date_range,
+              text: _formatter.format(widget.event.occurringAt),
+            ),
+            if (widget.event.location case final loc? when loc.isNotEmpty)
+              AppTag(icon: Icons.pin_drop, text: loc),
+            AppTag(
+              icon: Icons.attach_money,
+              text: _costToStr(widget.event.cost),
+            ),
+          ],
+        ),
+      ].map(
+        (w) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: w,
+        ),
+      ),
+    ],
+  );
 }
 
 class _Cover extends StatelessWidget {
@@ -101,7 +80,7 @@ class _Cover extends StatelessWidget {
 
   final EventModel event;
 
-  void _edit(BuildContext context) async {
+  Future<void> _edit(BuildContext context) async {
     context.read<Reporter>().reportEditEventTap(event, AppLocation.eventScreen);
     await context.pushRoute(
       EventEditingRoute(eventId: Option.of(event.eventId)),
@@ -109,62 +88,57 @@ class _Cover extends StatelessWidget {
     if (!context.mounted) {
       return;
     }
-    context.read<OneEventCubit>().loadEvent(event.eventId);
+    await context.read<OneEventCubit>().loadEvent(event.eventId);
   }
 
-  void _participate(BuildContext context) async {
+  Future<void> _participate(BuildContext context) async {
     final profileCubit = context.read<ProfileCubit>();
     await context.read<OneEventCubit>().participate();
     // Mark this one is updated
-    profileCubit.updateParticipatedEvents();
+    await profileCubit.updateParticipatedEvents();
   }
 
-  void _leave(BuildContext context) async {
+  Future<void> _leave(BuildContext context) async {
     final profileCubit = context.read<ProfileCubit>();
     await context.read<OneEventCubit>().leave();
     // Mark this one is updated
-    profileCubit.updateParticipatedEvents();
+    await profileCubit.updateParticipatedEvents();
   }
 
   @override
   Widget build(BuildContext context) => EventCover(
-        imageBytes: event.coverBytes,
-        title: event.title,
-        // location: event.location,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: AppButton(
-            buttonStyle: switch (event.userStatus) {
-              UserNotAuthor(:final participant) when participant =>
-                AppButtonStyle.secondary,
-              _ => AppButtonStyle.primary,
-            },
-            child: BlocBuilder<OneEventCubit, OneEventState>(
-              buildWhen: (p, c) => p.userStatusLoading != c.userStatusLoading,
-              builder: (context, state) => state.userStatusLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : Text(
-                      switch (event.userStatus) {
-                        UserAuthor() => 'Edit',
-                        UserNotAuthor(:final participant) when participant =>
-                          'I won\'t come',
-                        UserNotAuthor() => 'Participate',
-                      },
-                      style: AppTextStyles.actionSB,
-                      textAlign: TextAlign.center,
-                    ),
-            ),
-            onTap: () => switch (event.userStatus) {
-              UserAuthor() => _edit(context),
-              UserNotAuthor(:final participant) when participant =>
-                _leave(context),
-              UserNotAuthor() => _participate(context),
-            },
-          ),
+    imageBytes: event.coverBytes,
+    title: event.title,
+    // location: event.location,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: AppButton(
+        buttonStyle: switch (event.userStatus) {
+          UserNotAuthor(:final participant) when participant =>
+            AppButtonStyle.secondary,
+          _ => AppButtonStyle.primary,
+        },
+        child: BlocBuilder<OneEventCubit, OneEventState>(
+          buildWhen: (p, c) => p.userStatusLoading != c.userStatusLoading,
+          builder: (context, state) => state.userStatusLoading
+              ? const Center(child: AppLoader(color: Colors.white))
+              : Text(
+                  switch (event.userStatus) {
+                    UserAuthor() => 'Edit',
+                    UserNotAuthor(:final participant) when participant =>
+                      "I won't come",
+                    UserNotAuthor() => 'Participate',
+                  },
+                  style: AppTextStyles.actionSB.copyWith(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
         ),
-      );
+        onTap: () => switch (event.userStatus) {
+          UserAuthor() => _edit(context),
+          UserNotAuthor(:final participant) when participant => _leave(context),
+          UserNotAuthor() => _participate(context),
+        },
+      ),
+    ),
+  );
 }

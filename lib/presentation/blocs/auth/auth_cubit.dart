@@ -6,10 +6,8 @@ import '../../../application/repositories/reporter/reporter.dart';
 import '../../common/models/loaded_state.dart';
 
 class AuthCubit extends Cubit<LoadedState> {
-  AuthCubit(
-    this._authRepository,
-    this._reporter,
-  ) : super(const LoadedState.init());
+  AuthCubit(this._authRepository, this._reporter)
+    : super(const LoadedState.init());
 
   final AuthRepository _authRepository;
   final Reporter _reporter;
@@ -19,6 +17,10 @@ class AuthCubit extends Cubit<LoadedState> {
       : 'The email must have the "innopolis" mail server';
 
   Future<void> authorize(String login, String password) async {
+    if (login.isEmpty || password.isEmpty) {
+      emit(const LoadedState.error('You have to fill both email and password'));
+      return;
+    }
     final error = _validateEmail(login);
     if (error != null) {
       _reporter.reportAuthError(error, AppLocation.authScreen);
@@ -30,10 +32,10 @@ class AuthCubit extends Cubit<LoadedState> {
     emit(
       result.match(
         (e) {
-          final errorMsg =
-              'If you are an alumnus and haven\'t created an account in this app yet, proceed with registration';
+          const errorMsg =
+              "If you are an alumnus and haven't created an account in this app yet, proceed with registration";
           _reporter.reportAuthError(errorMsg, AppLocation.authScreen);
-          return LoadedState.error(errorMsg);
+          return const LoadedState.error(errorMsg);
         },
         (_) {
           _reporter.reportAuthSuccessful(AppLocation.authScreen);

@@ -12,7 +12,8 @@ part of 'event_data_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 EventDataModel _$EventDataModelFromJson(Map<String, dynamic> json) {
   return _EventDataModel.fromJson(json);
@@ -48,20 +49,22 @@ mixin _$EventDataModel {
 /// @nodoc
 abstract class $EventDataModelCopyWith<$Res> {
   factory $EventDataModelCopyWith(
-          EventDataModel value, $Res Function(EventDataModel) then) =
-      _$EventDataModelCopyWithImpl<$Res, EventDataModel>;
+    EventDataModel value,
+    $Res Function(EventDataModel) then,
+  ) = _$EventDataModelCopyWithImpl<$Res, EventDataModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'id') String eventId,
-      @JsonKey(name: 'owner_id') String ownerId,
-      @JsonKey(name: 'participants_ids') List<String> participantsIds,
-      String title,
-      String description,
-      String location,
-      DateTime datetime,
-      int cost,
-      @JsonKey(name: 'is_online') bool isOnline,
-      String? cover});
+  $Res call({
+    @JsonKey(name: 'id') String eventId,
+    @JsonKey(name: 'owner_id') String ownerId,
+    @JsonKey(name: 'participants_ids') List<String> participantsIds,
+    String title,
+    String description,
+    String location,
+    DateTime datetime,
+    int cost,
+    @JsonKey(name: 'is_online') bool isOnline,
+    String? cover,
+  });
 }
 
 /// @nodoc
@@ -90,70 +93,85 @@ class _$EventDataModelCopyWithImpl<$Res, $Val extends EventDataModel>
     Object? isOnline = null,
     Object? cover = freezed,
   }) {
-    return _then(_value.copyWith(
-      eventId: null == eventId
-          ? _value.eventId
-          : eventId // ignore: cast_nullable_to_non_nullable
-              as String,
-      ownerId: null == ownerId
-          ? _value.ownerId
-          : ownerId // ignore: cast_nullable_to_non_nullable
-              as String,
-      participantsIds: null == participantsIds
-          ? _value.participantsIds
-          : participantsIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-      datetime: null == datetime
-          ? _value.datetime
-          : datetime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      cost: null == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
-              as int,
-      isOnline: null == isOnline
-          ? _value.isOnline
-          : isOnline // ignore: cast_nullable_to_non_nullable
-              as bool,
-      cover: freezed == cover
-          ? _value.cover
-          : cover // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            eventId:
+                null == eventId
+                    ? _value.eventId
+                    : eventId // ignore: cast_nullable_to_non_nullable
+                        as String,
+            ownerId:
+                null == ownerId
+                    ? _value.ownerId
+                    : ownerId // ignore: cast_nullable_to_non_nullable
+                        as String,
+            participantsIds:
+                null == participantsIds
+                    ? _value.participantsIds
+                    : participantsIds // ignore: cast_nullable_to_non_nullable
+                        as List<String>,
+            title:
+                null == title
+                    ? _value.title
+                    : title // ignore: cast_nullable_to_non_nullable
+                        as String,
+            description:
+                null == description
+                    ? _value.description
+                    : description // ignore: cast_nullable_to_non_nullable
+                        as String,
+            location:
+                null == location
+                    ? _value.location
+                    : location // ignore: cast_nullable_to_non_nullable
+                        as String,
+            datetime:
+                null == datetime
+                    ? _value.datetime
+                    : datetime // ignore: cast_nullable_to_non_nullable
+                        as DateTime,
+            cost:
+                null == cost
+                    ? _value.cost
+                    : cost // ignore: cast_nullable_to_non_nullable
+                        as int,
+            isOnline:
+                null == isOnline
+                    ? _value.isOnline
+                    : isOnline // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            cover:
+                freezed == cover
+                    ? _value.cover
+                    : cover // ignore: cast_nullable_to_non_nullable
+                        as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$EventDataModelImplCopyWith<$Res>
     implements $EventDataModelCopyWith<$Res> {
-  factory _$$EventDataModelImplCopyWith(_$EventDataModelImpl value,
-          $Res Function(_$EventDataModelImpl) then) =
-      __$$EventDataModelImplCopyWithImpl<$Res>;
+  factory _$$EventDataModelImplCopyWith(
+    _$EventDataModelImpl value,
+    $Res Function(_$EventDataModelImpl) then,
+  ) = __$$EventDataModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'id') String eventId,
-      @JsonKey(name: 'owner_id') String ownerId,
-      @JsonKey(name: 'participants_ids') List<String> participantsIds,
-      String title,
-      String description,
-      String location,
-      DateTime datetime,
-      int cost,
-      @JsonKey(name: 'is_online') bool isOnline,
-      String? cover});
+  $Res call({
+    @JsonKey(name: 'id') String eventId,
+    @JsonKey(name: 'owner_id') String ownerId,
+    @JsonKey(name: 'participants_ids') List<String> participantsIds,
+    String title,
+    String description,
+    String location,
+    DateTime datetime,
+    int cost,
+    @JsonKey(name: 'is_online') bool isOnline,
+    String? cover,
+  });
 }
 
 /// @nodoc
@@ -161,8 +179,9 @@ class __$$EventDataModelImplCopyWithImpl<$Res>
     extends _$EventDataModelCopyWithImpl<$Res, _$EventDataModelImpl>
     implements _$$EventDataModelImplCopyWith<$Res> {
   __$$EventDataModelImplCopyWithImpl(
-      _$EventDataModelImpl _value, $Res Function(_$EventDataModelImpl) _then)
-      : super(_value, _then);
+    _$EventDataModelImpl _value,
+    $Res Function(_$EventDataModelImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EventDataModel
   /// with the given fields replaced by the non-null parameter values.
@@ -180,67 +199,79 @@ class __$$EventDataModelImplCopyWithImpl<$Res>
     Object? isOnline = null,
     Object? cover = freezed,
   }) {
-    return _then(_$EventDataModelImpl(
-      eventId: null == eventId
-          ? _value.eventId
-          : eventId // ignore: cast_nullable_to_non_nullable
-              as String,
-      ownerId: null == ownerId
-          ? _value.ownerId
-          : ownerId // ignore: cast_nullable_to_non_nullable
-              as String,
-      participantsIds: null == participantsIds
-          ? _value._participantsIds
-          : participantsIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-      datetime: null == datetime
-          ? _value.datetime
-          : datetime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      cost: null == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
-              as int,
-      isOnline: null == isOnline
-          ? _value.isOnline
-          : isOnline // ignore: cast_nullable_to_non_nullable
-              as bool,
-      cover: freezed == cover
-          ? _value.cover
-          : cover // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$EventDataModelImpl(
+        eventId:
+            null == eventId
+                ? _value.eventId
+                : eventId // ignore: cast_nullable_to_non_nullable
+                    as String,
+        ownerId:
+            null == ownerId
+                ? _value.ownerId
+                : ownerId // ignore: cast_nullable_to_non_nullable
+                    as String,
+        participantsIds:
+            null == participantsIds
+                ? _value._participantsIds
+                : participantsIds // ignore: cast_nullable_to_non_nullable
+                    as List<String>,
+        title:
+            null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                    as String,
+        description:
+            null == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                    as String,
+        location:
+            null == location
+                ? _value.location
+                : location // ignore: cast_nullable_to_non_nullable
+                    as String,
+        datetime:
+            null == datetime
+                ? _value.datetime
+                : datetime // ignore: cast_nullable_to_non_nullable
+                    as DateTime,
+        cost:
+            null == cost
+                ? _value.cost
+                : cost // ignore: cast_nullable_to_non_nullable
+                    as int,
+        isOnline:
+            null == isOnline
+                ? _value.isOnline
+                : isOnline // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        cover:
+            freezed == cover
+                ? _value.cover
+                : cover // ignore: cast_nullable_to_non_nullable
+                    as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$EventDataModelImpl implements _EventDataModel {
-  _$EventDataModelImpl(
-      {@JsonKey(name: 'id') required this.eventId,
-      @JsonKey(name: 'owner_id') required this.ownerId,
-      @JsonKey(name: 'participants_ids')
-      required final List<String> participantsIds,
-      required this.title,
-      required this.description,
-      required this.location,
-      required this.datetime,
-      required this.cost,
-      @JsonKey(name: 'is_online') required this.isOnline,
-      required this.cover})
-      : _participantsIds = participantsIds;
+  _$EventDataModelImpl({
+    @JsonKey(name: 'id') required this.eventId,
+    @JsonKey(name: 'owner_id') required this.ownerId,
+    @JsonKey(name: 'participants_ids')
+    required final List<String> participantsIds,
+    required this.title,
+    required this.description,
+    required this.location,
+    required this.datetime,
+    required this.cost,
+    @JsonKey(name: 'is_online') required this.isOnline,
+    required this.cover,
+  }) : _participantsIds = participantsIds;
 
   factory _$EventDataModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$EventDataModelImplFromJson(json);
@@ -288,8 +319,10 @@ class _$EventDataModelImpl implements _EventDataModel {
             other is _$EventDataModelImpl &&
             (identical(other.eventId, eventId) || other.eventId == eventId) &&
             (identical(other.ownerId, ownerId) || other.ownerId == ownerId) &&
-            const DeepCollectionEquality()
-                .equals(other._participantsIds, _participantsIds) &&
+            const DeepCollectionEquality().equals(
+              other._participantsIds,
+              _participantsIds,
+            ) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -306,17 +339,18 @@ class _$EventDataModelImpl implements _EventDataModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      eventId,
-      ownerId,
-      const DeepCollectionEquality().hash(_participantsIds),
-      title,
-      description,
-      location,
-      datetime,
-      cost,
-      isOnline,
-      cover);
+    runtimeType,
+    eventId,
+    ownerId,
+    const DeepCollectionEquality().hash(_participantsIds),
+    title,
+    description,
+    location,
+    datetime,
+    cost,
+    isOnline,
+    cover,
+  );
 
   /// Create a copy of EventDataModel
   /// with the given fields replaced by the non-null parameter values.
@@ -325,29 +359,30 @@ class _$EventDataModelImpl implements _EventDataModel {
   @pragma('vm:prefer-inline')
   _$$EventDataModelImplCopyWith<_$EventDataModelImpl> get copyWith =>
       __$$EventDataModelImplCopyWithImpl<_$EventDataModelImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EventDataModelImplToJson(
-      this,
-    );
+    return _$$EventDataModelImplToJson(this);
   }
 }
 
 abstract class _EventDataModel implements EventDataModel {
-  factory _EventDataModel(
-      {@JsonKey(name: 'id') required final String eventId,
-      @JsonKey(name: 'owner_id') required final String ownerId,
-      @JsonKey(name: 'participants_ids')
-      required final List<String> participantsIds,
-      required final String title,
-      required final String description,
-      required final String location,
-      required final DateTime datetime,
-      required final int cost,
-      @JsonKey(name: 'is_online') required final bool isOnline,
-      required final String? cover}) = _$EventDataModelImpl;
+  factory _EventDataModel({
+    @JsonKey(name: 'id') required final String eventId,
+    @JsonKey(name: 'owner_id') required final String ownerId,
+    @JsonKey(name: 'participants_ids')
+    required final List<String> participantsIds,
+    required final String title,
+    required final String description,
+    required final String location,
+    required final DateTime datetime,
+    required final int cost,
+    @JsonKey(name: 'is_online') required final bool isOnline,
+    required final String? cover,
+  }) = _$EventDataModelImpl;
 
   factory _EventDataModel.fromJson(Map<String, dynamic> json) =
       _$EventDataModelImpl.fromJson;

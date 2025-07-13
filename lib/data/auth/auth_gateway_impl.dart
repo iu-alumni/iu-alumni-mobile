@@ -23,22 +23,19 @@ class AuthGatewayImpl implements AuthGateway {
 
   @override
   Future<Either<String, Unit>> authorize(String email, String password) =>
-      TaskEither<String, Either<String, Unit>>.tryCatch(
-        () async {
-          final response = await _dio.post(
-            Paths.login(_secretsManager.hostPath),
-            data: {'email': email, 'password': password},
-            options: _dioOptionsManager.opts(withToken: false),
-          );
-          final data = response.data as Map<String, dynamic>;
-          if (data['access_token'] case final token?) {
-            _tokenManager.set(token);
-            return Either.of(unit);
-          }
-          return Left(data['detail'] ?? 'Unknown Error');
-        },
-        (e, _) => '$e',
-      ).flatMap(TaskEither.fromEither).run();
+      TaskEither<String, Either<String, Unit>>.tryCatch(() async {
+        final response = await _dio.post(
+          Paths.login(_secretsManager.hostPath),
+          data: {'email': email, 'password': password},
+          options: _dioOptionsManager.opts(withToken: false),
+        );
+        final data = response.data as Map<String, dynamic>;
+        if (data['access_token'] case final token?) {
+          _tokenManager.set(token);
+          return Either.of(unit);
+        }
+        return Left(data['detail'] ?? 'Unknown Error');
+      }, (e, _) => '$e').flatMap(TaskEither.fromEither).run();
 
   @override
   Future<Either<String, Unit>> register(RegisterRequest request) async {
@@ -51,8 +48,8 @@ class AuthGatewayImpl implements AuthGateway {
       return const Right(unit);
     } on DioException catch (e) {
       if (e.response case final r?) {
-        if (r.data case Map<String, dynamic> data) {
-          if (data['detail'] case String detail) {
+        if (r.data case final Map<String, dynamic> data) {
+          if (data['detail'] case final String detail) {
             return Left(detail);
           }
         }
@@ -63,37 +60,30 @@ class AuthGatewayImpl implements AuthGateway {
 
   @override
   Future<Either<String, Unit>> sendCode(String email) =>
-      TaskEither<String, Unit>.tryCatch(
-        () async {
-          await _dio.post(
-            Paths.resend(_secretsManager.hostPath),
-            data: {'email': email},
-            options: _dioOptionsManager.opts(withToken: false),
-          );
-          return unit;
-        },
-        (e, _) => '$e',
-      ).run();
+      TaskEither<String, Unit>.tryCatch(() async {
+        await _dio.post(
+          Paths.resend(_secretsManager.hostPath),
+          data: {'email': email},
+          options: _dioOptionsManager.opts(withToken: false),
+        );
+        return unit;
+      }, (e, _) => '$e').run();
 
   @override
   Future<Either<String, Unit>> verifyCode({
     required String email,
     required String code,
-  }) =>
-      TaskEither<String, Either<String, Unit>>.tryCatch(
-        () async {
-          final response = await _dio.post(
-            Paths.verify(_secretsManager.hostPath),
-            data: {'email': email, 'verification_code': code},
-            options: _dioOptionsManager.opts(withToken: false),
-          );
-          final data = response.data as Map<String, dynamic>;
-          if (data['access_token'] case final token?) {
-            _tokenManager.set(token);
-            return Either.of(unit);
-          }
-          return Left(data['detail'] ?? 'Unknown Error');
-        },
-        (e, _) => '$e',
-      ).flatMap(TaskEither.fromEither).run();
+  }) => TaskEither<String, Either<String, Unit>>.tryCatch(() async {
+    final response = await _dio.post(
+      Paths.verify(_secretsManager.hostPath),
+      data: {'email': email, 'verification_code': code},
+      options: _dioOptionsManager.opts(withToken: false),
+    );
+    final data = response.data as Map<String, dynamic>;
+    if (data['access_token'] case final token?) {
+      _tokenManager.set(token);
+      return Either.of(unit);
+    }
+    return Left(data['detail'] ?? 'Unknown Error');
+  }, (e, _) => '$e').flatMap(TaskEither.fromEither).run();
 }

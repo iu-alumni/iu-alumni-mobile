@@ -9,9 +9,7 @@ import '../models/registration_state.dart';
 
 class RegistrationCubit extends Cubit<RegistrationState> {
   RegistrationCubit(this._authRepository, this._reporter)
-      : super(
-          RegistrationState(verification: const LoadedState.init()),
-        );
+    : super(RegistrationState(verification: const LoadedState.init()));
 
   final AuthRepository _authRepository;
   final Reporter _reporter;
@@ -37,12 +35,15 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         ),
       );
 
+  void toInitial() =>
+      emit(RegistrationState(verification: const LoadedState.init()));
+
   void _register(bool manual) => _verificationData(manual: manual)
       .toEither(() => 'Please, specify all fields to complete the verification')
       .flatMap<RegisterRequest>(
         (r) => switch (_validateEmail(r.email)) {
           final e? => Left(e),
-          _ => Either.of(r)
+          _ => Either.of(r),
         },
       )
       .flatMap<RegisterRequest>(
@@ -76,21 +77,14 @@ class RegistrationCubit extends Cubit<RegistrationState> {
 
   void setPassword(String password) => emit(state.copyWith(password: password));
 
-  void setGradYear(int year) => emit(
-        state.copyWith(graduationYear: year),
-      );
+  void setGradYear(int year) => emit(state.copyWith(graduationYear: year));
 
-  void setFirstName(String firstName) => emit(
-        state.copyWith(firstName: firstName),
-      );
+  void setFirstName(String firstName) =>
+      emit(state.copyWith(firstName: firstName));
 
-  void setLastName(String lastName) => emit(
-        state.copyWith(lastName: lastName),
-      );
+  void setLastName(String lastName) => emit(state.copyWith(lastName: lastName));
 
-  void setTelegram(String telegram) => emit(
-        state.copyWith(telegram: telegram),
-      );
+  void setTelegram(String telegram) => emit(state.copyWith(telegram: telegram));
 
   void dispose() => _authRepository.cleanEmail();
 }

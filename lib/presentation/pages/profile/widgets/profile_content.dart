@@ -31,13 +31,11 @@ class ProfileContent {
   final Profile profile;
   final bool personal;
 
-  static const _horPadding = EdgeInsets.symmetric(horizontal: 16);
-
   void _openTelegram(BuildContext context) {
     context.read<Reporter>().reportUserTelegramOpen(
-          profile,
-          AppLocation.profileScreen,
-        );
+      profile,
+      AppLocation.profileScreen,
+    );
     if (profile.telegramAlias case final tg?) {
       launchUrl(
         Uri.parse('https://t.me/$tg'),
@@ -48,96 +46,80 @@ class ProfileContent {
 
   void _copyTelegram(BuildContext context) {
     context.read<Reporter>().reportUserTelegramCopy(
-          profile,
-          AppLocation.profileScreen,
-        );
+      profile,
+      AppLocation.profileScreen,
+    );
     if (profile.telegramAlias case final tg?) {
       Clipboard.setData(ClipboardData(text: tg));
     }
   }
 
   AppBody build(BuildContext context) => AppListBody(
-        padding: EdgeInsets.zero,
+    children: [
+      const SizedBox(height: 24),
+      ProfilePic(profile: profile),
+      const SizedBox(height: 8),
+      Text(
+        '${profile.firstName.trim()} ${profile.lastName.trim()}',
+        style: AppTextStyles.subtitle,
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(height: 8),
+      Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 8,
+        runSpacing: 8,
         children: [
-          const SizedBox(height: 24),
-          ProfilePic(profile: profile),
-          const SizedBox(height: 8),
-          Padding(
-            padding: _horPadding,
-            child: Text(
-              '${profile.firstName.trim()} ${profile.lastName.trim()}',
-              style: AppTextStyles.subtitle,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: _horPadding,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
+          if (profile.location case final loc?)
+            AppTag(icon: Icons.pin_drop, text: loc),
+          AppTag(icon: Icons.school, text: profile.graduationYear),
+        ],
+      ),
+      ...[
+        if (profile.biography case final bio?)
+          Text(bio, style: AppTextStyles.body),
+        if (profile.telegramAlias case final telegram?)
+          TitledItem(
+            title: 'Telegram alias',
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                if (profile.location case final loc?)
-                  AppTag(icon: Icons.pin_drop, text: loc),
-                AppTag(icon: Icons.school, text: profile.graduationYear),
+                Expanded(
+                  child: AppButton(
+                    buttonStyle: AppButtonStyle.text,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '@$telegram',
+                        style: AppTextStyles.body.copyWith(
+                          decoration: TextDecoration.underline,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    onTap: () => _copyTelegram(context),
+                  ),
+                ),
+                const SizedBox(width: 2),
+                AppButton(
+                  buttonStyle: AppButtonStyle.text,
+                  onTap: () => _openTelegram(context),
+                  child: const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Icon(Icons.open_in_new, color: AppColors.primary),
+                  ),
+                ),
               ],
             ),
           ),
-          ...[
-            if (profile.biography case final bio?)
-              Text(bio, style: AppTextStyles.body),
-            if (profile.telegramAlias case final telegram?)
-              Padding(
-                padding: _horPadding,
-                child: TitledItem(
-                  title: 'Telegram alias',
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: AppButton(
-                          buttonStyle: AppButtonStyle.text,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '@$telegram',
-                              style: AppTextStyles.body.copyWith(
-                                decoration: TextDecoration.underline,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          onTap: () => _copyTelegram(context),
-                        ),
-                      ),
-                      const SizedBox(width: 2),
-                      AppButton(
-                        buttonStyle: AppButtonStyle.text,
-                        onTap: () => _openTelegram(context),
-                        child: const Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Icon(
-                            Icons.open_in_new,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            if (personal) const _OwnedEvents(),
-            const _ParticipatedEvents(),
-            if (personal)
-              const Padding(padding: _horPadding, child: OpenBotCard()),
-          ].expand(
-            (e) => [const SizedBox(height: 24), e],
-          ),
-          const SizedBox(height: RootPage.navigationBarHeight + 16),
-        ],
-      );
+        if (personal) const _OwnedEvents(),
+        const _ParticipatedEvents(),
+        if (personal) const OpenBotCard(),
+      ].expand((e) => [const SizedBox(height: 24), e]),
+      const SizedBox(height: RootPage.navigationBarHeight + 16),
+    ],
+  );
 }
 
 class _ParticipatedEvents extends StatelessWidget {
@@ -145,46 +127,39 @@ class _ParticipatedEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TitledItem(
-        title: 'Participated events',
-        titlePadding: const EdgeInsets.symmetric(horizontal: 24),
-        child: BlocBuilder<ProfileCubit, ProfileState>(
-          buildWhen: (p, c) => p.participatedEvents != c.participatedEvents,
-          builder: (context, state) => switch (state.participatedEvents) {
-            LoadedStateData<IList<EventModel>>(:final data) when data.isEmpty =>
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  'Empty here 😢',
-                  style: AppTextStyles.caption,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            LoadedStateData<IList<EventModel>>(:final data) =>
-              SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                // padding: const EdgeInsets.symmetric(horizontal: 0),
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: <Widget>[
-                    for (final e in data)
-                      SizedBox(
-                        width: _eventCardWidth,
-                        child: EventCard(event: e),
-                      )
-                  ].gap(
-                    const SizedBox(width: 8),
+    title: 'Participated events',
+    child: BlocBuilder<ProfileCubit, ProfileState>(
+      buildWhen: (p, c) => p.participatedEvents != c.participatedEvents,
+      builder: (context, state) => switch (state.participatedEvents) {
+        LoadedStateData<IList<EventModel>>(:final data) when data.isEmpty =>
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'Empty here 😢',
+              style: AppTextStyles.caption,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        LoadedStateData<IList<EventModel>>(:final data) =>
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: <Widget>[
+                for (final e in data)
+                  SizedBox(
+                    width: _eventCardWidth,
+                    child: EventCard(event: e),
                   ),
-                ),
-              ),
-            _ => const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: AppLoader(),
-                ),
-              ),
-          },
+              ].gap(const SizedBox(width: 8)),
+            ),
+          ),
+        _ => const Center(
+          child: Padding(padding: EdgeInsets.all(16), child: AppLoader()),
         ),
-      );
+      },
+    ),
+  );
 }
 
 class _OwnedEvents extends StatelessWidget {
@@ -192,42 +167,38 @@ class _OwnedEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TitledItem(
-        title: 'Created events',
-        titlePadding: const EdgeInsets.symmetric(horizontal: 24),
-        child: BlocBuilder<ProfileCubit, ProfileState>(
-          buildWhen: (p, c) => p.ownedEvents != c.ownedEvents,
-          builder: (context, state) => switch (state.ownedEvents) {
-            LoadedStateData<IList<EventModel>>(:final data) when data.isEmpty =>
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  'You have not created any events yet',
-                  style: AppTextStyles.caption,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            LoadedStateData<IList<EventModel>>(:final data) =>
-              SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: <Widget>[
-                    for (final e in data)
-                      SizedBox(
-                        width: _eventCardWidth,
-                        child: EventCard(event: e),
-                      )
-                  ].gap(
-                    const SizedBox(width: 8),
+    title: 'Created events',
+    child: BlocBuilder<ProfileCubit, ProfileState>(
+      buildWhen: (p, c) => p.ownedEvents != c.ownedEvents,
+      builder: (context, state) => switch (state.ownedEvents) {
+        LoadedStateData<IList<EventModel>>(:final data) when data.isEmpty =>
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'You have not created any events yet',
+              style: AppTextStyles.caption,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        LoadedStateData<IList<EventModel>>(:final data) =>
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: <Widget>[
+                for (final e in data)
+                  SizedBox(
+                    width: _eventCardWidth,
+                    child: EventCard(event: e),
                   ),
-                ),
-              ),
-            _ => const Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(color: AppColors.gray50),
-              ),
-          },
+              ].gap(const SizedBox(width: 8)),
+            ),
+          ),
+        _ => const Padding(
+          padding: EdgeInsets.all(16),
+          child: CircularProgressIndicator(color: AppColors.gray50),
         ),
-      );
+      },
+    ),
+  );
 }

@@ -14,7 +14,7 @@ class ProfilePageTitle extends StatelessWidget {
 
   final bool showBackButton;
 
-  void _editTap(BuildContext context) async {
+  Future<void> _editTap(BuildContext context) async {
     context.read<Reporter>().reportEditProfileTap(AppLocation.profileScreen);
     await context.pushRoute(const ProfileEditingRoute());
     if (context.mounted) {
@@ -22,7 +22,7 @@ class ProfilePageTitle extends StatelessWidget {
     }
   }
 
-  void _logout(BuildContext context) async {
+  Future<void> _logout(BuildContext context) async {
     context.read<Reporter>().reportUnauthorize(AppLocation.profileScreen);
     context.read<ProfileCubit>().logout();
     context.router.replaceAll([const AuthRoute()]);
@@ -30,62 +30,59 @@ class ProfilePageTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SafeArea(
-        bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 40,
-          ).copyWith(bottom: 0),
-          child: BlocBuilder<ProfileCubit, ProfileState>(
-            builder: (context, state) => Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+    bottom: false,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 40,
+      ).copyWith(bottom: 0),
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (showBackButton) ...[
+              Align(
+                alignment: Alignment.topLeft,
+                child: Transform.translate(
+                  offset: const Offset(-16, 0),
+                  child: const BackButton(),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+            Row(
               children: [
-                if (showBackButton) ...[
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Transform.translate(
-                      offset: const Offset(-16, 0),
-                      child: const BackButton(),
+                Expanded(
+                  child: Text(
+                    'Profile',
+                    style: AppTextStyles.largeTitle,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (state.myOwn) ...[
+                  AppButton(
+                    onTap: () => _editTap(context),
+                    child: const Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Icon(Icons.edit_outlined, color: Colors.white),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                ],
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Profile',
-                        style: AppTextStyles.largeTitle,
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                  const SizedBox(width: 16),
+                  AppButton(
+                    buttonStyle: AppButtonStyle.secondary,
+                    onTap: () => _logout(context),
+                    child: const Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Icon(Icons.logout, color: Colors.white),
                     ),
-                    if (state.myOwn) ...[
-                      AppButton(
-                        onTap: () => _editTap(context),
-                        child: const Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Icon(
-                            Icons.edit_outlined,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      AppButton(
-                        buttonStyle: AppButtonStyle.secondary,
-                        onTap: () => _logout(context),
-                        child: const Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Icon(Icons.logout, color: Colors.white),
-                        ),
-                      ),
-                    ]
-                  ],
-                ),
+                  ),
+                ],
               ],
             ),
-          ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }

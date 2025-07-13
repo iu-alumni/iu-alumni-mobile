@@ -21,29 +21,29 @@ class AppButton extends StatelessWidget {
   final EdgeInsets padding;
 
   Color get _buttonColor => switch (buttonStyle) {
-        AppButtonStyle.primary => AppColors.primary,
-        AppButtonStyle.secondary => AppColors.darkGray,
-        AppButtonStyle.text => Colors.transparent,
-        AppButtonStyle.gray => AppColors.gray90,
-      };
+    AppButtonStyle.primary => AppColors.primary,
+    AppButtonStyle.secondary => AppColors.darkGray,
+    AppButtonStyle.text => Colors.transparent,
+    AppButtonStyle.gray => AppColors.gray90,
+  };
 
   @override
   Widget build(BuildContext context) => ConstrainedBox(
-        constraints: is48Height
-            ? const BoxConstraints(maxHeight: 48, minHeight: 48)
-            : const BoxConstraints(),
-        child: Material(
-          color: _buttonColor,
-          borderRadius: BorderRadius.circular(100),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(100),
-            child: Padding(
-              padding: is48Height ? padding : const EdgeInsets.all(16),
-              child: Center(child: child),
-            ),
-          ),
+    constraints: is48Height
+        ? const BoxConstraints(maxHeight: 48, minHeight: 48)
+        : const BoxConstraints(),
+    child: Material(
+      color: _buttonColor,
+      borderRadius: BorderRadius.circular(100),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(100),
+        child: Padding(
+          padding: is48Height ? padding : const EdgeInsets.all(16),
+          child: Center(child: child),
         ),
-      );
+      ),
+    ),
+  );
 }

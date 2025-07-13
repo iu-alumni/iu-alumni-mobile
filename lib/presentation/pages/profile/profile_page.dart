@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
+import 'package:ui_alumni_mobile/presentation/common/widgets/nav_button.dart';
 
 import '../../../application/models/profile.dart';
 import '../../../application/repositories/events/events_repository.dart';
@@ -28,12 +29,10 @@ class ProfilePage extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider(
-        create: (ctx) => ProfileCubit(
-          ctx.read<UsersRepository>(),
-          ctx.read<EventsRepository>(),
-        ),
-        child: this,
-      );
+    create: (ctx) =>
+        ProfileCubit(ctx.read<UsersRepository>(), ctx.read<EventsRepository>()),
+    child: this,
+  );
 }
 
 class _ProfilePageState extends State<ProfilePage> {
@@ -52,74 +51,69 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
-  void _editTap(BuildContext context) async {
+  Future<void> _editTap(BuildContext context) async {
     context.read<Reporter>().reportEditProfileTap(AppLocation.profileScreen);
     await context.pushRoute(const ProfileEditingRoute());
     if (context.mounted) {
-      context.read<ProfileCubit>().updateProfileData();
+      await context.read<ProfileCubit>().updateProfileData();
     }
   }
 
-  void _logout(BuildContext context) async {
+  Future<void> _logout(BuildContext context) async {
     context.read<Reporter>().reportUnauthorize(AppLocation.profileScreen);
     context.read<ProfileCubit>().logout();
-    context.router.replaceAll([const AuthRoute()]);
+    await context.router.replaceAll([const AuthRoute()]);
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocConsumer<ProfileCubit, ProfileState>(
-        listenWhen: (p, c) => p.profile != c.profile,
-        listener: (context, state) {
-          _cubit.loadOwnedEvents();
-          _cubit.loadParticipatedEvents();
-        },
-        builder: (context, state) => AppScaffold(
-          title: 'Profile',
-          leadingButton: state.myOwn
-              ? AppButton(
-                  is48Height: true,
-                  buttonStyle: AppButtonStyle.secondary,
-                  onTap: () => _logout(context),
-                  child: Text(
-                    'Logout',
-                    style: AppTextStyles.actionM.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              : null,
-          actions: [
-            if (state.myOwn)
-              AppButton(
-                is48Height: true,
-                onTap: () => _editTap(context),
-                child: Text(
-                  'Edit',
-                  style: AppTextStyles.actionSB.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-          ],
-          body: switch (state.profile) {
-            LoadedStateData(:final data) => ProfileContent(
-                profile: data,
-                personal: state.myOwn,
-              ).build(context),
-            LoadedStateError e => AppChildBody(
-                child: Center(
-                  child: Text(
-                    e.error,
-                    style: AppTextStyles.caption,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            _ => const AppChildBody(
-                child: Center(child: AppLoader(inCard: true)),
-              ),
-          },
+  Widget build(
+    BuildContext context,
+  ) => BlocConsumer<ProfileCubit, ProfileState>(
+    listenWhen: (p, c) => p.profile != c.profile,
+    listener: (context, state) {
+      _cubit.loadOwnedEvents();
+      _cubit.loadParticipatedEvents();
+    },
+    builder: (context, state) => AppScaffold(
+      title: 'Profile',
+      leadingButton: context.router.stack.length > 1 ? const NavButton() : null,
+      actions: [
+        if (state.myOwn) ...[
+          AppButton(
+            is48Height: true,
+            buttonStyle: AppButtonStyle.secondary,
+            onTap: () => _logout(context),
+            child: Text(
+              'Logout',
+              style: AppTextStyles.actionM.copyWith(color: Colors.white),
+            ),
+          ),
+          AppButton(
+            is48Height: true,
+            onTap: () => _editTap(context),
+            child: Text(
+              'Edit',
+              style: AppTextStyles.actionSB.copyWith(color: Colors.white),
+            ),
+          ),
+        ],
+      ],
+      body: switch (state.profile) {
+        LoadedStateData(:final data) => ProfileContent(
+          profile: data,
+          personal: state.myOwn,
+        ).build(context),
+        final LoadedStateError e => AppChildBody(
+          child: Center(
+            child: Text(
+              e.error,
+              style: AppTextStyles.caption,
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
-      );
+        _ => const AppChildBody(child: Center(child: AppLoader(inCard: true))),
+      },
+    ),
+  );
 }

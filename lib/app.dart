@@ -40,145 +40,135 @@ class App extends StatelessWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) => MultiBlocProvider(
-        providers: [
-          // --- SERVICES ---
-          RepositoryProvider(create: (_) => SecretsManager()),
-          RepositoryProvider(create: (_) => const FlutterSecureStorage()),
-          RepositoryProvider(create: (_) => SharedPreferencesAsync()),
-          RepositoryProvider(create: (_) => ImagePicker()),
-          RepositoryProvider<DbManager>(create: (_) => DbManagerImpl()),
-          RepositoryProvider(
-            create: (context) => TokenManager(
-              context.read<FlutterSecureStorage>(),
-              context.read<SharedPreferencesAsync>(),
-              context.read<SecretsManager>(),
-            ),
+  Widget build(BuildContext context) {
+    final dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 5)));
+    return MultiBlocProvider(
+      providers: [
+        // --- SERVICES ---
+        RepositoryProvider(create: (_) => SecretsManager()),
+        RepositoryProvider(create: (_) => const FlutterSecureStorage()),
+        RepositoryProvider(create: (_) => SharedPreferencesAsync()),
+        RepositoryProvider(create: (_) => ImagePicker()),
+        RepositoryProvider<DbManager>(create: (_) => DbManagerImpl()),
+        RepositoryProvider(
+          create: (context) => TokenManager(
+            context.read<FlutterSecureStorage>(),
+            context.read<SharedPreferencesAsync>(),
+            context.read<SecretsManager>(),
           ),
-          RepositoryProvider<TokenProvider>(
-            create: (context) => TokenProviderImpl(
-              context.read<TokenManager>(),
-            ),
-          ),
-          RepositoryProvider(
-            create: (context) => DioOptionsManager(
-              context.read<TokenProvider>(),
-            ),
-          ),
-          RepositoryProvider(
-            create: (_) => Dio(
-              BaseOptions(
-                connectTimeout: const Duration(seconds: 5),
-              ),
-            ),
-          ),
-          RepositoryProvider(create: (_) => const Uuid()),
-          // --- GATEWAYS ---
-          RepositoryProvider<EventsGateway>(
-            create: (context) => EventsGatewayImpl(
-              context.read<Dio>(),
-              context.read<DioOptionsManager>(),
-              context.read<SecretsManager>(),
-            ),
-          ),
-          RepositoryProvider<AuthGateway>(
-            create: (context) => AuthGatewayImpl(
-              context.read<Dio>(),
-              context.read<TokenManager>(),
-              context.read<DioOptionsManager>(),
-              context.read<SecretsManager>(),
-            ),
-          ),
-          RepositoryProvider<ProfileGateway>(
-            create: (context) => ProfileGatewayImpl(
-              context.read<Dio>(),
-              context.read<DioOptionsManager>(),
-              context.read<SecretsManager>(),
-            ),
-          ),
-          RepositoryProvider<UsersGateway>(
-            create: (context) => UsersGatewayImpl(
-              context.read<Dio>(),
-              context.read<DioOptionsManager>(),
-              context.read<SecretsManager>(),
-            ),
-          ),
-          // --- REPOSITORIES ---
-          RepositoryProvider<AuthRepository>(
-            create: (context) => AuthRepositoryImpl(
-              context.read<AuthGateway>(),
-            ),
-          ),
-          RepositoryProvider<UsersRepository>(
-            create: (context) => UsersRepositoryImpl(
-              context.read<ProfileGateway>(),
-              context.read<TokenProvider>(),
-              context.read<UsersGateway>(),
-            ),
-          ),
-          RepositoryProvider<EventsRepository>(
-            create: (context) => EventsRepositoryImpl(
-              context.read<Uuid>(),
-              context.read<EventsGateway>(),
-              context.read<UsersRepository>(),
-            ),
-          ),
-          // RepositoryProvider<Reporter>(
-          //   create: (context) => ReporterImpl(context.read<UsersRepository>()),
-          // ),
-          // TODO delete when moving to mobile
-          RepositoryProvider<Reporter>(create: (context) => ReporterMock()),
-          // RepositoryProvider(
-          //   create: (context) => AppLoadingManager(
-          //     context.read<TokenProvider>(),
-          //     context.read<DbManager>(),
-          //     context.read<Reporter>(),
-          //     context.read<SecretsManager>(),
-          //   ),
-          // ),
-          RepositoryProvider<MapRepository>(
-            create: (context) => MapRepositoryImpl(
-              context.read<DbManager>(),
-              context.read<UsersRepository>(),
-              context.read<EventsRepository>(),
-            ),
-          ),
-          // --- BLOCs ---
-          BlocProvider(
-            create: (context) => EventsListCubit(
-              context.read<EventsRepository>(),
-            ),
-          ),
-          BlocProvider(
-            create: (ctx) => ProfileCubit(
-              ctx.read<UsersRepository>(),
-              ctx.read<EventsRepository>(),
-            ),
-          ),
-        ],
-        child: Builder(
-          builder: (context) {
-            final router = AppRouter();
-            return MaterialApp.router(
-              theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(
-                  seedColor: AppColors.primary,
-                  surface: Colors.white,
-                ),
-                fontFamily: 'Montserrat',
-                useMaterial3: true,
-                splashFactory: NoSplash.splashFactory,
-              ),
-              // routerConfig: AppRouter().config(
-              //   navigatorObservers: () => [
-              //     AppObserver(context.read<Reporter>()),
-              //   ],
-              // ),
-              routerDelegate: router.delegate(),
-              routeInformationProvider: AlwaysRootRouteInformationProvider(),
-              routeInformationParser: router.defaultRouteParser(),
-            );
-          },
         ),
-      );
+        RepositoryProvider<TokenProvider>(
+          create: (context) => TokenProviderImpl(context.read<TokenManager>()),
+        ),
+        RepositoryProvider(
+          create: (context) => DioOptionsManager(context.read<TokenProvider>()),
+        ),
+        RepositoryProvider(create: (_) => dio),
+        RepositoryProvider(create: (_) => const Uuid()),
+        // --- GATEWAYS ---
+        RepositoryProvider<EventsGateway>(
+          create: (context) => EventsGatewayImpl(
+            context.read<Dio>(),
+            context.read<DioOptionsManager>(),
+            context.read<SecretsManager>(),
+          ),
+        ),
+        RepositoryProvider<AuthGateway>(
+          create: (context) => AuthGatewayImpl(
+            context.read<Dio>(),
+            context.read<TokenManager>(),
+            context.read<DioOptionsManager>(),
+            context.read<SecretsManager>(),
+          ),
+        ),
+        RepositoryProvider<ProfileGateway>(
+          create: (context) => ProfileGatewayImpl(
+            context.read<Dio>(),
+            context.read<DioOptionsManager>(),
+            context.read<SecretsManager>(),
+          ),
+        ),
+        RepositoryProvider<UsersGateway>(
+          create: (context) => UsersGatewayImpl(
+            context.read<Dio>(),
+            context.read<DioOptionsManager>(),
+            context.read<SecretsManager>(),
+          ),
+        ),
+        // --- REPOSITORIES ---
+        RepositoryProvider<AuthRepository>(
+          create: (context) => AuthRepositoryImpl(context.read<AuthGateway>()),
+        ),
+        RepositoryProvider<UsersRepository>(
+          create: (context) => UsersRepositoryImpl(
+            context.read<ProfileGateway>(),
+            context.read<TokenProvider>(),
+            context.read<UsersGateway>(),
+          ),
+        ),
+        RepositoryProvider<EventsRepository>(
+          create: (context) => EventsRepositoryImpl(
+            context.read<Uuid>(),
+            context.read<EventsGateway>(),
+            context.read<UsersRepository>(),
+          ),
+        ),
+        // RepositoryProvider<Reporter>(
+        //   create: (context) => ReporterImpl(context.read<UsersRepository>()),
+        // ),
+        // TODO delete when moving to mobile
+        RepositoryProvider<Reporter>(create: (context) => ReporterMock()),
+        // RepositoryProvider(
+        //   create: (context) => AppLoadingManager(
+        //     context.read<TokenProvider>(),
+        //     context.read<DbManager>(),
+        //     context.read<Reporter>(),
+        //     context.read<SecretsManager>(),
+        //   ),
+        // ),
+        RepositoryProvider<MapRepository>(
+          create: (context) => MapRepositoryImpl(
+            context.read<DbManager>(),
+            context.read<UsersRepository>(),
+            context.read<EventsRepository>(),
+          ),
+        ),
+        // --- BLOCs ---
+        BlocProvider(
+          create: (context) =>
+              EventsListCubit(context.read<EventsRepository>()),
+        ),
+        BlocProvider(
+          create: (ctx) => ProfileCubit(
+            ctx.read<UsersRepository>(),
+            ctx.read<EventsRepository>(),
+          ),
+        ),
+      ],
+      child: Builder(
+        builder: (context) {
+          final router = AppRouter();
+          return MaterialApp.router(
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: AppColors.primary,
+                surface: Colors.white,
+              ),
+              fontFamily: 'Montserrat',
+              useMaterial3: true,
+              splashFactory: NoSplash.splashFactory,
+            ),
+            // routerConfig: AppRouter().config(
+            //   navigatorObservers: () => [
+            //     AppObserver(context.read<Reporter>()),
+            //   ],
+            // ),
+            routerDelegate: router.delegate(),
+            routeInformationProvider: AlwaysRootRouteInformationProvider(),
+            routeInformationParser: router.defaultRouteParser(),
+          );
+        },
+      ),
+    );
+  }
 }

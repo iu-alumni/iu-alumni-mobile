@@ -29,11 +29,11 @@ class ProfileGatewayImpl extends ProfileGateway {
 
   @override
   Future<bool> update(Profile profile) => TaskEither.tryCatch(() async {
-        await _dio.put(
-          Paths.myProfile(_secretsManager.hostPath),
-          options: _optionsManager.opts(),
-          data: jsonEncode(profile.toJson()),
-        );
-        return true;
-      }, (e, _) => '$e').match((_) => false, identity).run();
+    await _dio.put(
+      Paths.myProfile(_secretsManager.hostPath),
+      options: _optionsManager.opts(),
+      data: jsonEncode(profile.toJson()),
+    );
+    return true;
+  }, (e, _) => '$e').match((_) => false, identity).run();
 }

@@ -5,7 +5,7 @@ part 'profile.g.dart';
 
 @freezed
 class Profile with _$Profile {
-  factory Profile({
+  const factory Profile({
     @JsonKey(name: 'id') required String profileId,
     @JsonKey(name: 'first_name') required String firstName,
     @JsonKey(name: 'last_name') required String lastName,
@@ -16,7 +16,10 @@ class Profile with _$Profile {
     @JsonKey(name: 'telegram_alias') required String? telegramAlias,
     required String? avatar,
   }) = _Profile;
+  const Profile._();
 
   factory Profile.fromJson(Map<String, dynamic> json) =>
       _$ProfileFromJson(json);
+
+  String get fullName => '$firstName $lastName';
 }

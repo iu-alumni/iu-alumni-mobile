@@ -58,52 +58,47 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) => TextField(
-        controller: _controller,
-        focusNode: _focusNode,
-        maxLines: widget.maxLines,
-        onTapUpOutside: (e) => _focusNode.unfocus(),
-        obscureText: _textObscured,
-        style: AppTextStyles.body,
-        keyboardType: widget.inputType,
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          hintStyle: AppTextStyles.body.copyWith(color: AppColors.gray50),
-          border: WidgetStateInputBorder.resolveWith(
-            (state) => OutlineInputBorder(
-              borderSide: BorderSide(
-                color: state.contains(WidgetState.focused)
-                    ? AppColors.darkGray
-                    : AppColors.gray80,
-              ),
-              borderRadius: BorderRadius.circular(24),
+    controller: _controller,
+    focusNode: _focusNode,
+    maxLines: widget.maxLines,
+    onTapUpOutside: (e) => _focusNode.unfocus(),
+    obscureText: _textObscured,
+    style: AppTextStyles.body,
+    keyboardType: widget.inputType,
+    decoration: InputDecoration(
+      hintText: widget.hintText,
+      hintStyle: AppTextStyles.body.copyWith(color: AppColors.gray50),
+      border: WidgetStateInputBorder.resolveWith(
+        (state) => OutlineInputBorder(
+          borderSide: BorderSide(
+            color: state.contains(WidgetState.focused)
+                ? AppColors.darkGray
+                : AppColors.gray80,
+          ),
+          borderRadius: BorderRadius.circular(24),
+        ),
+      ),
+      suffixIcon: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedScale(
+            scale: _focused ? 1 : 0,
+            duration: const Duration(milliseconds: 250),
+            child: IconButton(
+              onPressed: _controller.clear,
+              icon: const Icon(Icons.clear, color: AppColors.gray50),
             ),
           ),
-          suffixIcon: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AnimatedScale(
-                scale: _focused ? 1 : 0,
-                duration: const Duration(milliseconds: 250),
-                child: IconButton(
-                  onPressed: _controller.clear,
-                  icon: const Icon(
-                    Icons.clear,
-                    color: AppColors.gray50,
-                  ),
-                ),
+          if (widget.obscureText)
+            IconButton(
+              onPressed: () => setState(() => _textObscured = !_textObscured),
+              icon: Icon(
+                _textObscured ? Icons.visibility : Icons.visibility_off,
+                color: AppColors.gray50,
               ),
-              if (widget.obscureText)
-                IconButton(
-                  onPressed: () => setState(
-                    () => _textObscured = !_textObscured,
-                  ),
-                  icon: Icon(
-                    _textObscured ? Icons.visibility : Icons.visibility_off,
-                    color: AppColors.gray50,
-                  ),
-                )
-            ],
-          ),
-        ),
-      );
+            ),
+        ],
+      ),
+    ),
+  );
 }

@@ -28,13 +28,13 @@ class EventEditingPage extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider(
-        create: (context) => OneEventCubit(
-          context.read<EventsRepository>(),
-          context.read<UsersRepository>(),
-          context.read<Reporter>(),
-        ),
-        child: this,
-      );
+    create: (context) => OneEventCubit(
+      context.read<EventsRepository>(),
+      context.read<UsersRepository>(),
+      context.read<Reporter>(),
+    ),
+    child: this,
+  );
 }
 
 class _EventEditingPageState extends State<EventEditingPage> {
@@ -96,7 +96,6 @@ class _EventEditingPageState extends State<EventEditingPage> {
                 children: [
                   const _ErrorText(),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         child: AppButton(
@@ -105,20 +104,20 @@ class _EventEditingPageState extends State<EventEditingPage> {
                             buildWhen: (p, c) => p.saveState != c.saveState,
                             builder: (context, state) =>
                                 switch (state.saveState) {
-                              LoadedStateLoading() => const AppLoader(
-                                  color: Colors.white,
-                                ),
-                              _ => Text(
-                                  widget.eventId.match(
-                                    () => 'Post event',
-                                    (_) => 'Done',
-                                  ),
-                                  style: AppTextStyles.actionSB.copyWith(
+                                  LoadedStateLoading() => const AppLoader(
                                     color: Colors.white,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                            },
+                                  _ => Text(
+                                    widget.eventId.match(
+                                      () => 'Post event',
+                                      (_) => 'Done',
+                                    ),
+                                    style: AppTextStyles.actionSB.copyWith(
+                                      color: Colors.white,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                },
                           ),
                         ),
                       ),
@@ -175,13 +174,13 @@ class _ErrorText extends StatelessWidget {
           duration: const Duration(milliseconds: 250),
           child: switch (state.saveState) {
             LoadedStateError(:final error) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text(
-                  error,
-                  style: AppTextStyles.caption,
-                  textAlign: TextAlign.start,
-                ),
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                error,
+                style: AppTextStyles.caption,
+                textAlign: TextAlign.start,
               ),
+            ),
             _ => const SizedBox(),
           },
         ),

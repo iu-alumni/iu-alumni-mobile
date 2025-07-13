@@ -21,12 +21,10 @@ class ProfileEditingPage extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider(
-        create: (ctx) => ProfileEditingCubit(
-          ctx.read<UsersRepository>(),
-          ctx.read<Reporter>(),
-        ),
-        child: this,
-      );
+    create: (ctx) =>
+        ProfileEditingCubit(ctx.read<UsersRepository>(), ctx.read<Reporter>()),
+    child: this,
+  );
 }
 
 class _ProfileEditingPageState extends State<ProfileEditingPage> {
@@ -58,10 +56,11 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
             ),
           ],
           body: state.profile.match(
-              () => const AppChildBody(
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-              (p) => ProfileEditingContent(profile: p).build(context)),
+            () => const AppChildBody(
+              child: Center(child: CircularProgressIndicator()),
+            ),
+            (p) => ProfileEditingContent(profile: p).build(context),
+          ),
         ),
       );
 }

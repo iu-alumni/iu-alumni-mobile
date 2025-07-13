@@ -20,13 +20,13 @@ class EventPage extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) => BlocProvider(
-        create: (context) => OneEventCubit(
-          context.read<EventsRepository>(),
-          context.read<UsersRepository>(),
-          context.read<Reporter>(),
-        ),
-        child: this,
-      );
+    create: (context) => OneEventCubit(
+      context.read<EventsRepository>(),
+      context.read<UsersRepository>(),
+      context.read<Reporter>(),
+    ),
+    child: this,
+  );
 }
 
 class _EventPageState extends State<EventPage> {

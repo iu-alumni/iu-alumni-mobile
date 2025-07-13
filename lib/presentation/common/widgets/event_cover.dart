@@ -20,7 +20,7 @@ class EventCover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final maybeTitle = title;
-    final horPadding = const EdgeInsets.symmetric(horizontal: 16);
+    const horPadding = EdgeInsets.symmetric(horizontal: 16);
     return SizedBox(
       height: 324,
       child: Stack(
@@ -57,9 +57,9 @@ class EventCover extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 16),
-                  Padding(
+                  const Padding(
                     padding: horPadding,
-                    child: const Row(
+                    child: Row(
                       children: [
                         NavButton(style: NavButtonStyle.semitransparent),
                         Spacer(),
@@ -79,39 +79,6 @@ class EventCover extends StatelessWidget {
                     ),
                   const SizedBox(height: 24),
                   Padding(padding: horPadding, child: child),
-                  // Padding(
-                  //   padding: horPadding,
-                  //   child: Opacity(
-                  //     opacity: maybeTitle != null ? 1 : 0,
-                  //     child: Text(
-                  //       maybeTitle ?? 'title',
-                  //       style: AppTextStyles.h2.copyWith(color: Colors.white),
-                  //       textAlign: TextAlign.start,
-                  //     ),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 2),
-                  // Padding(
-                  //   padding: horPadding,
-                  //   child: Opacity(
-                  //     opacity: maybeLocation != null ? 1 : 0,
-                  //     child: Row(
-                  //       children: [
-                  //         Icon(Icons.location_pin, color: secondaryWhite),
-                  //         const SizedBox(width: 8),
-                  //         Expanded(
-                  //           child: Text(
-                  //             maybeLocation ?? 'location',
-                  //             style: AppTextStyles.h4
-                  //                 .copyWith(color: secondaryWhite),
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 140),
-                  // child,
                 ],
               ),
             ),

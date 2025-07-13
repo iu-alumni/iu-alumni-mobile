@@ -12,7 +12,8 @@ part of 'event.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$EventModel {
@@ -37,20 +38,22 @@ mixin _$EventModel {
 /// @nodoc
 abstract class $EventModelCopyWith<$Res> {
   factory $EventModelCopyWith(
-          EventModel value, $Res Function(EventModel) then) =
-      _$EventModelCopyWithImpl<$Res, EventModel>;
+    EventModel value,
+    $Res Function(EventModel) then,
+  ) = _$EventModelCopyWithImpl<$Res, EventModel>;
   @useResult
-  $Res call(
-      {String eventId,
-      UserStatus userStatus,
-      String? title,
-      String? description,
-      String? coverBytes,
-      String? location,
-      CostModel cost,
-      DateTime occurringAt,
-      bool onlineEvent,
-      ISet<String> participantsIds});
+  $Res call({
+    String eventId,
+    UserStatus userStatus,
+    String? title,
+    String? description,
+    String? coverBytes,
+    String? location,
+    CostModel cost,
+    DateTime occurringAt,
+    bool onlineEvent,
+    ISet<String> participantsIds,
+  });
 
   $UserStatusCopyWith<$Res> get userStatus;
   $CostModelCopyWith<$Res> get cost;
@@ -82,48 +85,61 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
     Object? onlineEvent = null,
     Object? participantsIds = null,
   }) {
-    return _then(_value.copyWith(
-      eventId: null == eventId
-          ? _value.eventId
-          : eventId // ignore: cast_nullable_to_non_nullable
-              as String,
-      userStatus: null == userStatus
-          ? _value.userStatus
-          : userStatus // ignore: cast_nullable_to_non_nullable
-              as UserStatus,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      coverBytes: freezed == coverBytes
-          ? _value.coverBytes
-          : coverBytes // ignore: cast_nullable_to_non_nullable
-              as String?,
-      location: freezed == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cost: null == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
-              as CostModel,
-      occurringAt: null == occurringAt
-          ? _value.occurringAt
-          : occurringAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      onlineEvent: null == onlineEvent
-          ? _value.onlineEvent
-          : onlineEvent // ignore: cast_nullable_to_non_nullable
-              as bool,
-      participantsIds: null == participantsIds
-          ? _value.participantsIds
-          : participantsIds // ignore: cast_nullable_to_non_nullable
-              as ISet<String>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            eventId:
+                null == eventId
+                    ? _value.eventId
+                    : eventId // ignore: cast_nullable_to_non_nullable
+                        as String,
+            userStatus:
+                null == userStatus
+                    ? _value.userStatus
+                    : userStatus // ignore: cast_nullable_to_non_nullable
+                        as UserStatus,
+            title:
+                freezed == title
+                    ? _value.title
+                    : title // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            description:
+                freezed == description
+                    ? _value.description
+                    : description // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            coverBytes:
+                freezed == coverBytes
+                    ? _value.coverBytes
+                    : coverBytes // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            location:
+                freezed == location
+                    ? _value.location
+                    : location // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            cost:
+                null == cost
+                    ? _value.cost
+                    : cost // ignore: cast_nullable_to_non_nullable
+                        as CostModel,
+            occurringAt:
+                null == occurringAt
+                    ? _value.occurringAt
+                    : occurringAt // ignore: cast_nullable_to_non_nullable
+                        as DateTime,
+            onlineEvent:
+                null == onlineEvent
+                    ? _value.onlineEvent
+                    : onlineEvent // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            participantsIds:
+                null == participantsIds
+                    ? _value.participantsIds
+                    : participantsIds // ignore: cast_nullable_to_non_nullable
+                        as ISet<String>,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of EventModel
@@ -151,21 +167,23 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
 abstract class _$$EventModelImplCopyWith<$Res>
     implements $EventModelCopyWith<$Res> {
   factory _$$EventModelImplCopyWith(
-          _$EventModelImpl value, $Res Function(_$EventModelImpl) then) =
-      __$$EventModelImplCopyWithImpl<$Res>;
+    _$EventModelImpl value,
+    $Res Function(_$EventModelImpl) then,
+  ) = __$$EventModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String eventId,
-      UserStatus userStatus,
-      String? title,
-      String? description,
-      String? coverBytes,
-      String? location,
-      CostModel cost,
-      DateTime occurringAt,
-      bool onlineEvent,
-      ISet<String> participantsIds});
+  $Res call({
+    String eventId,
+    UserStatus userStatus,
+    String? title,
+    String? description,
+    String? coverBytes,
+    String? location,
+    CostModel cost,
+    DateTime occurringAt,
+    bool onlineEvent,
+    ISet<String> participantsIds,
+  });
 
   @override
   $UserStatusCopyWith<$Res> get userStatus;
@@ -178,8 +196,9 @@ class __$$EventModelImplCopyWithImpl<$Res>
     extends _$EventModelCopyWithImpl<$Res, _$EventModelImpl>
     implements _$$EventModelImplCopyWith<$Res> {
   __$$EventModelImplCopyWithImpl(
-      _$EventModelImpl _value, $Res Function(_$EventModelImpl) _then)
-      : super(_value, _then);
+    _$EventModelImpl _value,
+    $Res Function(_$EventModelImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -197,65 +216,78 @@ class __$$EventModelImplCopyWithImpl<$Res>
     Object? onlineEvent = null,
     Object? participantsIds = null,
   }) {
-    return _then(_$EventModelImpl(
-      eventId: null == eventId
-          ? _value.eventId
-          : eventId // ignore: cast_nullable_to_non_nullable
-              as String,
-      userStatus: null == userStatus
-          ? _value.userStatus
-          : userStatus // ignore: cast_nullable_to_non_nullable
-              as UserStatus,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      coverBytes: freezed == coverBytes
-          ? _value.coverBytes
-          : coverBytes // ignore: cast_nullable_to_non_nullable
-              as String?,
-      location: freezed == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cost: null == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
-              as CostModel,
-      occurringAt: null == occurringAt
-          ? _value.occurringAt
-          : occurringAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      onlineEvent: null == onlineEvent
-          ? _value.onlineEvent
-          : onlineEvent // ignore: cast_nullable_to_non_nullable
-              as bool,
-      participantsIds: null == participantsIds
-          ? _value.participantsIds
-          : participantsIds // ignore: cast_nullable_to_non_nullable
-              as ISet<String>,
-    ));
+    return _then(
+      _$EventModelImpl(
+        eventId:
+            null == eventId
+                ? _value.eventId
+                : eventId // ignore: cast_nullable_to_non_nullable
+                    as String,
+        userStatus:
+            null == userStatus
+                ? _value.userStatus
+                : userStatus // ignore: cast_nullable_to_non_nullable
+                    as UserStatus,
+        title:
+            freezed == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        description:
+            freezed == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        coverBytes:
+            freezed == coverBytes
+                ? _value.coverBytes
+                : coverBytes // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        location:
+            freezed == location
+                ? _value.location
+                : location // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        cost:
+            null == cost
+                ? _value.cost
+                : cost // ignore: cast_nullable_to_non_nullable
+                    as CostModel,
+        occurringAt:
+            null == occurringAt
+                ? _value.occurringAt
+                : occurringAt // ignore: cast_nullable_to_non_nullable
+                    as DateTime,
+        onlineEvent:
+            null == onlineEvent
+                ? _value.onlineEvent
+                : onlineEvent // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        participantsIds:
+            null == participantsIds
+                ? _value.participantsIds
+                : participantsIds // ignore: cast_nullable_to_non_nullable
+                    as ISet<String>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$EventModelImpl implements _EventModel {
-  const _$EventModelImpl(
-      {required this.eventId,
-      required this.userStatus,
-      required this.title,
-      required this.description,
-      required this.coverBytes,
-      required this.location,
-      required this.cost,
-      required this.occurringAt,
-      required this.onlineEvent,
-      required this.participantsIds});
+  const _$EventModelImpl({
+    required this.eventId,
+    required this.userStatus,
+    required this.title,
+    required this.description,
+    required this.coverBytes,
+    required this.location,
+    required this.cost,
+    required this.occurringAt,
+    required this.onlineEvent,
+    required this.participantsIds,
+  });
 
   @override
   final String eventId;
@@ -265,10 +297,10 @@ class _$EventModelImpl implements _EventModel {
   final String? title;
   @override
   final String? description;
-// TODO
+  // TODO
   @override
   final String? coverBytes;
-// TODO
+  // TODO
   @override
   final String? location;
   @override
@@ -305,23 +337,26 @@ class _$EventModelImpl implements _EventModel {
                 other.occurringAt == occurringAt) &&
             (identical(other.onlineEvent, onlineEvent) ||
                 other.onlineEvent == onlineEvent) &&
-            const DeepCollectionEquality()
-                .equals(other.participantsIds, participantsIds));
+            const DeepCollectionEquality().equals(
+              other.participantsIds,
+              participantsIds,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      eventId,
-      userStatus,
-      title,
-      description,
-      coverBytes,
-      location,
-      cost,
-      occurringAt,
-      onlineEvent,
-      const DeepCollectionEquality().hash(participantsIds));
+    runtimeType,
+    eventId,
+    userStatus,
+    title,
+    description,
+    coverBytes,
+    location,
+    cost,
+    occurringAt,
+    onlineEvent,
+    const DeepCollectionEquality().hash(participantsIds),
+  );
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -333,17 +368,18 @@ class _$EventModelImpl implements _EventModel {
 }
 
 abstract class _EventModel implements EventModel {
-  const factory _EventModel(
-      {required final String eventId,
-      required final UserStatus userStatus,
-      required final String? title,
-      required final String? description,
-      required final String? coverBytes,
-      required final String? location,
-      required final CostModel cost,
-      required final DateTime occurringAt,
-      required final bool onlineEvent,
-      required final ISet<String> participantsIds}) = _$EventModelImpl;
+  const factory _EventModel({
+    required final String eventId,
+    required final UserStatus userStatus,
+    required final String? title,
+    required final String? description,
+    required final String? coverBytes,
+    required final String? location,
+    required final CostModel cost,
+    required final DateTime occurringAt,
+    required final bool onlineEvent,
+    required final ISet<String> participantsIds,
+  }) = _$EventModelImpl;
 
   @override
   String get eventId;

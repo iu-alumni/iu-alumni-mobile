@@ -12,7 +12,8 @@ part of 'profile_editing_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$ProfileEditingState {
@@ -29,8 +30,9 @@ mixin _$ProfileEditingState {
 /// @nodoc
 abstract class $ProfileEditingStateCopyWith<$Res> {
   factory $ProfileEditingStateCopyWith(
-          ProfileEditingState value, $Res Function(ProfileEditingState) then) =
-      _$ProfileEditingStateCopyWithImpl<$Res, ProfileEditingState>;
+    ProfileEditingState value,
+    $Res Function(ProfileEditingState) then,
+  ) = _$ProfileEditingStateCopyWithImpl<$Res, ProfileEditingState>;
   @useResult
   $Res call({Option<Profile> profile, LoadedState<Unit> saveState});
 
@@ -51,20 +53,22 @@ class _$ProfileEditingStateCopyWithImpl<$Res, $Val extends ProfileEditingState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? profile = null,
-    Object? saveState = null,
-  }) {
-    return _then(_value.copyWith(
-      profile: null == profile
-          ? _value.profile
-          : profile // ignore: cast_nullable_to_non_nullable
-              as Option<Profile>,
-      saveState: null == saveState
-          ? _value.saveState
-          : saveState // ignore: cast_nullable_to_non_nullable
-              as LoadedState<Unit>,
-    ) as $Val);
+  $Res call({Object? profile = null, Object? saveState = null}) {
+    return _then(
+      _value.copyWith(
+            profile:
+                null == profile
+                    ? _value.profile
+                    : profile // ignore: cast_nullable_to_non_nullable
+                        as Option<Profile>,
+            saveState:
+                null == saveState
+                    ? _value.saveState
+                    : saveState // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<Unit>,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of ProfileEditingState
@@ -81,9 +85,10 @@ class _$ProfileEditingStateCopyWithImpl<$Res, $Val extends ProfileEditingState>
 /// @nodoc
 abstract class _$$ProfileEditingStateImplCopyWith<$Res>
     implements $ProfileEditingStateCopyWith<$Res> {
-  factory _$$ProfileEditingStateImplCopyWith(_$ProfileEditingStateImpl value,
-          $Res Function(_$ProfileEditingStateImpl) then) =
-      __$$ProfileEditingStateImplCopyWithImpl<$Res>;
+  factory _$$ProfileEditingStateImplCopyWith(
+    _$ProfileEditingStateImpl value,
+    $Res Function(_$ProfileEditingStateImpl) then,
+  ) = __$$ProfileEditingStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({Option<Profile> profile, LoadedState<Unit> saveState});
@@ -96,36 +101,40 @@ abstract class _$$ProfileEditingStateImplCopyWith<$Res>
 class __$$ProfileEditingStateImplCopyWithImpl<$Res>
     extends _$ProfileEditingStateCopyWithImpl<$Res, _$ProfileEditingStateImpl>
     implements _$$ProfileEditingStateImplCopyWith<$Res> {
-  __$$ProfileEditingStateImplCopyWithImpl(_$ProfileEditingStateImpl _value,
-      $Res Function(_$ProfileEditingStateImpl) _then)
-      : super(_value, _then);
+  __$$ProfileEditingStateImplCopyWithImpl(
+    _$ProfileEditingStateImpl _value,
+    $Res Function(_$ProfileEditingStateImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of ProfileEditingState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? profile = null,
-    Object? saveState = null,
-  }) {
-    return _then(_$ProfileEditingStateImpl(
-      profile: null == profile
-          ? _value.profile
-          : profile // ignore: cast_nullable_to_non_nullable
-              as Option<Profile>,
-      saveState: null == saveState
-          ? _value.saveState
-          : saveState // ignore: cast_nullable_to_non_nullable
-              as LoadedState<Unit>,
-    ));
+  $Res call({Object? profile = null, Object? saveState = null}) {
+    return _then(
+      _$ProfileEditingStateImpl(
+        profile:
+            null == profile
+                ? _value.profile
+                : profile // ignore: cast_nullable_to_non_nullable
+                    as Option<Profile>,
+        saveState:
+            null == saveState
+                ? _value.saveState
+                : saveState // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<Unit>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$ProfileEditingStateImpl implements _ProfileEditingState {
-  const _$ProfileEditingStateImpl(
-      {required this.profile, required this.saveState});
+  const _$ProfileEditingStateImpl({
+    required this.profile,
+    required this.saveState,
+  });
 
   @override
   final Option<Profile> profile;
@@ -157,13 +166,16 @@ class _$ProfileEditingStateImpl implements _ProfileEditingState {
   @pragma('vm:prefer-inline')
   _$$ProfileEditingStateImplCopyWith<_$ProfileEditingStateImpl> get copyWith =>
       __$$ProfileEditingStateImplCopyWithImpl<_$ProfileEditingStateImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _ProfileEditingState implements ProfileEditingState {
-  const factory _ProfileEditingState(
-      {required final Option<Profile> profile,
-      required final LoadedState<Unit> saveState}) = _$ProfileEditingStateImpl;
+  const factory _ProfileEditingState({
+    required final Option<Profile> profile,
+    required final LoadedState<Unit> saveState,
+  }) = _$ProfileEditingStateImpl;
 
   @override
   Option<Profile> get profile;

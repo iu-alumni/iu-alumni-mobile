@@ -10,25 +10,21 @@ class AppObserver extends AutoRouteObserver {
 
   @override
   void didPush(Route route, Route? previousRoute) => _reporter.reportNavigation(
-        NavAction.push,
-        previousRoute?.name,
-        route.name,
-      );
+    NavAction.push,
+    previousRoute?.name,
+    route.name,
+  );
 
   @override
   void didPop(Route route, Route? previousRoute) => _reporter.reportNavigation(
-        NavAction.pop,
-        previousRoute?.name,
-        route.name,
-      );
+    NavAction.pop,
+    previousRoute?.name,
+    route.name,
+  );
 
   @override
-  void didReplace({Route? newRoute, Route? oldRoute}) =>
-      _reporter.reportNavigation(
-        NavAction.replace,
-        oldRoute?.name,
-        newRoute?.name,
-      );
+  void didReplace({Route? newRoute, Route? oldRoute}) => _reporter
+      .reportNavigation(NavAction.replace, oldRoute?.name, newRoute?.name);
 }
 
 extension on Route {

@@ -79,10 +79,10 @@ class EventsRepositoryImpl implements EventsRepository {
   }
 
   EventModel _fixEvent(EventModel model) => model.copyWith(
-        title: model.title == null || model.title!.isEmpty
-            ? 'Untitled'
-            : model.title,
-      );
+    title: model.title == null || model.title!.isEmpty
+        ? 'Untitled'
+        : model.title,
+  );
 
   @override
   void modifyEvent(EventModel event) {
@@ -156,7 +156,7 @@ class EventsRepositoryImpl implements EventsRepository {
     if (maybeMyId case Some(value: final myId)) {
       final success = await _gateway.participate(eventId, myId);
       if (_cache?[eventId] case final EventModel event when success) {
-        if (event.userStatus case UserNotAuthor status) {
+        if (event.userStatus case final UserNotAuthor status) {
           _cache?[eventId] = event.copyWith(
             userStatus: status.copyWith(participant: success),
             participantsIds: event.participantsIds.add(myId),
@@ -176,7 +176,7 @@ class EventsRepositoryImpl implements EventsRepository {
     if (maybeMyId case Some(value: final myId)) {
       final success = await _gateway.leave(eventId, myId);
       if (_cache?[eventId] case final EventModel event when success) {
-        if (event.userStatus case UserNotAuthor status) {
+        if (event.userStatus case final UserNotAuthor status) {
           _cache?[eventId] = event.copyWith(
             userStatus: status.copyWith(participant: !success),
             participantsIds: event.participantsIds.remove(myId),

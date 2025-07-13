@@ -12,7 +12,8 @@ part of 'profile.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Profile _$ProfileFromJson(Map<String, dynamic> json) {
   return _Profile.fromJson(json);
@@ -50,16 +51,17 @@ abstract class $ProfileCopyWith<$Res> {
   factory $ProfileCopyWith(Profile value, $Res Function(Profile) then) =
       _$ProfileCopyWithImpl<$Res, Profile>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'id') String profileId,
-      @JsonKey(name: 'first_name') String firstName,
-      @JsonKey(name: 'last_name') String lastName,
-      @JsonKey(name: 'graduation_year') String graduationYear,
-      String? location,
-      String? biography,
-      @JsonKey(name: 'show_location') bool showLocation,
-      @JsonKey(name: 'telegram_alias') String? telegramAlias,
-      String? avatar});
+  $Res call({
+    @JsonKey(name: 'id') String profileId,
+    @JsonKey(name: 'first_name') String firstName,
+    @JsonKey(name: 'last_name') String lastName,
+    @JsonKey(name: 'graduation_year') String graduationYear,
+    String? location,
+    String? biography,
+    @JsonKey(name: 'show_location') bool showLocation,
+    @JsonKey(name: 'telegram_alias') String? telegramAlias,
+    String? avatar,
+  });
 }
 
 /// @nodoc
@@ -87,64 +89,78 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
     Object? telegramAlias = freezed,
     Object? avatar = freezed,
   }) {
-    return _then(_value.copyWith(
-      profileId: null == profileId
-          ? _value.profileId
-          : profileId // ignore: cast_nullable_to_non_nullable
-              as String,
-      firstName: null == firstName
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastName: null == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String,
-      graduationYear: null == graduationYear
-          ? _value.graduationYear
-          : graduationYear // ignore: cast_nullable_to_non_nullable
-              as String,
-      location: freezed == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String?,
-      biography: freezed == biography
-          ? _value.biography
-          : biography // ignore: cast_nullable_to_non_nullable
-              as String?,
-      showLocation: null == showLocation
-          ? _value.showLocation
-          : showLocation // ignore: cast_nullable_to_non_nullable
-              as bool,
-      telegramAlias: freezed == telegramAlias
-          ? _value.telegramAlias
-          : telegramAlias // ignore: cast_nullable_to_non_nullable
-              as String?,
-      avatar: freezed == avatar
-          ? _value.avatar
-          : avatar // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            profileId:
+                null == profileId
+                    ? _value.profileId
+                    : profileId // ignore: cast_nullable_to_non_nullable
+                        as String,
+            firstName:
+                null == firstName
+                    ? _value.firstName
+                    : firstName // ignore: cast_nullable_to_non_nullable
+                        as String,
+            lastName:
+                null == lastName
+                    ? _value.lastName
+                    : lastName // ignore: cast_nullable_to_non_nullable
+                        as String,
+            graduationYear:
+                null == graduationYear
+                    ? _value.graduationYear
+                    : graduationYear // ignore: cast_nullable_to_non_nullable
+                        as String,
+            location:
+                freezed == location
+                    ? _value.location
+                    : location // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            biography:
+                freezed == biography
+                    ? _value.biography
+                    : biography // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            showLocation:
+                null == showLocation
+                    ? _value.showLocation
+                    : showLocation // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            telegramAlias:
+                freezed == telegramAlias
+                    ? _value.telegramAlias
+                    : telegramAlias // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            avatar:
+                freezed == avatar
+                    ? _value.avatar
+                    : avatar // ignore: cast_nullable_to_non_nullable
+                        as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
   factory _$$ProfileImplCopyWith(
-          _$ProfileImpl value, $Res Function(_$ProfileImpl) then) =
-      __$$ProfileImplCopyWithImpl<$Res>;
+    _$ProfileImpl value,
+    $Res Function(_$ProfileImpl) then,
+  ) = __$$ProfileImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'id') String profileId,
-      @JsonKey(name: 'first_name') String firstName,
-      @JsonKey(name: 'last_name') String lastName,
-      @JsonKey(name: 'graduation_year') String graduationYear,
-      String? location,
-      String? biography,
-      @JsonKey(name: 'show_location') bool showLocation,
-      @JsonKey(name: 'telegram_alias') String? telegramAlias,
-      String? avatar});
+  $Res call({
+    @JsonKey(name: 'id') String profileId,
+    @JsonKey(name: 'first_name') String firstName,
+    @JsonKey(name: 'last_name') String lastName,
+    @JsonKey(name: 'graduation_year') String graduationYear,
+    String? location,
+    String? biography,
+    @JsonKey(name: 'show_location') bool showLocation,
+    @JsonKey(name: 'telegram_alias') String? telegramAlias,
+    String? avatar,
+  });
 }
 
 /// @nodoc
@@ -152,8 +168,9 @@ class __$$ProfileImplCopyWithImpl<$Res>
     extends _$ProfileCopyWithImpl<$Res, _$ProfileImpl>
     implements _$$ProfileImplCopyWith<$Res> {
   __$$ProfileImplCopyWithImpl(
-      _$ProfileImpl _value, $Res Function(_$ProfileImpl) _then)
-      : super(_value, _then);
+    _$ProfileImpl _value,
+    $Res Function(_$ProfileImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Profile
   /// with the given fields replaced by the non-null parameter values.
@@ -170,60 +187,72 @@ class __$$ProfileImplCopyWithImpl<$Res>
     Object? telegramAlias = freezed,
     Object? avatar = freezed,
   }) {
-    return _then(_$ProfileImpl(
-      profileId: null == profileId
-          ? _value.profileId
-          : profileId // ignore: cast_nullable_to_non_nullable
-              as String,
-      firstName: null == firstName
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastName: null == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String,
-      graduationYear: null == graduationYear
-          ? _value.graduationYear
-          : graduationYear // ignore: cast_nullable_to_non_nullable
-              as String,
-      location: freezed == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String?,
-      biography: freezed == biography
-          ? _value.biography
-          : biography // ignore: cast_nullable_to_non_nullable
-              as String?,
-      showLocation: null == showLocation
-          ? _value.showLocation
-          : showLocation // ignore: cast_nullable_to_non_nullable
-              as bool,
-      telegramAlias: freezed == telegramAlias
-          ? _value.telegramAlias
-          : telegramAlias // ignore: cast_nullable_to_non_nullable
-              as String?,
-      avatar: freezed == avatar
-          ? _value.avatar
-          : avatar // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$ProfileImpl(
+        profileId:
+            null == profileId
+                ? _value.profileId
+                : profileId // ignore: cast_nullable_to_non_nullable
+                    as String,
+        firstName:
+            null == firstName
+                ? _value.firstName
+                : firstName // ignore: cast_nullable_to_non_nullable
+                    as String,
+        lastName:
+            null == lastName
+                ? _value.lastName
+                : lastName // ignore: cast_nullable_to_non_nullable
+                    as String,
+        graduationYear:
+            null == graduationYear
+                ? _value.graduationYear
+                : graduationYear // ignore: cast_nullable_to_non_nullable
+                    as String,
+        location:
+            freezed == location
+                ? _value.location
+                : location // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        biography:
+            freezed == biography
+                ? _value.biography
+                : biography // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        showLocation:
+            null == showLocation
+                ? _value.showLocation
+                : showLocation // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        telegramAlias:
+            freezed == telegramAlias
+                ? _value.telegramAlias
+                : telegramAlias // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        avatar:
+            freezed == avatar
+                ? _value.avatar
+                : avatar // ignore: cast_nullable_to_non_nullable
+                    as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$ProfileImpl implements _Profile {
-  _$ProfileImpl(
-      {@JsonKey(name: 'id') required this.profileId,
-      @JsonKey(name: 'first_name') required this.firstName,
-      @JsonKey(name: 'last_name') required this.lastName,
-      @JsonKey(name: 'graduation_year') required this.graduationYear,
-      required this.location,
-      required this.biography,
-      @JsonKey(name: 'show_location') required this.showLocation,
-      @JsonKey(name: 'telegram_alias') required this.telegramAlias,
-      required this.avatar});
+class _$ProfileImpl extends _Profile {
+  const _$ProfileImpl({
+    @JsonKey(name: 'id') required this.profileId,
+    @JsonKey(name: 'first_name') required this.firstName,
+    @JsonKey(name: 'last_name') required this.lastName,
+    @JsonKey(name: 'graduation_year') required this.graduationYear,
+    required this.location,
+    required this.biography,
+    @JsonKey(name: 'show_location') required this.showLocation,
+    @JsonKey(name: 'telegram_alias') required this.telegramAlias,
+    required this.avatar,
+  }) : super._();
 
   factory _$ProfileImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileImplFromJson(json);
@@ -284,8 +313,18 @@ class _$ProfileImpl implements _Profile {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, profileId, firstName, lastName,
-      graduationYear, location, biography, showLocation, telegramAlias, avatar);
+  int get hashCode => Object.hash(
+    runtimeType,
+    profileId,
+    firstName,
+    lastName,
+    graduationYear,
+    location,
+    biography,
+    showLocation,
+    telegramAlias,
+    avatar,
+  );
 
   /// Create a copy of Profile
   /// with the given fields replaced by the non-null parameter values.
@@ -297,23 +336,23 @@ class _$ProfileImpl implements _Profile {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ProfileImplToJson(
-      this,
-    );
+    return _$$ProfileImplToJson(this);
   }
 }
 
-abstract class _Profile implements Profile {
-  factory _Profile(
-      {@JsonKey(name: 'id') required final String profileId,
-      @JsonKey(name: 'first_name') required final String firstName,
-      @JsonKey(name: 'last_name') required final String lastName,
-      @JsonKey(name: 'graduation_year') required final String graduationYear,
-      required final String? location,
-      required final String? biography,
-      @JsonKey(name: 'show_location') required final bool showLocation,
-      @JsonKey(name: 'telegram_alias') required final String? telegramAlias,
-      required final String? avatar}) = _$ProfileImpl;
+abstract class _Profile extends Profile {
+  const factory _Profile({
+    @JsonKey(name: 'id') required final String profileId,
+    @JsonKey(name: 'first_name') required final String firstName,
+    @JsonKey(name: 'last_name') required final String lastName,
+    @JsonKey(name: 'graduation_year') required final String graduationYear,
+    required final String? location,
+    required final String? biography,
+    @JsonKey(name: 'show_location') required final bool showLocation,
+    @JsonKey(name: 'telegram_alias') required final String? telegramAlias,
+    required final String? avatar,
+  }) = _$ProfileImpl;
+  const _Profile._() : super._();
 
   factory _Profile.fromJson(Map<String, dynamic> json) = _$ProfileImpl.fromJson;
 

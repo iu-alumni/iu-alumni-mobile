@@ -12,7 +12,8 @@ part of 'register_request.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$RegisterRequest {
@@ -42,17 +43,19 @@ mixin _$RegisterRequest {
 /// @nodoc
 abstract class $RegisterRequestCopyWith<$Res> {
   factory $RegisterRequestCopyWith(
-          RegisterRequest value, $Res Function(RegisterRequest) then) =
-      _$RegisterRequestCopyWithImpl<$Res, RegisterRequest>;
+    RegisterRequest value,
+    $Res Function(RegisterRequest) then,
+  ) = _$RegisterRequestCopyWithImpl<$Res, RegisterRequest>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'first_name') String firstName,
-      @JsonKey(name: 'last_name') String lastName,
-      @JsonKey(name: 'graduation_year') String gradYear,
-      String email,
-      @JsonKey(name: 'telegram_alias') String telegram,
-      String password,
-      @JsonKey(name: 'manual_verification') bool manualVerification});
+  $Res call({
+    @JsonKey(name: 'first_name') String firstName,
+    @JsonKey(name: 'last_name') String lastName,
+    @JsonKey(name: 'graduation_year') String gradYear,
+    String email,
+    @JsonKey(name: 'telegram_alias') String telegram,
+    String password,
+    @JsonKey(name: 'manual_verification') bool manualVerification,
+  });
 }
 
 /// @nodoc
@@ -78,55 +81,67 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
     Object? password = null,
     Object? manualVerification = null,
   }) {
-    return _then(_value.copyWith(
-      firstName: null == firstName
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastName: null == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String,
-      gradYear: null == gradYear
-          ? _value.gradYear
-          : gradYear // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      telegram: null == telegram
-          ? _value.telegram
-          : telegram // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-      manualVerification: null == manualVerification
-          ? _value.manualVerification
-          : manualVerification // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            firstName:
+                null == firstName
+                    ? _value.firstName
+                    : firstName // ignore: cast_nullable_to_non_nullable
+                        as String,
+            lastName:
+                null == lastName
+                    ? _value.lastName
+                    : lastName // ignore: cast_nullable_to_non_nullable
+                        as String,
+            gradYear:
+                null == gradYear
+                    ? _value.gradYear
+                    : gradYear // ignore: cast_nullable_to_non_nullable
+                        as String,
+            email:
+                null == email
+                    ? _value.email
+                    : email // ignore: cast_nullable_to_non_nullable
+                        as String,
+            telegram:
+                null == telegram
+                    ? _value.telegram
+                    : telegram // ignore: cast_nullable_to_non_nullable
+                        as String,
+            password:
+                null == password
+                    ? _value.password
+                    : password // ignore: cast_nullable_to_non_nullable
+                        as String,
+            manualVerification:
+                null == manualVerification
+                    ? _value.manualVerification
+                    : manualVerification // ignore: cast_nullable_to_non_nullable
+                        as bool,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$RegisterRequestImplCopyWith<$Res>
     implements $RegisterRequestCopyWith<$Res> {
-  factory _$$RegisterRequestImplCopyWith(_$RegisterRequestImpl value,
-          $Res Function(_$RegisterRequestImpl) then) =
-      __$$RegisterRequestImplCopyWithImpl<$Res>;
+  factory _$$RegisterRequestImplCopyWith(
+    _$RegisterRequestImpl value,
+    $Res Function(_$RegisterRequestImpl) then,
+  ) = __$$RegisterRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'first_name') String firstName,
-      @JsonKey(name: 'last_name') String lastName,
-      @JsonKey(name: 'graduation_year') String gradYear,
-      String email,
-      @JsonKey(name: 'telegram_alias') String telegram,
-      String password,
-      @JsonKey(name: 'manual_verification') bool manualVerification});
+  $Res call({
+    @JsonKey(name: 'first_name') String firstName,
+    @JsonKey(name: 'last_name') String lastName,
+    @JsonKey(name: 'graduation_year') String gradYear,
+    String email,
+    @JsonKey(name: 'telegram_alias') String telegram,
+    String password,
+    @JsonKey(name: 'manual_verification') bool manualVerification,
+  });
 }
 
 /// @nodoc
@@ -134,8 +149,9 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
     extends _$RegisterRequestCopyWithImpl<$Res, _$RegisterRequestImpl>
     implements _$$RegisterRequestImplCopyWith<$Res> {
   __$$RegisterRequestImplCopyWithImpl(
-      _$RegisterRequestImpl _value, $Res Function(_$RegisterRequestImpl) _then)
-      : super(_value, _then);
+    _$RegisterRequestImpl _value,
+    $Res Function(_$RegisterRequestImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of RegisterRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -150,50 +166,60 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
     Object? password = null,
     Object? manualVerification = null,
   }) {
-    return _then(_$RegisterRequestImpl(
-      firstName: null == firstName
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastName: null == lastName
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String,
-      gradYear: null == gradYear
-          ? _value.gradYear
-          : gradYear // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      telegram: null == telegram
-          ? _value.telegram
-          : telegram // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-      manualVerification: null == manualVerification
-          ? _value.manualVerification
-          : manualVerification // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$RegisterRequestImpl(
+        firstName:
+            null == firstName
+                ? _value.firstName
+                : firstName // ignore: cast_nullable_to_non_nullable
+                    as String,
+        lastName:
+            null == lastName
+                ? _value.lastName
+                : lastName // ignore: cast_nullable_to_non_nullable
+                    as String,
+        gradYear:
+            null == gradYear
+                ? _value.gradYear
+                : gradYear // ignore: cast_nullable_to_non_nullable
+                    as String,
+        email:
+            null == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                    as String,
+        telegram:
+            null == telegram
+                ? _value.telegram
+                : telegram // ignore: cast_nullable_to_non_nullable
+                    as String,
+        password:
+            null == password
+                ? _value.password
+                : password // ignore: cast_nullable_to_non_nullable
+                    as String,
+        manualVerification:
+            null == manualVerification
+                ? _value.manualVerification
+                : manualVerification // ignore: cast_nullable_to_non_nullable
+                    as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable(createFactory: false)
 class _$RegisterRequestImpl implements _RegisterRequest {
-  const _$RegisterRequestImpl(
-      {@JsonKey(name: 'first_name') required this.firstName,
-      @JsonKey(name: 'last_name') required this.lastName,
-      @JsonKey(name: 'graduation_year') required this.gradYear,
-      required this.email,
-      @JsonKey(name: 'telegram_alias') required this.telegram,
-      required this.password,
-      @JsonKey(name: 'manual_verification') required this.manualVerification});
+  const _$RegisterRequestImpl({
+    @JsonKey(name: 'first_name') required this.firstName,
+    @JsonKey(name: 'last_name') required this.lastName,
+    @JsonKey(name: 'graduation_year') required this.gradYear,
+    required this.email,
+    @JsonKey(name: 'telegram_alias') required this.telegram,
+    required this.password,
+    @JsonKey(name: 'manual_verification') required this.manualVerification,
+  });
 
   @override
   @JsonKey(name: 'first_name')
@@ -242,8 +268,16 @@ class _$RegisterRequestImpl implements _RegisterRequest {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, firstName, lastName, gradYear,
-      email, telegram, password, manualVerification);
+  int get hashCode => Object.hash(
+    runtimeType,
+    firstName,
+    lastName,
+    gradYear,
+    email,
+    telegram,
+    password,
+    manualVerification,
+  );
 
   /// Create a copy of RegisterRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -252,26 +286,27 @@ class _$RegisterRequestImpl implements _RegisterRequest {
   @pragma('vm:prefer-inline')
   _$$RegisterRequestImplCopyWith<_$RegisterRequestImpl> get copyWith =>
       __$$RegisterRequestImplCopyWithImpl<_$RegisterRequestImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$RegisterRequestImplToJson(
-      this,
-    );
+    return _$$RegisterRequestImplToJson(this);
   }
 }
 
 abstract class _RegisterRequest implements RegisterRequest {
-  const factory _RegisterRequest(
-      {@JsonKey(name: 'first_name') required final String firstName,
-      @JsonKey(name: 'last_name') required final String lastName,
-      @JsonKey(name: 'graduation_year') required final String gradYear,
-      required final String email,
-      @JsonKey(name: 'telegram_alias') required final String telegram,
-      required final String password,
-      @JsonKey(name: 'manual_verification')
-      required final bool manualVerification}) = _$RegisterRequestImpl;
+  const factory _RegisterRequest({
+    @JsonKey(name: 'first_name') required final String firstName,
+    @JsonKey(name: 'last_name') required final String lastName,
+    @JsonKey(name: 'graduation_year') required final String gradYear,
+    required final String email,
+    @JsonKey(name: 'telegram_alias') required final String telegram,
+    required final String password,
+    @JsonKey(name: 'manual_verification')
+    required final bool manualVerification,
+  }) = _$RegisterRequestImpl;
 
   @override
   @JsonKey(name: 'first_name')

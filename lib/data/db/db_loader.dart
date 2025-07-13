@@ -23,10 +23,7 @@ class DbLoader {
 
   Future<Uint8List> _readFromAssets() async {
     final data = await rootBundle.load(Assets.dbs.worldCities);
-    return data.buffer.asUint8List(
-      data.offsetInBytes,
-      data.lengthInBytes,
-    );
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
   }
 
   Future<Database> _loadWeb() async {

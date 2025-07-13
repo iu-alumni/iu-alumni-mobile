@@ -11,20 +11,20 @@ class EditingDesc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TitledItem(
-        // icon: Icons.description_outlined,
-        title: 'Description',
-        child: AppTextField(
-          initialText: context
-              .read<OneEventCubit>()
-              .state
-              .event
-              .map((s) => s.description)
-              .match(() => '', identity),
-          onChange: (text) => context
-              .read<OneEventCubit>()
-              .modify((e) => e.copyWith(description: text)),
-          hintText:
-              'Briefly, describe what the event is about, what you are planning to do, etc.',
-        ),
-      );
+    // icon: Icons.description_outlined,
+    title: 'Description',
+    child: AppTextField(
+      initialText: context
+          .read<OneEventCubit>()
+          .state
+          .event
+          .map((s) => s.description)
+          .match(() => '', identity),
+      onChange: (text) => context.read<OneEventCubit>().modify(
+        (e) => e.copyWith(description: text),
+      ),
+      hintText:
+          'Briefly, describe what the event is about, what you are planning to do, etc.',
+    ),
+  );
 }
