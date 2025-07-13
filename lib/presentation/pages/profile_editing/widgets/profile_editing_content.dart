@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../application/models/profile.dart';
@@ -27,7 +28,10 @@ class ProfileEditingContent {
 
   static const _horPadding = EdgeInsets.symmetric(horizontal: 24);
 
-  Future<void> _showLocationPicker(BuildContext context, bool currentIsNone) async {
+  Future<void> _showLocationPicker(
+    BuildContext context,
+    bool currentIsNone,
+  ) async {
     final location = await LocationDialog.show(context, currentIsNone);
     if (!context.mounted) {
       return;
@@ -75,6 +79,7 @@ class ProfileEditingContent {
         },
       ),
       const SizedBox(height: 24),
+      const _ErrorText(),
       Padding(
         padding: _horPadding,
         child: TitledItem(
@@ -182,25 +187,41 @@ class ProfileEditingContent {
                 ),
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
-                    buildWhen: (p, c) =>
-                        p.profile.map((p) => p.showLocation) !=
-                        c.profile.map((p) => p.showLocation),
-                    builder: (context, ep) => AppSwitch(
-                      value: ep.profile.match(
-                        () => false,
-                        (p) => p.showLocation,
+              BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+                buildWhen: (p, c) =>
+                    p.profile.map((p) => p.showLocation) !=
+                        c.profile.map((p) => p.showLocation) ||
+                    p.profile.map((p) => p.location == null) !=
+                        c.profile.map((p) => p.location == null),
+                builder: (context, ep) => AnimatedSize(
+                  duration: const Duration(milliseconds: 300),
+                  child: ep.profile
+                      .flatMap((p) => Option.fromNullable(p.location))
+                      .match(
+                        () => const SizedBox(),
+                        (_) => Row(
+                          spacing: 8,
+                          children: [
+                            AppSwitch(
+                              value: ep.profile.match(
+                                () => false,
+                                (p) => p.location != null && p.showLocation,
+                              ),
+                              onTap: (_) =>
+                                  context.read<ProfileEditingCubit>().update(
+                                    (p) => p.copyWith(
+                                      showLocation: !p.showLocation,
+                                    ),
+                                  ),
+                            ),
+                            const Text(
+                              'Show my location',
+                              style: AppTextStyles.body,
+                            ),
+                          ],
+                        ),
                       ),
-                      onTap: (_) => context.read<ProfileEditingCubit>().update(
-                        (p) => p.copyWith(showLocation: !p.showLocation),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text('Show my location', style: AppTextStyles.body),
-                ],
+                ),
               ),
             ],
           ),
@@ -220,8 +241,6 @@ class ProfileEditingContent {
         ),
       ),
       const SizedBox(height: 24),
-      const _ErrorText(),
-      const SizedBox(height: 16),
     ],
   );
 }
@@ -237,13 +256,10 @@ class _ErrorText extends StatelessWidget {
           duration: const Duration(milliseconds: 250),
           child: switch (state.saveState) {
             LoadedStateError(:final error) => Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 40,
-              ).copyWith(top: 0),
+              padding: const EdgeInsets.only(bottom: 16),
               child: Text(
                 error,
-                style: AppTextStyles.caption,
+                style: AppTextStyles.caption.copyWith(color: AppColors.error),
                 textAlign: TextAlign.start,
               ),
             ),

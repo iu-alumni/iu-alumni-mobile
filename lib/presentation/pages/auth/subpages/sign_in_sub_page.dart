@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui_alumni_mobile/presentation/common/constants/app_colors.dart';
 
 import '../../../blocs/auth/auth_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
@@ -97,13 +98,12 @@ class _ErrorText extends StatelessWidget {
     builder: (context, state) => AnimatedSize(
       duration: const Duration(milliseconds: 250),
       child: switch (state) {
-        LoadedStateError(:final error) => Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 8),
-            Text(error, style: AppTextStyles.caption),
-          ],
+        LoadedStateError(:final error) => Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(
+            error,
+            style: AppTextStyles.caption.copyWith(color: AppColors.error),
+          ),
         ),
         _ => const SizedBox(),
       },
