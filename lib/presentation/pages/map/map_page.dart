@@ -54,19 +54,19 @@ class _MapPageState extends State<MapPage> {
         alignment: Alignment.center,
         point: LatLng(city.key.coord.lat, city.key.coord.lng),
         child: Center(
-          child: ClipRRect(
-            borderRadius: BorderRadiusGeometry.circular(100),
-            child: BackdropFilter.grouped(
-              filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(100),
-                  onTap: () => _open(city.key, city.value),
-                  child: Text(city.key.city, style: AppTextStyles.caption),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadiusGeometry.circular(100),
+              color: AppColors.darkGray,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(100),
+                onTap: () => _open(city.key, city.value),
+                child: Text(
+                  city.key.city,
+                  style: AppTextStyles.caption.copyWith(color: Colors.white),
                 ),
               ),
             ),

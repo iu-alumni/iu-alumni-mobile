@@ -38,14 +38,19 @@ class AuthGatewayImpl implements AuthGateway {
       }, (e, _) => '$e').flatMap(TaskEither.fromEither).run();
 
   @override
-  Future<Either<String, Unit>> register(RegisterRequest request) async {
+  Future<Either<String, Either<Unit, Unit>>> register(
+    RegisterRequest request,
+  ) async {
     try {
-      await _dio.post(
+      final resp = await _dio.post(
         Paths.register(_secretsManager.hostPath),
         data: request.toJson(),
         options: _dioOptionsManager.opts(withToken: false),
       );
-      return const Right(unit);
+      if (resp.statusCode == 201) {
+        return const Right(Left(unit));
+      }
+      return const Right(Right(unit));
     } on DioException catch (e) {
       if (e.response case final r?) {
         if (r.data case final Map<String, dynamic> data) {

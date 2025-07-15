@@ -1,7 +1,7 @@
 import 'package:ui_alumni_mobile/application/models/event.dart';
 import 'package:ui_alumni_mobile/application/models/profile.dart';
+import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository.dart';
 
-import '../../../data/db/db_manager.dart';
 import '../../../util/logger.dart';
 import '../../models/city_location.dart';
 import '../events/events_repository.dart';
@@ -10,12 +10,12 @@ import 'map_repository.dart';
 
 class MapRepositoryImpl extends MapRepository {
   MapRepositoryImpl(
-    this._dbManager,
+    this._locationsRepository,
     this._usersRepository,
     this._eventsRepository,
   );
 
-  final DbManager _dbManager;
+  final LocationsRepository _locationsRepository;
   final UsersRepository _usersRepository;
   final EventsRepository _eventsRepository;
 
@@ -24,7 +24,7 @@ class MapRepositoryImpl extends MapRepository {
     if (data.length != 2) {
       return null;
     }
-    return CityLocation(data[0], data[1]);
+    return CityLocation(country: data[0], city: data[1]);
   }
 
   Map<CityLocation, CityData> _locationMapFrom({
@@ -64,7 +64,7 @@ class MapRepositoryImpl extends MapRepository {
   ) async {
     final _map = <NamedCoordinates, CityData>{};
     for (final entry in locationsMap.entries) {
-      final coords = await _dbManager.coordinates(
+      final coords = await _locationsRepository.coordinates(
         entry.key.country,
         entry.key.city,
       );
@@ -104,5 +104,5 @@ class MapRepositoryImpl extends MapRepository {
 
   @override
   Future<List<CityLocation>> suggestions(String city) =>
-      _dbManager.cities(city);
+      _locationsRepository.cities(city);
 }

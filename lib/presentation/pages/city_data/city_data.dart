@@ -48,7 +48,7 @@ class CityDataPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: _InCity(profiles: cityData.profiles),
             ),
-          Expanded(child: EventsList(events: cityData.events)),
+          Expanded(child: EventsList(events: cityData.events, refresh: null)),
         ],
       ),
     ),

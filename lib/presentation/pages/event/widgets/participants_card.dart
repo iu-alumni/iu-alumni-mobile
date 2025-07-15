@@ -26,6 +26,7 @@ class ParticipantsCard extends StatelessWidget {
     color: AppColors.gray90,
     borderRadius: BorderRadius.circular(16),
     child: InkWell(
+      borderRadius: BorderRadius.circular(16),
       onTap: () => _showParticipants(context),
       child: Padding(
         padding: const EdgeInsets.all(16),

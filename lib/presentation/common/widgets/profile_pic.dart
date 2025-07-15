@@ -36,6 +36,7 @@ class ProfilePic extends StatelessWidget {
             borderRadius: BorderRadius.circular(radius),
             child: InkWell(
               onTap: onTap,
+              borderRadius: BorderRadius.circular(radius),
               child: switch (profile.avatar) {
                 final image? when image.isNotEmpty => Image.memory(
                   base64Decode(image),

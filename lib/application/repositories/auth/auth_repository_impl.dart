@@ -17,9 +17,11 @@ class AuthRepositoryImpl implements AuthRepository {
       _authGateway.authorize(login, password);
 
   @override
-  Future<Either<String, Unit>> register(RegisterRequest request) async {
+  Future<Either<String, Either<Unit, Unit>>> register(
+    RegisterRequest request,
+  ) async {
     final result = await _authGateway.register(request);
-    if (result.isRight()) {
+    if (result case Right(value: Right())) {
       // Save the email for future code verification
       _registrationEmail = request.email;
     }
@@ -49,5 +51,10 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   void cleanEmail() {
     _registrationEmail = null;
+  }
+
+  @override
+  void setEmail(String email) {
+    _registrationEmail = email;
   }
 }

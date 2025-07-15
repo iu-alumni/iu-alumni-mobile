@@ -1,11 +1,13 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Coordinates extends Equatable {
-  const Coordinates(this.lat, this.lng);
+part 'coordinates.freezed.dart';
+part 'coordinates.g.dart';
 
-  final double lat;
-  final double lng;
+@freezed
+abstract class Coordinates with _$Coordinates {
+  const factory Coordinates(double lat, double lng) = _Coordinates;
+  const Coordinates._();
 
-  @override
-  List<Object?> get props => [lat, lng];
+  factory Coordinates.fromJson(Map<String, dynamic> json) =>
+      _$CoordinatesFromJson(json);
 }

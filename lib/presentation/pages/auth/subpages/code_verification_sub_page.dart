@@ -46,55 +46,60 @@ class _CodeVerificationSubPageState extends State<CodeVerificationSubPage> {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) => BlocListener<CodeVerificationCubit, CodeVerificationState>(
-    listener: _listener,
-    child: AppScaffold(
-      title: 'Verification',
-      body: AppListBody(
-        children: [
-          AppTextField(
-            onChange: _sinkCode,
-            initialText: null,
-            hintText: 'XXXXXX',
-            inputType: TextInputType.number,
-            maxLines: 1,
-          ),
-          _ErrorText(mapError: (s) => s.verification),
-          const SizedBox(height: 24),
-          AppButton(
-            onTap: _cubit.verify,
-            child: BlocBuilder<CodeVerificationCubit, CodeVerificationState>(
-              buildWhen: (p, c) => p.verification != c.verification,
-              builder: (context, state) => switch (state.verification) {
-                LoadedStateLoading() => _loader,
-                _ => Text(
-                  'Verify',
-                  style: AppTextStyles.actionSB.copyWith(color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              },
+  Widget build(BuildContext context) => PopScope(
+    onPopInvokedWithResult: (didPop, result) {
+      if (didPop) {
+        _cubit.dispose();
+      }
+    },
+    child: BlocListener<CodeVerificationCubit, CodeVerificationState>(
+      listener: _listener,
+      child: AppScaffold(
+        title: 'Verification',
+        body: AppListBody(
+          children: [
+            AppTextField(
+              onChange: _sinkCode,
+              initialText: null,
+              hintText: 'XXXXXX',
+              inputType: TextInputType.number,
+              maxLines: 1,
             ),
-          ),
-          const SizedBox(height: 8),
-          AppButton(
-            onTap: _cubit.resend,
-            buttonStyle: AppButtonStyle.secondary,
-            child: BlocBuilder<CodeVerificationCubit, CodeVerificationState>(
-              buildWhen: (p, c) => p.resend != c.resend,
-              builder: (context, state) => switch (state.resend) {
-                LoadedStateLoading() => _loader,
-                _ => Text(
-                  'Resend the code',
-                  style: AppTextStyles.actionM.copyWith(color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              },
+            _ErrorText(mapError: (s) => s.verification),
+            const SizedBox(height: 24),
+            AppButton(
+              onTap: _cubit.verify,
+              child: BlocBuilder<CodeVerificationCubit, CodeVerificationState>(
+                buildWhen: (p, c) => p.verification != c.verification,
+                builder: (context, state) => switch (state.verification) {
+                  LoadedStateLoading() => _loader,
+                  _ => Text(
+                    'Verify',
+                    style: AppTextStyles.actionSB.copyWith(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                },
+              ),
             ),
-          ),
-          _ErrorText(mapError: (s) => s.verification),
-        ],
+            const SizedBox(height: 8),
+            AppButton(
+              onTap: _cubit.resend,
+              buttonStyle: AppButtonStyle.secondary,
+              child: BlocBuilder<CodeVerificationCubit, CodeVerificationState>(
+                buildWhen: (p, c) => p.resend != c.resend,
+                builder: (context, state) => switch (state.resend) {
+                  LoadedStateLoading() => _loader,
+                  _ => Text(
+                    'Resend the code',
+                    style: AppTextStyles.actionM.copyWith(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                },
+              ),
+            ),
+            _ErrorText(mapError: (s) => s.resend),
+          ],
+        ),
       ),
     ),
   );

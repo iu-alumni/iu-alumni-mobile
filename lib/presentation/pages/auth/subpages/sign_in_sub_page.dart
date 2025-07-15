@@ -84,6 +84,17 @@ class _SignInSubPageState extends State<SignInSubPage> {
               textAlign: TextAlign.center,
             ),
           ),
+          const SizedBox(height: 8),
+          AppButton(
+            onTap: () =>
+                context.pushRoute(const RestoredVerificationSubRoute()),
+            buttonStyle: AppButtonStyle.text,
+            child: Text(
+              'Enter a verification code',
+              style: AppTextStyles.actionM,
+              textAlign: TextAlign.center,
+            ),
+          ),
         ],
       ),
     ),

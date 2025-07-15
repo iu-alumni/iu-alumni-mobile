@@ -4,6 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository.dart';
+import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository_impl.dart';
+import 'package:ui_alumni_mobile/data/locations/locations_gateway.dart';
+import 'package:ui_alumni_mobile/data/locations/locations_gateway_impl.dart';
 import 'package:uuid/uuid.dart';
 import 'application/repositories/auth/auth_repository.dart';
 import 'application/repositories/auth/auth_repository_impl.dart';
@@ -99,6 +103,13 @@ class App extends StatelessWidget {
             context.read<SecretsManager>(),
           ),
         ),
+        RepositoryProvider<LocationsGateway>(
+          create: (context) => LocationsGatewayImpl(
+            context.read<Dio>(),
+            context.read<SecretsManager>(),
+            context.read<DioOptionsManager>(),
+          ),
+        ),
         // --- REPOSITORIES ---
         RepositoryProvider<AuthRepository>(
           create: (context) => AuthRepositoryImpl(context.read<AuthGateway>()),
@@ -130,9 +141,15 @@ class App extends StatelessWidget {
         //     context.read<SecretsManager>(),
         //   ),
         // ),
+        RepositoryProvider<LocationsRepository>(
+          create: (context) => LocationsRepositoryImpl(
+            context.read<DbManager>(),
+            context.read<LocationsGateway>(),
+          ),
+        ),
         RepositoryProvider<MapRepository>(
           create: (context) => MapRepositoryImpl(
-            context.read<DbManager>(),
+            context.read<LocationsRepository>(),
             context.read<UsersRepository>(),
             context.read<EventsRepository>(),
           ),

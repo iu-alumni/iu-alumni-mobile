@@ -19,6 +19,11 @@ class EventsListCubit extends Cubit<EventsListState> {
     emit(EventsListState.data(IList(events)));
   }
 
+  Future<void> refreshEvents() async {
+    final events = await _eventsRepository.refreshEvents();
+    emit(EventsListState.data(IList(events)));
+  }
+
   void remove(String eventId) {
     if (state case final EventsListData currState) {
       emit(

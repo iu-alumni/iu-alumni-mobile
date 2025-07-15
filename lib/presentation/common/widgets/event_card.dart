@@ -42,6 +42,7 @@ class _EventCardState extends State<EventCard> {
     color: widget.color,
     child: InkWell(
       onTap: _openEvent,
+      borderRadius: BorderRadius.circular(24),
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(

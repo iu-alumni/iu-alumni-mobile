@@ -53,7 +53,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         },
       )
       .toTaskEither()
-      .flatMap<Unit>(
+      .flatMap(
         (r) => TaskEither(() async {
           emit(state.copyWith(verification: const LoadedState.loading()));
           final result = await _authRepository.register(r);
@@ -65,7 +65,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       )
       .match(
         (e) => emit(state.copyWith(verification: LoadedState.error(e))),
-        (_) => emit(state.copyWith(verification: LoadedState.data(manual))),
+        (d) => emit(state.copyWith(verification: LoadedState.data(d.isLeft()))),
       )
       .run();
 

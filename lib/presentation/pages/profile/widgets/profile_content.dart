@@ -82,6 +82,7 @@ class ProfileContent {
             title: 'Telegram alias',
             child: Row(
               mainAxisSize: MainAxisSize.min,
+              spacing: 8,
               children: [
                 Expanded(
                   child: AppButton(
@@ -100,13 +101,12 @@ class ProfileContent {
                     onTap: () => _copyTelegram(context),
                   ),
                 ),
-                const SizedBox(width: 2),
                 AppButton(
                   buttonStyle: AppButtonStyle.text,
                   onTap: () => _openTelegram(context),
-                  child: const Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Icon(Icons.open_in_new, color: AppColors.primary),
+                  child: const Icon(
+                    Icons.open_in_new,
+                    color: AppColors.primary,
                   ),
                 ),
               ],

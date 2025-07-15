@@ -1,10 +1,13 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class CityLocation extends Equatable {
-  const CityLocation(this.country, this.city);
-  final String country;
-  final String city;
+part 'city_location.freezed.dart';
+part 'city_location.g.dart';
 
-  @override
-  List<Object?> get props => [country, city];
+@freezed
+abstract class CityLocation with _$CityLocation {
+  const factory CityLocation({required String country, required String city}) =
+      _CityLocation;
+
+  factory CityLocation.fromJson(Map<String, dynamic> json) =>
+      _$CityLocationFromJson(json);
 }

@@ -228,4 +228,10 @@ class EventsRepositoryImpl implements EventsRepository {
     final data = await _gateway.eventsWhereParticipate(uid);
     return data.map(EventMapper.eventFromData(uid));
   }
+
+  @override
+  Future<Iterable<EventModel>> refreshEvents() async {
+    await _loadEvents(refresh: true);
+    return _cache!.values;
+  }
 }

@@ -20,4 +20,8 @@ abstract class Paths {
   static String profile(String? base) => '${base ?? _defaultBase}/profile/';
   static String myProfile(String? base) => '${profile(base)}me';
   static String allProfiles(String? base) => '${profile(base)}all';
+
+  static String _cities(String? base) => '${base ?? _defaultBase}/cities';
+  static String coordinates(String? base) => '${_cities(base)}/coordinates';
+  static String search(String? base) => '${_cities(base)}/search';
 }

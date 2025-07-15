@@ -3,9 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart'
-    show databaseExists, databaseFactory, getDatabasesPath, openDatabase;
+    show databaseExists, getDatabasesPath, openDatabase;
 import 'package:sqflite/sqlite_api.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:path/path.dart';
 
 import '../../gen/assets.gen.dart';
@@ -14,9 +13,9 @@ import '../../util/logger.dart';
 class DbLoader {
   static const _dbName = 'world_cities.db';
 
-  Future<Database> loadDb() {
-    if (kIsWeb || kIsWasm) {
-      return _loadWeb();
+  Future<Database?> loadDb() async {
+    if (kIsWasm || kIsWeb) {
+      return null;
     }
     return _loadMobile();
   }
@@ -24,13 +23,6 @@ class DbLoader {
   Future<Uint8List> _readFromAssets() async {
     final data = await rootBundle.load(Assets.dbs.worldCities);
     return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-  }
-
-  Future<Database> _loadWeb() async {
-    databaseFactory = databaseFactoryFfiWeb;
-    final bytes = await _readFromAssets();
-    await databaseFactory.writeDatabaseBytes(_dbName, bytes);
-    return databaseFactory.openDatabase(_dbName);
   }
 
   Future<void> _copyDb(String path) async {

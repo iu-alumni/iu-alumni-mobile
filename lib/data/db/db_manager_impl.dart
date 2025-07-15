@@ -40,9 +40,6 @@ class DbManagerImpl extends DbManager {
     return Option.tryCatch(() => _coordFromJson(data.first)).toNullable();
   }
 
-  CityLocation _cityLocationFromJson(Map<String, Object?> data) =>
-      CityLocation(data['country'] as String, data['city'] as String);
-
   @override
   Future<List<CityLocation>> cities(String city) async {
     final data = await _db?.query(
@@ -56,7 +53,7 @@ class DbManagerImpl extends DbManager {
       return [];
     }
     return Option.tryCatch(
-      () => data.map(_cityLocationFromJson).toList(),
+      () => data.map(CityLocation.fromJson).toList(),
     ).match(() => [], identity);
   }
 }

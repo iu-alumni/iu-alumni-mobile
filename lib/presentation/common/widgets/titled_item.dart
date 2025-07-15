@@ -17,6 +17,7 @@ class TitledItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.stretch,
+    spacing: 4,
     children: [
       Padding(
         padding: titlePadding,
@@ -26,7 +27,6 @@ class TitledItem extends StatelessWidget {
           textAlign: TextAlign.start,
         ),
       ),
-      const SizedBox(height: 8),
       child,
     ],
   );

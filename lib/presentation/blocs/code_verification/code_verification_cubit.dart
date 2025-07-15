@@ -38,7 +38,7 @@ class CodeVerificationCubit extends Cubit<CodeVerificationState> {
       );
       return;
     }
-    _rawVerify();
+    await _rawVerify();
   }
 
   Future<void> _rawVerify() async {
@@ -65,5 +65,18 @@ class CodeVerificationCubit extends Cubit<CodeVerificationState> {
         ),
       ),
     );
+  }
+
+  void setEmail(String email) => _repo.setEmail(email);
+
+  void dispose() {
+    emit(
+      CodeVerificationState(
+        verification: const LoadedState.init(),
+        resend: const LoadedState.init(),
+        code: '',
+      ),
+    );
+    _repo.cleanEmail();
   }
 }

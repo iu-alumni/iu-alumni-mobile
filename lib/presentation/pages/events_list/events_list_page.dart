@@ -50,7 +50,10 @@ class _EventsListPageState extends State<EventsListPage> {
           final EventsListData d when d.data.isEmpty => Center(
             child: Text('No events', style: AppTextStyles.caption),
           ),
-          final EventsListData d => EventsList(events: d.data),
+          final EventsListData d => EventsList(
+            events: d.data,
+            refresh: context.read<EventsListCubit>().refreshEvents,
+          ),
           final EventsListError e => Center(
             child: Text(e.error, style: AppTextStyles.caption),
           ),

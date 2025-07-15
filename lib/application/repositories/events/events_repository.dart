@@ -7,6 +7,8 @@ abstract interface class EventsRepository {
 
   Future<Iterable<EventModel>> getEventsIOwn();
 
+  Future<Iterable<EventModel>> refreshEvents();
+
   // Future<Iterable<EventModel>> getEventsIParticipateIn();
 
   Future<Iterable<EventModel>> getEventsWhereParticipate(String uid);
