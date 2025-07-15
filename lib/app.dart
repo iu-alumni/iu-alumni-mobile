@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository.dart';
 import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository_impl.dart';
+import 'package:ui_alumni_mobile/application/repositories/reporter/reporter_impl.dart';
 import 'package:ui_alumni_mobile/data/locations/locations_gateway.dart';
 import 'package:ui_alumni_mobile/data/locations/locations_gateway_impl.dart';
 import 'package:uuid/uuid.dart';
@@ -16,7 +17,6 @@ import 'application/repositories/events/events_repository_impl.dart';
 import 'application/repositories/map/map_repository.dart';
 import 'application/repositories/map/map_repository_impl.dart';
 import 'application/repositories/reporter/reporter.dart';
-import 'application/repositories/reporter/reporter_mock.dart';
 import 'application/repositories/users/users_repository.dart';
 import 'application/repositories/users/users_repository_impl.dart';
 import 'data/auth/auth_gateway.dart';
@@ -128,19 +128,12 @@ class App extends StatelessWidget {
             context.read<UsersRepository>(),
           ),
         ),
-        // RepositoryProvider<Reporter>(
-        //   create: (context) => ReporterImpl(context.read<UsersRepository>()),
-        // ),
-        // TODO delete when moving to mobile
-        RepositoryProvider<Reporter>(create: (context) => ReporterMock()),
-        // RepositoryProvider(
-        //   create: (context) => AppLoadingManager(
-        //     context.read<TokenProvider>(),
-        //     context.read<DbManager>(),
-        //     context.read<Reporter>(),
-        //     context.read<SecretsManager>(),
-        //   ),
-        // ),
+        RepositoryProvider<Reporter>(
+          create: (context) => ReporterImpl(
+            context.read<UsersRepository>(),
+            context.read<SecretsManager>(),
+          ),
+        ),
         RepositoryProvider<LocationsRepository>(
           create: (context) => LocationsRepositoryImpl(
             context.read<DbManager>(),
