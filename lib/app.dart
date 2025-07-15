@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository.dart';
 import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository_impl.dart';
+import 'package:ui_alumni_mobile/data/db/db_mock.dart';
 import 'package:ui_alumni_mobile/data/locations/locations_gateway.dart';
 import 'package:ui_alumni_mobile/data/locations/locations_gateway_impl.dart';
 import 'package:uuid/uuid.dart';
@@ -23,7 +24,6 @@ import 'data/auth/auth_gateway.dart';
 import 'data/auth/auth_gateway_impl.dart';
 import 'data/common/dio_options_manager.dart';
 import 'data/db/db_manager.dart';
-import 'data/db/db_manager_impl.dart';
 import 'data/events/events_gateway.dart';
 import 'data/events/events_gateway_impl.dart';
 import 'data/profile/profile_gateway.dart';
@@ -57,7 +57,7 @@ class App extends StatelessWidget {
         ),
         RepositoryProvider(create: (_) => SharedPreferencesAsync()),
         RepositoryProvider(create: (_) => ImagePicker()),
-        RepositoryProvider<DbManager>(create: (_) => DbManagerImpl()),
+        RepositoryProvider<DbManager>(create: (_) => DbMock()),
         RepositoryProvider(
           create: (context) => TokenManager(
             context.read<FlutterSecureStorage>(),
@@ -128,19 +128,8 @@ class App extends StatelessWidget {
             context.read<UsersRepository>(),
           ),
         ),
-        // RepositoryProvider<Reporter>(
-        //   create: (context) => ReporterImpl(context.read<UsersRepository>()),
-        // ),
         // TODO delete when moving to mobile
         RepositoryProvider<Reporter>(create: (context) => ReporterMock()),
-        // RepositoryProvider(
-        //   create: (context) => AppLoadingManager(
-        //     context.read<TokenProvider>(),
-        //     context.read<DbManager>(),
-        //     context.read<Reporter>(),
-        //     context.read<SecretsManager>(),
-        //   ),
-        // ),
         RepositoryProvider<LocationsRepository>(
           create: (context) => LocationsRepositoryImpl(
             context.read<DbManager>(),
@@ -179,11 +168,6 @@ class App extends StatelessWidget {
               useMaterial3: true,
               splashFactory: NoSplash.splashFactory,
             ),
-            // routerConfig: AppRouter().config(
-            //   navigatorObservers: () => [
-            //     AppObserver(context.read<Reporter>()),
-            //   ],
-            // ),
             routerDelegate: router.delegate(),
             routeInformationProvider: AlwaysRootRouteInformationProvider(),
             routeInformationParser: router.defaultRouteParser(),

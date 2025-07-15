@@ -58,11 +58,7 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/icons/
-    - assets/icons/map/
-    - assets/dbs/
     - assets/fonts/
-    # - .env
 
   fonts:
     - family: Montserrat
@@ -71,13 +67,3 @@ flutter:
         - asset: assets/fonts/Montserrat-ExtraBold.ttf
         - asset: assets/fonts/Montserrat-Medium.ttf
         - asset: assets/fonts/Montserrat-SemiBold.ttf
-
-flutter_launcher_icons:
-  image_path: "assets/icons/iualumni_icon.png"
-  android: true
-  min_sdk_android: 24
-  adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/icons/iualumni_icon_trans.png"
-  ios: true
-  remove_alpha_ios: true
-  background_color_ios: "#FFFFFF"

@@ -29,11 +29,17 @@ class LocationsRepositoryImpl implements LocationsRepository {
 
   @override
   void dispose() {
+    if (kIsWeb || kIsWasm) {
+      return;
+    }
     return _dbManager.dispose();
   }
 
   @override
-  Future<void> init() {
+  Future<void> init() async {
+    if (kIsWeb || kIsWasm) {
+      return;
+    }
     return _dbManager.init();
   }
 }
