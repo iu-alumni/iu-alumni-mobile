@@ -26,8 +26,6 @@ class ProfileEditingContent {
 
   final Profile profile;
 
-  static const _horPadding = EdgeInsets.symmetric(horizontal: 24);
-
   Future<void> _showLocationPicker(
     BuildContext context,
     bool currentIsNone,
@@ -80,163 +78,144 @@ class ProfileEditingContent {
       ),
       const SizedBox(height: 24),
       const _ErrorText(),
-      Padding(
-        padding: _horPadding,
-        child: TitledItem(
-          title: 'First Name',
-          child: AppTextField(
-            initialText: profile.firstName,
-            hintText: 'Ivan',
-            onChange: (nn) => context.read<ProfileEditingCubit>().update(
-              (p) => p.copyWith(firstName: nn),
-            ),
+      TitledItem(
+        title: 'First Name',
+        child: AppTextField(
+          initialText: profile.firstName,
+          hintText: 'Ivan',
+          onChange: (nn) => context.read<ProfileEditingCubit>().update(
+            (p) => p.copyWith(firstName: nn),
           ),
         ),
       ),
       const SizedBox(height: 24),
-      Padding(
-        padding: _horPadding,
-        child: TitledItem(
-          title: 'Last Name',
-          child: AppTextField(
-            initialText: profile.lastName,
-            hintText: 'Ivanov',
-            onChange: (nn) => context.read<ProfileEditingCubit>().update(
-              (p) => p.copyWith(lastName: nn),
-            ),
+      TitledItem(
+        title: 'Last Name',
+        child: AppTextField(
+          initialText: profile.lastName,
+          hintText: 'Ivanov',
+          onChange: (nn) => context.read<ProfileEditingCubit>().update(
+            (p) => p.copyWith(lastName: nn),
           ),
         ),
       ),
       const SizedBox(height: 24),
-      Padding(
-        padding: _horPadding,
-        child: TitledItem(
-          title: 'Graduation year',
-          child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
-            buildWhen: (p, c) =>
-                p.profile.map((p) => p.graduationYear) !=
-                c.profile.map((p) => p.graduationYear),
-            builder: (context, ep) => AppButton(
-              buttonStyle: AppButtonStyle.gray,
-              onTap: () async {
-                final year = await GraduationYearPicker.show(context);
-                if (year != null && context.mounted) {
-                  context.read<ProfileEditingCubit>().update(
-                    (p) => p.copyWith(graduationYear: '$year'),
-                  );
-                }
-              },
-              child: Text(
-                ep.profile.match(
-                  () => profile.graduationYear,
-                  (s) => s.graduationYear,
-                ),
-                style: AppTextStyles.body,
-                textAlign: TextAlign.start,
+      TitledItem(
+        title: 'Graduation year',
+        child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+          buildWhen: (p, c) =>
+              p.profile.map((p) => p.graduationYear) !=
+              c.profile.map((p) => p.graduationYear),
+          builder: (context, ep) => AppButton(
+            buttonStyle: AppButtonStyle.gray,
+            onTap: () async {
+              final year = await GraduationYearPicker.show(context);
+              if (year != null && context.mounted) {
+                context.read<ProfileEditingCubit>().update(
+                  (p) => p.copyWith(graduationYear: '$year'),
+                );
+              }
+            },
+            child: Text(
+              ep.profile.match(
+                () => profile.graduationYear,
+                (s) => s.graduationYear,
               ),
+              style: AppTextStyles.body,
+              textAlign: TextAlign.start,
             ),
           ),
         ),
       ),
       const SizedBox(height: 24),
-      Padding(
-        padding: _horPadding,
-        child: TitledItem(
-          title: 'Biography',
-          child: AppTextField(
-            initialText: profile.biography,
-            hintText: 'What is on your mind?',
-            onChange: (nb) => context.read<ProfileEditingCubit>().update(
-              (p) => p.copyWith(biography: nb),
-            ),
+      TitledItem(
+        title: 'Biography',
+        child: AppTextField(
+          initialText: profile.biography,
+          hintText: 'What is on your mind?',
+          onChange: (nb) => context.read<ProfileEditingCubit>().update(
+            (p) => p.copyWith(biography: nb),
           ),
         ),
       ),
       const SizedBox(height: 24),
-      Padding(
-        padding: _horPadding,
-        child: TitledItem(
-          title: 'Location',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              AppButton(
-                buttonStyle: AppButtonStyle.gray,
-                child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
-                  buildWhen: (p, c) =>
-                      p.profile.map((p) => p.location) !=
-                      c.profile.map((p) => p.location),
-                  builder: (context, ep) => Text(
-                    ep.profile.toNullable()?.location ?? 'No location',
-                    style: AppTextStyles.actionSB.copyWith(
-                      color: ep.profile.toNullable()?.location == null
-                          ? AppColors.gray50
-                          : AppColors.darkGray,
-                    ),
+      TitledItem(
+        title: 'Location',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AppButton(
+              buttonStyle: AppButtonStyle.gray,
+              child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+                buildWhen: (p, c) =>
+                    p.profile.map((p) => p.location) !=
+                    c.profile.map((p) => p.location),
+                builder: (context, ep) => Text(
+                  ep.profile.toNullable()?.location ?? 'No location',
+                  style: AppTextStyles.actionSB.copyWith(
+                    color: ep.profile.toNullable()?.location == null
+                        ? AppColors.gray50
+                        : AppColors.darkGray,
                   ),
                 ),
-                onTap: () => _showLocationPicker(
-                  context,
-                  context
-                          .read<ProfileEditingCubit>()
-                          .state
-                          .profile
-                          .map((p) => p.location)
-                          .toNullable() ==
-                      null,
-                ),
               ),
-              const SizedBox(height: 16),
-              BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
-                buildWhen: (p, c) =>
-                    p.profile.map((p) => p.showLocation) !=
-                        c.profile.map((p) => p.showLocation) ||
-                    p.profile.map((p) => p.location == null) !=
-                        c.profile.map((p) => p.location == null),
-                builder: (context, ep) => AnimatedSize(
-                  duration: const Duration(milliseconds: 300),
-                  child: ep.profile
-                      .flatMap((p) => Option.fromNullable(p.location))
-                      .match(
-                        () => const SizedBox(),
-                        (_) => Row(
-                          spacing: 8,
-                          children: [
-                            AppSwitch(
-                              value: ep.profile.match(
-                                () => false,
-                                (p) => p.location != null && p.showLocation,
-                              ),
-                              onTap: (_) =>
-                                  context.read<ProfileEditingCubit>().update(
-                                    (p) => p.copyWith(
-                                      showLocation: !p.showLocation,
-                                    ),
-                                  ),
+              onTap: () => _showLocationPicker(
+                context,
+                context
+                        .read<ProfileEditingCubit>()
+                        .state
+                        .profile
+                        .map((p) => p.location)
+                        .toNullable() ==
+                    null,
+              ),
+            ),
+            const SizedBox(height: 16),
+            BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+              buildWhen: (p, c) =>
+                  p.profile.map((p) => p.showLocation) !=
+                      c.profile.map((p) => p.showLocation) ||
+                  p.profile.map((p) => p.location == null) !=
+                      c.profile.map((p) => p.location == null),
+              builder: (context, ep) => AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                child: ep.profile
+                    .flatMap((p) => Option.fromNullable(p.location))
+                    .match(
+                      () => const SizedBox(),
+                      (_) => Row(
+                        spacing: 8,
+                        children: [
+                          AppSwitch(
+                            value: ep.profile.match(
+                              () => false,
+                              (p) => p.location != null && p.showLocation,
                             ),
-                            const Text(
-                              'Show my location',
-                              style: AppTextStyles.body,
-                            ),
-                          ],
-                        ),
+                            onTap: (_) =>
+                                context.read<ProfileEditingCubit>().update(
+                                  (p) =>
+                                      p.copyWith(showLocation: !p.showLocation),
+                                ),
+                          ),
+                          const Text(
+                            'Show my location',
+                            style: AppTextStyles.body,
+                          ),
+                        ],
                       ),
-                ),
+                    ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       const SizedBox(height: 24),
-      Padding(
-        padding: _horPadding,
-        child: TitledItem(
-          title: 'Telegram',
-          child: AppTextField(
-            initialText: profile.telegramAlias,
-            onChange: (alias) => context.read<ProfileEditingCubit>().update(
-              (p) => p.copyWith(telegramAlias: alias),
-            ),
+      TitledItem(
+        title: 'Telegram',
+        child: AppTextField(
+          initialText: profile.telegramAlias,
+          onChange: (alias) => context.read<ProfileEditingCubit>().update(
+            (p) => p.copyWith(telegramAlias: alias),
           ),
         ),
       ),
