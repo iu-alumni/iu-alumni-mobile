@@ -53,6 +53,9 @@ class ProfileContent {
     }
   }
 
+  void _openDeleteAccount() =>
+      launchUrl(Uri.parse('https://forms.gle/6exD5U78s8ccya24A'));
+
   AppBody build(BuildContext context) => AppListBody(
     children: [
       const SizedBox(height: 24),
@@ -115,6 +118,15 @@ class ProfileContent {
         if (personal) const _OwnedEvents(),
         const _ParticipatedEvents(),
         if (personal) const OpenBotCard(),
+        if (personal)
+          AppButton(
+            buttonStyle: AppButtonStyle.text,
+            onTap: _openDeleteAccount,
+            child: Text(
+              'Delete my account',
+              style: AppTextStyles.actionM.copyWith(color: AppColors.error),
+            ),
+          ),
       ].expand((e) => [const SizedBox(height: 24), e]),
       const SizedBox(height: RootPage.navigationBarHeight + 16),
     ],

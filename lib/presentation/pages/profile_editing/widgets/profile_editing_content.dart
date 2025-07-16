@@ -49,7 +49,7 @@ class ProfileEditingContent {
     final bytes = await image.readAsBytes();
     final compressed = await FlutterImageCompress.compressWithList(
       bytes,
-      quality: 90,
+      quality: 85,
     );
     final encoded = base64Encode(compressed);
     if (!context.mounted) {
