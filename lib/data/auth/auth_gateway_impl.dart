@@ -4,28 +4,21 @@ import 'package:fpdart/fpdart.dart';
 import '../../application/models/register_request.dart';
 import '../common/dio_options_manager.dart';
 import '../paths.dart';
-import '../secrets/secrets_manager.dart';
 import '../token/token_manager.dart';
 import 'auth_gateway.dart';
 
 class AuthGatewayImpl implements AuthGateway {
-  AuthGatewayImpl(
-    this._dio,
-    this._tokenManager,
-    this._dioOptionsManager,
-    this._secretsManager,
-  );
+  AuthGatewayImpl(this._dio, this._tokenManager, this._dioOptionsManager);
 
   final TokenManager _tokenManager;
   final Dio _dio;
   final DioOptionsManager _dioOptionsManager;
-  final SecretsManager _secretsManager;
 
   @override
   Future<Either<String, Unit>> authorize(String email, String password) =>
       TaskEither<String, Either<String, Unit>>.tryCatch(() async {
         final response = await _dio.post(
-          Paths.login(_secretsManager.hostPath),
+          Paths.login,
           data: {'email': email, 'password': password},
           options: _dioOptionsManager.opts(withToken: false),
         );
@@ -43,7 +36,7 @@ class AuthGatewayImpl implements AuthGateway {
   ) async {
     try {
       final resp = await _dio.post(
-        Paths.register(_secretsManager.hostPath),
+        Paths.register,
         data: request.toJson(),
         options: _dioOptionsManager.opts(withToken: false),
       );
@@ -68,6 +61,8 @@ class AuthGatewayImpl implements AuthGateway {
         }
       }
       return Left('${e.message}');
+    } catch (e) {
+      return Left('$e');
     }
   }
 
@@ -75,7 +70,7 @@ class AuthGatewayImpl implements AuthGateway {
   Future<Either<String, Unit>> sendCode(String email) =>
       TaskEither<String, Unit>.tryCatch(() async {
         await _dio.post(
-          Paths.resend(_secretsManager.hostPath),
+          Paths.resend,
           data: {'email': email},
           options: _dioOptionsManager.opts(withToken: false),
         );
@@ -88,7 +83,7 @@ class AuthGatewayImpl implements AuthGateway {
     required String code,
   }) => TaskEither<String, Either<String, Unit>>.tryCatch(() async {
     final response = await _dio.post(
-      Paths.verify(_secretsManager.hostPath),
+      Paths.verify,
       data: {'email': email, 'verification_code': code},
       options: _dioOptionsManager.opts(withToken: false),
     );

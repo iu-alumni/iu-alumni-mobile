@@ -115,19 +115,14 @@ class _ClusterMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
-    decoration: BoxDecoration(
-      color: AppColors.gray90,
+    decoration: const BoxDecoration(
+      color: AppColors.darkGray,
       shape: BoxShape.circle,
-      border: Border.all(color: AppColors.primary, width: 3),
     ),
     child: Center(
       child: Text(
-        markersLength,
-        style: const TextStyle(
-          color: AppColors.darkGray,
-          fontWeight: FontWeight.w700,
-          fontSize: 18,
-        ),
+        '+$markersLength',
+        style: AppTextStyles.caption.copyWith(color: Colors.white),
       ),
     ),
   );

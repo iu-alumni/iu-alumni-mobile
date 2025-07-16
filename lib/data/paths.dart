@@ -1,27 +1,23 @@
 abstract class Paths {
-  static const _defaultBase = 'http://194.164.235.177';
+  static const String events = '/events/';
+  static String eventsOwner = '${events}owner';
+  static String eventsWhereParticipant(String uid) =>
+      '${events}participant/$uid';
+  static String eventWithId(String eid) => '$events$eid';
+  static String participants(String eid) => '${eventWithId(eid)}/participants';
+  static String leave(String eid) => '${eventWithId(eid)}/participants/remove';
 
-  static String events(String? base) => '${base ?? _defaultBase}/events/';
-  static String eventsOwner(String? base) => '${events(base)}owner';
-  static String eventsWhereParticipant(String? base, String uid) =>
-      '${events(base)}participant/$uid';
-  static String eventWithId(String? base, String eid) => '${events(base)}$eid';
-  static String participants(String? base, String eid) =>
-      '${eventWithId(base, eid)}/participants';
-  static String leave(String? base, String eid) =>
-      '${eventWithId(base, eid)}/participants/remove';
+  static const String _auth = '/auth';
+  static String login = '$_auth/login';
+  static String register = '$_auth/register';
+  static String resend = '$_auth/resend-verification';
+  static String verify = '$_auth/verify';
 
-  static String _auth(String? base) => '${base ?? _defaultBase}/auth';
-  static String login(String? base) => '${_auth(base)}/login';
-  static String register(String? base) => '${_auth(base)}/register';
-  static String resend(String? base) => '${_auth(base)}/resend-verification';
-  static String verify(String? base) => '${_auth(base)}/verify';
+  static String profile = '/profile/';
+  static String myProfile = '${profile}me';
+  static String allProfiles = '${profile}all';
 
-  static String profile(String? base) => '${base ?? _defaultBase}/profile/';
-  static String myProfile(String? base) => '${profile(base)}me';
-  static String allProfiles(String? base) => '${profile(base)}all';
-
-  static String _cities(String? base) => '${base ?? _defaultBase}/cities';
-  static String coordinates(String? base) => '${_cities(base)}/coordinates';
-  static String search(String? base) => '${_cities(base)}/search';
+  static const String _cities = '/cities';
+  static String coordinates = '$_cities/coordinates';
+  static String search = '$_cities/search';
 }

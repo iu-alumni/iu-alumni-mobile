@@ -7,22 +7,20 @@ import '../common/dio_options_manager.dart';
 import '../models/event_data_model.dart';
 import '../models/event_request_data_model.dart';
 import '../paths.dart';
-import '../secrets/secrets_manager.dart';
 import 'events_gateway.dart';
 
 class EventsGatewayImpl implements EventsGateway {
-  EventsGatewayImpl(this._dio, this._optionsManager, this._secretsManager);
+  EventsGatewayImpl(this._dio, this._optionsManager);
 
   final Dio _dio;
   final DioOptionsManager _optionsManager;
-  final SecretsManager _secretsManager;
 
   @override
   Future<Option<String>> addEvent(EventRequestDataModel event) async {
     final result = await TaskEither.tryCatch(() async {
       final data = jsonEncode(event.toJson());
       final response = await _dio.post(
-        Paths.events(_secretsManager.hostPath),
+        Paths.events,
         data: data,
         options: _optionsManager.opts(),
       );
@@ -36,7 +34,7 @@ class EventsGatewayImpl implements EventsGateway {
   Future<Iterable<EventDataModel>> loadEvents() => TaskEither.tryCatch(
     () async {
       final resp = await _dio.get(
-        Paths.events(_secretsManager.hostPath),
+        Paths.events,
         options: _optionsManager.opts(),
       );
       final list = resp.data as List;
@@ -49,7 +47,7 @@ class EventsGatewayImpl implements EventsGateway {
   Future<bool> deleteEvent(String eventId) async {
     final result = await TaskEither.tryCatch(
       () => _dio.delete(
-        Paths.eventWithId(_secretsManager.hostPath, eventId),
+        Paths.eventWithId(eventId),
         options: _optionsManager.opts(),
       ),
       (e, _) => '$e',
@@ -63,7 +61,7 @@ class EventsGatewayImpl implements EventsGateway {
       final requestModel = event.toJson();
       requestModel['datetime'] = null;
       await _dio.put(
-        Paths.eventWithId(_secretsManager.hostPath, eventId),
+        Paths.eventWithId(eventId),
         options: _optionsManager.opts(),
         data: jsonEncode(requestModel),
       );
@@ -75,7 +73,7 @@ class EventsGatewayImpl implements EventsGateway {
   Future<bool> participate(String eventId, String userId) async {
     final result = await TaskEither.tryCatch(
       () => _dio.post(
-        Paths.participants(_secretsManager.hostPath, eventId),
+        Paths.participants(eventId),
         options: _optionsManager.opts(),
         queryParameters: {'participant_id': userId},
       ),
@@ -88,7 +86,7 @@ class EventsGatewayImpl implements EventsGateway {
   Future<bool> leave(String eventId, String userId) async {
     final result = await TaskEither.tryCatch(
       () => _dio.post(
-        Paths.leave(_secretsManager.hostPath, eventId),
+        Paths.leave(eventId),
         options: _optionsManager.opts(),
         queryParameters: {'participant_id': userId},
       ),
@@ -101,7 +99,7 @@ class EventsGatewayImpl implements EventsGateway {
   Future<Iterable<EventDataModel>> eventsIOwn() => TaskEither.tryCatch(
     () async {
       final resp = await _dio.get(
-        Paths.eventsOwner(_secretsManager.hostPath),
+        Paths.eventsOwner,
         options: _optionsManager.opts(),
       );
       final list = resp.data as List;
@@ -115,7 +113,7 @@ class EventsGatewayImpl implements EventsGateway {
       TaskEither.tryCatch(
         () async {
           final resp = await _dio.get(
-            Paths.eventsWhereParticipant(_secretsManager.hostPath, userId),
+            Paths.eventsWhereParticipant(userId),
             options: _optionsManager.opts(),
           );
           final list = resp.data as List;

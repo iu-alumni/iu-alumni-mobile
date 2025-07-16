@@ -40,149 +40,145 @@ import 'presentation/common/constants/app_colors.dart';
 import 'presentation/router/always_root_route.dart';
 import 'presentation/router/app_router.dart';
 
+const _host = String.fromEnvironment('host_path');
+
 class App extends StatelessWidget {
   const App({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 10)));
-    return MultiBlocProvider(
-      providers: [
-        // --- SERVICES ---
-        RepositoryProvider(create: (_) => SecretsManager()),
-        RepositoryProvider(
-          create: (_) => const FlutterSecureStorage(
-            aOptions: AndroidOptions(encryptedSharedPreferences: true),
-          ),
-        ),
-        RepositoryProvider(create: (_) => SharedPreferencesAsync()),
-        RepositoryProvider(create: (_) => ImagePicker()),
-        RepositoryProvider<DbManager>(create: (_) => DbManagerImpl()),
-        RepositoryProvider(
-          create: (context) => TokenManager(
-            context.read<FlutterSecureStorage>(),
-            context.read<SharedPreferencesAsync>(),
-            context.read<SecretsManager>(),
-          ),
-        ),
-        RepositoryProvider<TokenProvider>(
-          create: (context) => TokenProviderImpl(context.read<TokenManager>()),
-        ),
-        RepositoryProvider(
-          create: (context) => DioOptionsManager(context.read<TokenProvider>()),
-        ),
-        RepositoryProvider(create: (_) => dio),
-        RepositoryProvider(create: (_) => const Uuid()),
-        // --- GATEWAYS ---
-        RepositoryProvider<EventsGateway>(
-          create: (context) => EventsGatewayImpl(
-            context.read<Dio>(),
-            context.read<DioOptionsManager>(),
-            context.read<SecretsManager>(),
-          ),
-        ),
-        RepositoryProvider<AuthGateway>(
-          create: (context) => AuthGatewayImpl(
-            context.read<Dio>(),
-            context.read<TokenManager>(),
-            context.read<DioOptionsManager>(),
-            context.read<SecretsManager>(),
-          ),
-        ),
-        RepositoryProvider<ProfileGateway>(
-          create: (context) => ProfileGatewayImpl(
-            context.read<Dio>(),
-            context.read<DioOptionsManager>(),
-            context.read<SecretsManager>(),
-          ),
-        ),
-        RepositoryProvider<UsersGateway>(
-          create: (context) => UsersGatewayImpl(
-            context.read<Dio>(),
-            context.read<DioOptionsManager>(),
-            context.read<SecretsManager>(),
-          ),
-        ),
-        RepositoryProvider<LocationsGateway>(
-          create: (context) => LocationsGatewayImpl(
-            context.read<Dio>(),
-            context.read<SecretsManager>(),
-            context.read<DioOptionsManager>(),
-          ),
-        ),
-        // --- REPOSITORIES ---
-        RepositoryProvider<AuthRepository>(
-          create: (context) => AuthRepositoryImpl(context.read<AuthGateway>()),
-        ),
-        RepositoryProvider<UsersRepository>(
-          create: (context) => UsersRepositoryImpl(
-            context.read<ProfileGateway>(),
-            context.read<TokenProvider>(),
-            context.read<UsersGateway>(),
-          ),
-        ),
-        RepositoryProvider<EventsRepository>(
-          create: (context) => EventsRepositoryImpl(
-            context.read<Uuid>(),
-            context.read<EventsGateway>(),
-            context.read<UsersRepository>(),
-          ),
-        ),
-        RepositoryProvider<Reporter>(
-          create: (context) => ReporterImpl(
-            context.read<UsersRepository>(),
-            context.read<SecretsManager>(),
-          ),
-        ),
-        RepositoryProvider<LocationsRepository>(
-          create: (context) => LocationsRepositoryImpl(
-            context.read<DbManager>(),
-            context.read<LocationsGateway>(),
-          ),
-        ),
-        RepositoryProvider<MapRepository>(
-          create: (context) => MapRepositoryImpl(
-            context.read<LocationsRepository>(),
-            context.read<UsersRepository>(),
-            context.read<EventsRepository>(),
-          ),
-        ),
-        // --- BLOCs ---
-        BlocProvider(
-          create: (context) =>
-              EventsListCubit(context.read<EventsRepository>()),
-        ),
-        BlocProvider(
-          create: (ctx) => ProfileCubit(
-            ctx.read<UsersRepository>(),
-            ctx.read<EventsRepository>(),
-          ),
-        ),
-      ],
-      child: Builder(
-        builder: (context) {
-          final router = AppRouter();
-          return MaterialApp.router(
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: AppColors.primary,
-                surface: Colors.white,
-              ),
-              fontFamily: 'Montserrat',
-              useMaterial3: true,
-              splashFactory: NoSplash.splashFactory,
-            ),
-            // routerConfig: AppRouter().config(
-            //   navigatorObservers: () => [
-            //     AppObserver(context.read<Reporter>()),
-            //   ],
-            // ),
-            routerDelegate: router.delegate(),
-            routeInformationProvider: AlwaysRootRouteInformationProvider(),
-            routeInformationParser: router.defaultRouteParser(),
-          );
-        },
-      ),
+  Dio get _dio {
+    final dio = Dio(
+      // ignore: avoid_redundant_argument_values
+      BaseOptions(connectTimeout: const Duration(seconds: 5), baseUrl: _host),
     );
+    return dio;
   }
+
+  @override
+  Widget build(BuildContext context) => MultiBlocProvider(
+    providers: [
+      // --- SERVICES ---
+      RepositoryProvider(create: (_) => SecretsManager()),
+      RepositoryProvider(
+        create: (_) => const FlutterSecureStorage(
+          aOptions: AndroidOptions(encryptedSharedPreferences: true),
+        ),
+      ),
+      RepositoryProvider(create: (_) => SharedPreferencesAsync()),
+      RepositoryProvider(create: (_) => ImagePicker()),
+      RepositoryProvider<DbManager>(create: (_) => DbMock()),
+      RepositoryProvider(
+        create: (context) => TokenManager(
+          context.read<FlutterSecureStorage>(),
+          context.read<SharedPreferencesAsync>(),
+          context.read<SecretsManager>(),
+        ),
+      ),
+      RepositoryProvider<TokenProvider>(
+        create: (context) => TokenProviderImpl(context.read<TokenManager>()),
+      ),
+      RepositoryProvider(
+        create: (context) => DioOptionsManager(context.read<TokenProvider>()),
+      ),
+      RepositoryProvider(create: (_) => _dio),
+      RepositoryProvider(create: (_) => const Uuid()),
+      // --- GATEWAYS ---
+      RepositoryProvider<EventsGateway>(
+        create: (context) => EventsGatewayImpl(
+          context.read<Dio>(),
+          context.read<DioOptionsManager>(),
+        ),
+      ),
+      RepositoryProvider<AuthGateway>(
+        create: (context) => AuthGatewayImpl(
+          context.read<Dio>(),
+          context.read<TokenManager>(),
+          context.read<DioOptionsManager>(),
+        ),
+      ),
+      RepositoryProvider<ProfileGateway>(
+        create: (context) => ProfileGatewayImpl(
+          context.read<Dio>(),
+          context.read<DioOptionsManager>(),
+        ),
+      ),
+      RepositoryProvider<UsersGateway>(
+        create: (context) => UsersGatewayImpl(
+          context.read<Dio>(),
+          context.read<DioOptionsManager>(),
+        ),
+      ),
+      RepositoryProvider<LocationsGateway>(
+        create: (context) => LocationsGatewayImpl(
+          context.read<Dio>(),
+          context.read<DioOptionsManager>(),
+        ),
+      ),
+      // --- REPOSITORIES ---
+      RepositoryProvider<AuthRepository>(
+        create: (context) => AuthRepositoryImpl(context.read<AuthGateway>()),
+      ),
+      RepositoryProvider<UsersRepository>(
+        create: (context) => UsersRepositoryImpl(
+          context.read<ProfileGateway>(),
+          context.read<TokenProvider>(),
+          context.read<UsersGateway>(),
+        ),
+      ),
+      RepositoryProvider<EventsRepository>(
+        create: (context) => EventsRepositoryImpl(
+          context.read<Uuid>(),
+          context.read<EventsGateway>(),
+          context.read<UsersRepository>(),
+        ),
+      ),
+      RepositoryProvider<Reporter>(
+        create: (context) => ReporterImpl(
+          context.read<UsersRepository>(),
+          context.read<SecretsManager>(),
+        ),
+      ),
+      RepositoryProvider<LocationsRepository>(
+        create: (context) => LocationsRepositoryImpl(
+          context.read<DbManager>(),
+          context.read<LocationsGateway>(),
+        ),
+      ),
+      RepositoryProvider<MapRepository>(
+        create: (context) => MapRepositoryImpl(
+          context.read<LocationsRepository>(),
+          context.read<UsersRepository>(),
+          context.read<EventsRepository>(),
+        ),
+      ),
+      // --- BLOCs ---
+      BlocProvider(
+        create: (context) => EventsListCubit(context.read<EventsRepository>()),
+      ),
+      BlocProvider(
+        create: (ctx) => ProfileCubit(
+          ctx.read<UsersRepository>(),
+          ctx.read<EventsRepository>(),
+        ),
+      ),
+    ],
+    child: Builder(
+      builder: (context) {
+        final router = AppRouter();
+        return MaterialApp.router(
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: AppColors.primary,
+              surface: Colors.white,
+            ),
+            fontFamily: 'Montserrat',
+            useMaterial3: true,
+            splashFactory: NoSplash.splashFactory,
+          ),
+          routerDelegate: router.delegate(),
+          routeInformationProvider: AlwaysRootRouteInformationProvider(),
+          routeInformationParser: router.defaultRouteParser(),
+        );
+      },
+    ),
+  );
 }

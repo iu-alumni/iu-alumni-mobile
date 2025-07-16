@@ -5,13 +5,11 @@ import 'package:ui_alumni_mobile/application/models/coordinates.dart';
 import 'package:ui_alumni_mobile/data/common/dio_options_manager.dart';
 import 'package:ui_alumni_mobile/data/locations/locations_gateway.dart';
 import 'package:ui_alumni_mobile/data/paths.dart';
-import 'package:ui_alumni_mobile/data/secrets/secrets_manager.dart';
 
 class LocationsGatewayImpl implements LocationsGateway {
-  LocationsGatewayImpl(this._dio, this._secretsManager, this._optionsManager);
+  LocationsGatewayImpl(this._dio, this._optionsManager);
 
   final Dio _dio;
-  final SecretsManager _secretsManager;
   final DioOptionsManager _optionsManager;
 
   @override
@@ -20,7 +18,7 @@ class LocationsGatewayImpl implements LocationsGateway {
     required String city,
   }) => TaskEither.tryCatch(() async {
     final results = await _dio.get(
-      Paths.coordinates(_secretsManager.hostPath),
+      Paths.coordinates,
       options: _optionsManager.opts(),
       queryParameters: {'city': city, 'country': country},
     );
@@ -31,7 +29,7 @@ class LocationsGatewayImpl implements LocationsGateway {
   Future<List<CityLocation>> search(String city) =>
       TaskEither.tryCatch(() async {
         final results = await _dio.get(
-          Paths.search(_secretsManager.hostPath),
+          Paths.search,
           options: _optionsManager.opts(),
           queryParameters: {'q': city},
         );
