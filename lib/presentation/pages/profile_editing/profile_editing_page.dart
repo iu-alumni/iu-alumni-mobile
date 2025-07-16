@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui_alumni_mobile/presentation/common/widgets/app_loader.dart';
 
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
@@ -49,9 +50,15 @@ class _ProfileEditingPageState extends State<ProfileEditingPage> {
             AppButton(
               is48Height: true,
               onTap: context.read<ProfileEditingCubit>().save,
-              child: Text(
-                'Save',
-                style: AppTextStyles.actionSB.copyWith(color: Colors.white),
+              child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+                buildWhen: (p, c) => p.saveState != c.saveState,
+                builder: (context, state) => switch (state.saveState) {
+                  LoadedStateLoading() => const AppLoader(color: Colors.white),
+                  _ => Text(
+                    'Save',
+                    style: AppTextStyles.actionSB.copyWith(color: Colors.white),
+                  ),
+                },
               ),
             ),
           ],
