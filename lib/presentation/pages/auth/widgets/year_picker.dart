@@ -25,7 +25,9 @@ class GraduationYearPicker extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: List.generate(DateTime.now().year - _firstYear, (d) {
+              children: List.generate(DateTime.now().year - _firstYear + 1, (
+                d,
+              ) {
                 final year = _firstYear + d;
                 return AppButton(
                   onTap: () => context.maybePop(year),
