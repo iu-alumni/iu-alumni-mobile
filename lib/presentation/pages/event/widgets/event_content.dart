@@ -31,7 +31,7 @@ class EventViewingContent extends StatefulWidget {
 }
 
 class _EventViewingContentState extends State<EventViewingContent> {
-  late final _formatter = DateFormat('dd/MM/yyyy');
+  late final _formatter = DateFormat('dd.MM.yyyy');
 
   String _costToStr(CostModel cost) =>
       '${cost.number.format} ${cost.currency.format}';

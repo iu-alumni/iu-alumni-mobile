@@ -17,7 +17,7 @@ class EditingDate extends StatefulWidget {
 }
 
 class _EditingDateState extends State<EditingDate> {
-  late final _formatter = DateFormat('dd/MM/yyyy');
+  late final _formatter = DateFormat('dd.MM.yyyy');
 
   Future<void> _selectDate(BuildContext context) async {
     final newDate = await showDatePicker(
@@ -34,7 +34,6 @@ class _EditingDateState extends State<EditingDate> {
 
   @override
   Widget build(BuildContext context) => TitledItem(
-    // icon: Icons.watch_later_outlined,
     title: 'When',
     child: AppButton(
       buttonStyle: AppButtonStyle.gray,
