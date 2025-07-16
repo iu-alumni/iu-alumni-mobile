@@ -57,6 +57,14 @@ class AuthGatewayImpl implements AuthGateway {
           if (data['detail'] case final String detail) {
             return Left(detail);
           }
+          if (data['detail'] case final List details) {
+            return Left(
+              details
+                  .map((d) => d is Map<String, dynamic> ? d['msg'] : null)
+                  .nonNulls
+                  .join('\n'),
+            );
+          }
         }
       }
       return Left('${e.message}');

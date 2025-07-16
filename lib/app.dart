@@ -45,7 +45,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 5)));
+    final dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 10)));
     return MultiBlocProvider(
       providers: [
         // --- SERVICES ---
