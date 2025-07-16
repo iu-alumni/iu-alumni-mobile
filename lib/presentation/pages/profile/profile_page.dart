@@ -66,54 +66,57 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) => BlocConsumer<ProfileCubit, ProfileState>(
-    listenWhen: (p, c) => p.profile != c.profile,
-    listener: (context, state) {
-      _cubit.loadOwnedEvents();
-      _cubit.loadParticipatedEvents();
-    },
-    builder: (context, state) => AppScaffold(
-      title: 'Profile',
-      leadingButton: context.router.stack.length > 1 ? const NavButton() : null,
-      actions: [
-        if (state.myOwn) ...[
-          AppButton(
-            is48Height: true,
-            buttonStyle: AppButtonStyle.secondary,
-            onTap: () => _logout(context),
-            child: Text(
-              'Logout',
-              style: AppTextStyles.actionM.copyWith(color: Colors.white),
-            ),
-          ),
-          AppButton(
-            is48Height: true,
-            onTap: () => _editTap(context),
-            child: Text(
-              'Edit',
-              style: AppTextStyles.actionSB.copyWith(color: Colors.white),
-            ),
-          ),
-        ],
-      ],
-      body: switch (state.profile) {
-        LoadedStateData(:final data) => ProfileContent(
-          profile: data,
-          personal: state.myOwn,
-        ).build(context),
-        final LoadedStateError e => AppChildBody(
-          child: Center(
-            child: Text(
-              e.error,
-              style: AppTextStyles.caption,
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-        _ => const AppChildBody(child: Center(child: AppLoader(inCard: true))),
+  Widget build(BuildContext context) {
+    final notRoot = context.router.stack.length > 1;
+    return BlocConsumer<ProfileCubit, ProfileState>(
+      listenWhen: (p, c) => p.profile != c.profile,
+      listener: (context, state) {
+        _cubit.loadOwnedEvents();
+        _cubit.loadParticipatedEvents();
       },
-    ),
-  );
+      builder: (context, state) => AppScaffold(
+        title: 'Profile',
+        leadingButton: notRoot ? const NavButton() : null,
+        actions: [
+          if (state.myOwn && !notRoot) ...[
+            AppButton(
+              is48Height: true,
+              buttonStyle: AppButtonStyle.secondary,
+              onTap: () => _logout(context),
+              child: Text(
+                'Logout',
+                style: AppTextStyles.actionM.copyWith(color: Colors.white),
+              ),
+            ),
+            AppButton(
+              is48Height: true,
+              onTap: () => _editTap(context),
+              child: Text(
+                'Edit',
+                style: AppTextStyles.actionSB.copyWith(color: Colors.white),
+              ),
+            ),
+          ],
+        ],
+        body: switch (state.profile) {
+          LoadedStateData(:final data) => ProfileContent(
+            profile: data,
+            personal: state.myOwn,
+          ).build(context),
+          final LoadedStateError e => AppChildBody(
+            child: Center(
+              child: Text(
+                e.error,
+                style: AppTextStyles.caption,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          _ => const AppChildBody(
+            child: Center(child: AppLoader(inCard: true)),
+          ),
+        },
+      ),
+    );
+  }
 }

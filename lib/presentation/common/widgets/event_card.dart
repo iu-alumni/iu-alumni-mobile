@@ -26,7 +26,7 @@ class EventCard extends StatefulWidget {
 }
 
 class _EventCardState extends State<EventCard> {
-  late final _formatter = DateFormat('hh:mm dd.MM.yyyy');
+  late final _formatter = DateFormat('dd.MM.yyyy');
 
   void _openEvent() {
     context.read<Reporter>().reportOpenEvent(
