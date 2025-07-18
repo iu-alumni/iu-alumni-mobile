@@ -65,7 +65,7 @@ class App extends StatelessWidget {
       ),
       RepositoryProvider(create: (_) => SharedPreferencesAsync()),
       RepositoryProvider(create: (_) => ImagePicker()),
-      RepositoryProvider<DbManager>(create: (_) => DbMock()),
+      RepositoryProvider<DbManager>(create: (_) => DbManagerImpl()),
       RepositoryProvider(
         create: (context) => TokenManager(
           context.read<FlutterSecureStorage>(),
