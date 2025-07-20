@@ -40,9 +40,12 @@ class EventsRepositoryImpl implements EventsRepository {
     if (!refresh && _cache != null) {
       return;
     }
-    final data = await _gateway.loadEvents();
+    final publicData = await _gateway.loadEvents();
+    final privateData = await _gateway.loadPendingEvents();
     final myId = await _myId();
-    final eventModels = data.map(EventMapper.eventFromData(myId.toNullable()));
+    final eventModels = privateData
+        .followedBy(publicData)
+        .map(EventMapper.eventFromData(myId.toNullable()));
     // Fill the cache
     _cache?.clear();
     _owned?.clear();
@@ -73,6 +76,7 @@ class EventsRepositoryImpl implements EventsRepository {
       occurringAt: DateTime.now().add(const Duration(days: 1)),
       onlineEvent: false,
       participantsIds: const ISet.empty(),
+      pendingApproval: true,
     );
     _modifiedEvent = event;
     return event;

@@ -48,7 +48,7 @@ class _AuthPageState extends State<AuthPage> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 64),
+            padding: EdgeInsets.symmetric(vertical: 48),
             child: AlumniLogo(),
           ),
           Expanded(

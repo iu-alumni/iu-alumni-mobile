@@ -34,7 +34,7 @@ class _SignInSubPageState extends State<SignInSubPage> {
       }
     },
     child: AppScaffold(
-      title: 'Sign in',
+      title: 'Authorization',
       leadingButton: null,
       topSafeArea: false,
       body: AppListBody(

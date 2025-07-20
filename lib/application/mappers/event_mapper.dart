@@ -25,6 +25,7 @@ abstract class EventMapper {
         occurringAt: data.datetime,
         onlineEvent: data.isOnline,
         participantsIds: data.participantsIds.toISet(),
+        pendingApproval: !(data.approved ?? false),
       );
 
   static EventRequestDataModel eventRequestFromModel(EventModel model) =>

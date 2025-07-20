@@ -13,5 +13,5 @@ abstract interface class AuthGateway {
     required String email,
     required String code,
   });
-  Future<Either<String, Unit>> sendCode(String email);
+  Future<Either<String?, Unit>> sendCode(String email);
 }

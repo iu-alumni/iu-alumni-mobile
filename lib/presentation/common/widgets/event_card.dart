@@ -26,7 +26,7 @@ class EventCard extends StatefulWidget {
 }
 
 class _EventCardState extends State<EventCard> {
-  late final _formatter = DateFormat('dd.MM.yyyy');
+  late final _formatter = DateFormat('dd.MM.yyyy, HH:mm');
 
   void _openEvent() {
     context.read<Reporter>().reportOpenEvent(
@@ -102,6 +102,23 @@ class _EventCardState extends State<EventCard> {
                         Expanded(
                           child: Text(
                             location,
+                            style: AppTextStyles.caption.copyWith(
+                              color: Colors.black38,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (widget.event.pendingApproval)
+                    Row(
+                      children: [
+                        const Icon(Icons.access_time, color: Colors.black38),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            'Pending approval',
                             style: AppTextStyles.caption.copyWith(
                               color: Colors.black38,
                             ),

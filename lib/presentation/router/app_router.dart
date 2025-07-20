@@ -16,6 +16,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: RegistrationSubRoute.page),
         AutoRoute(page: CodeVerificationSubRoute.page),
         AutoRoute(page: RestoredVerificationSubRoute.page),
+        AutoRoute(page: VerificationWaySubRoute.page),
       ],
     ),
     AutoRoute(page: ProfileEditingRoute.page),
