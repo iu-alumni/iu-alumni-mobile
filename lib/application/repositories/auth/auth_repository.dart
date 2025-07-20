@@ -9,7 +9,7 @@ abstract interface class AuthRepository {
 
   Future<Either<String, Unit>> verifyCode(String code);
 
-  Future<Either<String, Unit>> sendCode();
+  Future<Either<String?, Unit>> sendCode();
 
   void cleanEmail();
 

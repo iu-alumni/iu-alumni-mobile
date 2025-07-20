@@ -13,13 +13,12 @@ class EventModel with _$EventModel {
     required UserStatus userStatus,
     required String? title,
     required String? description,
-    // TODO
     required String? coverBytes,
-    // TODO
     required String? location,
     required CostModel cost,
     required DateTime occurringAt,
     required bool onlineEvent,
     required ISet<String> participantsIds,
+    required bool pendingApproval,
   }) = _EventModel;
 }

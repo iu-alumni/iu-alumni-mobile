@@ -35,6 +35,7 @@ mixin _$EventDataModel {
   @JsonKey(name: 'is_online')
   bool get isOnline => throw _privateConstructorUsedError;
   String? get cover => throw _privateConstructorUsedError;
+  bool? get approved => throw _privateConstructorUsedError;
 
   /// Serializes this EventDataModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -64,6 +65,7 @@ abstract class $EventDataModelCopyWith<$Res> {
     int cost,
     @JsonKey(name: 'is_online') bool isOnline,
     String? cover,
+    bool? approved,
   });
 }
 
@@ -92,6 +94,7 @@ class _$EventDataModelCopyWithImpl<$Res, $Val extends EventDataModel>
     Object? cost = null,
     Object? isOnline = null,
     Object? cover = freezed,
+    Object? approved = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -145,6 +148,11 @@ class _$EventDataModelCopyWithImpl<$Res, $Val extends EventDataModel>
                     ? _value.cover
                     : cover // ignore: cast_nullable_to_non_nullable
                         as String?,
+            approved:
+                freezed == approved
+                    ? _value.approved
+                    : approved // ignore: cast_nullable_to_non_nullable
+                        as bool?,
           )
           as $Val,
     );
@@ -171,6 +179,7 @@ abstract class _$$EventDataModelImplCopyWith<$Res>
     int cost,
     @JsonKey(name: 'is_online') bool isOnline,
     String? cover,
+    bool? approved,
   });
 }
 
@@ -198,6 +207,7 @@ class __$$EventDataModelImplCopyWithImpl<$Res>
     Object? cost = null,
     Object? isOnline = null,
     Object? cover = freezed,
+    Object? approved = freezed,
   }) {
     return _then(
       _$EventDataModelImpl(
@@ -251,6 +261,11 @@ class __$$EventDataModelImplCopyWithImpl<$Res>
                 ? _value.cover
                 : cover // ignore: cast_nullable_to_non_nullable
                     as String?,
+        approved:
+            freezed == approved
+                ? _value.approved
+                : approved // ignore: cast_nullable_to_non_nullable
+                    as bool?,
       ),
     );
   }
@@ -271,6 +286,7 @@ class _$EventDataModelImpl implements _EventDataModel {
     required this.cost,
     @JsonKey(name: 'is_online') required this.isOnline,
     required this.cover,
+    required this.approved,
   }) : _participantsIds = participantsIds;
 
   factory _$EventDataModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -306,10 +322,12 @@ class _$EventDataModelImpl implements _EventDataModel {
   final bool isOnline;
   @override
   final String? cover;
+  @override
+  final bool? approved;
 
   @override
   String toString() {
-    return 'EventDataModel(eventId: $eventId, ownerId: $ownerId, participantsIds: $participantsIds, title: $title, description: $description, location: $location, datetime: $datetime, cost: $cost, isOnline: $isOnline, cover: $cover)';
+    return 'EventDataModel(eventId: $eventId, ownerId: $ownerId, participantsIds: $participantsIds, title: $title, description: $description, location: $location, datetime: $datetime, cost: $cost, isOnline: $isOnline, cover: $cover, approved: $approved)';
   }
 
   @override
@@ -333,7 +351,9 @@ class _$EventDataModelImpl implements _EventDataModel {
             (identical(other.cost, cost) || other.cost == cost) &&
             (identical(other.isOnline, isOnline) ||
                 other.isOnline == isOnline) &&
-            (identical(other.cover, cover) || other.cover == cover));
+            (identical(other.cover, cover) || other.cover == cover) &&
+            (identical(other.approved, approved) ||
+                other.approved == approved));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -350,6 +370,7 @@ class _$EventDataModelImpl implements _EventDataModel {
     cost,
     isOnline,
     cover,
+    approved,
   );
 
   /// Create a copy of EventDataModel
@@ -382,6 +403,7 @@ abstract class _EventDataModel implements EventDataModel {
     required final int cost,
     @JsonKey(name: 'is_online') required final bool isOnline,
     required final String? cover,
+    required final bool? approved,
   }) = _$EventDataModelImpl;
 
   factory _EventDataModel.fromJson(Map<String, dynamic> json) =
@@ -411,6 +433,8 @@ abstract class _EventDataModel implements EventDataModel {
   bool get isOnline;
   @override
   String? get cover;
+  @override
+  bool? get approved;
 
   /// Create a copy of EventDataModel
   /// with the given fields replaced by the non-null parameter values.

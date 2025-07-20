@@ -34,28 +34,29 @@ class _EventsListState extends State<EventsList> {
     _refreshController.refreshCompleted();
   }
 
-  late final _child = MasonryGridView.count(
-    crossAxisCount: 2,
-    mainAxisSpacing: 8,
-    crossAxisSpacing: 8,
-    physics: const BouncingScrollPhysics(),
-    padding: const EdgeInsets.symmetric(
-      horizontal: 8,
-      vertical: 16,
-    ).copyWith(bottom: RootPage.navigationBarHeight + 16),
-    itemCount: widget.events.length,
-    itemBuilder: (context, i) =>
-        EventCard(color: _colorFor(i), event: widget.events.elementAt(i)),
-  );
-
   @override
-  Widget build(BuildContext context) => widget.refresh != null
-      ? SmartRefresher(
-          physics: const BouncingScrollPhysics(),
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          header: const ClassicHeader(),
-          child: _child,
-        )
-      : _child;
+  Widget build(BuildContext context) {
+    final child = MasonryGridView.count(
+      crossAxisCount: 2,
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 16,
+      ).copyWith(bottom: RootPage.navigationBarHeight + 16),
+      itemCount: widget.events.length,
+      itemBuilder: (context, i) =>
+          EventCard(color: _colorFor(i), event: widget.events.elementAt(i)),
+    );
+    return widget.refresh != null
+        ? SmartRefresher(
+            physics: const BouncingScrollPhysics(),
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            header: const ClassicHeader(),
+            child: child,
+          )
+        : child;
+  }
 }

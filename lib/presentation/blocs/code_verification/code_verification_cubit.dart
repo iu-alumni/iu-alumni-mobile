@@ -60,7 +60,7 @@ class CodeVerificationCubit extends Cubit<CodeVerificationState> {
     emit(
       state.copyWith(
         resend: result.match(
-          (_) => const LoadedState.error('Could not resend the code'),
+          (e) => LoadedState.error(e ?? 'Could not resend the code'),
           LoadedState.data,
         ),
       ),

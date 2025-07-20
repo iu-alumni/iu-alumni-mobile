@@ -16,6 +16,7 @@ class EventDataModel with _$EventDataModel {
     required int cost,
     @JsonKey(name: 'is_online') required bool isOnline,
     required String? cover,
+    required bool? approved,
   }) = _EventDataModel;
 
   factory EventDataModel.fromJson(Map<String, dynamic> json) =>

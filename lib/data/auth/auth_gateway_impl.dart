@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:ui_alumni_mobile/util/logger.dart';
 
 import '../../application/models/register_request.dart';
 import '../common/dio_options_manager.dart';
@@ -40,10 +41,11 @@ class AuthGatewayImpl implements AuthGateway {
         data: request.toJson(),
         options: _dioOptionsManager.opts(withToken: false),
       );
-      if (resp.statusCode == 201) {
-        return const Right(Left(unit));
-      }
-      return const Right(Right(unit));
+      final data = resp.data as Map<String, dynamic>;
+      final msg = data['message'] as String;
+      return Right(
+        msg.contains('manual') ? const Left(unit) : const Right(unit),
+      );
     } on DioException catch (e) {
       if (e.response case final r?) {
         if (r.data case final Map<String, dynamic> data) {
@@ -67,15 +69,26 @@ class AuthGatewayImpl implements AuthGateway {
   }
 
   @override
-  Future<Either<String, Unit>> sendCode(String email) =>
-      TaskEither<String, Unit>.tryCatch(() async {
-        await _dio.post(
-          Paths.resend,
-          data: {'email': email},
-          options: _dioOptionsManager.opts(withToken: false),
-        );
-        return unit;
-      }, (e, _) => '$e').run();
+  Future<Either<String?, Unit>> sendCode(String email) async {
+    try {
+      await _dio.post(
+        Paths.resend,
+        data: {'email': email},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      return const Right(unit);
+    } on DioException catch (e, st) {
+      logger.e('Error while resending the code', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        if (detail != null) {
+          return Left(detail);
+        }
+      }
+      return const Left(null);
+    }
+  }
 
   @override
   Future<Either<String, Unit>> verifyCode({

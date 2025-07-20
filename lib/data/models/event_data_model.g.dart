@@ -21,6 +21,7 @@ _$EventDataModelImpl _$$EventDataModelImplFromJson(Map<String, dynamic> json) =>
       cost: (json['cost'] as num).toInt(),
       isOnline: json['is_online'] as bool,
       cover: json['cover'] as String?,
+      approved: json['approved'] as bool?,
     );
 
 Map<String, dynamic> _$$EventDataModelImplToJson(
@@ -36,4 +37,5 @@ Map<String, dynamic> _$$EventDataModelImplToJson(
   'cost': instance.cost,
   'is_online': instance.isOnline,
   'cover': instance.cover,
+  'approved': instance.approved,
 };

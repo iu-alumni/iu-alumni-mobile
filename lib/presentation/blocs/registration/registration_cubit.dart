@@ -14,9 +14,11 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   final AuthRepository _authRepository;
   final Reporter _reporter;
 
-  String? _validateEmail(String email) => email.contains('@innopolis.')
+  String? _validateEmail(String email) =>
+      (email.contains('@innopolis.university') ||
+          email.contains('@innopolis.ru'))
       ? null
-      : 'The email must have the "innopolis" mail server';
+      : 'The email must contain either "innopolis.university" or "innopolis.ru"';
 
   String? _validatePassword(String pass) => pass.length < 8
       ? 'The password needs to contain at least 8 characters'
@@ -38,20 +40,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   void toInitial() =>
       emit(RegistrationState(verification: const LoadedState.init()));
 
-  void _register(bool manual) => _verificationData(manual: manual)
-      .toEither(() => 'Please, specify all fields to complete the verification')
-      .flatMap<RegisterRequest>(
-        (r) => switch (_validateEmail(r.email)) {
-          final e? => Left(e),
-          _ => Either.of(r),
-        },
-      )
-      .flatMap<RegisterRequest>(
-        (r) => switch (_validatePassword(r.password)) {
-          final e? => Left(e),
-          _ => Either.of(r),
-        },
-      )
+  void _register(bool manual) => verificationRequest(manual)
       .toTaskEither()
       .flatMap(
         (r) => TaskEither(() async {
@@ -68,6 +57,27 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         (d) => emit(state.copyWith(verification: LoadedState.data(d.isLeft()))),
       )
       .run();
+
+  Either<String, RegisterRequest> verificationRequest(bool manual) =>
+      _verificationData(manual: manual)
+          .toEither(
+            () => 'Please, specify all fields to complete the verification',
+          )
+          .flatMap<RegisterRequest>(
+            (r) => switch (_validateEmail(r.email)) {
+              final e? => Left(e),
+              _ => Either.of(r),
+            },
+          )
+          .flatMap<RegisterRequest>(
+            (r) => switch (_validatePassword(r.password)) {
+              final e? => Left(e),
+              _ => Either.of(r),
+            },
+          );
+
+  Either<String, Unit> dataIsValid() =>
+      verificationRequest(true).map((_) => unit);
 
   void registerManually() => _register(true);
 

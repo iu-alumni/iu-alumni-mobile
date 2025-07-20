@@ -17,7 +17,8 @@ class EditingDate extends StatefulWidget {
 }
 
 class _EditingDateState extends State<EditingDate> {
-  late final _formatter = DateFormat('dd.MM.yyyy');
+  late final _dateFormatter = DateFormat('dd.MM.yyyy');
+  late final _timeFormatter = DateFormat('HH:mm');
 
   Future<void> _selectDate(BuildContext context) async {
     final newDate = await showDatePicker(
@@ -27,7 +28,29 @@ class _EditingDateState extends State<EditingDate> {
     );
     if (newDate != null && context.mounted) {
       context.read<OneEventCubit>().modify(
-        (e) => e.copyWith(occurringAt: newDate),
+        (e) => e.copyWith(
+          occurringAt: newDate.copyWith(
+            hour: e.occurringAt.hour,
+            minute: e.occurringAt.minute,
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final newTime = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 18, minute: 0),
+    );
+    if (newTime != null && context.mounted) {
+      context.read<OneEventCubit>().modify(
+        (e) => e.copyWith(
+          occurringAt: e.occurringAt.copyWith(
+            hour: newTime.hour,
+            minute: newTime.minute,
+          ),
+        ),
       );
     }
   }
@@ -35,17 +58,39 @@ class _EditingDateState extends State<EditingDate> {
   @override
   Widget build(BuildContext context) => TitledItem(
     title: 'When',
-    child: AppButton(
-      buttonStyle: AppButtonStyle.gray,
-      child: BlocBuilder<OneEventCubit, OneEventState>(
-        builder: (context, state) => Text(
-          state.event
-              .map((e) => _formatter.format(e.occurringAt))
-              .match(() => '', identity),
-          style: AppTextStyles.body,
-        ),
+    child: BlocBuilder<OneEventCubit, OneEventState>(
+      buildWhen: (p, c) =>
+          p.event.map((e) => e.occurringAt) !=
+          c.event.map((e) => e.occurringAt),
+      builder: (context, state) => Row(
+        spacing: 8,
+        children: [
+          Expanded(
+            child: AppButton(
+              buttonStyle: AppButtonStyle.gray,
+              child: Text(
+                state.event
+                    .map((e) => _dateFormatter.format(e.occurringAt))
+                    .match(() => '', identity),
+                style: AppTextStyles.body,
+              ),
+              onTap: () => _selectDate(context),
+            ),
+          ),
+          Expanded(
+            child: AppButton(
+              buttonStyle: AppButtonStyle.gray,
+              child: Text(
+                state.event
+                    .map((e) => _timeFormatter.format(e.occurringAt))
+                    .match(() => '', identity),
+                style: AppTextStyles.body,
+              ),
+              onTap: () => _selectTime(context),
+            ),
+          ),
+        ],
       ),
-      onTap: () => _selectDate(context),
     ),
   );
 }
