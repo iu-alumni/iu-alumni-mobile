@@ -1,6 +1,7 @@
 abstract class Paths {
   static const String events = '/events/';
   static String eventsOwner = '${events}owner';
+  static String eventsPending = '$eventsOwner/pending';
   static String eventsWhereParticipant(String uid) =>
       '${events}participant/$uid';
   static String eventWithId(String eid) => '$events$eid';

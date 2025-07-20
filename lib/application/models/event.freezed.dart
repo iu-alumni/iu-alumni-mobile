@@ -20,13 +20,14 @@ mixin _$EventModel {
   String get eventId => throw _privateConstructorUsedError;
   UserStatus get userStatus => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError; // TODO
-  String? get coverBytes => throw _privateConstructorUsedError; // TODO
+  String? get description => throw _privateConstructorUsedError;
+  String? get coverBytes => throw _privateConstructorUsedError;
   String? get location => throw _privateConstructorUsedError;
   CostModel get cost => throw _privateConstructorUsedError;
   DateTime get occurringAt => throw _privateConstructorUsedError;
   bool get onlineEvent => throw _privateConstructorUsedError;
   ISet<String> get participantsIds => throw _privateConstructorUsedError;
+  bool get pendingApproval => throw _privateConstructorUsedError;
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -53,6 +54,7 @@ abstract class $EventModelCopyWith<$Res> {
     DateTime occurringAt,
     bool onlineEvent,
     ISet<String> participantsIds,
+    bool pendingApproval,
   });
 
   $UserStatusCopyWith<$Res> get userStatus;
@@ -84,6 +86,7 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
     Object? occurringAt = null,
     Object? onlineEvent = null,
     Object? participantsIds = null,
+    Object? pendingApproval = null,
   }) {
     return _then(
       _value.copyWith(
@@ -137,6 +140,11 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
                     ? _value.participantsIds
                     : participantsIds // ignore: cast_nullable_to_non_nullable
                         as ISet<String>,
+            pendingApproval:
+                null == pendingApproval
+                    ? _value.pendingApproval
+                    : pendingApproval // ignore: cast_nullable_to_non_nullable
+                        as bool,
           )
           as $Val,
     );
@@ -183,6 +191,7 @@ abstract class _$$EventModelImplCopyWith<$Res>
     DateTime occurringAt,
     bool onlineEvent,
     ISet<String> participantsIds,
+    bool pendingApproval,
   });
 
   @override
@@ -215,6 +224,7 @@ class __$$EventModelImplCopyWithImpl<$Res>
     Object? occurringAt = null,
     Object? onlineEvent = null,
     Object? participantsIds = null,
+    Object? pendingApproval = null,
   }) {
     return _then(
       _$EventModelImpl(
@@ -268,6 +278,11 @@ class __$$EventModelImplCopyWithImpl<$Res>
                 ? _value.participantsIds
                 : participantsIds // ignore: cast_nullable_to_non_nullable
                     as ISet<String>,
+        pendingApproval:
+            null == pendingApproval
+                ? _value.pendingApproval
+                : pendingApproval // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -287,6 +302,7 @@ class _$EventModelImpl implements _EventModel {
     required this.occurringAt,
     required this.onlineEvent,
     required this.participantsIds,
+    required this.pendingApproval,
   });
 
   @override
@@ -297,10 +313,8 @@ class _$EventModelImpl implements _EventModel {
   final String? title;
   @override
   final String? description;
-  // TODO
   @override
   final String? coverBytes;
-  // TODO
   @override
   final String? location;
   @override
@@ -311,10 +325,12 @@ class _$EventModelImpl implements _EventModel {
   final bool onlineEvent;
   @override
   final ISet<String> participantsIds;
+  @override
+  final bool pendingApproval;
 
   @override
   String toString() {
-    return 'EventModel(eventId: $eventId, userStatus: $userStatus, title: $title, description: $description, coverBytes: $coverBytes, location: $location, cost: $cost, occurringAt: $occurringAt, onlineEvent: $onlineEvent, participantsIds: $participantsIds)';
+    return 'EventModel(eventId: $eventId, userStatus: $userStatus, title: $title, description: $description, coverBytes: $coverBytes, location: $location, cost: $cost, occurringAt: $occurringAt, onlineEvent: $onlineEvent, participantsIds: $participantsIds, pendingApproval: $pendingApproval)';
   }
 
   @override
@@ -340,7 +356,9 @@ class _$EventModelImpl implements _EventModel {
             const DeepCollectionEquality().equals(
               other.participantsIds,
               participantsIds,
-            ));
+            ) &&
+            (identical(other.pendingApproval, pendingApproval) ||
+                other.pendingApproval == pendingApproval));
   }
 
   @override
@@ -356,6 +374,7 @@ class _$EventModelImpl implements _EventModel {
     occurringAt,
     onlineEvent,
     const DeepCollectionEquality().hash(participantsIds),
+    pendingApproval,
   );
 
   /// Create a copy of EventModel
@@ -379,6 +398,7 @@ abstract class _EventModel implements EventModel {
     required final DateTime occurringAt,
     required final bool onlineEvent,
     required final ISet<String> participantsIds,
+    required final bool pendingApproval,
   }) = _$EventModelImpl;
 
   @override
@@ -388,9 +408,9 @@ abstract class _EventModel implements EventModel {
   @override
   String? get title;
   @override
-  String? get description; // TODO
+  String? get description;
   @override
-  String? get coverBytes; // TODO
+  String? get coverBytes;
   @override
   String? get location;
   @override
@@ -401,6 +421,8 @@ abstract class _EventModel implements EventModel {
   bool get onlineEvent;
   @override
   ISet<String> get participantsIds;
+  @override
+  bool get pendingApproval;
 
   /// Create a copy of EventModel
   /// with the given fields replaced by the non-null parameter values.

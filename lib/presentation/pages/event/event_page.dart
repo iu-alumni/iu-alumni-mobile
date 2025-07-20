@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui_alumni_mobile/presentation/common/widgets/app_loader.dart';
 
 import '../../../application/repositories/events/events_repository.dart';
 import '../../../application/repositories/reporter/reporter.dart';
@@ -48,7 +49,7 @@ class _EventPageState extends State<EventPage> {
           body: BlocBuilder<OneEventCubit, OneEventState>(
             buildWhen: (p, c) => p.event != c.event,
             builder: (context, eventState) => eventState.event.match(
-              () => const Center(child: CircularProgressIndicator()),
+              () => const Center(child: AppLoader(inCard: true)),
               (event) => SafeArea(
                 top: false,
                 child: SingleChildScrollView(

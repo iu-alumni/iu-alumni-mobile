@@ -12,9 +12,11 @@ class AuthCubit extends Cubit<LoadedState> {
   final AuthRepository _authRepository;
   final Reporter _reporter;
 
-  String? _validateEmail(String email) => email.contains('@innopolis.')
+  String? _validateEmail(String email) =>
+      (email.contains('@innopolis.university') ||
+          email.contains('@innopolis.ru'))
       ? null
-      : 'The email must have the "innopolis" mail server';
+      : 'The email must contain either "innopolis.university" or "innopolis.ru"';
 
   Future<void> authorize(String login, String password) async {
     if (login.isEmpty || password.isEmpty) {

@@ -44,6 +44,19 @@ class EventsGatewayImpl implements EventsGateway {
   ).match<Iterable<EventDataModel>>((_) => [], identity).run();
 
   @override
+  Future<Iterable<EventDataModel>> loadPendingEvents() => TaskEither.tryCatch(
+    () async {
+      final resp = await _dio.get(
+        Paths.eventsPending,
+        options: _optionsManager.opts(),
+      );
+      final list = resp.data as List;
+      return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
+    },
+    (e, _) => '$e',
+  ).match<Iterable<EventDataModel>>((_) => [], identity).run();
+
+  @override
   Future<bool> deleteEvent(String eventId) async {
     final result = await TaskEither.tryCatch(
       () => _dio.delete(

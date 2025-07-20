@@ -55,7 +55,7 @@ class _CodeVerificationSubPageState extends State<CodeVerificationSubPage> {
     child: BlocListener<CodeVerificationCubit, CodeVerificationState>(
       listener: _listener,
       child: AppScaffold(
-        title: 'Verification',
+        title: 'Code verification',
         body: AppListBody(
           children: [
             AppTextField(

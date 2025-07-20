@@ -5,6 +5,7 @@ import '../models/event_request_data_model.dart';
 
 abstract interface class EventsGateway {
   Future<Iterable<EventDataModel>> loadEvents();
+  Future<Iterable<EventDataModel>> loadPendingEvents();
   Future<Option<String>> addEvent(EventRequestDataModel event);
   Future<bool> updateEvent(String eventId, EventRequestDataModel event);
   Future<bool> deleteEvent(String eventId);

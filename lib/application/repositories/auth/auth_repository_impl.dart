@@ -29,7 +29,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<String, Unit>> sendCode() async {
+  Future<Either<String?, Unit>> sendCode() async {
     if (_registrationEmail case final s?) {
       return _authGateway.sendCode(s);
     }
