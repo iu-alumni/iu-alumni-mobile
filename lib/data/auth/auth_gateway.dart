@@ -9,7 +9,7 @@ abstract interface class AuthGateway {
   /// | Manual verification
   ///   | Success
   Future<Either<String, Either<Unit, Unit>>> register(RegisterRequest request);
-  Future<Either<String, Unit>> verifyCode({
+  Future<Either<String?, Unit>> verifyCode({
     required String email,
     required String code,
   });

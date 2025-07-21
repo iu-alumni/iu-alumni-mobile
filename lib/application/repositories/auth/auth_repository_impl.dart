@@ -39,7 +39,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<String, Unit>> verifyCode(String code) async {
+  Future<Either<String?, Unit>> verifyCode(String code) async {
     if (_registrationEmail case final s?) {
       return _authGateway.verifyCode(email: s, code: code);
     }

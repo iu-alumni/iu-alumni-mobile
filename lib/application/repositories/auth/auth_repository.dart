@@ -7,7 +7,7 @@ abstract interface class AuthRepository {
 
   Future<Either<String, Either<Unit, Unit>>> register(RegisterRequest request);
 
-  Future<Either<String, Unit>> verifyCode(String code);
+  Future<Either<String?, Unit>> verifyCode(String code);
 
   Future<Either<String?, Unit>> sendCode();
 
