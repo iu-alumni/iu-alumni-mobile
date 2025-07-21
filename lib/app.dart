@@ -48,7 +48,7 @@ class App extends StatelessWidget {
   Dio get _dio {
     final dio = Dio(
       // ignore: avoid_redundant_argument_values
-      BaseOptions(connectTimeout: const Duration(seconds: 5), baseUrl: _host),
+      BaseOptions(connectTimeout: const Duration(seconds: 10), baseUrl: _host),
     );
     return dio;
   }
