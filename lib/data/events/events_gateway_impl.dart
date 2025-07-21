@@ -72,7 +72,6 @@ class EventsGatewayImpl implements EventsGateway {
   Future<bool> updateEvent(String eventId, EventRequestDataModel event) async {
     final result = await TaskEither.tryCatch(() async {
       final requestModel = event.toJson();
-      requestModel['datetime'] = null;
       await _dio.put(
         Paths.eventWithId(eventId),
         options: _optionsManager.opts(),
