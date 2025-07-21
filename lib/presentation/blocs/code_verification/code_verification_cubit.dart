@@ -47,7 +47,7 @@ class CodeVerificationCubit extends Cubit<CodeVerificationState> {
     emit(
       state.copyWith(
         verification: result.match(
-          (_) => const LoadedState.error('Code was not verified'),
+          (e) => LoadedState.error(e ?? 'Code was not verified'),
           LoadedState.data,
         ),
       ),

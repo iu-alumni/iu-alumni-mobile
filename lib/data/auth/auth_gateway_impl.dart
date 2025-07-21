@@ -82,29 +82,37 @@ class AuthGatewayImpl implements AuthGateway {
       final data = e.response?.data;
       if (data is Map<String, dynamic>) {
         final detail = data['detail'];
-        if (detail != null) {
-          return Left(detail);
-        }
+        return Left(detail);
       }
       return const Left(null);
     }
   }
 
   @override
-  Future<Either<String, Unit>> verifyCode({
+  Future<Either<String?, Unit>> verifyCode({
     required String email,
     required String code,
-  }) => TaskEither<String, Either<String, Unit>>.tryCatch(() async {
-    final response = await _dio.post(
-      Paths.verify,
-      data: {'email': email, 'verification_code': code},
-      options: _dioOptionsManager.opts(withToken: false),
-    );
-    final data = response.data as Map<String, dynamic>;
-    if (data['access_token'] case final token?) {
-      _tokenManager.set(token);
-      return Either.of(unit);
+  }) async {
+    try {
+      final response = await _dio.post(
+        Paths.verify,
+        data: {'email': email, 'verification_code': code},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      final data = response.data as Map<String, dynamic>;
+      if (data['access_token'] case final token?) {
+        _tokenManager.set(token);
+        return Either.of(unit);
+      }
+      return const Left(null);
+    } on DioException catch (e, st) {
+      logger.e('Error while resending the code', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        return Left(detail);
+      }
+      return const Left(null);
     }
-    return Left(data['detail'] ?? 'Unknown Error');
-  }, (e, _) => '$e').flatMap(TaskEither.fromEither).run();
+  }
 }

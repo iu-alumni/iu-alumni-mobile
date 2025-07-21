@@ -42,7 +42,7 @@ class VerificationWaySubPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'Registration successful, but your email is not in our graduates list. Your account is pending manual verification',
+            'Registration successful. Your account is pending manual verification',
             style: AppTextStyles.subtitle,
           ),
         ),
