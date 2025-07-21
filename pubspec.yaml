@@ -1,7 +1,7 @@
 name: ui_alumni_mobile
 description: "UI Alumni Flutter Mobile App created during the Industrial Project Master's Course at Innopolis University."
 publish_to: "none"
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.8.1
