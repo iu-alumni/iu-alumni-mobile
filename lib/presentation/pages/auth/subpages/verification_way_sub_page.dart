@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui_alumni_mobile/gen/assets.gen.dart';
 import 'package:ui_alumni_mobile/presentation/blocs/models/registration_state.dart';
 import 'package:ui_alumni_mobile/presentation/blocs/registration/registration_cubit.dart';
 import 'package:ui_alumni_mobile/presentation/common/constants/app_colors.dart';
@@ -40,11 +41,25 @@ class VerificationWaySubPage extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(16),
           child: Text(
             'Registration successful. Your account is pending manual verification',
             style: AppTextStyles.subtitle,
           ),
+        ),
+      ),
+    ),
+  );
+
+  void _showBetterImage(BuildContext context) => showCupertinoModalPopup(
+    context: context,
+    builder: (context) => Material(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Assets.images.registrationSchemeImproved.image(),
         ),
       ),
     ),
@@ -64,7 +79,20 @@ class VerificationWaySubPage extends StatelessWidget {
               style: AppTextStyles.body,
               textAlign: TextAlign.start,
             ),
-            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Assets.images.registrationScheme.image(),
+            ),
+            AppButton(
+              onTap: () => _showBetterImage(context),
+              buttonStyle: AppButtonStyle.text,
+              child: Text(
+                'See the scheme in goblin version',
+                style: AppTextStyles.actionM,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 8),
             AppButton(
               onTap: regCubit.registerViaEmail,
               child: BlocBuilder<RegistrationCubit, RegistrationState>(
@@ -100,6 +128,7 @@ class VerificationWaySubPage extends StatelessWidget {
               ),
             ),
             const _ErrorText(),
+            const SizedBox(height: 16),
           ],
         ),
       ),
