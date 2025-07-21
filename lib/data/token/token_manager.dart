@@ -62,5 +62,6 @@ class TokenManager {
   void clear() {
     _token = const None();
     _secureStorage.delete(key: _tokenKey);
+    _sharedPrefs.remove(_tokenKey);
   }
 }
