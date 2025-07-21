@@ -64,8 +64,20 @@ class $AssetsImagesGen {
   /// File path: assets/images/alumni.svg
   String get alumni => 'assets/images/alumni.svg';
 
+  /// File path: assets/images/registration_scheme.png
+  AssetGenImage get registrationScheme =>
+      const AssetGenImage('assets/images/registration_scheme.png');
+
+  /// File path: assets/images/registration_scheme_improved.png
+  AssetGenImage get registrationSchemeImproved =>
+      const AssetGenImage('assets/images/registration_scheme_improved.png');
+
   /// List of all assets
-  List<String> get values => [alumni];
+  List<dynamic> get values => [
+    alumni,
+    registrationScheme,
+    registrationSchemeImproved,
+  ];
 }
 
 class Assets {
