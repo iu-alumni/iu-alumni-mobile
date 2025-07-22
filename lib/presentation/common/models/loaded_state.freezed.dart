@@ -353,7 +353,7 @@ class __$$LoadedStateDataImplCopyWithImpl<T, $Res>
         freezed == data
             ? _value.data
             : data // ignore: cast_nullable_to_non_nullable
-                as T,
+                  as T,
       ),
     );
   }
@@ -511,7 +511,7 @@ class __$$LoadedStateErrorImplCopyWithImpl<T, $Res>
         null == error
             ? _value.error
             : error // ignore: cast_nullable_to_non_nullable
-                as String,
+                  as String,
       ),
     );
   }

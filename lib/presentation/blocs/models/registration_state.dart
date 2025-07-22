@@ -6,7 +6,6 @@ part 'registration_state.freezed.dart';
 
 @freezed
 class RegistrationState with _$RegistrationState {
-
   const factory RegistrationState({
     required LoadedState<bool> verification,
     String? firstName,

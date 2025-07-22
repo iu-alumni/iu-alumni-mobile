@@ -83,41 +83,34 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
   }) {
     return _then(
       _value.copyWith(
-            firstName:
-                null == firstName
-                    ? _value.firstName
-                    : firstName // ignore: cast_nullable_to_non_nullable
-                        as String,
-            lastName:
-                null == lastName
-                    ? _value.lastName
-                    : lastName // ignore: cast_nullable_to_non_nullable
-                        as String,
-            gradYear:
-                null == gradYear
-                    ? _value.gradYear
-                    : gradYear // ignore: cast_nullable_to_non_nullable
-                        as String,
-            email:
-                null == email
-                    ? _value.email
-                    : email // ignore: cast_nullable_to_non_nullable
-                        as String,
-            telegram:
-                null == telegram
-                    ? _value.telegram
-                    : telegram // ignore: cast_nullable_to_non_nullable
-                        as String,
-            password:
-                null == password
-                    ? _value.password
-                    : password // ignore: cast_nullable_to_non_nullable
-                        as String,
-            manualVerification:
-                null == manualVerification
-                    ? _value.manualVerification
-                    : manualVerification // ignore: cast_nullable_to_non_nullable
-                        as bool,
+            firstName: null == firstName
+                ? _value.firstName
+                : firstName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            lastName: null == lastName
+                ? _value.lastName
+                : lastName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            gradYear: null == gradYear
+                ? _value.gradYear
+                : gradYear // ignore: cast_nullable_to_non_nullable
+                      as String,
+            email: null == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                      as String,
+            telegram: null == telegram
+                ? _value.telegram
+                : telegram // ignore: cast_nullable_to_non_nullable
+                      as String,
+            password: null == password
+                ? _value.password
+                : password // ignore: cast_nullable_to_non_nullable
+                      as String,
+            manualVerification: null == manualVerification
+                ? _value.manualVerification
+                : manualVerification // ignore: cast_nullable_to_non_nullable
+                      as bool,
           )
           as $Val,
     );
@@ -168,41 +161,34 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$RegisterRequestImpl(
-        firstName:
-            null == firstName
-                ? _value.firstName
-                : firstName // ignore: cast_nullable_to_non_nullable
-                    as String,
-        lastName:
-            null == lastName
-                ? _value.lastName
-                : lastName // ignore: cast_nullable_to_non_nullable
-                    as String,
-        gradYear:
-            null == gradYear
-                ? _value.gradYear
-                : gradYear // ignore: cast_nullable_to_non_nullable
-                    as String,
-        email:
-            null == email
-                ? _value.email
-                : email // ignore: cast_nullable_to_non_nullable
-                    as String,
-        telegram:
-            null == telegram
-                ? _value.telegram
-                : telegram // ignore: cast_nullable_to_non_nullable
-                    as String,
-        password:
-            null == password
-                ? _value.password
-                : password // ignore: cast_nullable_to_non_nullable
-                    as String,
-        manualVerification:
-            null == manualVerification
-                ? _value.manualVerification
-                : manualVerification // ignore: cast_nullable_to_non_nullable
-                    as bool,
+        firstName: null == firstName
+            ? _value.firstName
+            : firstName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        lastName: null == lastName
+            ? _value.lastName
+            : lastName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        gradYear: null == gradYear
+            ? _value.gradYear
+            : gradYear // ignore: cast_nullable_to_non_nullable
+                  as String,
+        email: null == email
+            ? _value.email
+            : email // ignore: cast_nullable_to_non_nullable
+                  as String,
+        telegram: null == telegram
+            ? _value.telegram
+            : telegram // ignore: cast_nullable_to_non_nullable
+                  as String,
+        password: null == password
+            ? _value.password
+            : password // ignore: cast_nullable_to_non_nullable
+                  as String,
+        manualVerification: null == manualVerification
+            ? _value.manualVerification
+            : manualVerification // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }

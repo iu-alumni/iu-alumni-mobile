@@ -90,61 +90,50 @@ class _$EventModelCopyWithImpl<$Res, $Val extends EventModel>
   }) {
     return _then(
       _value.copyWith(
-            eventId:
-                null == eventId
-                    ? _value.eventId
-                    : eventId // ignore: cast_nullable_to_non_nullable
-                        as String,
-            userStatus:
-                null == userStatus
-                    ? _value.userStatus
-                    : userStatus // ignore: cast_nullable_to_non_nullable
-                        as UserStatus,
-            title:
-                freezed == title
-                    ? _value.title
-                    : title // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            description:
-                freezed == description
-                    ? _value.description
-                    : description // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            coverBytes:
-                freezed == coverBytes
-                    ? _value.coverBytes
-                    : coverBytes // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            location:
-                freezed == location
-                    ? _value.location
-                    : location // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            cost:
-                null == cost
-                    ? _value.cost
-                    : cost // ignore: cast_nullable_to_non_nullable
-                        as CostModel,
-            occurringAt:
-                null == occurringAt
-                    ? _value.occurringAt
-                    : occurringAt // ignore: cast_nullable_to_non_nullable
-                        as DateTime,
-            onlineEvent:
-                null == onlineEvent
-                    ? _value.onlineEvent
-                    : onlineEvent // ignore: cast_nullable_to_non_nullable
-                        as bool,
-            participantsIds:
-                null == participantsIds
-                    ? _value.participantsIds
-                    : participantsIds // ignore: cast_nullable_to_non_nullable
-                        as ISet<String>,
-            pendingApproval:
-                null == pendingApproval
-                    ? _value.pendingApproval
-                    : pendingApproval // ignore: cast_nullable_to_non_nullable
-                        as bool,
+            eventId: null == eventId
+                ? _value.eventId
+                : eventId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            userStatus: null == userStatus
+                ? _value.userStatus
+                : userStatus // ignore: cast_nullable_to_non_nullable
+                      as UserStatus,
+            title: freezed == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            description: freezed == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            coverBytes: freezed == coverBytes
+                ? _value.coverBytes
+                : coverBytes // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            location: freezed == location
+                ? _value.location
+                : location // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            cost: null == cost
+                ? _value.cost
+                : cost // ignore: cast_nullable_to_non_nullable
+                      as CostModel,
+            occurringAt: null == occurringAt
+                ? _value.occurringAt
+                : occurringAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            onlineEvent: null == onlineEvent
+                ? _value.onlineEvent
+                : onlineEvent // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            participantsIds: null == participantsIds
+                ? _value.participantsIds
+                : participantsIds // ignore: cast_nullable_to_non_nullable
+                      as ISet<String>,
+            pendingApproval: null == pendingApproval
+                ? _value.pendingApproval
+                : pendingApproval // ignore: cast_nullable_to_non_nullable
+                      as bool,
           )
           as $Val,
     );
@@ -228,61 +217,50 @@ class __$$EventModelImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$EventModelImpl(
-        eventId:
-            null == eventId
-                ? _value.eventId
-                : eventId // ignore: cast_nullable_to_non_nullable
-                    as String,
-        userStatus:
-            null == userStatus
-                ? _value.userStatus
-                : userStatus // ignore: cast_nullable_to_non_nullable
-                    as UserStatus,
-        title:
-            freezed == title
-                ? _value.title
-                : title // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        description:
-            freezed == description
-                ? _value.description
-                : description // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        coverBytes:
-            freezed == coverBytes
-                ? _value.coverBytes
-                : coverBytes // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        location:
-            freezed == location
-                ? _value.location
-                : location // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        cost:
-            null == cost
-                ? _value.cost
-                : cost // ignore: cast_nullable_to_non_nullable
-                    as CostModel,
-        occurringAt:
-            null == occurringAt
-                ? _value.occurringAt
-                : occurringAt // ignore: cast_nullable_to_non_nullable
-                    as DateTime,
-        onlineEvent:
-            null == onlineEvent
-                ? _value.onlineEvent
-                : onlineEvent // ignore: cast_nullable_to_non_nullable
-                    as bool,
-        participantsIds:
-            null == participantsIds
-                ? _value.participantsIds
-                : participantsIds // ignore: cast_nullable_to_non_nullable
-                    as ISet<String>,
-        pendingApproval:
-            null == pendingApproval
-                ? _value.pendingApproval
-                : pendingApproval // ignore: cast_nullable_to_non_nullable
-                    as bool,
+        eventId: null == eventId
+            ? _value.eventId
+            : eventId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        userStatus: null == userStatus
+            ? _value.userStatus
+            : userStatus // ignore: cast_nullable_to_non_nullable
+                  as UserStatus,
+        title: freezed == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        description: freezed == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        coverBytes: freezed == coverBytes
+            ? _value.coverBytes
+            : coverBytes // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        location: freezed == location
+            ? _value.location
+            : location // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        cost: null == cost
+            ? _value.cost
+            : cost // ignore: cast_nullable_to_non_nullable
+                  as CostModel,
+        occurringAt: null == occurringAt
+            ? _value.occurringAt
+            : occurringAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        onlineEvent: null == onlineEvent
+            ? _value.onlineEvent
+            : onlineEvent // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        participantsIds: null == participantsIds
+            ? _value.participantsIds
+            : participantsIds // ignore: cast_nullable_to_non_nullable
+                  as ISet<String>,
+        pendingApproval: null == pendingApproval
+            ? _value.pendingApproval
+            : pendingApproval // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }

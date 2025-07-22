@@ -52,6 +52,7 @@ dev_dependencies:
   json_serializable: ^6.9.3
   flutter_gen_runner: ^5.9.0
   flutter_launcher_icons: ^0.14.3
+  husky: ^0.1.7
 
 flutter:
   uses-material-design: true
