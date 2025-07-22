@@ -10,10 +10,9 @@ _$EventDataModelImpl _$$EventDataModelImplFromJson(Map<String, dynamic> json) =>
     _$EventDataModelImpl(
       eventId: json['id'] as String,
       ownerId: json['owner_id'] as String,
-      participantsIds:
-          (json['participants_ids'] as List<dynamic>)
-              .map((e) => e as String)
-              .toList(),
+      participantsIds: (json['participants_ids'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       title: json['title'] as String,
       description: json['description'] as String,
       location: json['location'] as String,

@@ -98,61 +98,50 @@ class _$EventDataModelCopyWithImpl<$Res, $Val extends EventDataModel>
   }) {
     return _then(
       _value.copyWith(
-            eventId:
-                null == eventId
-                    ? _value.eventId
-                    : eventId // ignore: cast_nullable_to_non_nullable
-                        as String,
-            ownerId:
-                null == ownerId
-                    ? _value.ownerId
-                    : ownerId // ignore: cast_nullable_to_non_nullable
-                        as String,
-            participantsIds:
-                null == participantsIds
-                    ? _value.participantsIds
-                    : participantsIds // ignore: cast_nullable_to_non_nullable
-                        as List<String>,
-            title:
-                null == title
-                    ? _value.title
-                    : title // ignore: cast_nullable_to_non_nullable
-                        as String,
-            description:
-                null == description
-                    ? _value.description
-                    : description // ignore: cast_nullable_to_non_nullable
-                        as String,
-            location:
-                null == location
-                    ? _value.location
-                    : location // ignore: cast_nullable_to_non_nullable
-                        as String,
-            datetime:
-                null == datetime
-                    ? _value.datetime
-                    : datetime // ignore: cast_nullable_to_non_nullable
-                        as DateTime,
-            cost:
-                null == cost
-                    ? _value.cost
-                    : cost // ignore: cast_nullable_to_non_nullable
-                        as int,
-            isOnline:
-                null == isOnline
-                    ? _value.isOnline
-                    : isOnline // ignore: cast_nullable_to_non_nullable
-                        as bool,
-            cover:
-                freezed == cover
-                    ? _value.cover
-                    : cover // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            approved:
-                freezed == approved
-                    ? _value.approved
-                    : approved // ignore: cast_nullable_to_non_nullable
-                        as bool?,
+            eventId: null == eventId
+                ? _value.eventId
+                : eventId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            ownerId: null == ownerId
+                ? _value.ownerId
+                : ownerId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            participantsIds: null == participantsIds
+                ? _value.participantsIds
+                : participantsIds // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            description: null == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as String,
+            location: null == location
+                ? _value.location
+                : location // ignore: cast_nullable_to_non_nullable
+                      as String,
+            datetime: null == datetime
+                ? _value.datetime
+                : datetime // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            cost: null == cost
+                ? _value.cost
+                : cost // ignore: cast_nullable_to_non_nullable
+                      as int,
+            isOnline: null == isOnline
+                ? _value.isOnline
+                : isOnline // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            cover: freezed == cover
+                ? _value.cover
+                : cover // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            approved: freezed == approved
+                ? _value.approved
+                : approved // ignore: cast_nullable_to_non_nullable
+                      as bool?,
           )
           as $Val,
     );
@@ -211,61 +200,50 @@ class __$$EventDataModelImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$EventDataModelImpl(
-        eventId:
-            null == eventId
-                ? _value.eventId
-                : eventId // ignore: cast_nullable_to_non_nullable
-                    as String,
-        ownerId:
-            null == ownerId
-                ? _value.ownerId
-                : ownerId // ignore: cast_nullable_to_non_nullable
-                    as String,
-        participantsIds:
-            null == participantsIds
-                ? _value._participantsIds
-                : participantsIds // ignore: cast_nullable_to_non_nullable
-                    as List<String>,
-        title:
-            null == title
-                ? _value.title
-                : title // ignore: cast_nullable_to_non_nullable
-                    as String,
-        description:
-            null == description
-                ? _value.description
-                : description // ignore: cast_nullable_to_non_nullable
-                    as String,
-        location:
-            null == location
-                ? _value.location
-                : location // ignore: cast_nullable_to_non_nullable
-                    as String,
-        datetime:
-            null == datetime
-                ? _value.datetime
-                : datetime // ignore: cast_nullable_to_non_nullable
-                    as DateTime,
-        cost:
-            null == cost
-                ? _value.cost
-                : cost // ignore: cast_nullable_to_non_nullable
-                    as int,
-        isOnline:
-            null == isOnline
-                ? _value.isOnline
-                : isOnline // ignore: cast_nullable_to_non_nullable
-                    as bool,
-        cover:
-            freezed == cover
-                ? _value.cover
-                : cover // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        approved:
-            freezed == approved
-                ? _value.approved
-                : approved // ignore: cast_nullable_to_non_nullable
-                    as bool?,
+        eventId: null == eventId
+            ? _value.eventId
+            : eventId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        ownerId: null == ownerId
+            ? _value.ownerId
+            : ownerId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        participantsIds: null == participantsIds
+            ? _value._participantsIds
+            : participantsIds // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        description: null == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as String,
+        location: null == location
+            ? _value.location
+            : location // ignore: cast_nullable_to_non_nullable
+                  as String,
+        datetime: null == datetime
+            ? _value.datetime
+            : datetime // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        cost: null == cost
+            ? _value.cost
+            : cost // ignore: cast_nullable_to_non_nullable
+                  as int,
+        isOnline: null == isOnline
+            ? _value.isOnline
+            : isOnline // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        cover: freezed == cover
+            ? _value.cover
+            : cover // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        approved: freezed == approved
+            ? _value.approved
+            : approved // ignore: cast_nullable_to_non_nullable
+                  as bool?,
       ),
     );
   }

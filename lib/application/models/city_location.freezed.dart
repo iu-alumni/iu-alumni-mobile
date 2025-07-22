@@ -61,16 +61,14 @@ class _$CityLocationCopyWithImpl<$Res, $Val extends CityLocation>
   $Res call({Object? country = null, Object? city = null}) {
     return _then(
       _value.copyWith(
-            country:
-                null == country
-                    ? _value.country
-                    : country // ignore: cast_nullable_to_non_nullable
-                        as String,
-            city:
-                null == city
-                    ? _value.city
-                    : city // ignore: cast_nullable_to_non_nullable
-                        as String,
+            country: null == country
+                ? _value.country
+                : country // ignore: cast_nullable_to_non_nullable
+                      as String,
+            city: null == city
+                ? _value.city
+                : city // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -105,16 +103,14 @@ class __$$CityLocationImplCopyWithImpl<$Res>
   $Res call({Object? country = null, Object? city = null}) {
     return _then(
       _$CityLocationImpl(
-        country:
-            null == country
-                ? _value.country
-                : country // ignore: cast_nullable_to_non_nullable
-                    as String,
-        city:
-            null == city
-                ? _value.city
-                : city // ignore: cast_nullable_to_non_nullable
-                    as String,
+        country: null == country
+            ? _value.country
+            : country // ignore: cast_nullable_to_non_nullable
+                  as String,
+        city: null == city
+            ? _value.city
+            : city // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }

@@ -70,26 +70,22 @@ class _$OneEventStateCopyWithImpl<$Res, $Val extends OneEventState>
   }) {
     return _then(
       _value.copyWith(
-            saveState:
-                null == saveState
-                    ? _value.saveState
-                    : saveState // ignore: cast_nullable_to_non_nullable
-                        as LoadedState<Unit>,
-            event:
-                null == event
-                    ? _value.event
-                    : event // ignore: cast_nullable_to_non_nullable
-                        as Option<EventModel>,
-            userStatusLoading:
-                null == userStatusLoading
-                    ? _value.userStatusLoading
-                    : userStatusLoading // ignore: cast_nullable_to_non_nullable
-                        as bool,
-            participants:
-                null == participants
-                    ? _value.participants
-                    : participants // ignore: cast_nullable_to_non_nullable
-                        as LoadedState<Iterable<Profile>>,
+            saveState: null == saveState
+                ? _value.saveState
+                : saveState // ignore: cast_nullable_to_non_nullable
+                      as LoadedState<Unit>,
+            event: null == event
+                ? _value.event
+                : event // ignore: cast_nullable_to_non_nullable
+                      as Option<EventModel>,
+            userStatusLoading: null == userStatusLoading
+                ? _value.userStatusLoading
+                : userStatusLoading // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            participants: null == participants
+                ? _value.participants
+                : participants // ignore: cast_nullable_to_non_nullable
+                      as LoadedState<Iterable<Profile>>,
           )
           as $Val,
     );
@@ -161,26 +157,22 @@ class __$$OneEventStateImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$OneEventStateImpl(
-        saveState:
-            null == saveState
-                ? _value.saveState
-                : saveState // ignore: cast_nullable_to_non_nullable
-                    as LoadedState<Unit>,
-        event:
-            null == event
-                ? _value.event
-                : event // ignore: cast_nullable_to_non_nullable
-                    as Option<EventModel>,
-        userStatusLoading:
-            null == userStatusLoading
-                ? _value.userStatusLoading
-                : userStatusLoading // ignore: cast_nullable_to_non_nullable
-                    as bool,
-        participants:
-            null == participants
-                ? _value.participants
-                : participants // ignore: cast_nullable_to_non_nullable
-                    as LoadedState<Iterable<Profile>>,
+        saveState: null == saveState
+            ? _value.saveState
+            : saveState // ignore: cast_nullable_to_non_nullable
+                  as LoadedState<Unit>,
+        event: null == event
+            ? _value.event
+            : event // ignore: cast_nullable_to_non_nullable
+                  as Option<EventModel>,
+        userStatusLoading: null == userStatusLoading
+            ? _value.userStatusLoading
+            : userStatusLoading // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        participants: null == participants
+            ? _value.participants
+            : participants // ignore: cast_nullable_to_non_nullable
+                  as LoadedState<Iterable<Profile>>,
       ),
     );
   }

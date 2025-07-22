@@ -91,51 +91,42 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
   }) {
     return _then(
       _value.copyWith(
-            profileId:
-                null == profileId
-                    ? _value.profileId
-                    : profileId // ignore: cast_nullable_to_non_nullable
-                        as String,
-            firstName:
-                null == firstName
-                    ? _value.firstName
-                    : firstName // ignore: cast_nullable_to_non_nullable
-                        as String,
-            lastName:
-                null == lastName
-                    ? _value.lastName
-                    : lastName // ignore: cast_nullable_to_non_nullable
-                        as String,
-            graduationYear:
-                null == graduationYear
-                    ? _value.graduationYear
-                    : graduationYear // ignore: cast_nullable_to_non_nullable
-                        as String,
-            location:
-                freezed == location
-                    ? _value.location
-                    : location // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            biography:
-                freezed == biography
-                    ? _value.biography
-                    : biography // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            showLocation:
-                null == showLocation
-                    ? _value.showLocation
-                    : showLocation // ignore: cast_nullable_to_non_nullable
-                        as bool,
-            telegramAlias:
-                freezed == telegramAlias
-                    ? _value.telegramAlias
-                    : telegramAlias // ignore: cast_nullable_to_non_nullable
-                        as String?,
-            avatar:
-                freezed == avatar
-                    ? _value.avatar
-                    : avatar // ignore: cast_nullable_to_non_nullable
-                        as String?,
+            profileId: null == profileId
+                ? _value.profileId
+                : profileId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            firstName: null == firstName
+                ? _value.firstName
+                : firstName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            lastName: null == lastName
+                ? _value.lastName
+                : lastName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            graduationYear: null == graduationYear
+                ? _value.graduationYear
+                : graduationYear // ignore: cast_nullable_to_non_nullable
+                      as String,
+            location: freezed == location
+                ? _value.location
+                : location // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            biography: freezed == biography
+                ? _value.biography
+                : biography // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            showLocation: null == showLocation
+                ? _value.showLocation
+                : showLocation // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            telegramAlias: freezed == telegramAlias
+                ? _value.telegramAlias
+                : telegramAlias // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            avatar: freezed == avatar
+                ? _value.avatar
+                : avatar // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -189,51 +180,42 @@ class __$$ProfileImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$ProfileImpl(
-        profileId:
-            null == profileId
-                ? _value.profileId
-                : profileId // ignore: cast_nullable_to_non_nullable
-                    as String,
-        firstName:
-            null == firstName
-                ? _value.firstName
-                : firstName // ignore: cast_nullable_to_non_nullable
-                    as String,
-        lastName:
-            null == lastName
-                ? _value.lastName
-                : lastName // ignore: cast_nullable_to_non_nullable
-                    as String,
-        graduationYear:
-            null == graduationYear
-                ? _value.graduationYear
-                : graduationYear // ignore: cast_nullable_to_non_nullable
-                    as String,
-        location:
-            freezed == location
-                ? _value.location
-                : location // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        biography:
-            freezed == biography
-                ? _value.biography
-                : biography // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        showLocation:
-            null == showLocation
-                ? _value.showLocation
-                : showLocation // ignore: cast_nullable_to_non_nullable
-                    as bool,
-        telegramAlias:
-            freezed == telegramAlias
-                ? _value.telegramAlias
-                : telegramAlias // ignore: cast_nullable_to_non_nullable
-                    as String?,
-        avatar:
-            freezed == avatar
-                ? _value.avatar
-                : avatar // ignore: cast_nullable_to_non_nullable
-                    as String?,
+        profileId: null == profileId
+            ? _value.profileId
+            : profileId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        firstName: null == firstName
+            ? _value.firstName
+            : firstName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        lastName: null == lastName
+            ? _value.lastName
+            : lastName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        graduationYear: null == graduationYear
+            ? _value.graduationYear
+            : graduationYear // ignore: cast_nullable_to_non_nullable
+                  as String,
+        location: freezed == location
+            ? _value.location
+            : location // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        biography: freezed == biography
+            ? _value.biography
+            : biography // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        showLocation: null == showLocation
+            ? _value.showLocation
+            : showLocation // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        telegramAlias: freezed == telegramAlias
+            ? _value.telegramAlias
+            : telegramAlias // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        avatar: freezed == avatar
+            ? _value.avatar
+            : avatar // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }

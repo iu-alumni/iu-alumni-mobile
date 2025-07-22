@@ -88,41 +88,34 @@ class _$EventRequestDataModelCopyWithImpl<
   }) {
     return _then(
       _value.copyWith(
-            title:
-                null == title
-                    ? _value.title
-                    : title // ignore: cast_nullable_to_non_nullable
-                        as String,
-            description:
-                null == description
-                    ? _value.description
-                    : description // ignore: cast_nullable_to_non_nullable
-                        as String,
-            location:
-                null == location
-                    ? _value.location
-                    : location // ignore: cast_nullable_to_non_nullable
-                        as String,
-            datetime:
-                null == datetime
-                    ? _value.datetime
-                    : datetime // ignore: cast_nullable_to_non_nullable
-                        as DateTime,
-            cost:
-                null == cost
-                    ? _value.cost
-                    : cost // ignore: cast_nullable_to_non_nullable
-                        as int,
-            isOnline:
-                null == isOnline
-                    ? _value.isOnline
-                    : isOnline // ignore: cast_nullable_to_non_nullable
-                        as bool,
-            cover:
-                freezed == cover
-                    ? _value.cover
-                    : cover // ignore: cast_nullable_to_non_nullable
-                        as String?,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            description: null == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as String,
+            location: null == location
+                ? _value.location
+                : location // ignore: cast_nullable_to_non_nullable
+                      as String,
+            datetime: null == datetime
+                ? _value.datetime
+                : datetime // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            cost: null == cost
+                ? _value.cost
+                : cost // ignore: cast_nullable_to_non_nullable
+                      as int,
+            isOnline: null == isOnline
+                ? _value.isOnline
+                : isOnline // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            cover: freezed == cover
+                ? _value.cover
+                : cover // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -174,41 +167,34 @@ class __$$EventRequestDataModelImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$EventRequestDataModelImpl(
-        title:
-            null == title
-                ? _value.title
-                : title // ignore: cast_nullable_to_non_nullable
-                    as String,
-        description:
-            null == description
-                ? _value.description
-                : description // ignore: cast_nullable_to_non_nullable
-                    as String,
-        location:
-            null == location
-                ? _value.location
-                : location // ignore: cast_nullable_to_non_nullable
-                    as String,
-        datetime:
-            null == datetime
-                ? _value.datetime
-                : datetime // ignore: cast_nullable_to_non_nullable
-                    as DateTime,
-        cost:
-            null == cost
-                ? _value.cost
-                : cost // ignore: cast_nullable_to_non_nullable
-                    as int,
-        isOnline:
-            null == isOnline
-                ? _value.isOnline
-                : isOnline // ignore: cast_nullable_to_non_nullable
-                    as bool,
-        cover:
-            freezed == cover
-                ? _value.cover
-                : cover // ignore: cast_nullable_to_non_nullable
-                    as String?,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        description: null == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as String,
+        location: null == location
+            ? _value.location
+            : location // ignore: cast_nullable_to_non_nullable
+                  as String,
+        datetime: null == datetime
+            ? _value.datetime
+            : datetime // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        cost: null == cost
+            ? _value.cost
+            : cost // ignore: cast_nullable_to_non_nullable
+                  as int,
+        isOnline: null == isOnline
+            ? _value.isOnline
+            : isOnline // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        cover: freezed == cover
+            ? _value.cover
+            : cover // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }

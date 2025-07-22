@@ -206,16 +206,14 @@ class __$$UserNotAuthorImplCopyWithImpl<$Res>
   $Res call({Object? authorId = null, Object? participant = null}) {
     return _then(
       _$UserNotAuthorImpl(
-        authorId:
-            null == authorId
-                ? _value.authorId
-                : authorId // ignore: cast_nullable_to_non_nullable
-                    as String,
-        participant:
-            null == participant
-                ? _value.participant
-                : participant // ignore: cast_nullable_to_non_nullable
-                    as bool,
+        authorId: null == authorId
+            ? _value.authorId
+            : authorId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        participant: null == participant
+            ? _value.participant
+            : participant // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }

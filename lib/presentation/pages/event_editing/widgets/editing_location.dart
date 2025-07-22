@@ -17,7 +17,10 @@ class EditingLocation extends StatelessWidget {
     (e) => e.onlineEvent ? const None() : Option.of(e.location),
   );
 
-  Future<void> _showLocationPicker(BuildContext context, bool currentIsNone) async {
+  Future<void> _showLocationPicker(
+    BuildContext context,
+    bool currentIsNone,
+  ) async {
     final location = await LocationDialog.show(context, currentIsNone);
     if (!context.mounted) {
       return;

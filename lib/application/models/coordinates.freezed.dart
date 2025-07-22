@@ -61,16 +61,14 @@ class _$CoordinatesCopyWithImpl<$Res, $Val extends Coordinates>
   $Res call({Object? lat = null, Object? lng = null}) {
     return _then(
       _value.copyWith(
-            lat:
-                null == lat
-                    ? _value.lat
-                    : lat // ignore: cast_nullable_to_non_nullable
-                        as double,
-            lng:
-                null == lng
-                    ? _value.lng
-                    : lng // ignore: cast_nullable_to_non_nullable
-                        as double,
+            lat: null == lat
+                ? _value.lat
+                : lat // ignore: cast_nullable_to_non_nullable
+                      as double,
+            lng: null == lng
+                ? _value.lng
+                : lng // ignore: cast_nullable_to_non_nullable
+                      as double,
           )
           as $Val,
     );
@@ -108,11 +106,11 @@ class __$$CoordinatesImplCopyWithImpl<$Res>
         null == lat
             ? _value.lat
             : lat // ignore: cast_nullable_to_non_nullable
-                as double,
+                  as double,
         null == lng
             ? _value.lng
             : lng // ignore: cast_nullable_to_non_nullable
-                as double,
+                  as double,
       ),
     );
   }
