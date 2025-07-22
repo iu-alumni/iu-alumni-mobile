@@ -77,9 +77,9 @@ flutter_launcher_icons:
   min_sdk_android: 24
   adaptive_icon_background: "#40BA21"
   adaptive_icon_foreground: "assets/icons/iualumni_icon_trans.png"
-  # ios: true
-  # remove_alpha_ios: true
-  # background_color_ios: "#FFFFFF"
+  ios: true
+  remove_alpha_ios: true
+  background_color_ios: "#40BA21"
 
 flutter_native_splash:
   color: "#40BA21"

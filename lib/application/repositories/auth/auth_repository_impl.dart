@@ -13,7 +13,7 @@ class AuthRepositoryImpl implements AuthRepository {
   String? _registrationEmail;
 
   @override
-  Future<Either<String, Unit>> authorize(String login, String password) =>
+  Future<Either<String?, Unit>> authorize(String login, String password) =>
       _authGateway.authorize(login, password);
 
   @override

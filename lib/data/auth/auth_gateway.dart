@@ -3,7 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import '../../application/models/register_request.dart';
 
 abstract interface class AuthGateway {
-  Future<Either<String, Unit>> authorize(String email, String password);
+  Future<Either<String?, Unit>> authorize(String email, String password);
 
   /// = Error message
   /// | Manual verification

@@ -34,10 +34,11 @@ class AuthCubit extends Cubit<LoadedState> {
     emit(
       result.match(
         (e) {
-          const errorMsg =
+          final errorMsg =
+              e ??
               "If you are an alumnus and haven't created an account in this app yet, proceed with registration";
           _reporter.reportAuthError(errorMsg, AppLocation.authScreen);
-          return const LoadedState.error(errorMsg);
+          return LoadedState.error(errorMsg);
         },
         (_) {
           _reporter.reportAuthSuccessful(AppLocation.authScreen);

@@ -16,20 +16,31 @@ class AuthGatewayImpl implements AuthGateway {
   final DioOptionsManager _dioOptionsManager;
 
   @override
-  Future<Either<String, Unit>> authorize(String email, String password) =>
-      TaskEither<String, Either<String, Unit>>.tryCatch(() async {
-        final response = await _dio.post(
-          Paths.login,
-          data: {'email': email, 'password': password},
-          options: _dioOptionsManager.opts(withToken: false),
-        );
-        final data = response.data as Map<String, dynamic>;
-        if (data['access_token'] case final token?) {
-          _tokenManager.set(token);
-          return Either.of(unit);
+  Future<Either<String?, Unit>> authorize(String email, String password) async {
+    try {
+      final response = await _dio.post(
+        Paths.login,
+        data: {'email': email, 'password': password},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      final data = response.data as Map<String, dynamic>;
+      if (data['access_token'] case final token?) {
+        _tokenManager.set(token);
+        return Either.of(unit);
+      }
+      return const Left('Token was not received');
+    } on DioException catch (e) {
+      if (e.response case final resp? when resp.data is Map<String, dynamic>) {
+        final detail = resp.data['detail'];
+        if (detail is String) {
+          return Left(detail);
         }
-        return Left(data['detail'] ?? 'Unknown Error');
-      }, (e, _) => '$e').flatMap(TaskEither.fromEither).run();
+      }
+      return const Left(null);
+    } catch (e) {
+      return const Left(null);
+    }
+  }
 
   @override
   Future<Either<String, Either<Unit, Unit>>> register(
