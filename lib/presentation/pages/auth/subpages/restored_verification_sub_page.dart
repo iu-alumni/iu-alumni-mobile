@@ -22,29 +22,27 @@ class _RestoredVerificationSubPageState
   var _email = '';
 
   @override
-  Widget build(BuildContext context) {
-    return AppScaffold(
-      title: 'Restore verification',
-      body: AppListBody(
-        children: [
-          AppTextField(
-            onChange: (a) => _email = a,
-            initialText: null,
-            hintText: 'Email',
+  Widget build(BuildContext context) => AppScaffold(
+    title: 'Restore verification',
+    body: AppListBody(
+      children: [
+        AppTextField(
+          onChange: (a) => _email = a,
+          initialText: null,
+          hintText: 'Email',
+        ),
+        const SizedBox(height: 16),
+        AppButton(
+          child: Text(
+            'Enter the code',
+            style: AppTextStyles.actionSB.copyWith(color: Colors.white),
           ),
-          const SizedBox(height: 16),
-          AppButton(
-            child: Text(
-              'Enter the code',
-              style: AppTextStyles.actionSB.copyWith(color: Colors.white),
-            ),
-            onTap: () {
-              context.read<CodeVerificationCubit>().setEmail(_email);
-              context.pushRoute(const CodeVerificationSubRoute());
-            },
-          ),
-        ],
-      ),
-    );
-  }
+          onTap: () {
+            context.read<CodeVerificationCubit>().setEmail(_email);
+            context.pushRoute(const CodeVerificationSubRoute());
+          },
+        ),
+      ],
+    ),
+  );
 }

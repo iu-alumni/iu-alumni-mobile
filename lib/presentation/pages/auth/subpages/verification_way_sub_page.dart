@@ -19,7 +19,7 @@ class VerificationWaySubPage extends StatelessWidget {
   const VerificationWaySubPage({super.key});
 
   static const _desc =
-      'You would need to enter a 6-digit code sent to your university mail address. This is the quickest and safest way for us to know you are a real alumnus. If you don’t have access to the mail address, pick manual verification';
+      'You would need to enter a 6-digit code sent to your university mail address. This is the quickest and safest way for us to know you are a real alumnus. If you don’t have access to the mailbox, pick manual verification';
 
   void _listen(BuildContext context, RegistrationState state) {
     if (state.verification case LoadedStateData(:final data)) {

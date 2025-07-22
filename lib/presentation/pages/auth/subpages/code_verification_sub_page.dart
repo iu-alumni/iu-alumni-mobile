@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,6 +44,28 @@ class _CodeVerificationSubPageState extends State<CodeVerificationSubPage> {
   void _sinkCode(String code) {
     _cubit.sinkCode(code);
     _cubit.checkCode();
+  }
+
+  Future<void> _showModal() async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (context) => Material(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'Contact the admins and wait for manual verification',
+              style: AppTextStyles.subtitle,
+            ),
+          ),
+        ),
+      ),
+    );
+    if (context.mounted) {
+      context.router.popUntilRoot();
+    }
   }
 
   @override
@@ -95,6 +118,16 @@ class _CodeVerificationSubPageState extends State<CodeVerificationSubPage> {
                     textAlign: TextAlign.center,
                   ),
                 },
+              ),
+            ),
+            const SizedBox(height: 8),
+            AppButton(
+              onTap: _showModal,
+              buttonStyle: AppButtonStyle.secondary,
+              child: Text(
+                "Oops, I don't have access to the mailbox",
+                style: AppTextStyles.actionM.copyWith(color: Colors.white),
+                textAlign: TextAlign.center,
               ),
             ),
             _ErrorText(mapError: (s) => s.resend),
