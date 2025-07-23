@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository.dart';
 import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository_impl.dart';
 import 'package:ui_alumni_mobile/data/db/db_mock.dart';
@@ -63,15 +62,10 @@ class App extends StatelessWidget {
           aOptions: AndroidOptions(encryptedSharedPreferences: true),
         ),
       ),
-      RepositoryProvider(create: (_) => SharedPreferencesAsync()),
       RepositoryProvider(create: (_) => ImagePicker()),
       RepositoryProvider<DbManager>(create: (_) => DbMock()),
       RepositoryProvider(
-        create: (context) => TokenManager(
-          context.read<FlutterSecureStorage>(),
-          context.read<SharedPreferencesAsync>(),
-          context.read<SecretsManager>(),
-        ),
+        create: (context) => TokenManager(context.read<FlutterSecureStorage>()),
       ),
       RepositoryProvider<TokenProvider>(
         create: (context) => TokenProviderImpl(context.read<TokenManager>()),
