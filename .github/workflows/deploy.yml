@@ -9,15 +9,22 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options: [testing, production]
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # ── Testing build + deploy (PR to main) ──────────────────────────────────
+  # ── Testing build + deploy (PR to main or manual dispatch) ──────────────
   build-testing:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'testing')
     runs-on: ubuntu-latest
     environment: testing
     permissions:
@@ -58,7 +65,7 @@ jobs:
 
   deploy-testing:
     needs: build-testing
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'testing')
     uses: iu-alumni/iu-alumni-infra/.github/workflows/deploy-app.yml@main
     with:
       repo_name: iu-alumni-mobile
@@ -72,9 +79,9 @@ jobs:
       SERVER_USER: ${{ secrets.SERVER_USER }}
       SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
 
-  # ── Production build + deploy (push to main) ─────────────────────────────
+  # ── Production build + deploy (push to main or manual dispatch) ─────────
   build-production:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
     runs-on: ubuntu-latest
     environment: production
     permissions:
@@ -115,7 +122,7 @@ jobs:
 
   deploy-production:
     needs: build-production
-    if: github.ref == 'refs/heads/main'
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
     uses: iu-alumni/iu-alumni-infra/.github/workflows/deploy-app.yml@main
     with:
       repo_name: iu-alumni-mobile
