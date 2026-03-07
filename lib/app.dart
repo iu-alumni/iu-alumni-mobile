@@ -39,7 +39,7 @@ import 'presentation/common/constants/app_colors.dart';
 import 'presentation/router/always_root_route.dart';
 import 'presentation/router/app_router.dart';
 
-const _host = String.fromEnvironment('host_path');
+const _host = String.fromEnvironment('API_BASE_URL');
 
 class App extends StatelessWidget {
   const App({super.key});

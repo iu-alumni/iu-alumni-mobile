@@ -1,33 +1,45 @@
-# IU Alumni Flutter App / Alumni Client
+# IU Alumni — Mobile / Web MiniApp
 
-IU Alumni Flutter App created during the Industrial Project Master's Course at Innopolis University.
+Flutter application for the IU Alumni platform, targeting web (Telegram MiniApp) and mobile (Android/iOS).
 
-## Technologies and Architecture
+## Tech Stack
 
-This project uses Bloc/Cubit for state management and DI, AutoRoute for navigation, and Logger for logging. Also some important noted on the project architecture.
+- **Flutter** (SDK ^3.32) · **Dart** (SDK ^3.8)
+- **Bloc/Cubit** (state management) · **AutoRoute** (navigation) · **Dio** (HTTP)
+- **Freezed** (immutable models) · **fpdart** (typed error handling)
+- **flutter_map** (interactive maps) · **flutter_secure_storage** (credential storage)
+- **AppMetrica** (analytics)
 
-#### Clean Layered Structure
+## Architecture
 
-- `Data` layer is responsible for data loading and parsing. `Dio` is used to load the data from the Internet, while any Database solution also falls into this layer. Please use `freezed` to parse the data if needed and `fpdart` to present results of functions that could fail. 
-- `Application` layer is responsible for data processing before presenting it to the UI. It stores everything runtime and frees upcoming Blocs/Cubits from the burden of managing cache, sorting or filtering data. Also, this layer must contain models widely used across the layers. Some data definitely needs different models on the `Presentation` or `Data` layers, but the default option lies here on this layer. You can also know this as a `Domain` layer.
-- `Presentation` layer consists of Blocs/Cubits responsible for the application logic while also containing the UI state. Several rules are assumed:
-    - Nothing important should be stored on the `Presentation` layer. Blocs and Cubits must be easy to dispose when needed.
-    - Blocs, Cubits and Widgets must be as stupid as possible. Animations or state management cases coverage alone requires enough lines of code, and it is the reason the presentation layer exists in the first place. Move logic to the `Application` as much as possible.
-    - The state must be immutable. Consider Fast Immutable Collections for collections, utilize sealed classes for complex non-interchangeable states. 
+**Layers:**
+- `data/` — network (Dio), local storage (sqflite), models (freezed). Uses `fpdart` for failable results.
+- `application/` — business logic, cross-layer models, runtime cache.
+- `presentation/` — Blocs/Cubits + UI. Keep it dumb; move logic to `application/`.
 
-## Targets
+## Branches
 
-The app supports Web, Android, and iOS. The difference between targets lead us to create two separate branches for mobile and web targets. For instance, web doesn't support AppMetrica or sqflite (used to store cities database, leverage FTS and convert city names to coordinates), and use different map implementations. We don't need to compile unused code and include unused assets. 
+| Branch | Target |
+|--------|--------|
+| `main` / `develop` | Web (Flutter web — deployed as Telegram MiniApp) |
+| `mobile-main` | Android / iOS |
 
-Web development takes place in the `web-main` branch that is apparently the main branch of this repo, since the web target is the most popular.
+Cherry-pick shared features between branches.
 
-Mobile development takes place in the `mobile-main`. 
+## Local Development
 
-After implementing a target-universal feature, cherry-pick it to the second branch. 
+```bash
+# Web
+flutter run -d chrome --dart-define=API_BASE_URL=http://localhost:8080
 
-### Environment Variables
+# Android
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080 \
+            --dart-define=APP_METRICA_KEY=your_key
+```
 
-Environment variables are inserted using `--dart-define`
+## Deployment
 
-- All targets require `host_path`, e.g. `--dart-define host_path=https://backendserver.ru` 
-- Mobile requires `app_metrica_key`, e.g. `--dart-define app_metrica_key=xx-xx-xx`
+The web target deploys automatically on push to `develop` (testing) or `main` (production).  
+`API_BASE_URL` is baked into the binary at build time from the `API_BASE_URL` GitHub environment secret.  
+A separate Docker image is built per environment (testing tag: `sha-test`, production tag: `sha`).  
+See [iu-alumni-infra](https://github.com/iu-alumni/iu-alumni-infra) for the full deployment guide.

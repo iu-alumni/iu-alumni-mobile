@@ -1,0 +1,42 @@
+version: "3.8"
+
+# ─────────────────────────────────────────────────────────────
+# IU Alumni Mobile - Production Docker Swarm stack (Flutter web)
+#
+# The Flutter app is built with the backend API URL baked in at
+# image build time. A separate image is built per environment.
+#
+# Deploy:
+#   docker stack deploy -c docker-stack.yml iu_alumni_mobile --with-registry-auth
+#
+# Requires the shared overlay network:
+#   docker network create --driver overlay --attachable iu_alumni_network
+# ─────────────────────────────────────────────────────────────
+
+services:
+  mobile:
+    image: ${MOBILE_IMAGE:-ghcr.io/iu-alumni/iu-alumni-mobile:latest}
+    networks:
+      iu_alumni_network:
+        aliases:
+          - mobile
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+        reservations:
+          cpus: "0.05"
+          memory: 32M
+
+networks:
+  iu_alumni_network:
+    external: true

@@ -19,9 +19,13 @@ RUN flutter doctor -v
 WORKDIR /ui_alumni_mobile
 COPY . .
 
-# Build Flutter web app
+# Build-time arg: backend API base URL injected by CI/CD
+ARG API_BASE_URL=http://localhost:8080
+ENV API_BASE_URL=$API_BASE_URL
+
+# Build Flutter web app; API_BASE_URL is baked in via --dart-define
 RUN flutter pub get
-RUN flutter build web --release
+RUN flutter build web --release --dart-define=API_BASE_URL=$API_BASE_URL
 
 # Stage 2: Serve the built web app
 FROM nginx:stable-alpine
@@ -29,11 +33,6 @@ FROM nginx:stable-alpine
 # Copy built files from builder stage
 COPY --from=builder /ui_alumni_mobile/build/web /usr/share/nginx/html
 
-# Copy custom nginx configuration if needed
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80 (default HTTP port for nginx)
 EXPOSE 80
 
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
