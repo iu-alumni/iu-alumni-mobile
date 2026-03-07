@@ -9,7 +9,7 @@
             "program": "lib/main.dart",
             "args": [
                 "--dart-define",
-                "host_path=https://xdkomel.ru",
+                "API_BASE_URL=https://xdkomel.ru",
             ],
         },
         {
@@ -20,7 +20,7 @@
             "program": "lib/main.dart",
             "args": [
                 "--dart-define",
-                "host_path=https://xdkomel.ru",
+                "API_BASE_URL=https://xdkomel.ru",
             ],
         },
         {
@@ -31,7 +31,7 @@
             "program": "lib/main.dart",
             "args": [
                 "--dart-define",
-                "host_path=https://xdkomel.ru",
+                "API_BASE_URL=https://xdkomel.ru",
             ],
         }
     ]
