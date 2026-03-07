@@ -9,119 +9,97 @@ class ReporterAppMetrica implements Reporter {
   ReporterAppMetrica(this._secretsManager);
 
   final SecretsManager _secretsManager;
+  bool _activated = false;
 
   @override
   void init() {
     final key = _secretsManager.appMetricaKey;
     if (key != null && key.isNotEmpty) {
       AppMetrica.activate(AppMetricaConfig(key));
+      _activated = true;
+    }
+  }
+
+  void _report(String name, [Map<String, Object>? params]) {
+    if (!_activated) return;
+    if (params != null) {
+      AppMetrica.reportEventWithMap(name, params);
+    } else {
+      AppMetrica.reportEvent(name);
     }
   }
 
   @override
   void reportOpenEvent(EventModel event, AppLocation location) =>
-      AppMetrica.reportEventWithMap('open_event', {
-        'event_id': event.eventId,
-        'location': location.name,
-      });
+      _report('open_event', {'event_id': event.eventId, 'location': location.name});
 
   @override
   void reportOpenProfile(Profile profile, AppLocation location) =>
-      AppMetrica.reportEventWithMap('open_profile', {
-        'user_id': profile.profileId,
-        'location': location.name,
-      });
+      _report('open_profile', {'user_id': profile.profileId, 'location': location.name});
 
   @override
   void reportParticipate(EventModel event, AppLocation location) =>
-      AppMetrica.reportEventWithMap('participate_event', {
-        'event_id': event.eventId,
-        'location': location.name,
-      });
+      _report('participate_event', {'event_id': event.eventId, 'location': location.name});
 
   @override
   void reportLeave(EventModel event, AppLocation location) =>
-      AppMetrica.reportEventWithMap('leave_event', {
-        'event_id': event.eventId,
-        'location': location.name,
-      });
+      _report('leave_event', {'event_id': event.eventId, 'location': location.name});
 
   @override
   void reportTabChanged(String tabName) =>
-      AppMetrica.reportEventWithMap('tab_changed', {'tab': tabName});
+      _report('tab_changed', {'tab': tabName});
 
   @override
   void reportCreateEventTap(AppLocation location) =>
-      AppMetrica.reportEventWithMap('create_event_tap', {'location': location.name});
+      _report('create_event_tap', {'location': location.name});
 
   @override
   void reportEditEventTap(EventModel event, AppLocation location) =>
-      AppMetrica.reportEventWithMap('edit_event_tap', {
-        'event_id': event.eventId,
-        'location': location.name,
-      });
+      _report('edit_event_tap', {'event_id': event.eventId, 'location': location.name});
 
   @override
   void reportDeleteEvent(EventModel event, AppLocation location) =>
-      AppMetrica.reportEventWithMap('delete_event', {
-        'event_id': event.eventId,
-        'location': location.name,
-      });
+      _report('delete_event', {'event_id': event.eventId, 'location': location.name});
 
   @override
   void reportSaveEvent(EventModel event, AppLocation location) =>
-      AppMetrica.reportEventWithMap('save_event', {
-        'event_id': event.eventId,
-        'location': location.name,
-      });
+      _report('save_event', {'event_id': event.eventId, 'location': location.name});
 
   @override
   void reportAuthError(String description, AppLocation location) =>
-      AppMetrica.reportEventWithMap('auth_error', {
-        'description': description,
-        'location': location.name,
-      });
+      _report('auth_error', {'description': description, 'location': location.name});
 
   @override
   void reportAuthSuccessful(AppLocation location) =>
-      AppMetrica.reportEventWithMap('auth_successful', {'location': location.name});
+      _report('auth_successful', {'location': location.name});
 
   @override
   void reportUserTelegramOpen(Profile profile, AppLocation location) =>
-      AppMetrica.reportEventWithMap('user_telegram_open', {
-        'user_id': profile.profileId,
-        'location': location.name,
-      });
+      _report('user_telegram_open', {'user_id': profile.profileId, 'location': location.name});
 
   @override
   void reportUserTelegramCopy(Profile profile, AppLocation location) =>
-      AppMetrica.reportEventWithMap('user_telegram_copy', {
-        'user_id': profile.profileId,
-        'location': location.name,
-      });
+      _report('user_telegram_copy', {'user_id': profile.profileId, 'location': location.name});
 
   @override
   void reportSaveProfileChanges(AppLocation location) =>
-      AppMetrica.reportEventWithMap('save_profile_changes', {'location': location.name});
+      _report('save_profile_changes', {'location': location.name});
 
   @override
   void reportEditProfileTap(AppLocation location) =>
-      AppMetrica.reportEventWithMap('edit_profile_tap', {'location': location.name});
+      _report('edit_profile_tap', {'location': location.name});
 
   @override
   void reportUnauthorize(AppLocation location) =>
-      AppMetrica.reportEventWithMap('unauthorize', {'location': location.name});
+      _report('unauthorize', {'location': location.name});
 
   @override
   void reportOpenMapLocation(String cityName, AppLocation location) =>
-      AppMetrica.reportEventWithMap('open_map_location', {
-        'city': cityName,
-        'location': location.name,
-      });
+      _report('open_map_location', {'city': cityName, 'location': location.name});
 
   @override
   void reportNavigation(NavAction action, String? previousRoute, String? newRoute) =>
-      AppMetrica.reportEventWithMap('navigation', {
+      _report('navigation', {
         'action': action.name,
         'from': previousRoute ?? '',
         'to': newRoute ?? '',
