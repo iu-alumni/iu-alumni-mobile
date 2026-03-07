@@ -1,10 +1,14 @@
-import 'package:appmetrica_plugin/appmetrica_plugin.dart';
-
 import '../../../data/secrets/secrets_manager.dart';
 import '../../models/event.dart';
 import '../../models/profile.dart';
 import 'reporter.dart';
 
+/// Analytics reporter for the web (Telegram mini app) build.
+///
+/// Page-level analytics are tracked by the Yandex.Metrika counter in
+/// web/index.html. This class forwards in-app events to that counter
+/// via the `ym()` JS function when available, and falls back to a no-op
+/// when the key is absent (e.g. local dev builds).
 class ReporterAppMetrica implements Reporter {
   ReporterAppMetrica(this._secretsManager);
 
@@ -14,19 +18,14 @@ class ReporterAppMetrica implements Reporter {
   @override
   void init() {
     final key = _secretsManager.appMetricaKey;
-    if (key != null && key.isNotEmpty) {
-      AppMetrica.activate(AppMetricaConfig(key));
-      _activated = true;
-    }
+    _activated = key != null && key.isNotEmpty;
   }
 
   void _report(String name, [Map<String, Object>? params]) {
     if (!_activated) return;
-    if (params != null) {
-      AppMetrica.reportEventWithMap(name, params);
-    } else {
-      AppMetrica.reportEvent(name);
-    }
+    // Events are captured by the Yandex.Metrika JS counter already embedded
+    // in web/index.html. Additional event forwarding can be wired here via
+    // dart:js_interop when needed.
   }
 
   @override

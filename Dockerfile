@@ -1,5 +1,5 @@
 # Stage 1: Build the Flutter web app
-FROM debian:stable-slim as builder
+FROM debian:stable-slim AS builder
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -24,8 +24,6 @@ ARG API_BASE_URL=http://localhost:8080
 ARG APP_METRICA_KEY=""
 ARG IU_ALUMNI_WEB_SALT=""
 ENV API_BASE_URL=$API_BASE_URL
-ENV APP_METRICA_KEY=$APP_METRICA_KEY
-ENV IU_ALUMNI_WEB_SALT=$IU_ALUMNI_WEB_SALT
 
 # Build Flutter web app; API_BASE_URL is baked in via --dart-define
 RUN flutter pub get
