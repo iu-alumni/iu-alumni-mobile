@@ -16,7 +16,7 @@ import 'application/repositories/events/events_repository_impl.dart';
 import 'application/repositories/map/map_repository.dart';
 import 'application/repositories/map/map_repository_impl.dart';
 import 'application/repositories/reporter/reporter.dart';
-import 'application/repositories/reporter/reporter_mock.dart';
+import 'application/repositories/reporter/reporter_appmetrica.dart';
 import 'application/repositories/users/users_repository.dart';
 import 'application/repositories/users/users_repository_impl.dart';
 import 'data/auth/auth_gateway.dart';
@@ -40,6 +40,7 @@ import 'presentation/router/always_root_route.dart';
 import 'presentation/router/app_router.dart';
 
 const _host = String.fromEnvironment('API_BASE_URL');
+const _webSalt = String.fromEnvironment('IU_ALUMNI_WEB_SALT');
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -60,6 +61,7 @@ class App extends StatelessWidget {
       RepositoryProvider(
         create: (_) => const FlutterSecureStorage(
           aOptions: AndroidOptions(encryptedSharedPreferences: true),
+          wOptions: WebOptions(dbName: 'iu_alumni', publicKey: _webSalt),
         ),
       ),
       RepositoryProvider(create: (_) => ImagePicker()),
@@ -125,8 +127,9 @@ class App extends StatelessWidget {
           context.read<UsersRepository>(),
         ),
       ),
-      // TODO delete when moving to mobile
-      RepositoryProvider<Reporter>(create: (context) => ReporterMock()),
+      RepositoryProvider<Reporter>(
+        create: (context) => ReporterAppMetrica(context.read<SecretsManager>()),
+      ),
       RepositoryProvider<LocationsRepository>(
         create: (context) => LocationsRepositoryImpl(
           context.read<DbManager>(),
