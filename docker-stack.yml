@@ -15,7 +15,7 @@ version: "3.8"
 
 services:
   mobile:
-    image: ${MOBILE_IMAGE:-ghcr.io/iu-alumni/iu-alumni-mobile:latest}
+    image: ${MOBILE_IMAGE}
     networks:
       iu_alumni_network:
         aliases:
