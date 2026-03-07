@@ -61,7 +61,7 @@ class App extends StatelessWidget {
       RepositoryProvider(
         create: (_) => const FlutterSecureStorage(
           aOptions: AndroidOptions(encryptedSharedPreferences: true),
-          wOptions: WebOptions(dbName: 'iu_alumni', publicKey: _webSalt),
+          webOptions: WebOptions(dbName: 'iu_alumni', publicKey: _webSalt),
         ),
       ),
       RepositoryProvider(create: (_) => ImagePicker()),
