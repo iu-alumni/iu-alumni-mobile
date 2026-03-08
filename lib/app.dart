@@ -5,7 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository.dart';
 import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository_impl.dart';
-import 'package:ui_alumni_mobile/data/db/db_mock.dart';
 import 'package:ui_alumni_mobile/data/locations/locations_gateway.dart';
 import 'package:ui_alumni_mobile/data/locations/locations_gateway_impl.dart';
 import 'package:uuid/uuid.dart';
@@ -26,7 +25,6 @@ import 'application/repositories/users/users_repository_impl.dart';
 import 'data/auth/auth_gateway.dart';
 import 'data/auth/auth_gateway_impl.dart';
 import 'data/common/dio_options_manager.dart';
-import 'data/db/db_manager.dart';
 import 'data/events/events_gateway.dart';
 import 'data/events/events_gateway_impl.dart';
 import 'data/profile/profile_gateway.dart';
@@ -70,7 +68,6 @@ class App extends StatelessWidget {
         ),
       ),
       RepositoryProvider(create: (_) => ImagePicker()),
-      RepositoryProvider<DbManager>(create: (_) => DbMock()),
       RepositoryProvider(
         create: (context) => TokenManager(context.read<FlutterSecureStorage>()),
       ),
@@ -145,7 +142,6 @@ class App extends StatelessWidget {
       ),
       RepositoryProvider<LocationsRepository>(
         create: (context) => LocationsRepositoryImpl(
-          context.read<DbManager>(),
           context.read<LocationsGateway>(),
         ),
       ),

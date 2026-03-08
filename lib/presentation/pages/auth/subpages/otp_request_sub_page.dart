@@ -25,7 +25,6 @@ class OtpRequestSubPage extends StatefulWidget {
 
 class _OtpRequestSubPageState extends State<OtpRequestSubPage> {
   late var _email = widget.email;
-  var _password = '';
 
   @override
   Widget build(BuildContext context) => BlocListener<OtpLoginCubit, OtpLoginState>(
@@ -45,15 +44,6 @@ class _OtpRequestSubPageState extends State<OtpRequestSubPage> {
             onChange: (t) => _email = t,
             hintText: 'Innopolis Email',
             inputType: TextInputType.emailAddress,
-          ),
-          const SizedBox(height: 8),
-          AppTextField(
-            initialText: null,
-            onChange: (t) => _password = t,
-            hintText: 'Password',
-            inputType: TextInputType.visiblePassword,
-            obscureText: true,
-            maxLines: 1,
           ),
           BlocBuilder<OtpLoginCubit, OtpLoginState>(
             buildWhen: (p, c) => p.request != c.request,
@@ -76,7 +66,6 @@ class _OtpRequestSubPageState extends State<OtpRequestSubPage> {
           AppButton(
             onTap: () => context.read<OtpLoginCubit>().requestOtp(
               email: _email,
-              password: _password,
             ),
             child: BlocBuilder<OtpLoginCubit, OtpLoginState>(
               buildWhen: (p, c) => p.request != c.request,

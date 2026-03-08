@@ -25,11 +25,10 @@ class OtpLoginCubit extends Cubit<OtpLoginState> {
 
   Future<void> requestOtp({
     required String email,
-    required String password,
   }) async {
-    if (email.isEmpty || password.isEmpty) {
+    if (email.isEmpty) {
       emit(state.copyWith(
-        request: const LoadedState.error('Please fill in both email and password'),
+        request: const LoadedState.error('Please enter your email'),
       ));
       return;
     }
@@ -39,7 +38,7 @@ class OtpLoginCubit extends Cubit<OtpLoginState> {
       return;
     }
     emit(state.copyWith(request: const LoadedState.loading()));
-    final result = await _repository.requestOtp(email: email, password: password);
+    final result = await _repository.requestOtp(email: email);
     emit(state.copyWith(
       request: result.match(
         LoadedState.error,
