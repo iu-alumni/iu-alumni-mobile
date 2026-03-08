@@ -1,0 +1,7 @@
+# Ignore everything by default, then allow only what the Dockerfile needs
+**
+
+# Allow nginx config, entrypoint, and pre-built web artifacts
+!nginx.conf
+!entrypoint.sh
+!build/web/**

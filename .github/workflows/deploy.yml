@@ -18,7 +18,36 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  build-flutter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Flutter web
+        run: |
+          flutter build web --release \
+            --dart-define=APP_METRICA_KEY=${{ secrets.APP_METRICA_KEY }} \
+            --dart-define=IU_ALUMNI_WEB_SALT=${{ secrets.IU_ALUMNI_WEB_SALT }}
+
+      - name: Upload web build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: build/web/
+          retention-days: 1
+
   build-image:
+    needs: build-flutter
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -26,6 +55,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download web build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: build/web
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
