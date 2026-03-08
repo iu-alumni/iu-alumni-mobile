@@ -17,6 +17,8 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: CodeVerificationSubRoute.page),
         AutoRoute(page: RestoredVerificationSubRoute.page),
         AutoRoute(page: VerificationWaySubRoute.page),
+        AutoRoute(page: OtpRequestSubRoute.page),
+        AutoRoute(page: OtpVerifySubRoute.page),
       ],
     ),
     AutoRoute(page: ProfileEditingRoute.page),

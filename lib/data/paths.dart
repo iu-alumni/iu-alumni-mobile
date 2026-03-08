@@ -13,6 +13,8 @@ abstract class Paths {
   static String register = '$_auth/register';
   static String resend = '$_auth/resend-verification';
   static String verify = '$_auth/verify';
+  static String loginOtpRequest = '$_auth/login/otp/request';
+  static String loginOtpVerify = '$_auth/login/otp/verify';
 
   static String profile = '/profile/';
   static String myProfile = '${profile}me';

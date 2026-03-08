@@ -14,4 +14,17 @@ abstract interface class AuthGateway {
     required String code,
   });
   Future<Either<String?, Unit>> sendCode(String email);
+
+  /// Requests an OTP code to be sent via email.
+  /// Returns the session_token needed to complete verification.
+  Future<Either<String, String>> loginOtpRequest({
+    required String email,
+    required String password,
+  });
+
+  /// Verifies the OTP code and returns a JWT on success.
+  Future<Either<String, Unit>> loginOtpVerify({
+    required String sessionToken,
+    required String code,
+  });
 }

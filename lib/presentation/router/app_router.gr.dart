@@ -39,8 +39,10 @@ import 'package:ui_alumni_mobile/presentation/pages/profile/profile_page.dart'
     as _i9;
 import 'package:ui_alumni_mobile/presentation/pages/profile_editing/profile_editing_page.dart'
     as _i8;
-import 'package:ui_alumni_mobile/presentation/pages/root/root_page.dart'
-    as _i12;
+import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/otp_request_sub_page.dart'
+    as _i20;
+import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/otp_verify_sub_page.dart'
+    as _i21;
 
 /// generated route for
 /// [_i1.AppLoadingPage]
@@ -401,6 +403,61 @@ class VerificationWaySubRoute extends _i15.PageRouteInfo<void> {
     name,
     builder: (data) {
       return const _i14.VerificationWaySubPage();
+    },
+  );
+}
+
+/// generated route for
+/// [_i20.OtpRequestSubPage]
+class OtpRequestSubRoute extends _i15.PageRouteInfo<OtpRequestSubRouteArgs> {
+  OtpRequestSubRoute({
+    String email = '',
+    _i18.Key? key,
+    List<_i15.PageRouteInfo>? children,
+  }) : super(
+         OtpRequestSubRoute.name,
+         args: OtpRequestSubRouteArgs(email: email, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'OtpRequestSubRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<OtpRequestSubRouteArgs>(
+        orElse: () => const OtpRequestSubRouteArgs(),
+      );
+      return _i20.OtpRequestSubPage(email: args.email, key: args.key);
+    },
+  );
+}
+
+class OtpRequestSubRouteArgs {
+  const OtpRequestSubRouteArgs({this.email = '', this.key});
+
+  final String email;
+
+  final _i18.Key? key;
+
+  @override
+  String toString() {
+    return 'OtpRequestSubRouteArgs{email: $email, key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i21.OtpVerifySubPage]
+class OtpVerifySubRoute extends _i15.PageRouteInfo<void> {
+  const OtpVerifySubRoute({List<_i15.PageRouteInfo>? children})
+    : super(OtpVerifySubRoute.name, initialChildren: children);
+
+  static const String name = 'OtpVerifySubRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      return const _i21.OtpVerifySubPage();
     },
   );
 }
