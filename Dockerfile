@@ -1,5 +1,5 @@
 # Stage 1: Build the Flutter web app
-FROM debian:stable-slim as builder
+FROM debian:stable-slim AS builder
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -19,13 +19,18 @@ RUN flutter doctor -v
 WORKDIR /ui_alumni_mobile
 COPY . .
 
-# Build-time arg: backend API base URL injected by CI/CD
+# Build-time args: backend API base URL and analytics keys baked in via --dart-define
 ARG API_BASE_URL=http://localhost:8080
+ARG APP_METRICA_KEY=""
+ARG IU_ALUMNI_WEB_SALT=""
 ENV API_BASE_URL=$API_BASE_URL
 
 # Build Flutter web app; API_BASE_URL is baked in via --dart-define
 RUN flutter pub get
-RUN flutter build web --release --dart-define=API_BASE_URL=$API_BASE_URL
+RUN flutter build web --release \
+    --dart-define=API_BASE_URL=$API_BASE_URL \
+    --dart-define=APP_METRICA_KEY=$APP_METRICA_KEY \
+    --dart-define=IU_ALUMNI_WEB_SALT=$IU_ALUMNI_WEB_SALT
 
 # Stage 2: Serve the built web app
 FROM nginx:stable-alpine

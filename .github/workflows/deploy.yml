@@ -57,6 +57,8 @@ jobs:
           push: true
           build-args: |
             API_BASE_URL=${{ secrets.API_BASE_URL }}
+            APP_METRICA_KEY=${{ secrets.APP_METRICA_KEY }}
+            IU_ALUMNI_WEB_SALT=${{ secrets.IU_ALUMNI_WEB_SALT }}
           tags: |
             ${{ steps.meta.outputs.image_tag }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-test
@@ -114,6 +116,8 @@ jobs:
           push: true
           build-args: |
             API_BASE_URL=${{ secrets.API_BASE_URL }}
+            APP_METRICA_KEY=${{ secrets.APP_METRICA_KEY }}
+            IU_ALUMNI_WEB_SALT=${{ secrets.IU_ALUMNI_WEB_SALT }}
           tags: |
             ${{ steps.meta.outputs.image_tag }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
