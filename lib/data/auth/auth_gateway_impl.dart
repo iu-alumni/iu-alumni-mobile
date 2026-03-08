@@ -174,4 +174,46 @@ class AuthGatewayImpl implements AuthGateway {
       return Left('$e');
     }
   }
+
+  @override
+  Future<Either<String, Unit>> passwordResetRequest(String email) async {
+    try {
+      await _dio.post(
+        Paths.passwordResetRequest,
+        data: {'email': email},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      return Either.of(unit);
+    } on DioException catch (e, st) {
+      logger.e('Error requesting password reset', error: e, stackTrace: st);
+      return Left(e.message ?? 'Unknown error');
+    } catch (e) {
+      return Left('$e');
+    }
+  }
+
+  @override
+  Future<Either<String, Unit>> passwordResetConfirm({
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      await _dio.post(
+        Paths.passwordResetConfirm,
+        data: {'token': token, 'new_password': newPassword},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      return Either.of(unit);
+    } on DioException catch (e, st) {
+      logger.e('Error confirming password reset', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        if (detail is String) return Left(detail);
+      }
+      return Left(e.message ?? 'Unknown error');
+    } catch (e) {
+      return Left('$e');
+    }
+  }
 }

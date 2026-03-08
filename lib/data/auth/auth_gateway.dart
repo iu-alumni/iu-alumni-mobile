@@ -27,4 +27,14 @@ abstract interface class AuthGateway {
     required String sessionToken,
     required String code,
   });
+
+  /// Requests a password reset link to be sent to the given email.
+  /// Always succeeds (even if email not found) to prevent enumeration.
+  Future<Either<String, Unit>> passwordResetRequest(String email);
+
+  /// Confirms a password reset using the token from the email link.
+  Future<Either<String, Unit>> passwordResetConfirm({
+    required String token,
+    required String newPassword,
+  });
 }

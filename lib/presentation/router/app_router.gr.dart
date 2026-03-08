@@ -43,6 +43,10 @@ import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/otp_request_su
     as _i20;
 import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/otp_verify_sub_page.dart'
     as _i21;
+import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/password_reset_request_sub_page.dart'
+    as _i22;
+import 'package:ui_alumni_mobile/presentation/pages/password_reset/password_reset_confirm_page.dart'
+    as _i23;
 
 /// generated route for
 /// [_i1.AppLoadingPage]
@@ -460,4 +464,60 @@ class OtpVerifySubRoute extends _i15.PageRouteInfo<void> {
       return const _i21.OtpVerifySubPage();
     },
   );
+}
+
+/// generated route for
+/// [_i22.PasswordResetRequestSubPage]
+class PasswordResetRequestSubRoute extends _i15.PageRouteInfo<void> {
+  const PasswordResetRequestSubRoute({List<_i15.PageRouteInfo>? children})
+    : super(PasswordResetRequestSubRoute.name, initialChildren: children);
+
+  static const String name = 'PasswordResetRequestSubRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      return const _i22.PasswordResetRequestSubPage();
+    },
+  );
+}
+
+/// generated route for
+/// [_i23.PasswordResetConfirmPage]
+class PasswordResetConfirmRoute
+    extends _i15.PageRouteInfo<PasswordResetConfirmRouteArgs> {
+  PasswordResetConfirmRoute({
+    required String token,
+    _i18.Key? key,
+    List<_i15.PageRouteInfo>? children,
+  }) : super(
+         PasswordResetConfirmRoute.name,
+         args: PasswordResetConfirmRouteArgs(token: token, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'PasswordResetConfirmRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PasswordResetConfirmRouteArgs>();
+      return _i15.WrappedRoute(
+        child: _i23.PasswordResetConfirmPage(token: args.token, key: args.key),
+      );
+    },
+  );
+}
+
+class PasswordResetConfirmRouteArgs {
+  const PasswordResetConfirmRouteArgs({required this.token, this.key});
+
+  final String token;
+
+  final _i18.Key? key;
+
+  @override
+  String toString() {
+    return 'PasswordResetConfirmRouteArgs{token: $token, key: $key}';
+  }
 }

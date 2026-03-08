@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/auth/auth_repository.dart';
 import '../../../application/repositories/auth/otp_login_repository.dart';
+import '../../../application/repositories/auth/password_reset_repository.dart';
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/auth/auth_cubit.dart';
 import '../../blocs/code_verification/code_verification_cubit.dart';
 import '../../blocs/otp_login/otp_login_cubit.dart';
+import '../../blocs/password_reset/password_reset_request_cubit.dart';
 import '../../blocs/registration/registration_cubit.dart';
 import '../../common/constants/app_colors.dart';
 import '../../common/widgets/alumni_logo.dart';
@@ -39,6 +41,11 @@ class AuthPage extends StatefulWidget implements AutoRouteWrapper {
       BlocProvider(
         create: (context) =>
             OtpLoginCubit(context.read<OtpLoginRepository>()),
+      ),
+      BlocProvider(
+        create: (context) => PasswordResetRequestCubit(
+          context.read<PasswordResetRepository>(),
+        ),
       ),
     ],
     child: this,

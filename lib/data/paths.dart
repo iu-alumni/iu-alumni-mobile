@@ -15,6 +15,8 @@ abstract class Paths {
   static String verify = '$_auth/verify';
   static String loginOtpRequest = '$_auth/login/otp/request';
   static String loginOtpVerify = '$_auth/login/otp/verify';
+  static String passwordResetRequest = '$_auth/password-reset/request';
+  static String passwordResetConfirm = '$_auth/password-reset/confirm';
 
   static String profile = '/profile/';
   static String myProfile = '${profile}me';

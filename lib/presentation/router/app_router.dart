@@ -9,6 +9,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: RootRoute.page),
     AutoRoute(page: EventRoute.page),
     AutoRoute(page: EventEditingRoute.page),
+    AutoRoute(page: PasswordResetConfirmRoute.page),
     AutoRoute(
       page: AuthRoute.page,
       children: [
@@ -19,6 +20,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: VerificationWaySubRoute.page),
         AutoRoute(page: OtpRequestSubRoute.page),
         AutoRoute(page: OtpVerifySubRoute.page),
+        AutoRoute(page: PasswordResetRequestSubRoute.page),
       ],
     ),
     AutoRoute(page: ProfileEditingRoute.page),
