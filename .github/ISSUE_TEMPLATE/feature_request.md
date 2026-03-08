@@ -1,32 +1,37 @@
 ---
-name: Feature request
-about: Suggest a new feature or enhancement for the project.
-title: ''
-labels: ''
+name: Feature Request
+about: Suggest a new feature or improvement
+title: "[Feature] "
+labels: enhancement
 assignees: ''
-
 ---
 
-## **User Story**
-As a [type of user], I want to [action] so that [benefit].
-Link to user story:
+## User Story
 
-**Example:**
-As a user, I want to be able to filter search results by date so that I can find relevant information faster.
+As a **[type of user]**, I want to **[action]** so that **[benefit]**.
 
----
+<!-- Link to related user story or issue if applicable: -->
 
-## **Definition of Done**
-The feature will be considered complete when the following items are completed:
+## Problem / Motivation
 
-- [ ] Code is written and reviewed.
-- [ ] Unit tests are added and passing.
-- [ ] Documentation is updated (if applicable).
-- [ ] Feature is tested in the development environment.
-- [ ] Feature is deployed to production.
-- [ ] Stakeholder approval is received.
+<!-- What problem does this feature solve? -->
 
----
+## Proposed Solution
 
-## **Additional Context**
-Add any additional context, screenshots, or references here.
+<!-- Describe your proposed approach. -->
+
+## Alternatives Considered
+
+<!-- Have you considered alternative solutions? -->
+
+## Definition of Done
+
+- [ ] Implementation complete and reviewed
+- [ ] Tests added and passing
+- [ ] Documentation updated
+- [ ] Tested in development environment
+- [ ] Deployed to production
+
+## Additional Context
+
+<!-- Screenshots, mockups, references, etc. -->
