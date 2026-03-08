@@ -25,6 +25,8 @@ import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/registration_s
     as _i10;
 import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/restored_verification_sub_page.dart'
     as _i11;
+import 'package:ui_alumni_mobile/presentation/pages/root/root_page.dart'
+    as _i12;
 import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/sign_in_sub_page.dart'
     as _i13;
 import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/verification_way_sub_page.dart'
