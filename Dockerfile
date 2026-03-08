@@ -37,6 +37,7 @@ FROM nginx:stable-alpine
 
 # Copy built files from builder stage
 COPY --from=builder /ui_alumni_mobile/build/web /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 EXPOSE 80
