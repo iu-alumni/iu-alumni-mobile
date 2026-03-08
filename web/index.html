@@ -31,6 +31,9 @@
 
   <title>IU Alumni</title>
   <link rel="manifest" href="manifest.json">
+  <!-- Runtime API configuration: placeholder replaced by nginx entrypoint at container start. -->
+  <!-- Falls back to the value baked in at build time via --dart-define if not replaced.      -->
+  <script>var apiBaseUrl = "__API_BASE_URL__";</script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>

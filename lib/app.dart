@@ -27,6 +27,7 @@ import 'data/events/events_gateway.dart';
 import 'data/events/events_gateway_impl.dart';
 import 'data/profile/profile_gateway.dart';
 import 'data/profile/profile_gateway_impl.dart';
+import 'data/config/api_config.dart';
 import 'data/secrets/secrets_manager.dart';
 import 'data/token/token_manager.dart';
 import 'data/token/token_provider.dart';
@@ -39,7 +40,7 @@ import 'presentation/common/constants/app_colors.dart';
 import 'presentation/router/always_root_route.dart';
 import 'presentation/router/app_router.dart';
 
-const _host = String.fromEnvironment('API_BASE_URL');
+final _host = getApiBaseUrl();
 const _webSalt = String.fromEnvironment('IU_ALUMNI_WEB_SALT');
 
 class App extends StatelessWidget {

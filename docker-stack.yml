@@ -3,8 +3,8 @@ version: "3.8"
 # ─────────────────────────────────────────────────────────────
 # IU Alumni Mobile - Production Docker Swarm stack (Flutter web)
 #
-# The Flutter app is built with the backend API URL baked in at
-# image build time. A separate image is built per environment.
+# API_BASE_URL is injected at container start: the nginx entrypoint replaces the
+# __API_BASE_URL__ placeholder in index.html with https://api.DOMAIN from .env.
 #
 # Deploy:
 #   docker stack deploy -c docker-stack.yml iu_alumni_mobile --with-registry-auth
@@ -16,6 +16,10 @@ version: "3.8"
 services:
   mobile:
     image: ${MOBILE_IMAGE}
+    environment:
+      # Derived from DOMAIN in DEPLOY_DIR/.env at deploy time.
+      # The entrypoint replaces __API_BASE_URL__ in index.html with this value.
+      - API_BASE_URL=https://api.${DOMAIN}
     networks:
       iu_alumni_network:
         aliases:
