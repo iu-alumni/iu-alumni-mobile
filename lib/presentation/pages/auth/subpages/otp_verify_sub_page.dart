@@ -81,7 +81,7 @@ class OtpVerifySubPage extends StatelessWidget {
             AppButton(
               onTap: () {
                 cubit.reset();
-                context.router.pop();
+                Navigator.pop(context);
               },
               buttonStyle: AppButtonStyle.text,
               child: Text(
