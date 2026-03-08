@@ -50,7 +50,7 @@ jobs:
 
   deploy-testing:
     needs: build-image
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'testing')
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'testing')
     uses: iu-alumni/iu-alumni-infra/.github/workflows/deploy-app.yml@main
     with:
       repo_name: iu-alumni-mobile
