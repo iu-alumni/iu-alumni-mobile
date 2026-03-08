@@ -1,7 +1,9 @@
 name: Mobile CI/CD
 
 # Flutter native app — WebView shell for the IU Alumni web app.
-# The Docker web deployment has moved to iu-alumni-bot (Nuxt web app).
+# MOBILE_URL is injected at build time from the GitHub environment variable.
+#   testing    → vars.MOBILE_URL (e.g. https://mobile.alumap.tst.escalopa.com)
+#   production → vars.MOBILE_URL (e.g. https://mobile.alumap.escalopa.com)
 
 on:
   push:
@@ -9,10 +11,20 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options: [testing, production]
 
 jobs:
-  build:
+  # ── Testing build (PR to main or manual dispatch) ───────────────────────
+  build-testing:
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'testing')
     runs-on: ubuntu-latest
+    environment: testing
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,7 +41,43 @@ jobs:
       - name: Analyze
         run: flutter analyze --no-fatal-infos
 
-      - name: Build Android APK
-        run: flutter build apk --release \
-          --dart-define=MOBILE_URL=https://mobile.alumap.escalopa.com
+      - name: Build Android APK (testing)
+        run: flutter build apk --release --dart-define=MOBILE_URL=${{ vars.MOBILE_URL }}
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-testing.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  # ── Production build (push to main or manual dispatch) ──────────────────
+  build-production:
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.32.x"
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Build Android APK (production)
+        run: flutter build apk --release --dart-define=MOBILE_URL=${{ vars.MOBILE_URL }}
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-production.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
 
