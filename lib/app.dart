@@ -1,178 +1,56 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository.dart';
-import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository_impl.dart';
-import 'package:ui_alumni_mobile/data/db/db_mock.dart';
-import 'package:ui_alumni_mobile/data/locations/locations_gateway.dart';
-import 'package:ui_alumni_mobile/data/locations/locations_gateway_impl.dart';
-import 'package:uuid/uuid.dart';
-import 'application/repositories/auth/auth_repository.dart';
-import 'application/repositories/auth/auth_repository_impl.dart';
-import 'application/repositories/events/events_repository.dart';
-import 'application/repositories/events/events_repository_impl.dart';
-import 'application/repositories/map/map_repository.dart';
-import 'application/repositories/map/map_repository_impl.dart';
-import 'application/repositories/reporter/reporter.dart';
-import 'application/repositories/reporter/reporter_appmetrica.dart';
-import 'application/repositories/users/users_repository.dart';
-import 'application/repositories/users/users_repository_impl.dart';
-import 'data/auth/auth_gateway.dart';
-import 'data/auth/auth_gateway_impl.dart';
-import 'data/common/dio_options_manager.dart';
-import 'data/db/db_manager.dart';
-import 'data/events/events_gateway.dart';
-import 'data/events/events_gateway_impl.dart';
-import 'data/profile/profile_gateway.dart';
-import 'data/profile/profile_gateway_impl.dart';
-import 'data/config/api_config.dart';
-import 'data/secrets/secrets_manager.dart';
-import 'data/token/token_manager.dart';
-import 'data/token/token_provider.dart';
-import 'data/token/token_provider_impl.dart';
-import 'data/users/users_gateway.dart';
-import 'data/users/users_gateway_impl.dart';
-import 'presentation/blocs/events_list/events_list_cubit.dart';
-import 'presentation/blocs/profile/profile_cubit.dart';
-import 'presentation/common/constants/app_colors.dart';
-import 'presentation/router/always_root_route.dart';
-import 'presentation/router/app_router.dart';
+import "package:flutter/material.dart";
+import "package:webview_flutter/webview_flutter.dart";
 
-final _host = getApiBaseUrl();
-const _webSalt = String.fromEnvironment('IU_ALUMNI_WEB_SALT');
+// The URL of the web app opened by the Telegram bot.
+// Override at build time via: --dart-define=MOBILE_URL=https://...
+const _mobileUrl = String.fromEnvironment(
+  "MOBILE_URL",
+  defaultValue: "https://mobile.alumap.escalopa.com",
+);
 
 class App extends StatelessWidget {
   const App({super.key});
 
-  Dio get _dio {
-    final dio = Dio(
-      // ignore: avoid_redundant_argument_values
-      BaseOptions(connectTimeout: const Duration(seconds: 10), baseUrl: _host),
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: "IU Alumni",
+      home: WebViewScreen(),
     );
-    return dio;
+  }
+}
+
+class WebViewScreen extends StatefulWidget {
+  const WebViewScreen({super.key});
+
+  @override
+  State<WebViewScreen> createState() => _WebViewScreenState();
+}
+
+class _WebViewScreenState extends State<WebViewScreen> {
+  late final WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (request) {
+            // Allow all navigation within the web app
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(_mobileUrl));
   }
 
   @override
-  Widget build(BuildContext context) => MultiBlocProvider(
-    providers: [
-      // --- SERVICES ---
-      RepositoryProvider(create: (_) => SecretsManager()),
-      RepositoryProvider(
-        create: (_) => const FlutterSecureStorage(
-          aOptions: AndroidOptions(encryptedSharedPreferences: true),
-          webOptions: WebOptions(dbName: 'iu_alumni', publicKey: _webSalt),
-        ),
-      ),
-      RepositoryProvider(create: (_) => ImagePicker()),
-      RepositoryProvider<DbManager>(create: (_) => DbMock()),
-      RepositoryProvider(
-        create: (context) => TokenManager(context.read<FlutterSecureStorage>()),
-      ),
-      RepositoryProvider<TokenProvider>(
-        create: (context) => TokenProviderImpl(context.read<TokenManager>()),
-      ),
-      RepositoryProvider(
-        create: (context) => DioOptionsManager(context.read<TokenProvider>()),
-      ),
-      RepositoryProvider(create: (_) => _dio),
-      RepositoryProvider(create: (_) => const Uuid()),
-      // --- GATEWAYS ---
-      RepositoryProvider<EventsGateway>(
-        create: (context) => EventsGatewayImpl(
-          context.read<Dio>(),
-          context.read<DioOptionsManager>(),
-        ),
-      ),
-      RepositoryProvider<AuthGateway>(
-        create: (context) => AuthGatewayImpl(
-          context.read<Dio>(),
-          context.read<TokenManager>(),
-          context.read<DioOptionsManager>(),
-        ),
-      ),
-      RepositoryProvider<ProfileGateway>(
-        create: (context) => ProfileGatewayImpl(
-          context.read<Dio>(),
-          context.read<DioOptionsManager>(),
-        ),
-      ),
-      RepositoryProvider<UsersGateway>(
-        create: (context) => UsersGatewayImpl(
-          context.read<Dio>(),
-          context.read<DioOptionsManager>(),
-        ),
-      ),
-      RepositoryProvider<LocationsGateway>(
-        create: (context) => LocationsGatewayImpl(
-          context.read<Dio>(),
-          context.read<DioOptionsManager>(),
-        ),
-      ),
-      // --- REPOSITORIES ---
-      RepositoryProvider<AuthRepository>(
-        create: (context) => AuthRepositoryImpl(context.read<AuthGateway>()),
-      ),
-      RepositoryProvider<UsersRepository>(
-        create: (context) => UsersRepositoryImpl(
-          context.read<ProfileGateway>(),
-          context.read<TokenProvider>(),
-          context.read<UsersGateway>(),
-        ),
-      ),
-      RepositoryProvider<EventsRepository>(
-        create: (context) => EventsRepositoryImpl(
-          context.read<Uuid>(),
-          context.read<EventsGateway>(),
-          context.read<UsersRepository>(),
-        ),
-      ),
-      RepositoryProvider<Reporter>(
-        create: (context) => ReporterAppMetrica(context.read<SecretsManager>()),
-      ),
-      RepositoryProvider<LocationsRepository>(
-        create: (context) => LocationsRepositoryImpl(
-          context.read<DbManager>(),
-          context.read<LocationsGateway>(),
-        ),
-      ),
-      RepositoryProvider<MapRepository>(
-        create: (context) => MapRepositoryImpl(
-          context.read<LocationsRepository>(),
-          context.read<UsersRepository>(),
-          context.read<EventsRepository>(),
-        ),
-      ),
-      // --- BLOCs ---
-      BlocProvider(
-        create: (context) => EventsListCubit(context.read<EventsRepository>()),
-      ),
-      BlocProvider(
-        create: (ctx) => ProfileCubit(
-          ctx.read<UsersRepository>(),
-          ctx.read<EventsRepository>(),
-        ),
-      ),
-    ],
-    child: Builder(
-      builder: (context) {
-        final router = AppRouter();
-        return MaterialApp.router(
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: AppColors.primary,
-              surface: Colors.white,
-            ),
-            fontFamily: 'Montserrat',
-            useMaterial3: true,
-            splashFactory: NoSplash.splashFactory,
-          ),
-          routerDelegate: router.delegate(),
-          routeInformationProvider: AlwaysRootRouteInformationProvider(),
-          routeInformationParser: router.defaultRouteParser(),
-        );
-      },
-    ),
-  );
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(child: WebViewWidget(controller: _controller)),
+    );
+  }
 }
