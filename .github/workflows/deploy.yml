@@ -1,8 +1,8 @@
 name: Mobile CI/CD
 
-# The Flutter web app bakes the backend API URL into the binary at build time
-# (via --dart-define). Testing and production use different API URLs, so a
-# separate Docker image is built for each environment.
+# Triggers the centralized Mobile CI/CD workflow in iu-alumni-infra.
+# All build and deploy logic lives in:
+#   iu-alumni/iu-alumni-infra/.github/workflows/mobile.yml
 
 on:
   push:
@@ -17,125 +17,18 @@ on:
         type: choice
         options: [testing, production]
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
-  # ── Testing build + deploy (PR to main or manual dispatch) ──────────────
-  build-testing:
-    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'testing')
+  trigger:
     runs-on: ubuntu-latest
-    environment: testing
-    permissions:
-      contents: read
-      packages: write
-    outputs:
-      image_tag: ${{ steps.meta.outputs.image_tag }}
-
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to Container Registry
-        uses: docker/login-action@v2
+      - name: Dispatch to infra mobile workflow
+        uses: peter-evans/repository-dispatch@v3
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set image tag
-        id: meta
-        run: echo "image_tag=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-test" >> $GITHUB_OUTPUT
-
-      - name: Build and push Docker image (testing)
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          build-args: |
-            API_BASE_URL=${{ secrets.API_BASE_URL }}
-            APP_METRICA_KEY=${{ secrets.APP_METRICA_KEY }}
-            IU_ALUMNI_WEB_SALT=${{ secrets.IU_ALUMNI_WEB_SALT }}
-          tags: |
-            ${{ steps.meta.outputs.image_tag }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-test
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-  deploy-testing:
-    needs: build-testing
-    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'testing')
-    uses: iu-alumni/iu-alumni-infra/.github/workflows/deploy-app.yml@main
-    with:
-      repo_name: iu-alumni-mobile
-      stack_name: iu_alumni_mobile
-      image_var: MOBILE_IMAGE
-      image_tag: ${{ needs.build-testing.outputs.image_tag }}
-      branch: main
-      environment: testing
-    secrets:
-      SERVER_HOST: ${{ secrets.SERVER_HOST }}
-      SERVER_USER: ${{ secrets.SERVER_USER }}
-      SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
-
-  # ── Production build + deploy (push to main or manual dispatch) ─────────
-  build-production:
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
-    runs-on: ubuntu-latest
-    environment: production
-    permissions:
-      contents: read
-      packages: write
-    outputs:
-      image_tag: ${{ steps.meta.outputs.image_tag }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set image tag
-        id: meta
-        run: echo "image_tag=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}" >> $GITHUB_OUTPUT
-
-      - name: Build and push Docker image (production)
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          build-args: |
-            API_BASE_URL=${{ secrets.API_BASE_URL }}
-            APP_METRICA_KEY=${{ secrets.APP_METRICA_KEY }}
-            IU_ALUMNI_WEB_SALT=${{ secrets.IU_ALUMNI_WEB_SALT }}
-          tags: |
-            ${{ steps.meta.outputs.image_tag }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-  deploy-production:
-    needs: build-production
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'production')
-    uses: iu-alumni/iu-alumni-infra/.github/workflows/deploy-app.yml@main
-    with:
-      repo_name: iu-alumni-mobile
-      stack_name: iu_alumni_mobile
-      image_var: MOBILE_IMAGE
-      image_tag: ${{ needs.build-production.outputs.image_tag }}
-      branch: main
-      environment: production
-    secrets:
-      SERVER_HOST: ${{ secrets.SERVER_HOST }}
-      SERVER_USER: ${{ secrets.SERVER_USER }}
-      SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          token: ${{ secrets.INFRA_DISPATCH_TOKEN }}
+          repository: iu-alumni/iu-alumni-infra
+          event-type: mobile-deploy
+          client-payload: |
+            {
+              "environment": "${{ github.event_name == 'pull_request' && 'testing' || inputs.environment || 'production' }}",
+              "ref": "${{ github.sha }}"
+            }
