@@ -11,6 +11,10 @@ import 'package:ui_alumni_mobile/data/locations/locations_gateway_impl.dart';
 import 'package:uuid/uuid.dart';
 import 'application/repositories/auth/auth_repository.dart';
 import 'application/repositories/auth/auth_repository_impl.dart';
+import 'application/repositories/auth/otp_login_repository.dart';
+import 'application/repositories/auth/otp_login_repository_impl.dart';
+import 'application/repositories/auth/password_reset_repository.dart';
+import 'application/repositories/auth/password_reset_repository_impl.dart';
 import 'application/repositories/events/events_repository.dart';
 import 'application/repositories/events/events_repository_impl.dart';
 import 'application/repositories/map/map_repository.dart';
@@ -113,6 +117,14 @@ class App extends StatelessWidget {
       // --- REPOSITORIES ---
       RepositoryProvider<AuthRepository>(
         create: (context) => AuthRepositoryImpl(context.read<AuthGateway>()),
+      ),
+      RepositoryProvider<OtpLoginRepository>(
+        create: (context) =>
+            OtpLoginRepositoryImpl(context.read<AuthGateway>()),
+      ),
+      RepositoryProvider<PasswordResetRepository>(
+        create: (context) =>
+            PasswordResetRepositoryImpl(context.read<AuthGateway>()),
       ),
       RepositoryProvider<UsersRepository>(
         create: (context) => UsersRepositoryImpl(

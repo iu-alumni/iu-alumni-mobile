@@ -95,6 +95,29 @@ class _SignInSubPageState extends State<SignInSubPage> {
               textAlign: TextAlign.center,
             ),
           ),
+          const SizedBox(height: 8),
+          AppButton(
+            onTap: () => context.pushRoute(
+              OtpRequestSubRoute(email: _email),
+            ),
+            buttonStyle: AppButtonStyle.text,
+            child: Text(
+              'Login with email code',
+              style: AppTextStyles.actionM,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 8),
+          AppButton(
+            onTap: () =>
+                context.pushRoute(const PasswordResetRequestSubRoute()),
+            buttonStyle: AppButtonStyle.text,
+            child: Text(
+              'Forgot password?',
+              style: AppTextStyles.actionM,
+              textAlign: TextAlign.center,
+            ),
+          ),
         ],
       ),
     ),

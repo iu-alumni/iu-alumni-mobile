@@ -25,6 +25,8 @@ import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/registration_s
     as _i10;
 import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/restored_verification_sub_page.dart'
     as _i11;
+import 'package:ui_alumni_mobile/presentation/pages/root/root_page.dart'
+    as _i12;
 import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/sign_in_sub_page.dart'
     as _i13;
 import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/verification_way_sub_page.dart'
@@ -39,8 +41,14 @@ import 'package:ui_alumni_mobile/presentation/pages/profile/profile_page.dart'
     as _i9;
 import 'package:ui_alumni_mobile/presentation/pages/profile_editing/profile_editing_page.dart'
     as _i8;
-import 'package:ui_alumni_mobile/presentation/pages/root/root_page.dart'
-    as _i12;
+import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/otp_request_sub_page.dart'
+    as _i20;
+import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/otp_verify_sub_page.dart'
+    as _i21;
+import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/password_reset_request_sub_page.dart'
+    as _i22;
+import 'package:ui_alumni_mobile/presentation/pages/password_reset/password_reset_confirm_page.dart'
+    as _i23;
 
 /// generated route for
 /// [_i1.AppLoadingPage]
@@ -403,4 +411,115 @@ class VerificationWaySubRoute extends _i15.PageRouteInfo<void> {
       return const _i14.VerificationWaySubPage();
     },
   );
+}
+
+/// generated route for
+/// [_i20.OtpRequestSubPage]
+class OtpRequestSubRoute extends _i15.PageRouteInfo<OtpRequestSubRouteArgs> {
+  OtpRequestSubRoute({
+    String email = '',
+    _i18.Key? key,
+    List<_i15.PageRouteInfo>? children,
+  }) : super(
+         OtpRequestSubRoute.name,
+         args: OtpRequestSubRouteArgs(email: email, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'OtpRequestSubRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<OtpRequestSubRouteArgs>(
+        orElse: () => const OtpRequestSubRouteArgs(),
+      );
+      return _i20.OtpRequestSubPage(email: args.email, key: args.key);
+    },
+  );
+}
+
+class OtpRequestSubRouteArgs {
+  const OtpRequestSubRouteArgs({this.email = '', this.key});
+
+  final String email;
+
+  final _i18.Key? key;
+
+  @override
+  String toString() {
+    return 'OtpRequestSubRouteArgs{email: $email, key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i21.OtpVerifySubPage]
+class OtpVerifySubRoute extends _i15.PageRouteInfo<void> {
+  const OtpVerifySubRoute({List<_i15.PageRouteInfo>? children})
+    : super(OtpVerifySubRoute.name, initialChildren: children);
+
+  static const String name = 'OtpVerifySubRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      return const _i21.OtpVerifySubPage();
+    },
+  );
+}
+
+/// generated route for
+/// [_i22.PasswordResetRequestSubPage]
+class PasswordResetRequestSubRoute extends _i15.PageRouteInfo<void> {
+  const PasswordResetRequestSubRoute({List<_i15.PageRouteInfo>? children})
+    : super(PasswordResetRequestSubRoute.name, initialChildren: children);
+
+  static const String name = 'PasswordResetRequestSubRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      return const _i22.PasswordResetRequestSubPage();
+    },
+  );
+}
+
+/// generated route for
+/// [_i23.PasswordResetConfirmPage]
+class PasswordResetConfirmRoute
+    extends _i15.PageRouteInfo<PasswordResetConfirmRouteArgs> {
+  PasswordResetConfirmRoute({
+    required String token,
+    _i18.Key? key,
+    List<_i15.PageRouteInfo>? children,
+  }) : super(
+         PasswordResetConfirmRoute.name,
+         args: PasswordResetConfirmRouteArgs(token: token, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'PasswordResetConfirmRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PasswordResetConfirmRouteArgs>();
+      return _i15.WrappedRoute(
+        child: _i23.PasswordResetConfirmPage(token: args.token, key: args.key),
+      );
+    },
+  );
+}
+
+class PasswordResetConfirmRouteArgs {
+  const PasswordResetConfirmRouteArgs({required this.token, this.key});
+
+  final String token;
+
+  final _i18.Key? key;
+
+  @override
+  String toString() {
+    return 'PasswordResetConfirmRouteArgs{token: $token, key: $key}';
+  }
 }

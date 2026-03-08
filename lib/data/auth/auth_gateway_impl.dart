@@ -115,4 +115,105 @@ class AuthGatewayImpl implements AuthGateway {
       return const Left(null);
     }
   }
+
+  @override
+  Future<Either<String, String>> loginOtpRequest({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await _dio.post(
+        Paths.loginOtpRequest,
+        data: {'email': email, 'password': password},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      final data = response.data as Map<String, dynamic>;
+      if (data['session_token'] case final String token) {
+        return Right(token);
+      }
+      return const Left('Unexpected response from server');
+    } on DioException catch (e, st) {
+      logger.e('Error requesting OTP', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        if (detail is String) return Left(detail);
+      }
+      return Left(e.message ?? 'Unknown error');
+    } catch (e) {
+      return Left('$e');
+    }
+  }
+
+  @override
+  Future<Either<String, Unit>> loginOtpVerify({
+    required String sessionToken,
+    required String code,
+  }) async {
+    try {
+      final response = await _dio.post(
+        Paths.loginOtpVerify,
+        data: {'session_token': sessionToken, 'code': code},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      final data = response.data as Map<String, dynamic>;
+      if (data['access_token'] case final String token) {
+        _tokenManager.set(token);
+        return Either.of(unit);
+      }
+      return const Left('Unexpected response from server');
+    } on DioException catch (e, st) {
+      logger.e('Error verifying OTP', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        if (detail is String) return Left(detail);
+      }
+      return Left(e.message ?? 'Unknown error');
+    } catch (e) {
+      return Left('$e');
+    }
+  }
+
+  @override
+  Future<Either<String, Unit>> passwordResetRequest(String email) async {
+    try {
+      await _dio.post(
+        Paths.passwordResetRequest,
+        data: {'email': email},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      return Either.of(unit);
+    } on DioException catch (e, st) {
+      logger.e('Error requesting password reset', error: e, stackTrace: st);
+      return Left(e.message ?? 'Unknown error');
+    } catch (e) {
+      return Left('$e');
+    }
+  }
+
+  @override
+  Future<Either<String, Unit>> passwordResetConfirm({
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      await _dio.post(
+        Paths.passwordResetConfirm,
+        data: {'token': token, 'new_password': newPassword},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      return Either.of(unit);
+    } on DioException catch (e, st) {
+      logger.e('Error confirming password reset', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        if (detail is String) return Left(detail);
+      }
+      return Left(e.message ?? 'Unknown error');
+    } catch (e) {
+      return Left('$e');
+    }
+  }
 }
