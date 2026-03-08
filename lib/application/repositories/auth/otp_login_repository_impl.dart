@@ -14,11 +14,9 @@ class OtpLoginRepositoryImpl implements OtpLoginRepository {
   @override
   Future<Either<String, Unit>> requestOtp({
     required String email,
-    required String password,
   }) async {
     final result = await _authGateway.loginOtpRequest(
       email: email,
-      password: password,
     );
     return result.map((token) {
       _sessionToken = token;

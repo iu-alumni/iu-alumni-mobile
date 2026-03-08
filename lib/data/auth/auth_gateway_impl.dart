@@ -119,12 +119,11 @@ class AuthGatewayImpl implements AuthGateway {
   @override
   Future<Either<String, String>> loginOtpRequest({
     required String email,
-    required String password,
   }) async {
     try {
       final response = await _dio.post(
         Paths.loginOtpRequest,
-        data: {'email': email, 'password': password},
+        data: {'email': email},
         options: _dioOptionsManager.opts(withToken: false),
       );
       final data = response.data as Map<String, dynamic>;

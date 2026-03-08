@@ -19,7 +19,6 @@ abstract interface class AuthGateway {
   /// Returns the session_token needed to complete verification.
   Future<Either<String, String>> loginOtpRequest({
     required String email,
-    required String password,
   });
 
   /// Verifies the OTP code and returns a JWT on success.
