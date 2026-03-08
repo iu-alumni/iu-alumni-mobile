@@ -1,7 +1,9 @@
-# Ignore everything by default, then allow only what the Dockerfile needs
+# Ignore everything, then whitelist only what the Dockerfile needs.
+# Parent directories must also be explicitly un-ignored.
 **
 
-# Allow nginx config, entrypoint, and pre-built web artifacts
 !nginx.conf
 !entrypoint.sh
+!build/
+!build/web/
 !build/web/**
