@@ -116,11 +116,11 @@ class ProfileContent {
               ],
             ),
           ),
+        if (personal && profile.telegramAlias != null)
+          _TelegramVerifySection(profile: profile),
         if (personal) const _OwnedEvents(),
         const _ParticipatedEvents(),
         if (personal) const OpenBotCard(),
-        if (personal && profile.telegramAlias != null)
-          _TelegramVerifySection(profile: profile),
         if (personal)
           AppButton(
             buttonStyle: AppButtonStyle.text,
