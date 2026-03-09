@@ -51,10 +51,13 @@ class UsersGatewayImpl extends UsersGateway {
             'limit': limit,
           },
         );
+        final data = response.data;
+        if (data is! Map<String, dynamic> || data['items'] is! List) {
+          // Unexpected shape — return empty page
+          return PaginatedResult(items: const []);
+        }
         return PaginatedResult.fromJson(
-          response.data as Map<String, dynamic>,
-          (e) => Profile.fromJson(e as Map<String, dynamic>),
-        );
+            data as Map<String, dynamic>, (e) => Profile.fromJson(e as Map<String, dynamic>));
       }, (e, _) => PaginatedResult<Profile>(items: const []))
           .match(identity, identity)
           .run();

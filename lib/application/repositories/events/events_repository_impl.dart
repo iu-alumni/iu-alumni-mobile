@@ -5,6 +5,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../data/events/events_gateway.dart';
+import '../../../data/models/event_data_model.dart';
 import '../../../util/logger.dart';
 import '../../mappers/event_mapper.dart';
 import '../../models/cost.dart';
@@ -40,12 +41,28 @@ class EventsRepositoryImpl implements EventsRepository {
     if (!refresh && _cache != null) {
       return;
     }
-    final publicData = await _gateway.loadEvents();
-    final privateData = await _gateway.loadPendingEvents();
+    // Load all pages for public events
+    final publicItems = <dynamic>[];
+    String? pubCursor;
+    do {
+      final page = await _gateway.loadEvents(cursor: pubCursor, limit: 100);
+      publicItems.addAll(page.items);
+      pubCursor = page.nextCursor;
+    } while (pubCursor != null);
+
+    // Load all pages for pending (private) events
+    final privateItems = <dynamic>[];
+    String? privCursor;
+    do {
+      final page = await _gateway.loadPendingEvents(cursor: privCursor, limit: 100);
+      privateItems.addAll(page.items);
+      privCursor = page.nextCursor;
+    } while (privCursor != null);
+
     final myId = await _myId();
-    final eventModels = privateData
-        .followedBy(publicData)
-        .map(EventMapper.eventFromData(myId.toNullable()));
+    final eventModels = privateItems
+      .followedBy(publicItems)
+      .map((d) => EventMapper.eventFromData(myId.toNullable())(d as EventDataModel));
     // Fill the cache
     _cache?.clear();
     _owned?.clear();

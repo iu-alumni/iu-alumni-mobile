@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 
+import '../../application/models/paginated_result.dart';
 import '../common/dio_options_manager.dart';
 import '../models/event_data_model.dart';
 import '../models/event_request_data_model.dart';
@@ -31,30 +32,46 @@ class EventsGatewayImpl implements EventsGateway {
   }
 
   @override
-  Future<Iterable<EventDataModel>> loadEvents() => TaskEither.tryCatch(
-    () async {
-      final resp = await _dio.get(
-        Paths.events,
-        options: _optionsManager.opts(),
-      );
-      final list = resp.data as List;
-      return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
-    },
-    (e, _) => '$e',
-  ).match<Iterable<EventDataModel>>((_) => [], identity).run();
+  Future<PaginatedResult<EventDataModel>> loadEvents({String? cursor, int limit = 50}) =>
+      TaskEither.tryCatch(() async {
+        final resp = await _dio.get(
+          Paths.events,
+          options: _optionsManager.opts(),
+          queryParameters: {
+            if (cursor != null) 'cursor': cursor,
+            'limit': limit,
+          },
+        );
+        final data = resp.data;
+        if (data is! Map<String, dynamic> || data['items'] is! List) {
+          return PaginatedResult(items: const []);
+        }
+        return PaginatedResult.fromJson(
+          data as Map<String, dynamic>,
+          (e) => EventDataModel.fromJson(e as Map<String, dynamic>),
+        );
+      }, (e, _) => PaginatedResult<EventDataModel>(items: const [])).match(identity, identity).run();
 
   @override
-  Future<Iterable<EventDataModel>> loadPendingEvents() => TaskEither.tryCatch(
-    () async {
-      final resp = await _dio.get(
-        Paths.eventsPending,
-        options: _optionsManager.opts(),
-      );
-      final list = resp.data as List;
-      return list.cast<Map<String, dynamic>>().map(EventDataModel.fromJson);
-    },
-    (e, _) => '$e',
-  ).match<Iterable<EventDataModel>>((_) => [], identity).run();
+  Future<PaginatedResult<EventDataModel>> loadPendingEvents({String? cursor, int limit = 50}) =>
+      TaskEither.tryCatch(() async {
+        final resp = await _dio.get(
+          Paths.eventsPending,
+          options: _optionsManager.opts(),
+          queryParameters: {
+            if (cursor != null) 'cursor': cursor,
+            'limit': limit,
+          },
+        );
+        final data = resp.data;
+        if (data is! Map<String, dynamic> || data['items'] is! List) {
+          return PaginatedResult(items: const []);
+        }
+        return PaginatedResult.fromJson(
+          data as Map<String, dynamic>,
+          (e) => EventDataModel.fromJson(e as Map<String, dynamic>),
+        );
+      }, (e, _) => PaginatedResult<EventDataModel>(items: const [])).match(identity, identity).run();
 
   @override
   Future<bool> deleteEvent(String eventId) async {
