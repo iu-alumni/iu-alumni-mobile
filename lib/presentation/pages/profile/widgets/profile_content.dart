@@ -113,11 +113,10 @@ class ProfileContent {
                     color: AppColors.primary,
                   ),
                 ),
+                if (personal) _TelegramVerifyButton(profile: profile),
               ],
             ),
           ),
-        if (personal && profile.telegramAlias != null)
-          _TelegramVerifySection(profile: profile),
         if (personal) const _OwnedEvents(),
         const _ParticipatedEvents(),
         if (personal) const OpenBotCard(),
@@ -221,70 +220,56 @@ class _OwnedEvents extends StatelessWidget {
   );
 }
 
-class _TelegramVerifySection extends StatelessWidget {
-  const _TelegramVerifySection({required this.profile});
+class _TelegramVerifyButton extends StatelessWidget {
+  const _TelegramVerifyButton({required this.profile});
 
   final Profile profile;
 
   @override
   Widget build(BuildContext context) {
     if (profile.isTelegramVerified) {
-      return TitledItem(
-        title: 'Telegram status',
-        child: Row(
-          children: [
-            const Icon(Icons.verified, color: Colors.green, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              'Telegram account verified',
-              style: AppTextStyles.body.copyWith(color: Colors.green),
-            ),
-          ],
-        ),
+      return const Tooltip(
+        message: 'Telegram verified',
+        child: Icon(Icons.verified, color: Colors.green, size: 24),
       );
     }
-    return TitledItem(
-      title: 'Telegram status',
-      child: BlocConsumer<TelegramVerifyCubit, TelegramVerifyState>(
-        builder: (context, state) => switch (state.request) {
-          LoadedStateLoading() => const Center(child: AppLoader()),
-          LoadedStateData() => Text(
-            'Verification email sent! Check your inbox.',
-            style: AppTextStyles.body.copyWith(color: Colors.green),
-          ),
-          LoadedStateError(:final error) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                error,
-                style: AppTextStyles.caption.copyWith(color: AppColors.error),
-              ),
-              const SizedBox(height: 8),
-              AppButton(
-                is48Height: true,
-                onTap: () =>
-                    context.read<TelegramVerifyCubit>().requestVerification(),
-                buttonStyle: AppButtonStyle.secondary,
-                child: Text(
-                  'Verify Telegram',
-                  style: AppTextStyles.actionM.copyWith(color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-          _ => AppButton(
-            is48Height: true,
-            onTap: () =>
-                context.read<TelegramVerifyCubit>().requestVerification(),
-            buttonStyle: AppButtonStyle.secondary,
-            child: Text(
-              'Verify Telegram',
-              style: AppTextStyles.actionM.copyWith(color: Colors.white),
+    return BlocConsumer<TelegramVerifyCubit, TelegramVerifyState>(
+      listener: (context, state) {
+        if (state.request case LoadedStateData()) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Verification email sent! Check your inbox.'),
             ),
+          );
+        } else if (state.request case LoadedStateError(:final error)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(error)),
+          );
+        }
+      },
+      builder: (context, state) => switch (state.request) {
+        LoadedStateLoading() => const SizedBox(
+          width: 24,
+          height: 24,
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+        LoadedStateData() => const Tooltip(
+          message: 'Verification email sent',
+          child: Icon(Icons.mark_email_read, color: Colors.green, size: 24),
+        ),
+        _ => Tooltip(
+          message: 'Verify Telegram',
+          child: IconButton(
+            onPressed: () =>
+                context.read<TelegramVerifyCubit>().requestVerification(),
+            icon: const Icon(Icons.verified_user_outlined),
+            color: AppColors.primary,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            iconSize: 24,
           ),
-        },
-        listener: (context, state) {},
-      ),
+        ),
+      },
     );
   }
 }
