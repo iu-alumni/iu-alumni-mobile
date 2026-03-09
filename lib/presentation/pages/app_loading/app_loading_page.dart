@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../application/repositories/reporter/reporter.dart';
-import '../../../data/db/db_manager.dart';
 import '../../../data/secrets/secrets_manager.dart';
 import '../../../data/token/token_provider.dart';
 import '../../common/widgets/alumni_logo.dart';
@@ -20,7 +19,6 @@ class AppLoadingPage extends StatefulWidget implements AutoRouteWrapper {
   Widget wrappedRoute(BuildContext context) => RepositoryProvider(
     create: (context) => AppLoadingManager(
       context.read<TokenProvider>(),
-      context.read<DbManager>(),
       context.read<Reporter>(),
       context.read<SecretsManager>(),
     ),
