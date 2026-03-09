@@ -108,13 +108,14 @@ class _SignInSubPageState extends State<SignInSubPage> {
                   OtpRequestSubRoute(email: _email),
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.send),
-                tooltip: 'Telegram OTP',
-                onPressed: () => context.pushRoute(
-                  TelegramOtpRequestSubRoute(email: _email),
-                ),
-              ),
+              // Telegram OTP login is temporarily disabled (bot not yet ready)
+              // IconButton(
+              //   icon: const Icon(Icons.send),
+              //   tooltip: 'Telegram OTP',
+              //   onPressed: () => context.pushRoute(
+              //     TelegramOtpRequestSubRoute(email: _email),
+              //   ),
+              // ),
             ],
           ),
           const SizedBox(height: 8),
