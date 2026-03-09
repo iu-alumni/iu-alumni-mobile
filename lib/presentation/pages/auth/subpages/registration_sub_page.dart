@@ -236,4 +236,3 @@ class _RegistrationSubPageState extends State<RegistrationSubPage> {
     ),
   );
 }
-}
