@@ -58,8 +58,11 @@ class UsersRepositoryImpl extends UsersRepository {
   }) async {
     // Only use the in-memory cache for the initial (no-cursor) load so that
     // subsequent "load more" calls always hit the network.
-    if (cursor == null && _users case final map?) {
-      return PaginatedResult(items: map.values.toList());
+    if (cursor == null) {
+      final cached = _users;
+      if (cached != null) {
+        return PaginatedResult(items: cached.values.toList());
+      }
     }
     final page = await _usersGateway.getAllUsers(cursor: cursor, limit: limit);
     _users ??= {};

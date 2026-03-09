@@ -44,3 +44,5 @@ app.*.map.json
 
 # Local Netlify folder
 .netlify
+keystore-release.jks
+release/
