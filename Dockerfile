@@ -27,6 +27,7 @@ ENV API_BASE_URL=$API_BASE_URL
 
 # Build Flutter web app; API_BASE_URL is baked in via --dart-define
 RUN flutter pub get
+RUN dart run build_runner build --delete-conflicting-outputs
 RUN flutter build web --release \
     --dart-define=API_BASE_URL=$API_BASE_URL \
     --dart-define=APP_METRICA_KEY=$APP_METRICA_KEY \

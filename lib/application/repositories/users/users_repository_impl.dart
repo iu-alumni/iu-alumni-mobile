@@ -4,6 +4,7 @@ import '../../../data/profile/profile_gateway.dart';
 import '../../../data/token/token_provider.dart';
 import '../../../data/users/users_gateway.dart';
 import '../../../util/logger.dart';
+import '../../models/paginated_result.dart';
 import '../../models/profile.dart';
 import 'users_repository.dart';
 
@@ -51,14 +52,30 @@ class UsersRepositoryImpl extends UsersRepository {
   }
 
   @override
-  Future<Iterable<Profile>> getAllUsers() async {
-    if (_users case final map?) {
-      return map.values;
+  Future<PaginatedResult<Profile>> getAllUsers({
+    String? cursor,
+    int limit = 50,
+  }) async {
+    // Only use the in-memory cache for the initial (no-cursor) load so that
+    // subsequent "load more" calls always hit the network.
+    if (cursor == null && _users case final map?) {
+      return PaginatedResult(items: map.values.toList());
     }
-    final users = await _usersGateway.getAllUsers();
-    _users = {for (final u in users) u.profileId: u};
-    return users;
+    final page = await _usersGateway.getAllUsers(cursor: cursor, limit: limit);
+    _users ??= {};
+    for (final u in page.items) {
+      _users![u.profileId] = u;
+    }
+    return page;
   }
+
+  @override
+  Future<PaginatedResult<Profile>> getUsersAtLocation(
+    String location, {
+    String? cursor,
+    int limit = 50,
+  }) =>
+      _usersGateway.getUsersAtLocation(location, cursor: cursor, limit: limit);
 
   @override
   Future<Iterable<Profile>> getUsersByIds(Iterable<String> ids) async {

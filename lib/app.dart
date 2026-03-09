@@ -7,6 +7,8 @@ import 'package:ui_alumni_mobile/application/repositories/locations/locations_re
 import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository_impl.dart';
 import 'package:ui_alumni_mobile/data/locations/locations_gateway.dart';
 import 'package:ui_alumni_mobile/data/locations/locations_gateway_impl.dart';
+import 'package:ui_alumni_mobile/data/map/map_gateway.dart';
+import 'package:ui_alumni_mobile/data/map/map_gateway_impl.dart';
 import 'package:uuid/uuid.dart';
 import 'application/repositories/auth/auth_repository.dart';
 import 'application/repositories/auth/auth_repository_impl.dart';
@@ -111,6 +113,12 @@ class App extends StatelessWidget {
           context.read<DioOptionsManager>(),
         ),
       ),
+      RepositoryProvider<MapGateway>(
+        create: (context) => MapGatewayImpl(
+          context.read<Dio>(),
+          context.read<DioOptionsManager>(),
+        ),
+      ),
       // --- REPOSITORIES ---
       RepositoryProvider<AuthRepository>(
         create: (context) => AuthRepositoryImpl(context.read<AuthGateway>()),
@@ -147,9 +155,9 @@ class App extends StatelessWidget {
       ),
       RepositoryProvider<MapRepository>(
         create: (context) => MapRepositoryImpl(
-          context.read<LocationsRepository>(),
-          context.read<UsersRepository>(),
+          context.read<MapGateway>(),
           context.read<EventsRepository>(),
+          context.read<LocationsRepository>(),
         ),
       ),
       // --- BLOCs ---

@@ -21,6 +21,7 @@ abstract class Paths {
   static String profile = '/profile/';
   static String myProfile = '${profile}me';
   static String allProfiles = '${profile}all';
+  static String mapProfiles = '${profile}map';
 
   static const String _cities = '/cities';
   static String coordinates = '$_cities/coordinates';

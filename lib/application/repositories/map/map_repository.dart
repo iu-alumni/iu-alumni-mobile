@@ -12,9 +12,20 @@ abstract class MapRepository {
 }
 
 class CityData {
-  const CityData({required this.events, required this.profiles});
+  const CityData({
+    required this.events,
+    required this.profiles,
+    this.alumniCount = 0,
+  });
+
   final List<Profile> profiles;
   final List<EventModel> events;
+
+  /// Total number of alumni at this location.
+  ///
+  /// Populated from the `/profile/map` grouped endpoint. [profiles] may be
+  /// empty on the map view (profiles are lazy-loaded in CityDataPage).
+  final int alumniCount;
 }
 
 class NamedCoordinates extends Equatable {

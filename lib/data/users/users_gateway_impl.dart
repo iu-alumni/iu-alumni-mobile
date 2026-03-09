@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 
+import '../../application/models/paginated_result.dart';
 import '../../application/models/profile.dart';
 import '../common/dio_options_manager.dart';
 import '../paths.dart';
@@ -13,14 +14,50 @@ class UsersGatewayImpl extends UsersGateway {
   final DioOptionsManager _optionsManager;
 
   @override
-  Future<List<Profile>> getAllUsers() => TaskEither.tryCatch(() async {
-    final response = await _dio.get(
-      Paths.allProfiles,
-      options: _optionsManager.opts(),
-    );
-    final list = response.data as List;
-    return [for (final p in list) Profile.fromJson(p)];
-  }, (e, st) => <Profile>[]).match(identity, identity).run();
+  Future<PaginatedResult<Profile>> getAllUsers({
+    String? cursor,
+    int limit = 50,
+  }) =>
+      TaskEither.tryCatch(() async {
+        final response = await _dio.get(
+          Paths.allProfiles,
+          options: _optionsManager.opts(),
+          queryParameters: {
+            if (cursor != null) 'cursor': cursor,
+            'limit': limit,
+          },
+        );
+        return PaginatedResult.fromJson(
+          response.data as Map<String, dynamic>,
+          (e) => Profile.fromJson(e as Map<String, dynamic>),
+        );
+      }, (e, _) => PaginatedResult<Profile>(items: const []))
+          .match(identity, identity)
+          .run();
+
+  @override
+  Future<PaginatedResult<Profile>> getUsersAtLocation(
+    String location, {
+    String? cursor,
+    int limit = 50,
+  }) =>
+      TaskEither.tryCatch(() async {
+        final response = await _dio.get(
+          Paths.allProfiles,
+          options: _optionsManager.opts(),
+          queryParameters: {
+            'location': location,
+            if (cursor != null) 'cursor': cursor,
+            'limit': limit,
+          },
+        );
+        return PaginatedResult.fromJson(
+          response.data as Map<String, dynamic>,
+          (e) => Profile.fromJson(e as Map<String, dynamic>),
+        );
+      }, (e, _) => PaginatedResult<Profile>(items: const []))
+          .match(identity, identity)
+          .run();
 
   @override
   Future<List<Profile>> getUsersByIds(List<String> ids) =>
