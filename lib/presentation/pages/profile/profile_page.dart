@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 import 'package:ui_alumni_mobile/presentation/common/widgets/nav_button.dart';
 
+import '../../../application/models/profile.dart';
 import '../../../application/repositories/auth/telegram_verify_repository.dart';
 import '../../../application/repositories/events/events_repository.dart';
 import '../../../application/repositories/reporter/reporter.dart';

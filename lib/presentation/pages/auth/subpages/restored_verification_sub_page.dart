@@ -8,7 +8,7 @@ import 'package:ui_alumni_mobile/presentation/common/widgets/app_loader.dart';
 import 'package:ui_alumni_mobile/presentation/common/widgets/app_scaffold.dart';
 import 'package:ui_alumni_mobile/presentation/common/widgets/app_text_field.dart';
 
-import '../../../application/repositories/auth/auth_repository.dart';
+import '../../../../application/repositories/auth/auth_repository.dart';
 
 @RoutePage()
 class RestoredVerificationSubPage extends StatefulWidget {
