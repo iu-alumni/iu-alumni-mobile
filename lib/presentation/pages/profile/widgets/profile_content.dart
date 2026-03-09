@@ -9,7 +9,7 @@ import '../../../../application/models/profile.dart';
 import '../../../../application/repositories/reporter/reporter.dart';
 import '../../../blocs/models/profile_state.dart';
 import '../../../blocs/profile/profile_cubit.dart';
-import '../../../blocs/telegram_verify/telegram_verify_cubit.dart';
+// import '../../../blocs/telegram_verify/telegram_verify_cubit.dart'; // temporarily disabled
 import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/models/loaded_state.dart';
@@ -113,7 +113,8 @@ class ProfileContent {
                     color: AppColors.primary,
                   ),
                 ),
-                if (personal) _TelegramVerifyButton(profile: profile),
+                // Telegram account verification temporarily disabled
+                // if (personal) _TelegramVerifyButton(profile: profile),
               ],
             ),
           ),
@@ -220,56 +221,57 @@ class _OwnedEvents extends StatelessWidget {
   );
 }
 
-class _TelegramVerifyButton extends StatelessWidget {
-  const _TelegramVerifyButton({required this.profile});
-
-  final Profile profile;
-
-  @override
-  Widget build(BuildContext context) {
-    if (profile.isTelegramVerified) {
-      return const Tooltip(
-        message: 'Telegram verified',
-        child: Icon(Icons.verified, color: Colors.green, size: 24),
-      );
-    }
-    return BlocConsumer<TelegramVerifyCubit, TelegramVerifyState>(
-      listener: (context, state) {
-        if (state.request case LoadedStateData()) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Verification email sent! Check your inbox.'),
-            ),
-          );
-        } else if (state.request case LoadedStateError(:final error)) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(error)),
-          );
-        }
-      },
-      builder: (context, state) => switch (state.request) {
-        LoadedStateLoading() => const SizedBox(
-          width: 24,
-          height: 24,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
-        LoadedStateData() => const Tooltip(
-          message: 'Verification email sent',
-          child: Icon(Icons.mark_email_read, color: Colors.green, size: 24),
-        ),
-        _ => Tooltip(
-          message: 'Verify Telegram',
-          child: IconButton(
-            onPressed: () =>
-                context.read<TelegramVerifyCubit>().requestVerification(),
-            icon: const Icon(Icons.verified_user_outlined),
-            color: AppColors.primary,
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            iconSize: 24,
-          ),
-        ),
-      },
-    );
-  }
-}
+// Telegram account verification temporarily disabled — uncomment when bot is ready
+// class _TelegramVerifyButton extends StatelessWidget {
+//   const _TelegramVerifyButton({required this.profile});
+//
+//   final Profile profile;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     if (profile.isTelegramVerified) {
+//       return const Tooltip(
+//         message: 'Telegram verified',
+//         child: Icon(Icons.verified, color: Colors.green, size: 24),
+//       );
+//     }
+//     return BlocConsumer<TelegramVerifyCubit, TelegramVerifyState>(
+//       listener: (context, state) {
+//         if (state.request case LoadedStateData()) {
+//           ScaffoldMessenger.of(context).showSnackBar(
+//             const SnackBar(
+//               content: Text('Verification email sent! Check your inbox.'),
+//             ),
+//           );
+//         } else if (state.request case LoadedStateError(:final error)) {
+//           ScaffoldMessenger.of(context).showSnackBar(
+//             SnackBar(content: Text(error)),
+//           );
+//         }
+//       },
+//       builder: (context, state) => switch (state.request) {
+//         LoadedStateLoading() => const SizedBox(
+//           width: 24,
+//           height: 24,
+//           child: CircularProgressIndicator(strokeWidth: 2),
+//         ),
+//         LoadedStateData() => const Tooltip(
+//           message: 'Verification email sent',
+//           child: Icon(Icons.mark_email_read, color: Colors.green, size: 24),
+//         ),
+//         _ => Tooltip(
+//           message: 'Verify Telegram',
+//           child: IconButton(
+//             onPressed: () =>
+//                 context.read<TelegramVerifyCubit>().requestVerification(),
+//             icon: const Icon(Icons.verified_user_outlined),
+//             color: AppColors.primary,
+//             padding: EdgeInsets.zero,
+//             constraints: const BoxConstraints(),
+//             iconSize: 24,
+//           ),
+//         ),
+//       },
+//     );
+//   }
+// }
