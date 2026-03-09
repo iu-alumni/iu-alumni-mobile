@@ -55,6 +55,21 @@ class _CityDataPageState extends State<CityDataPage> {
     }
   }
 
+  Future<void> _openInCitySheet() async {
+    if (!_profilesLoaded) await _loadProfiles();
+    if (!mounted) return;
+    showCupertinoSheet(
+      context: context,
+      pageBuilder: (context) => _InCitySheet(
+        profiles: List.of(_profiles),
+        nextCursor: _nextCursor,
+        onLoadMore: () => _loadProfiles(loadMore: true),
+        getLatestProfiles: () => _profiles,
+        getLatestCursor: () => _nextCursor,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => AppScaffold(
     title: widget.coords.city,
@@ -83,13 +98,7 @@ class _CityDataPageState extends State<CityDataPage> {
               child: _InCityButton(
                 alumniCount: widget.cityData.alumniCount,
                 profiles: _profiles,
-                isLoaded: _profilesLoaded,
-                isLoading: _isLoadingProfiles,
-                nextCursor: _nextCursor,
-                onOpen: () async {
-                  if (!_profilesLoaded) await _loadProfiles();
-                },
-                onLoadMore: () => _loadProfiles(loadMore: true),
+                onTap: _openInCitySheet,
               ),
             ),
           Expanded(
@@ -105,37 +114,17 @@ class _InCityButton extends StatelessWidget {
   const _InCityButton({
     required this.alumniCount,
     required this.profiles,
-    required this.isLoaded,
-    required this.isLoading,
-    required this.nextCursor,
-    required this.onOpen,
-    required this.onLoadMore,
+    required this.onTap,
   });
 
   final int alumniCount;
   final List<Profile> profiles;
-  final bool isLoaded;
-  final bool isLoading;
-  final String? nextCursor;
-  final Future<void> Function() onOpen;
-  final Future<void> Function() onLoadMore;
+  final Future<void> Function() onTap;
 
   @override
   Widget build(BuildContext context) => AppButton(
     buttonStyle: AppButtonStyle.gray,
-    onTap: () async {
-      await onOpen();
-      if (!context.mounted) return;
-      showCupertinoSheet(
-        context: context,
-        pageBuilder: (context) => _InCitySheet(
-          profiles: profiles,
-          isLoading: isLoading,
-          nextCursor: nextCursor,
-          onLoadMore: onLoadMore,
-        ),
-      );
-    },
+    onTap: onTap,
     child: Row(
       spacing: 8,
       children: [
@@ -163,15 +152,17 @@ class _InCityButton extends StatelessWidget {
 class _InCitySheet extends StatefulWidget {
   const _InCitySheet({
     required this.profiles,
-    required this.isLoading,
     required this.nextCursor,
     required this.onLoadMore,
+    required this.getLatestProfiles,
+    required this.getLatestCursor,
   });
 
   final List<Profile> profiles;
-  final bool isLoading;
   final String? nextCursor;
   final Future<void> Function() onLoadMore;
+  final List<Profile> Function() getLatestProfiles;
+  final String? Function() getLatestCursor;
 
   @override
   State<_InCitySheet> createState() => _InCitySheetState();
@@ -179,14 +170,13 @@ class _InCitySheet extends StatefulWidget {
 
 class _InCitySheetState extends State<_InCitySheet> {
   late List<Profile> _profiles;
-  late bool _isLoading;
   late String? _nextCursor;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _profiles = List.of(widget.profiles);
-    _isLoading = widget.isLoading;
     _nextCursor = widget.nextCursor;
   }
 
@@ -196,8 +186,8 @@ class _InCitySheetState extends State<_InCitySheet> {
     await widget.onLoadMore();
     if (mounted) {
       setState(() {
-        _profiles = List.of(widget.profiles);
-        _nextCursor = widget.nextCursor;
+        _profiles = List.of(widget.getLatestProfiles());
+        _nextCursor = widget.getLatestCursor();
         _isLoading = false;
       });
     }
