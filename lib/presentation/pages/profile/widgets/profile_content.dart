@@ -261,6 +261,7 @@ class _TelegramVerifySection extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               AppButton(
+                is48Height: true,
                 onTap: () =>
                     context.read<TelegramVerifyCubit>().requestVerification(),
                 buttonStyle: AppButtonStyle.secondary,
@@ -272,6 +273,7 @@ class _TelegramVerifySection extends StatelessWidget {
             ],
           ),
           _ => AppButton(
+            is48Height: true,
             onTap: () =>
                 context.read<TelegramVerifyCubit>().requestVerification(),
             buttonStyle: AppButtonStyle.secondary,
