@@ -1,5 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 
+import '../../models/paginated_result.dart';
 import '../../models/profile.dart';
 
 abstract class UsersRepository {
@@ -7,6 +8,15 @@ abstract class UsersRepository {
   Future<bool> update(Profile profile);
   void logout();
 
-  Future<Iterable<Profile>> getAllUsers();
+  /// Fetch a page of all alumni profiles (cursor-paginated).
+  Future<PaginatedResult<Profile>> getAllUsers({String? cursor, int limit = 50});
+
+  /// Fetch a page of alumni at a specific location string, e.g. 'Russia, Innopolis'.
+  Future<PaginatedResult<Profile>> getUsersAtLocation(
+    String location, {
+    String? cursor,
+    int limit = 50,
+  });
+
   Future<Iterable<Profile>> getUsersByIds(Iterable<String> ids);
 }

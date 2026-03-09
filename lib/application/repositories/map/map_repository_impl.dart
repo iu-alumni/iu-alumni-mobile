@@ -1,108 +1,98 @@
 import 'package:ui_alumni_mobile/application/models/event.dart';
-import 'package:ui_alumni_mobile/application/models/profile.dart';
-import 'package:ui_alumni_mobile/application/repositories/locations/locations_repository.dart';
 
+import '../../../data/map/map_gateway.dart';
 import '../../../util/logger.dart';
 import '../../models/city_location.dart';
+import '../../models/coordinates.dart';
 import '../events/events_repository.dart';
-import '../users/users_repository.dart';
+import '../locations/locations_repository.dart';
 import 'map_repository.dart';
 
 class MapRepositoryImpl extends MapRepository {
   MapRepositoryImpl(
-    this._locationsRepository,
-    this._usersRepository,
+    this._mapGateway,
     this._eventsRepository,
+    this._locationsRepository,
   );
 
-  final LocationsRepository _locationsRepository;
-  final UsersRepository _usersRepository;
+  final MapGateway _mapGateway;
   final EventsRepository _eventsRepository;
+  final LocationsRepository _locationsRepository;
 
   CityLocation? _cityLocationFromStr(String location) {
     final data = location.split(', ');
-    if (data.length != 2) {
-      return null;
-    }
+    if (data.length != 2) return null;
     return CityLocation(country: data[0], city: data[1]);
-  }
-
-  Map<CityLocation, CityData> _locationMapFrom({
-    required Iterable<(String, Profile)> profiles,
-    required Iterable<(String, EventModel)> events,
-  }) {
-    final _map = <CityLocation, CityData>{};
-    for (final (l, o) in profiles) {
-      final cityLocation = _cityLocationFromStr(l);
-      if (cityLocation == null) {
-        logger.d('$l of $o could not be transformed to the city location');
-        continue;
-      }
-      if (_map.containsKey(cityLocation)) {
-        _map[cityLocation]?.profiles.add(o);
-      } else {
-        _map[cityLocation] = CityData(events: [], profiles: [o]);
-      }
-    }
-    for (final (l, o) in events) {
-      final cityLocation = _cityLocationFromStr(l);
-      if (cityLocation == null) {
-        logger.d('$l of $o could not be transformed to the city location');
-        continue;
-      }
-      if (_map.containsKey(cityLocation)) {
-        _map[cityLocation]?.events.add(o);
-      } else {
-        _map[cityLocation] = CityData(events: [o], profiles: []);
-      }
-    }
-    return _map;
-  }
-
-  Future<MapInfo> _buildMapInfo(
-    Map<CityLocation, CityData> locationsMap,
-  ) async {
-    final _map = <NamedCoordinates, CityData>{};
-    for (final entry in locationsMap.entries) {
-      final coords = await _locationsRepository.coordinates(
-        entry.key.country,
-        entry.key.city,
-      );
-      if (coords == null) {
-        logger.d(
-          '${entry.key.country}, ${entry.key.city} could not be mapped to proper coordinates',
-        );
-        continue;
-      }
-      final namedCoords = NamedCoordinates(
-        coord: coords,
-        city: entry.key.city,
-        country: entry.key.country,
-      );
-      _map[namedCoords] = entry.value;
-    }
-    return _map;
   }
 
   @override
   Future<MapInfo> getPinsOnMap() async {
-    final users = await _usersRepository.getAllUsers();
+    // Alumni locations come pre-grouped and pre-resolved from the backend —
+    // no need to load all profiles or do per-city coordinate lookups.
+    final alumniGroups = await _mapGateway.getMapLocations();
     final events = await _eventsRepository.getEvents();
-    final locations = _locationMapFrom(
-      profiles: [
-        for (final u in users)
-          if (u.location case final l? when u.showLocation && l.isNotEmpty)
-            (l, u),
-      ],
-      events: [
-        for (final e in events)
-          if (e.location case final l? when l.isNotEmpty) (l, e),
-      ],
-    );
-    return _buildMapInfo(locations);
+
+    final map = <NamedCoordinates, CityData>{};
+
+    // Add alumni pins from the grouped map endpoint.
+    for (final group in alumniGroups) {
+      final nc = NamedCoordinates(
+        coord: Coordinates(group.lat, group.lng),
+        country: group.country,
+        city: group.city,
+      );
+      map[nc] = CityData(events: const [], profiles: const [], alumniCount: group.count);
+    }
+
+    // Overlay event pins: look up coordinates, then merge into existing pins
+    // or create new ones for event-only locations.
+    for (final event in events) {
+      final l = event.location;
+      if (l == null || l.isEmpty) continue;
+      final cityLocation = _cityLocationFromStr(l);
+      if (cityLocation == null) {
+        logger.d('Event location "$l" could not be parsed as "Country, City"');
+        continue;
+      }
+
+      // Try to find an existing alumni pin for this city.
+      final existingKey = map.keys.where(
+        (nc) =>
+            nc.country.toLowerCase() == cityLocation.country.toLowerCase() &&
+            nc.city.toLowerCase() == cityLocation.city.toLowerCase(),
+      ).firstOrNull;
+
+      if (existingKey != null) {
+        final existing = map[existingKey]!;
+        map[existingKey] = CityData(
+          events: [...existing.events, event],
+          profiles: existing.profiles,
+          alumniCount: existing.alumniCount,
+        );
+      } else {
+        // Event-only location: resolve coordinates.
+        final coords = await _locationsRepository.coordinates(
+          cityLocation.country,
+          cityLocation.city,
+        );
+        if (coords == null) {
+          logger.d('No coordinates for event location "$l"');
+          continue;
+        }
+        final nc = NamedCoordinates(
+          coord: coords,
+          country: cityLocation.country,
+          city: cityLocation.city,
+        );
+        map[nc] = CityData(events: [event], profiles: const [], alumniCount: 0);
+      }
+    }
+
+    return map;
   }
 
   @override
   Future<List<CityLocation>> suggestions(String city) =>
       _locationsRepository.cities(city);
 }
+
