@@ -4,12 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 import 'package:ui_alumni_mobile/presentation/common/widgets/nav_button.dart';
 
-import '../../../application/models/profile.dart';
+import '../../../application/repositories/auth/telegram_verify_repository.dart';
 import '../../../application/repositories/events/events_repository.dart';
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
 import '../../blocs/models/profile_state.dart';
 import '../../blocs/profile/profile_cubit.dart';
+import '../../blocs/telegram_verify/telegram_verify_cubit.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/models/loaded_state.dart';
 import '../../common/widgets/app_button.dart';
@@ -28,9 +29,17 @@ class ProfilePage extends StatefulWidget implements AutoRouteWrapper {
   State<ProfilePage> createState() => _ProfilePageState();
 
   @override
-  Widget wrappedRoute(BuildContext context) => BlocProvider(
-    create: (ctx) =>
-        ProfileCubit(ctx.read<UsersRepository>(), ctx.read<EventsRepository>()),
+  Widget wrappedRoute(BuildContext context) => MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (ctx) =>
+            ProfileCubit(ctx.read<UsersRepository>(), ctx.read<EventsRepository>()),
+      ),
+      BlocProvider(
+        create: (ctx) =>
+            TelegramVerifyCubit(ctx.read<TelegramVerifyRepository>()),
+      ),
+    ],
     child: this,
   );
 }

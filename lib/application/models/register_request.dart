@@ -10,7 +10,7 @@ class RegisterRequest with _$RegisterRequest {
     @JsonKey(name: 'last_name') required String lastName,
     @JsonKey(name: 'graduation_year') required String gradYear,
     required String email,
-    @JsonKey(name: 'telegram_alias') required String telegram,
+    @JsonKey(name: 'telegram_alias') String? telegram,
     required String password,
     @JsonKey(name: 'manual_verification') required bool manualVerification,
   }) = _RegisterRequest;

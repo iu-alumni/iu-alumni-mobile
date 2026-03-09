@@ -16,6 +16,10 @@ import 'application/repositories/auth/otp_login_repository.dart';
 import 'application/repositories/auth/otp_login_repository_impl.dart';
 import 'application/repositories/auth/password_reset_repository.dart';
 import 'application/repositories/auth/password_reset_repository_impl.dart';
+import 'application/repositories/auth/telegram_otp_login_repository.dart';
+import 'application/repositories/auth/telegram_otp_login_repository_impl.dart';
+import 'application/repositories/auth/telegram_verify_repository.dart';
+import 'application/repositories/auth/telegram_verify_repository_impl.dart';
 import 'application/repositories/events/events_repository.dart';
 import 'application/repositories/events/events_repository_impl.dart';
 import 'application/repositories/map/map_repository.dart';
@@ -126,6 +130,14 @@ class App extends StatelessWidget {
       RepositoryProvider<OtpLoginRepository>(
         create: (context) =>
             OtpLoginRepositoryImpl(context.read<AuthGateway>()),
+      ),
+      RepositoryProvider<TelegramOtpLoginRepository>(
+        create: (context) =>
+            TelegramOtpLoginRepositoryImpl(context.read<AuthGateway>()),
+      ),
+      RepositoryProvider<TelegramVerifyRepository>(
+        create: (context) =>
+            TelegramVerifyRepositoryImpl(context.read<AuthGateway>()),
       ),
       RepositoryProvider<PasswordResetRepository>(
         create: (context) =>

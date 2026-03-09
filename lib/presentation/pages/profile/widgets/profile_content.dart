@@ -9,6 +9,7 @@ import '../../../../application/models/profile.dart';
 import '../../../../application/repositories/reporter/reporter.dart';
 import '../../../blocs/models/profile_state.dart';
 import '../../../blocs/profile/profile_cubit.dart';
+import '../../../blocs/telegram_verify/telegram_verify_cubit.dart';
 import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/models/loaded_state.dart';
@@ -118,6 +119,8 @@ class ProfileContent {
         if (personal) const _OwnedEvents(),
         const _ParticipatedEvents(),
         if (personal) const OpenBotCard(),
+        if (personal && profile.telegramAlias != null)
+          _TelegramVerifySection(profile: profile),
         if (personal)
           AppButton(
             buttonStyle: AppButtonStyle.text,
@@ -216,4 +219,70 @@ class _OwnedEvents extends StatelessWidget {
       },
     ),
   );
+}
+
+class _TelegramVerifySection extends StatelessWidget {
+  const _TelegramVerifySection({required this.profile});
+
+  final Profile profile;
+
+  @override
+  Widget build(BuildContext context) {
+    if (profile.isTelegramVerified) {
+      return TitledItem(
+        title: 'Telegram status',
+        child: Row(
+          children: [
+            const Icon(Icons.verified, color: Colors.green, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              'Telegram account verified',
+              style: AppTextStyles.body.copyWith(color: Colors.green),
+            ),
+          ],
+        ),
+      );
+    }
+    return TitledItem(
+      title: 'Telegram status',
+      child: BlocConsumer<TelegramVerifyCubit, TelegramVerifyState>(
+        builder: (context, state) => switch (state.request) {
+          LoadedStateLoading() => const Center(child: AppLoader()),
+          LoadedStateData() => Text(
+            'Verification email sent! Check your inbox.',
+            style: AppTextStyles.body.copyWith(color: Colors.green),
+          ),
+          LoadedStateError(:final error) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                error,
+                style: AppTextStyles.caption.copyWith(color: AppColors.error),
+              ),
+              const SizedBox(height: 8),
+              AppButton(
+                onTap: () =>
+                    context.read<TelegramVerifyCubit>().requestVerification(),
+                buttonStyle: AppButtonStyle.secondary,
+                child: Text(
+                  'Verify Telegram',
+                  style: AppTextStyles.actionM.copyWith(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+          _ => AppButton(
+            onTap: () =>
+                context.read<TelegramVerifyCubit>().requestVerification(),
+            buttonStyle: AppButtonStyle.secondary,
+            child: Text(
+              'Verify Telegram',
+              style: AppTextStyles.actionM.copyWith(color: Colors.white),
+            ),
+          ),
+        },
+        listener: (context, state) {},
+      ),
+    );
+  }
 }
