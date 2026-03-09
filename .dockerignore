@@ -1,9 +1,19 @@
-# Ignore everything, then whitelist only what the Dockerfile needs.
-# Parent directories must also be explicitly un-ignored.
-**
-
-!nginx.conf
-!entrypoint.sh
-!build/
-!build/web/
-!build/web/**
+# Exclude Flutter source code — the pre-built build/web artifact,
+# nginx.conf, and entrypoint.sh are all that Docker needs.
+lib/
+android/
+ios/
+web/
+assets/
+test/
+scripts/
+csv_processing/
+.flutter-plugins
+.flutter-plugins-dependencies
+.dart_tool/
+pubspec.yaml
+pubspec.lock
+analysis_options.yaml
+devtools_options.yaml
+dbgen.sh
+README.md
