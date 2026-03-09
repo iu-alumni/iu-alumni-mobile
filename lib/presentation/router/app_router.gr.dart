@@ -49,6 +49,10 @@ import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/password_reset
     as _i22;
 import 'package:ui_alumni_mobile/presentation/pages/password_reset/password_reset_confirm_page.dart'
     as _i23;
+import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/telegram_otp_request_sub_page.dart'
+    as _i24;
+import 'package:ui_alumni_mobile/presentation/pages/auth/subpages/telegram_otp_verify_sub_page.dart'
+    as _i25;
 
 /// generated route for
 /// [_i1.AppLoadingPage]
@@ -522,4 +526,58 @@ class PasswordResetConfirmRouteArgs {
   String toString() {
     return 'PasswordResetConfirmRouteArgs{token: $token, key: $key}';
   }
+}
+
+/// [_i24.TelegramOtpRequestSubPage]
+class TelegramOtpRequestSubRoute
+    extends _i15.PageRouteInfo<TelegramOtpRequestSubRouteArgs> {
+  TelegramOtpRequestSubRoute({
+    String email = '',
+    _i18.Key? key,
+    List<_i15.PageRouteInfo>? children,
+  }) : super(
+         TelegramOtpRequestSubRoute.name,
+         args: TelegramOtpRequestSubRouteArgs(email: email, key: key),
+         initialChildren: children,
+       );
+
+  static const String name = 'TelegramOtpRequestSubRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<TelegramOtpRequestSubRouteArgs>(
+        orElse: () => const TelegramOtpRequestSubRouteArgs(),
+      );
+      return _i24.TelegramOtpRequestSubPage(email: args.email, key: args.key);
+    },
+  );
+}
+
+class TelegramOtpRequestSubRouteArgs {
+  const TelegramOtpRequestSubRouteArgs({this.email = '', this.key});
+
+  final String email;
+
+  final _i18.Key? key;
+
+  @override
+  String toString() {
+    return 'TelegramOtpRequestSubRouteArgs{email: $email, key: $key}';
+  }
+}
+
+/// [_i25.TelegramOtpVerifySubPage]
+class TelegramOtpVerifySubRoute extends _i15.PageRouteInfo<void> {
+  const TelegramOtpVerifySubRoute({List<_i15.PageRouteInfo>? children})
+    : super(TelegramOtpVerifySubRoute.name, initialChildren: children);
+
+  static const String name = 'TelegramOtpVerifySubRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      return const _i25.TelegramOtpVerifySubPage();
+    },
+  );
 }

@@ -15,6 +15,7 @@ class Profile with _$Profile {
     @JsonKey(name: 'show_location') required bool showLocation,
     @JsonKey(name: 'telegram_alias') required String? telegramAlias,
     required String? avatar,
+    @JsonKey(name: 'is_telegram_verified') required bool isTelegramVerified,
   }) = _Profile;
   const Profile._();
 

@@ -8,12 +8,22 @@ part of 'register_request.dart';
 
 Map<String, dynamic> _$$RegisterRequestImplToJson(
   _$RegisterRequestImpl instance,
-) => <String, dynamic>{
-  'first_name': instance.firstName,
-  'last_name': instance.lastName,
-  'graduation_year': instance.gradYear,
-  'email': instance.email,
-  'telegram_alias': instance.telegram,
-  'password': instance.password,
-  'manual_verification': instance.manualVerification,
-};
+) {
+  final val = <String, dynamic>{
+    'first_name': instance.firstName,
+    'last_name': instance.lastName,
+    'graduation_year': instance.gradYear,
+    'email': instance.email,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('telegram_alias', instance.telegram);
+  val['password'] = instance.password;
+  val['manual_verification'] = instance.manualVerification;
+  return val;
+}

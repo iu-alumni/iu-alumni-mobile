@@ -36,4 +36,21 @@ abstract interface class AuthGateway {
     required String token,
     required String newPassword,
   });
+
+  /// Requests a Telegram OTP code to be sent via Telegram bot.
+  /// User must have `is_telegram_verified = true`.
+  /// Returns the session_token needed to complete verification.
+  Future<Either<String, String>> loginTelegramOtpRequest({
+    required String email,
+  });
+
+  /// Verifies the Telegram OTP code and returns a JWT on success.
+  Future<Either<String, Unit>> loginTelegramOtpVerify({
+    required String sessionToken,
+    required String code,
+  });
+
+  /// Sends a Telegram verification link to the authenticated user's email.
+  /// Requires JWT. User must have `telegram_alias` set.
+  Future<Either<String, Unit>> telegramVerifyRequest();
 }

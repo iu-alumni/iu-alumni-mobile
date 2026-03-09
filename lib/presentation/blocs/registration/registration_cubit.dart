@@ -31,7 +31,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
           lastName: mb(Option.fromNullable(state.lastName)),
           gradYear: '${mb(Option.fromNullable(state.graduationYear))}',
           email: mb(Option.fromNullable(state.email)),
-          telegram: mb(Option.fromNullable(state.telegram)),
+          telegram: state.telegram,
           password: mb(Option.fromNullable(state.password)),
           manualVerification: manual,
         ),

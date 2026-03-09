@@ -215,4 +215,83 @@ class AuthGatewayImpl implements AuthGateway {
       return Left('$e');
     }
   }
+
+  @override
+  Future<Either<String, String>> loginTelegramOtpRequest({
+    required String email,
+  }) async {
+    try {
+      final response = await _dio.post(
+        Paths.loginTelegramOtpRequest,
+        data: {'email': email},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      final data = response.data as Map<String, dynamic>;
+      if (data['session_token'] case final String token) {
+        return Right(token);
+      }
+      return const Left('Unexpected response from server');
+    } on DioException catch (e, st) {
+      logger.e('Error requesting Telegram OTP', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        if (detail is String) return Left(detail);
+      }
+      return Left(e.message ?? 'Unknown error');
+    } catch (e) {
+      return Left('$e');
+    }
+  }
+
+  @override
+  Future<Either<String, Unit>> loginTelegramOtpVerify({
+    required String sessionToken,
+    required String code,
+  }) async {
+    try {
+      final response = await _dio.post(
+        Paths.loginTelegramOtpVerify,
+        data: {'session_token': sessionToken, 'code': code},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      final data = response.data as Map<String, dynamic>;
+      if (data['access_token'] case final String token) {
+        _tokenManager.set(token);
+        return Either.of(unit);
+      }
+      return const Left('Unexpected response from server');
+    } on DioException catch (e, st) {
+      logger.e('Error verifying Telegram OTP', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        if (detail is String) return Left(detail);
+      }
+      return Left(e.message ?? 'Unknown error');
+    } catch (e) {
+      return Left('$e');
+    }
+  }
+
+  @override
+  Future<Either<String, Unit>> telegramVerifyRequest() async {
+    try {
+      await _dio.post(
+        Paths.telegramVerifyRequest,
+        options: _dioOptionsManager.opts(withToken: true),
+      );
+      return Either.of(unit);
+    } on DioException catch (e, st) {
+      logger.e('Error requesting Telegram verification', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        if (detail is String) return Left(detail);
+      }
+      return Left(e.message ?? 'Unknown error');
+    } catch (e) {
+      return Left('$e');
+    }
+  }
 }

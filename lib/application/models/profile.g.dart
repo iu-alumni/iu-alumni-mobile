@@ -17,6 +17,7 @@ _$ProfileImpl _$$ProfileImplFromJson(Map<String, dynamic> json) =>
       showLocation: json['show_location'] as bool,
       telegramAlias: json['telegram_alias'] as String?,
       avatar: json['avatar'] as String?,
+      isTelegramVerified: json['is_telegram_verified'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$ProfileImplToJson(_$ProfileImpl instance) =>
@@ -30,4 +31,5 @@ Map<String, dynamic> _$$ProfileImplToJson(_$ProfileImpl instance) =>
       'show_location': instance.showLocation,
       'telegram_alias': instance.telegramAlias,
       'avatar': instance.avatar,
+      'is_telegram_verified': instance.isTelegramVerified,
     };

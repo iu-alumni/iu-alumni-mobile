@@ -25,7 +25,7 @@ mixin _$RegisterRequest {
   String get gradYear => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   @JsonKey(name: 'telegram_alias')
-  String get telegram => throw _privateConstructorUsedError;
+  String? get telegram => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
   @JsonKey(name: 'manual_verification')
   bool get manualVerification => throw _privateConstructorUsedError;
@@ -52,7 +52,7 @@ abstract class $RegisterRequestCopyWith<$Res> {
     @JsonKey(name: 'last_name') String lastName,
     @JsonKey(name: 'graduation_year') String gradYear,
     String email,
-    @JsonKey(name: 'telegram_alias') String telegram,
+    @JsonKey(name: 'telegram_alias') String? telegram,
     String password,
     @JsonKey(name: 'manual_verification') bool manualVerification,
   });
@@ -77,7 +77,7 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
     Object? lastName = null,
     Object? gradYear = null,
     Object? email = null,
-    Object? telegram = null,
+    Object? telegram = freezed,
     Object? password = null,
     Object? manualVerification = null,
   }) {
@@ -99,10 +99,7 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
                 ? _value.email
                 : email // ignore: cast_nullable_to_non_nullable
                       as String,
-            telegram: null == telegram
-                ? _value.telegram
-                : telegram // ignore: cast_nullable_to_non_nullable
-                      as String,
+            telegram: freezed == telegram ? _value.telegram : telegram as String?,
             password: null == password
                 ? _value.password
                 : password // ignore: cast_nullable_to_non_nullable
@@ -131,7 +128,7 @@ abstract class _$$RegisterRequestImplCopyWith<$Res>
     @JsonKey(name: 'last_name') String lastName,
     @JsonKey(name: 'graduation_year') String gradYear,
     String email,
-    @JsonKey(name: 'telegram_alias') String telegram,
+    @JsonKey(name: 'telegram_alias') String? telegram,
     String password,
     @JsonKey(name: 'manual_verification') bool manualVerification,
   });
@@ -155,7 +152,7 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
     Object? lastName = null,
     Object? gradYear = null,
     Object? email = null,
-    Object? telegram = null,
+    Object? telegram = freezed,
     Object? password = null,
     Object? manualVerification = null,
   }) {
@@ -177,10 +174,7 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
             ? _value.email
             : email // ignore: cast_nullable_to_non_nullable
                   as String,
-        telegram: null == telegram
-            ? _value.telegram
-            : telegram // ignore: cast_nullable_to_non_nullable
-                  as String,
+        telegram: freezed == telegram ? _value.telegram : telegram as String?,
         password: null == password
             ? _value.password
             : password // ignore: cast_nullable_to_non_nullable
@@ -202,7 +196,7 @@ class _$RegisterRequestImpl implements _RegisterRequest {
     @JsonKey(name: 'last_name') required this.lastName,
     @JsonKey(name: 'graduation_year') required this.gradYear,
     required this.email,
-    @JsonKey(name: 'telegram_alias') required this.telegram,
+    @JsonKey(name: 'telegram_alias') this.telegram,
     required this.password,
     @JsonKey(name: 'manual_verification') required this.manualVerification,
   });
@@ -220,7 +214,7 @@ class _$RegisterRequestImpl implements _RegisterRequest {
   final String email;
   @override
   @JsonKey(name: 'telegram_alias')
-  final String telegram;
+  final String? telegram;
   @override
   final String password;
   @override
@@ -288,7 +282,7 @@ abstract class _RegisterRequest implements RegisterRequest {
     @JsonKey(name: 'last_name') required final String lastName,
     @JsonKey(name: 'graduation_year') required final String gradYear,
     required final String email,
-    @JsonKey(name: 'telegram_alias') required final String telegram,
+    @JsonKey(name: 'telegram_alias') final String? telegram,
     required final String password,
     @JsonKey(name: 'manual_verification')
     required final bool manualVerification,
@@ -307,7 +301,7 @@ abstract class _RegisterRequest implements RegisterRequest {
   String get email;
   @override
   @JsonKey(name: 'telegram_alias')
-  String get telegram;
+  String? get telegram;
   @override
   String get password;
   @override
