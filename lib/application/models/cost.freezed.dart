@@ -52,14 +52,16 @@ class _$CostModelCopyWithImpl<$Res, $Val extends CostModel>
   $Res call({Object? number = null, Object? currency = null}) {
     return _then(
       _value.copyWith(
-            number: null == number
-                ? _value.number
-                : number // ignore: cast_nullable_to_non_nullable
-                      as double,
-            currency: null == currency
-                ? _value.currency
-                : currency // ignore: cast_nullable_to_non_nullable
-                      as Currency,
+            number:
+                null == number
+                    ? _value.number
+                    : number // ignore: cast_nullable_to_non_nullable
+                        as double,
+            currency:
+                null == currency
+                    ? _value.currency
+                    : currency // ignore: cast_nullable_to_non_nullable
+                        as Currency,
           )
           as $Val,
     );
@@ -94,14 +96,16 @@ class __$$CostModelImplCopyWithImpl<$Res>
   $Res call({Object? number = null, Object? currency = null}) {
     return _then(
       _$CostModelImpl(
-        number: null == number
-            ? _value.number
-            : number // ignore: cast_nullable_to_non_nullable
-                  as double,
-        currency: null == currency
-            ? _value.currency
-            : currency // ignore: cast_nullable_to_non_nullable
-                  as Currency,
+        number:
+            null == number
+                ? _value.number
+                : number // ignore: cast_nullable_to_non_nullable
+                    as double,
+        currency:
+            null == currency
+                ? _value.currency
+                : currency // ignore: cast_nullable_to_non_nullable
+                    as Currency,
       ),
     );
   }
