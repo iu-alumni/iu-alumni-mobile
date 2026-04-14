@@ -72,18 +72,21 @@ class _$CodeVerificationStateCopyWithImpl<
   }) {
     return _then(
       _value.copyWith(
-            verification: null == verification
-                ? _value.verification
-                : verification // ignore: cast_nullable_to_non_nullable
-                      as LoadedState<Unit>,
-            resend: null == resend
-                ? _value.resend
-                : resend // ignore: cast_nullable_to_non_nullable
-                      as LoadedState<Unit>,
-            code: null == code
-                ? _value.code
-                : code // ignore: cast_nullable_to_non_nullable
-                      as String,
+            verification:
+                null == verification
+                    ? _value.verification
+                    : verification // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<Unit>,
+            resend:
+                null == resend
+                    ? _value.resend
+                    : resend // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<Unit>,
+            code:
+                null == code
+                    ? _value.code
+                    : code // ignore: cast_nullable_to_non_nullable
+                        as String,
           )
           as $Val,
     );
@@ -152,18 +155,21 @@ class __$$CodeVerificationStateImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$CodeVerificationStateImpl(
-        verification: null == verification
-            ? _value.verification
-            : verification // ignore: cast_nullable_to_non_nullable
-                  as LoadedState<Unit>,
-        resend: null == resend
-            ? _value.resend
-            : resend // ignore: cast_nullable_to_non_nullable
-                  as LoadedState<Unit>,
-        code: null == code
-            ? _value.code
-            : code // ignore: cast_nullable_to_non_nullable
-                  as String,
+        verification:
+            null == verification
+                ? _value.verification
+                : verification // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<Unit>,
+        resend:
+            null == resend
+                ? _value.resend
+                : resend // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<Unit>,
+        code:
+            null == code
+                ? _value.code
+                : code // ignore: cast_nullable_to_non_nullable
+                    as String,
       ),
     );
   }

@@ -72,22 +72,26 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
   }) {
     return _then(
       _value.copyWith(
-            myOwn: null == myOwn
-                ? _value.myOwn
-                : myOwn // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            profile: null == profile
-                ? _value.profile
-                : profile // ignore: cast_nullable_to_non_nullable
-                      as LoadedState<Profile>,
-            ownedEvents: null == ownedEvents
-                ? _value.ownedEvents
-                : ownedEvents // ignore: cast_nullable_to_non_nullable
-                      as LoadedState<IList<EventModel>>,
-            participatedEvents: null == participatedEvents
-                ? _value.participatedEvents
-                : participatedEvents // ignore: cast_nullable_to_non_nullable
-                      as LoadedState<IList<EventModel>>,
+            myOwn:
+                null == myOwn
+                    ? _value.myOwn
+                    : myOwn // ignore: cast_nullable_to_non_nullable
+                        as bool,
+            profile:
+                null == profile
+                    ? _value.profile
+                    : profile // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<Profile>,
+            ownedEvents:
+                null == ownedEvents
+                    ? _value.ownedEvents
+                    : ownedEvents // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<IList<EventModel>>,
+            participatedEvents:
+                null == participatedEvents
+                    ? _value.participatedEvents
+                    : participatedEvents // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<IList<EventModel>>,
           )
           as $Val,
     );
@@ -174,22 +178,26 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$ProfileStateImpl(
-        myOwn: null == myOwn
-            ? _value.myOwn
-            : myOwn // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        profile: null == profile
-            ? _value.profile
-            : profile // ignore: cast_nullable_to_non_nullable
-                  as LoadedState<Profile>,
-        ownedEvents: null == ownedEvents
-            ? _value.ownedEvents
-            : ownedEvents // ignore: cast_nullable_to_non_nullable
-                  as LoadedState<IList<EventModel>>,
-        participatedEvents: null == participatedEvents
-            ? _value.participatedEvents
-            : participatedEvents // ignore: cast_nullable_to_non_nullable
-                  as LoadedState<IList<EventModel>>,
+        myOwn:
+            null == myOwn
+                ? _value.myOwn
+                : myOwn // ignore: cast_nullable_to_non_nullable
+                    as bool,
+        profile:
+            null == profile
+                ? _value.profile
+                : profile // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<Profile>,
+        ownedEvents:
+            null == ownedEvents
+                ? _value.ownedEvents
+                : ownedEvents // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<IList<EventModel>>,
+        participatedEvents:
+            null == participatedEvents
+                ? _value.participatedEvents
+                : participatedEvents // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<IList<EventModel>>,
       ),
     );
   }

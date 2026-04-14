@@ -56,14 +56,16 @@ class _$ProfileEditingStateCopyWithImpl<$Res, $Val extends ProfileEditingState>
   $Res call({Object? profile = null, Object? saveState = null}) {
     return _then(
       _value.copyWith(
-            profile: null == profile
-                ? _value.profile
-                : profile // ignore: cast_nullable_to_non_nullable
-                      as Option<Profile>,
-            saveState: null == saveState
-                ? _value.saveState
-                : saveState // ignore: cast_nullable_to_non_nullable
-                      as LoadedState<Unit>,
+            profile:
+                null == profile
+                    ? _value.profile
+                    : profile // ignore: cast_nullable_to_non_nullable
+                        as Option<Profile>,
+            saveState:
+                null == saveState
+                    ? _value.saveState
+                    : saveState // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<Unit>,
           )
           as $Val,
     );
@@ -111,14 +113,16 @@ class __$$ProfileEditingStateImplCopyWithImpl<$Res>
   $Res call({Object? profile = null, Object? saveState = null}) {
     return _then(
       _$ProfileEditingStateImpl(
-        profile: null == profile
-            ? _value.profile
-            : profile // ignore: cast_nullable_to_non_nullable
-                  as Option<Profile>,
-        saveState: null == saveState
-            ? _value.saveState
-            : saveState // ignore: cast_nullable_to_non_nullable
-                  as LoadedState<Unit>,
+        profile:
+            null == profile
+                ? _value.profile
+                : profile // ignore: cast_nullable_to_non_nullable
+                    as Option<Profile>,
+        saveState:
+            null == saveState
+                ? _value.saveState
+                : saveState // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<Unit>,
       ),
     );
   }

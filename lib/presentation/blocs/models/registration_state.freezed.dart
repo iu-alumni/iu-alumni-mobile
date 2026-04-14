@@ -77,34 +77,41 @@ class _$RegistrationStateCopyWithImpl<$Res, $Val extends RegistrationState>
   }) {
     return _then(
       _value.copyWith(
-            verification: null == verification
-                ? _value.verification
-                : verification // ignore: cast_nullable_to_non_nullable
-                      as LoadedState<bool>,
-            firstName: freezed == firstName
-                ? _value.firstName
-                : firstName // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            lastName: freezed == lastName
-                ? _value.lastName
-                : lastName // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            graduationYear: freezed == graduationYear
-                ? _value.graduationYear
-                : graduationYear // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            email: freezed == email
-                ? _value.email
-                : email // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            password: freezed == password
-                ? _value.password
-                : password // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            telegram: freezed == telegram
-                ? _value.telegram
-                : telegram // ignore: cast_nullable_to_non_nullable
-                      as String?,
+            verification:
+                null == verification
+                    ? _value.verification
+                    : verification // ignore: cast_nullable_to_non_nullable
+                        as LoadedState<bool>,
+            firstName:
+                freezed == firstName
+                    ? _value.firstName
+                    : firstName // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            lastName:
+                freezed == lastName
+                    ? _value.lastName
+                    : lastName // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            graduationYear:
+                freezed == graduationYear
+                    ? _value.graduationYear
+                    : graduationYear // ignore: cast_nullable_to_non_nullable
+                        as int?,
+            email:
+                freezed == email
+                    ? _value.email
+                    : email // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            password:
+                freezed == password
+                    ? _value.password
+                    : password // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            telegram:
+                freezed == telegram
+                    ? _value.telegram
+                    : telegram // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -168,34 +175,41 @@ class __$$RegistrationStateImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$RegistrationStateImpl(
-        verification: null == verification
-            ? _value.verification
-            : verification // ignore: cast_nullable_to_non_nullable
-                  as LoadedState<bool>,
-        firstName: freezed == firstName
-            ? _value.firstName
-            : firstName // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        lastName: freezed == lastName
-            ? _value.lastName
-            : lastName // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        graduationYear: freezed == graduationYear
-            ? _value.graduationYear
-            : graduationYear // ignore: cast_nullable_to_non_nullable
-                  as int?,
-        email: freezed == email
-            ? _value.email
-            : email // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        password: freezed == password
-            ? _value.password
-            : password // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        telegram: freezed == telegram
-            ? _value.telegram
-            : telegram // ignore: cast_nullable_to_non_nullable
-                  as String?,
+        verification:
+            null == verification
+                ? _value.verification
+                : verification // ignore: cast_nullable_to_non_nullable
+                    as LoadedState<bool>,
+        firstName:
+            freezed == firstName
+                ? _value.firstName
+                : firstName // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        lastName:
+            freezed == lastName
+                ? _value.lastName
+                : lastName // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        graduationYear:
+            freezed == graduationYear
+                ? _value.graduationYear
+                : graduationYear // ignore: cast_nullable_to_non_nullable
+                    as int?,
+        email:
+            freezed == email
+                ? _value.email
+                : email // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        password:
+            freezed == password
+                ? _value.password
+                : password // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        telegram:
+            freezed == telegram
+                ? _value.telegram
+                : telegram // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
