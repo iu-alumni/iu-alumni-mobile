@@ -12,10 +12,10 @@ import '../models/profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit(this._usersRepository, this._eventsRepository) : super(_initial);
 
-  static final _initial = ProfileState(
-    profile: const LoadedState.init(),
-    ownedEvents: const LoadedState.init(),
-    participatedEvents: const LoadedState.init(),
+  static const _initial = ProfileState(
+    profile: LoadedState.init(),
+    ownedEvents: LoadedState.init(),
+    participatedEvents: LoadedState.init(),
     myOwn: true,
   );
 
@@ -23,10 +23,10 @@ class ProfileCubit extends Cubit<ProfileState> {
   final EventsRepository _eventsRepository;
 
   void dispose() => emit(
-    ProfileState(
-      profile: const LoadedState.init(),
-      ownedEvents: const LoadedState.init(),
-      participatedEvents: const LoadedState.init(),
+    const ProfileState(
+      profile: LoadedState.init(),
+      ownedEvents: LoadedState.init(),
+      participatedEvents: LoadedState.init(),
       myOwn: false,
     ),
   );

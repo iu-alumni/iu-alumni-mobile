@@ -8,9 +8,9 @@ import '../models/telegram_otp_login_state.dart';
 class TelegramOtpLoginCubit extends Cubit<TelegramOtpLoginState> {
   TelegramOtpLoginCubit(this._repository)
     : super(
-        TelegramOtpLoginState(
-          request: const LoadedState.init(),
-          verify: const LoadedState.init(),
+        const TelegramOtpLoginState(
+          request: LoadedState.init(),
+          verify: LoadedState.init(),
           code: '',
         ),
       );
@@ -77,9 +77,9 @@ class TelegramOtpLoginCubit extends Cubit<TelegramOtpLoginState> {
   bool get _codeIsValid =>
       state.code.length == 6 && RegExp(r'^\d{6}$').hasMatch(state.code);
 
-  void reset() => emit(TelegramOtpLoginState(
-    request: const LoadedState.init(),
-    verify: const LoadedState.init(),
+  void reset() => emit(const TelegramOtpLoginState(
+    request: LoadedState.init(),
+    verify: LoadedState.init(),
     code: '',
   ));
 }

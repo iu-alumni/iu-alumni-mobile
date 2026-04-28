@@ -7,9 +7,9 @@ import '../models/code_verification_state.dart';
 class CodeVerificationCubit extends Cubit<CodeVerificationState> {
   CodeVerificationCubit(this._repo)
     : super(
-        CodeVerificationState(
-          verification: const LoadedState.init(),
-          resend: const LoadedState.init(),
+        const CodeVerificationState(
+          verification: LoadedState.init(),
+          resend: LoadedState.init(),
           code: '',
         ),
       );
@@ -71,9 +71,9 @@ class CodeVerificationCubit extends Cubit<CodeVerificationState> {
 
   void dispose() {
     emit(
-      CodeVerificationState(
-        verification: const LoadedState.init(),
-        resend: const LoadedState.init(),
+      const CodeVerificationState(
+        verification: LoadedState.init(),
+        resend: LoadedState.init(),
         code: '',
       ),
     );

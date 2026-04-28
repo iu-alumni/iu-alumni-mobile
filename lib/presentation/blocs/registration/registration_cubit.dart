@@ -9,7 +9,7 @@ import '../models/registration_state.dart';
 
 class RegistrationCubit extends Cubit<RegistrationState> {
   RegistrationCubit(this._authRepository, this._reporter)
-    : super(RegistrationState(verification: const LoadedState.init()));
+    : super(const RegistrationState(verification: LoadedState.init()));
 
   final AuthRepository _authRepository;
   final Reporter _reporter;
@@ -38,7 +38,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       );
 
   void toInitial() =>
-      emit(RegistrationState(verification: const LoadedState.init()));
+      emit(const RegistrationState(verification: LoadedState.init()));
 
   void _register(bool manual) => verificationRequest(manual)
       .toTaskEither()

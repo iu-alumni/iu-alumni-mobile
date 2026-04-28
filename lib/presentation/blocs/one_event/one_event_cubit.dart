@@ -11,11 +11,11 @@ import '../models/one_event_state.dart';
 class OneEventCubit extends Cubit<OneEventState> {
   OneEventCubit(this._repository, this._usersRepository, this._reporter)
     : super(
-        OneEventState(
-          saveState: const LoadedState.init(),
-          event: const None(),
+        const OneEventState(
+          saveState: LoadedState.init(),
+          event: None(),
           userStatusLoading: false,
-          participants: const LoadedState.init(),
+          participants: LoadedState.init(),
         ),
       );
 

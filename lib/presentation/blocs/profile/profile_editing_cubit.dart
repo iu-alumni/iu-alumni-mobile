@@ -10,9 +10,9 @@ import '../models/profile_editing_state.dart';
 class ProfileEditingCubit extends Cubit<ProfileEditingState> {
   ProfileEditingCubit(this._repository, this._reporter)
     : super(
-        ProfileEditingState(
-          profile: const None(),
-          saveState: const LoadedState.init(),
+        const ProfileEditingState(
+          profile: None(),
+          saveState: LoadedState.init(),
         ),
       );
 
