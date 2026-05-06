@@ -166,7 +166,7 @@ class _RegistrationSubPageState extends State<RegistrationSubPage> {
             AppTextField(
               initialText: null,
               onChange: _registrationCubit.setTelegram,
-              hintText: 'Telegram alias (optional)',
+              hintText: 'Telegram alias',
               inputType: TextInputType.text,
               maxLines: 1,
             ),
