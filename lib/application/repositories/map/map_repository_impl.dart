@@ -1,4 +1,3 @@
-import 'package:ui_alumni_mobile/application/models/event.dart';
 
 import '../../../data/map/map_gateway.dart';
 import '../../../util/logger.dart';
@@ -84,7 +83,7 @@ class MapRepositoryImpl extends MapRepository {
           country: cityLocation.country,
           city: cityLocation.city,
         );
-        map[nc] = CityData(events: [event], profiles: const [], alumniCount: 0);
+        map[nc] = CityData(events: [event], profiles: const []);
       }
     }
 

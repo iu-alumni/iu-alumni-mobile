@@ -44,14 +44,14 @@ class EventsGatewayImpl implements EventsGateway {
       );
       final data = resp.data;
       if (data is! Map<String, dynamic> || data['items'] is! List) {
-        return PaginatedResult(items: const []);
+        return const PaginatedResult(items: []);
       }
       return PaginatedResult.fromJson(
-        data as Map<String, dynamic>,
+        data,
         (e) => EventDataModel.fromJson(e as Map<String, dynamic>),
       );
     } catch (_) {
-      return PaginatedResult(items: const []);
+      return const PaginatedResult(items: []);
     }
   }
 
@@ -68,14 +68,14 @@ class EventsGatewayImpl implements EventsGateway {
       );
       final data = resp.data;
       if (data is! Map<String, dynamic> || data['items'] is! List) {
-        return PaginatedResult(items: const []);
+        return const PaginatedResult(items: []);
       }
       return PaginatedResult.fromJson(
-        data as Map<String, dynamic>,
+        data,
         (e) => EventDataModel.fromJson(e as Map<String, dynamic>),
       );
     } catch (_) {
-      return PaginatedResult(items: const []);
+      return const PaginatedResult(items: []);
     }
   }
 

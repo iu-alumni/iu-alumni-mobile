@@ -17,7 +17,7 @@ import '../../router/app_router.gr.dart';
 @RoutePage()
 class PasswordResetConfirmPage extends StatefulWidget
     implements AutoRouteWrapper {
-  const PasswordResetConfirmPage({super.key, required this.token});
+  const PasswordResetConfirmPage({required this.token, super.key});
 
   final String token;
 

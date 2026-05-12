@@ -8,9 +8,9 @@ import '../models/otp_login_state.dart';
 class OtpLoginCubit extends Cubit<OtpLoginState> {
   OtpLoginCubit(this._repository)
     : super(
-        OtpLoginState(
-          request: const LoadedState.init(),
-          verify: const LoadedState.init(),
+        const OtpLoginState(
+          request: LoadedState.init(),
+          verify: LoadedState.init(),
           code: '',
         ),
       );
@@ -80,9 +80,9 @@ class OtpLoginCubit extends Cubit<OtpLoginState> {
       state.code.length == 6 && RegExp(r'^\d{6}$').hasMatch(state.code);
 
   /// Resets both request and verify states so the flow can restart.
-  void reset() => emit(OtpLoginState(
-    request: const LoadedState.init(),
-    verify: const LoadedState.init(),
+  void reset() => emit(const OtpLoginState(
+    request: LoadedState.init(),
+    verify: LoadedState.init(),
     code: '',
   ));
 }

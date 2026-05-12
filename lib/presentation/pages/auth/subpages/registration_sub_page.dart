@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ui_alumni_mobile/presentation/router/app_router.gr.dart';
 
 import '../../../blocs/models/registration_state.dart';
 import '../../../blocs/registration/registration_cubit.dart';

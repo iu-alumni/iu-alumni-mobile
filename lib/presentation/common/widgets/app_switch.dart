@@ -12,7 +12,7 @@ class AppSwitch extends StatelessWidget {
   Widget build(BuildContext context) => Switch(
     inactiveThumbColor: Colors.white,
     inactiveTrackColor: AppColors.gray80,
-    activeColor: Colors.white,
+    activeThumbColor: Colors.white,
     activeTrackColor: AppColors.primary,
     trackOutlineColor: WidgetStateProperty.resolveWith(
       (states) => states.contains(WidgetState.selected)

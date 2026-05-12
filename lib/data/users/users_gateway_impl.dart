@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:fpdart/fpdart.dart';
 
 import '../../application/models/paginated_result.dart';
 import '../../application/models/profile.dart';
@@ -32,7 +31,7 @@ class UsersGatewayImpl extends UsersGateway {
         (e) => Profile.fromJson(e as Map<String, dynamic>),
       );
     } catch (_) {
-      return PaginatedResult(items: const []);
+      return const PaginatedResult(items: []);
     }
   }
 
@@ -55,7 +54,7 @@ class UsersGatewayImpl extends UsersGateway {
       return PaginatedResult.fromJson(
           response.data as Map<String, dynamic>, (e) => Profile.fromJson(e as Map<String, dynamic>));
     } catch (_) {
-      return PaginatedResult(items: const []);
+      return const PaginatedResult(items: []);
     }
   }
 

@@ -279,7 +279,7 @@ class AuthGatewayImpl implements AuthGateway {
     try {
       await _dio.post(
         Paths.telegramVerifyRequest,
-        options: _dioOptionsManager.opts(withToken: true),
+        options: _dioOptionsManager.opts(),
       );
       return Either.of(unit);
     } on DioException catch (e, st) {
