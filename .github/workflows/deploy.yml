@@ -18,7 +18,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-flutter:
+  validate:
     runs-on: ubuntu-latest
 
     steps:
@@ -50,7 +50,7 @@ jobs:
           retention-days: 1
 
   build-image:
-    needs: build-flutter
+    needs: validate
     runs-on: ubuntu-latest
     permissions:
       contents: read
