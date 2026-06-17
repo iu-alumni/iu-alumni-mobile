@@ -21,6 +21,7 @@ import '../../../common/widgets/event_card.dart';
 import '../../../common/widgets/profile_pic.dart';
 import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
+import 'badges_section.dart';
 import 'open_bot_card.dart';
 
 const _eventCardWidth = 200.0;
@@ -118,6 +119,7 @@ class ProfileContent {
               ],
             ),
           ),
+        const BadgesSection(),
         if (personal) const _OwnedEvents(),
         const _ParticipatedEvents(),
         if (personal) const OpenBotCard(),
