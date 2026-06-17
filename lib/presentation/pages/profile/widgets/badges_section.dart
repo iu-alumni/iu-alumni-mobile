@@ -188,26 +188,80 @@ class _LockedTile extends StatelessWidget {
                 ),
               ),
             ),
-            // Top-right info pill.
+            // Top-right info pill — hover (web/desktop) or long-press (mobile)
+            // surfaces a tooltip explaining how to earn the badge.
             Positioned(
               right: -2,
               top: -2,
-              child: Container(
-                width: 24,
-                height: 24,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary,
-                  border: Border.all(color: Colors.white, width: 2),
+              child: Tooltip(
+                richMessage: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '${locked.badge.name}\n',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '${locked.badge.description}\n',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        height: 1.35,
+                      ),
+                    ),
+                    TextSpan(
+                      text: locked.threshold <= 1
+                          ? '\nNot yet started'
+                          : '\nProgress: ${locked.progress} / ${locked.threshold} ${locked.metricLabel}',
+                      style: const TextStyle(
+                        color: Color(0xFFC7F0BB),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Text(
-                  'i',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 13,
-                    height: 1,
+                preferBelow: false,
+                waitDuration: const Duration(milliseconds: 300),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.darkGray,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x33000000),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.help,
+                  child: Container(
+                    width: 24,
+                    height: 24,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.primary,
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    child: const Text(
+                      'i',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13,
+                        height: 1,
+                      ),
+                    ),
                   ),
                 ),
               ),

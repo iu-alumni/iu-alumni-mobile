@@ -6,11 +6,9 @@ import 'package:ui_alumni_mobile/presentation/common/widgets/nav_button.dart';
 
 import '../../../application/models/profile.dart';
 // import '../../../application/repositories/auth/telegram_verify_repository.dart'; // temporarily disabled
-import '../../../application/repositories/badges/badges_repository.dart';
 import '../../../application/repositories/events/events_repository.dart';
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
-import '../../blocs/badges/badges_cubit.dart';
 import '../../blocs/models/profile_state.dart';
 import '../../blocs/profile/profile_cubit.dart';
 // import '../../blocs/telegram_verify/telegram_verify_cubit.dart'; // temporarily disabled
@@ -37,9 +35,6 @@ class ProfilePage extends StatefulWidget implements AutoRouteWrapper {
       BlocProvider(
         create: (ctx) =>
             ProfileCubit(ctx.read<UsersRepository>(), ctx.read<EventsRepository>()),
-      ),
-      BlocProvider(
-        create: (ctx) => BadgesCubit(ctx.read<BadgesRepository>())..loadMine(),
       ),
       // Telegram verification temporarily disabled — re-enable when bot is ready
       // BlocProvider(

@@ -44,6 +44,7 @@ import 'data/token/token_provider.dart';
 import 'data/token/token_provider_impl.dart';
 import 'data/users/users_gateway.dart';
 import 'data/users/users_gateway_impl.dart';
+import 'presentation/blocs/badges/badges_cubit.dart';
 import 'presentation/blocs/events_list/events_list_cubit.dart';
 import 'presentation/blocs/profile/profile_cubit.dart';
 import 'presentation/common/constants/app_colors.dart';
@@ -185,6 +186,9 @@ class App extends StatelessWidget {
           ctx.read<UsersRepository>(),
           ctx.read<EventsRepository>(),
         ),
+      ),
+      BlocProvider(
+        create: (ctx) => BadgesCubit(ctx.read<BadgesRepository>())..loadMine(),
       ),
     ],
     child: Builder(
