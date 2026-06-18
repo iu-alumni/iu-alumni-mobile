@@ -8,20 +8,52 @@ import '../../../common/constants/app_colors.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/models/loaded_state.dart';
 import '../../../common/widgets/app_loader.dart';
-import '../../../common/widgets/titled_item.dart';
+import '../../../common/constants/app_text_styles.dart' show AppTextStyles;
 
 const _badgeWidth = 96.0;
 const _ringSize = 96.0;
 
-class BadgesSection extends StatelessWidget {
+class BadgesSection extends StatefulWidget {
   const BadgesSection({super.key});
 
   @override
-  Widget build(BuildContext context) => TitledItem(
-    title: 'Badges',
-    child: BlocBuilder<BadgesCubit, BadgesState>(
-      buildWhen: (p, c) => p.badges != c.badges,
-      builder: (context, state) => switch (state.badges) {
+  State<BadgesSection> createState() => _BadgesSectionState();
+}
+
+class _BadgesSectionState extends State<BadgesSection> {
+  @override
+  void initState() {
+    super.initState();
+    // Re-fetch every time the section mounts so newly-earned badges show up
+    // after the user takes an action elsewhere (e.g. joining an event).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<BadgesCubit>().loadMine();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Row(
+        children: [
+          Expanded(
+            child: Text('Badges', style: AppTextStyles.subtitle),
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            tooltip: 'Refresh',
+            icon: const Icon(Icons.refresh, color: AppColors.gray50, size: 20),
+            onPressed: () => context.read<BadgesCubit>().loadMine(),
+          ),
+        ],
+      ),
+      const SizedBox(height: 4),
+      BlocBuilder<BadgesCubit, BadgesState>(
+        buildWhen: (p, c) => p.badges != c.badges,
+        builder: (context, state) => switch (state.badges) {
         LoadedStateData<BadgesData>(:final data) when data.isEmpty => Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
@@ -44,7 +76,8 @@ class BadgesSection extends StatelessWidget {
           child: Center(child: AppLoader()),
         ),
       },
-    ),
+      ),
+    ],
   );
 }
 

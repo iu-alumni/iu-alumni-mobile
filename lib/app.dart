@@ -13,7 +13,7 @@ import 'package:uuid/uuid.dart';
 import 'application/repositories/auth/auth_repository.dart';
 import 'application/repositories/auth/auth_repository_impl.dart';
 import 'application/repositories/badges/badges_repository.dart';
-import 'application/repositories/badges/badges_repository_mock.dart';
+import 'application/repositories/badges/badges_repository_api.dart';
 import 'application/repositories/auth/otp_login_repository.dart';
 import 'application/repositories/auth/otp_login_repository_impl.dart';
 import 'application/repositories/auth/password_reset_repository.dart';
@@ -175,8 +175,12 @@ class App extends StatelessWidget {
           context.read<LocationsRepository>(),
         ),
       ),
-      // Mocked until BADGES_TICKETS.md #8 (Public badges API) ships.
-      RepositoryProvider<BadgesRepository>(create: (_) => BadgesRepositoryMock()),
+      RepositoryProvider<BadgesRepository>(
+        create: (context) => BadgesRepositoryApi(
+          context.read<Dio>(),
+          context.read<DioOptionsManager>(),
+        ),
+      ),
       // --- BLOCs ---
       BlocProvider(
         create: (context) => EventsListCubit(context.read<EventsRepository>()),
