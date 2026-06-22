@@ -39,10 +39,16 @@ class BadgesRepositoryApi implements BadgesRepository {
   @override
   Future<void> markSeen(List<String> badgeCodes) async {
     final opts = _options.opts();
+    // Best-effort: a failed mark-seen should NOT kill the popup chain. Worst
+    // case the badge re-appears in newlyEarned next time, which is fine.
     await Future.wait(
-      badgeCodes.map(
-        (code) => _dio.post<void>('$_base/me/$code/seen', options: opts),
-      ),
+      badgeCodes.map((code) async {
+        try {
+          await _dio.post<void>('$_base/me/$code/seen', options: opts);
+        } catch (_) {
+          // ignore: we still want to advance the popup chain
+        }
+      }),
     );
   }
 

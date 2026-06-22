@@ -13,6 +13,7 @@ import '../../../../util/currency_formatter.dart';
 import '../../../../util/num_formatter.dart';
 import '../../../blocs/models/one_event_state.dart';
 import '../../../blocs/one_event/one_event_cubit.dart';
+import '../../../blocs/badges/badges_cubit.dart';
 import '../../../blocs/profile/profile_cubit.dart';
 import '../../../common/constants/app_text_styles.dart';
 import '../../../common/widgets/app_button.dart';
@@ -93,9 +94,13 @@ class _Cover extends StatelessWidget {
 
   Future<void> _participate(BuildContext context) async {
     final profileCubit = context.read<ProfileCubit>();
+    final badgesCubit = context.read<BadgesCubit>();
     await context.read<OneEventCubit>().participate();
     // Mark this one is updated
     await profileCubit.updateParticipatedEvents();
+    // Re-fetch badges so any newly-earned badge shows the celebratory popup
+    // immediately — the global listener in app.dart handles the popup itself.
+    await badgesCubit.loadMine();
   }
 
   Future<void> _leave(BuildContext context) async {
