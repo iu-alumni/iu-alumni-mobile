@@ -9,6 +9,7 @@ import '../../../application/models/profile.dart';
 import '../../../application/repositories/events/events_repository.dart';
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../../application/repositories/users/users_repository.dart';
+import '../../blocs/badges/badges_cubit.dart';
 import '../../blocs/models/profile_state.dart';
 import '../../blocs/profile/profile_cubit.dart';
 // import '../../blocs/telegram_verify/telegram_verify_cubit.dart'; // temporarily disabled
@@ -84,6 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
       listener: (context, state) {
         _cubit.loadOwnedEvents();
         _cubit.loadParticipatedEvents();
+        context.read<BadgesCubit>().loadMine();
       },
       builder: (context, state) => AppScaffold(
         title: 'Profile',

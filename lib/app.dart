@@ -12,6 +12,8 @@ import 'package:ui_alumni_mobile/data/map/map_gateway_impl.dart';
 import 'package:uuid/uuid.dart';
 import 'application/repositories/auth/auth_repository.dart';
 import 'application/repositories/auth/auth_repository_impl.dart';
+import 'application/repositories/badges/badges_repository.dart';
+import 'application/repositories/badges/badges_repository_api.dart';
 import 'application/repositories/auth/otp_login_repository.dart';
 import 'application/repositories/auth/otp_login_repository_impl.dart';
 import 'application/repositories/auth/password_reset_repository.dart';
@@ -42,6 +44,7 @@ import 'data/token/token_provider.dart';
 import 'data/token/token_provider_impl.dart';
 import 'data/users/users_gateway.dart';
 import 'data/users/users_gateway_impl.dart';
+import 'presentation/blocs/badges/badges_cubit.dart';
 import 'presentation/blocs/events_list/events_list_cubit.dart';
 import 'presentation/blocs/profile/profile_cubit.dart';
 import 'presentation/common/constants/app_colors.dart';
@@ -172,6 +175,12 @@ class App extends StatelessWidget {
           context.read<LocationsRepository>(),
         ),
       ),
+      RepositoryProvider<BadgesRepository>(
+        create: (context) => BadgesRepositoryApi(
+          context.read<Dio>(),
+          context.read<DioOptionsManager>(),
+        ),
+      ),
       // --- BLOCs ---
       BlocProvider(
         create: (context) => EventsListCubit(context.read<EventsRepository>()),
@@ -181,6 +190,9 @@ class App extends StatelessWidget {
           ctx.read<UsersRepository>(),
           ctx.read<EventsRepository>(),
         ),
+      ),
+      BlocProvider(
+        create: (ctx) => BadgesCubit(ctx.read<BadgesRepository>())..loadMine(),
       ),
     ],
     child: Builder(
@@ -204,3 +216,4 @@ class App extends StatelessWidget {
     ),
   );
 }
+
