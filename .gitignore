@@ -46,3 +46,14 @@ app.*.map.json
 .netlify
 keystore-release.jks
 release/
+
+# Generated files
+
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+
+# Coverage
+coverage/
+*.lcov
+*.info
