@@ -16,20 +16,32 @@ class AuthGatewayImpl implements AuthGateway {
   final DioOptionsManager _dioOptionsManager;
 
   @override
-  Future<Either<String, Unit>> authorize(String email, String password) =>
-      TaskEither<String, Either<String, Unit>>.tryCatch(() async {
-        final response = await _dio.post(
-          Paths.login,
-          data: {'email': email, 'password': password},
-          options: _dioOptionsManager.opts(withToken: false),
-        );
-        final data = response.data as Map<String, dynamic>;
-        if (data['access_token'] case final token?) {
-          _tokenManager.set(token);
-          return Either.of(unit);
+  Future<Either<String, Unit>> authorize(String email, String password) async {
+    try {
+      final response = await _dio.post(
+        Paths.login,
+        data: {'email': email, 'password': password},
+        options: _dioOptionsManager.opts(withToken: false),
+      );
+      final data = response.data as Map<String, dynamic>;
+      if (data['access_token'] case final token?) {
+        _tokenManager.set(token);
+        return Either.of(unit);
+      }
+      return Left(data['detail'] ?? 'Unknown Error');
+    } on DioException catch (e, st) {
+      logger.e('Error while authorizing', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        if (data['detail'] case final String detail) {
+          return Left(detail);
         }
-        return Left(data['detail'] ?? 'Unknown Error');
-      }, (e, _) => '$e').flatMap(TaskEither.fromEither).run();
+      }
+      return Left(e.message ?? 'Unknown error');
+    } catch (e) {
+      return Left('$e');
+    }
+  }
 
   @override
   Future<Either<String, Either<Unit, Unit>>> register(
