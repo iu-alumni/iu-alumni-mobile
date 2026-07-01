@@ -43,3 +43,13 @@ The web target deploys automatically on push to `develop` (testing) or `main` (p
 `API_BASE_URL` is baked into the binary at build time from the `API_BASE_URL` GitHub environment secret.  
 A separate Docker image is built per environment (testing tag: `sha-test`, production tag: `sha`).  
 See [iu-alumni-infra](https://github.com/iu-alumni/iu-alumni-infra) for the full deployment guide.
+
+
+## Testing
+
+```bash
+flutter pub get
+flutter pub run build_runner build --delete-conflicting-outputs
+flutter test
+```
+
