@@ -197,6 +197,11 @@ class AuthGatewayImpl implements AuthGateway {
       return Either.of(unit);
     } on DioException catch (e, st) {
       logger.e('Error requesting password reset', error: e, stackTrace: st);
+      final data = e.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        if (detail is String) return Left(detail);
+      }
       return Left(e.message ?? 'Unknown error');
     } catch (e) {
       return Left('$e');

@@ -76,6 +76,31 @@ class ProfileEditingContent {
           return ProfilePic(profile: p, edit: () => _updateAvatar(context));
         },
       ),
+      BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+        buildWhen: (pr, cu) =>
+            pr.profile.toNullable()?.avatar != cu.profile.toNullable()?.avatar,
+        builder: (context, ep) {
+          final p = ep.profile.toNullable() ?? profile;
+          if (p.avatar == null || p.avatar!.isEmpty) return const SizedBox();
+          return Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Align(
+              child: AppButton(
+                buttonStyle: AppButtonStyle.gray,
+                onTap: () => context.read<ProfileEditingCubit>().update(
+                  (p) => p.copyWith(avatar: null),
+                ),
+                child: Text(
+                  'Remove photo',
+                  style: AppTextStyles.actionSB.copyWith(
+                    color: AppColors.darkGray,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
       const SizedBox(height: 24),
       const _ErrorText(),
       TitledItem(

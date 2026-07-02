@@ -14,12 +14,15 @@ class PasswordResetRequestCubit extends Cubit<LoadedState<Unit>> {
   final PasswordResetRepository _repository;
 
   Future<void> requestReset(String email) async {
-    if (email.isEmpty) {
+    if (state is LoadedStateLoading<Unit>) return;
+
+    final normalizedEmail = email.trim();
+    if (normalizedEmail.isEmpty) {
       emit(const LoadedState.error('Please enter your email address'));
       return;
     }
     emit(const LoadedState.loading());
-    final result = await _repository.requestReset(email);
+    final result = await _repository.requestReset(normalizedEmail);
     emit(
       result.match(
         LoadedState.error,
