@@ -146,9 +146,8 @@ class _InCityButton extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        if (profiles.isNotEmpty)
-          StackedRow(profiles: profiles)
-        else if (alumniCount > 0)
+        if (profiles.isNotEmpty) StackedRow(profiles: profiles),
+        if (alumniCount > 0)
           Text(
             '$alumniCount',
             style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
@@ -237,4 +236,3 @@ class _InCitySheetState extends State<_InCitySheet> {
     ),
   );
 }
-
