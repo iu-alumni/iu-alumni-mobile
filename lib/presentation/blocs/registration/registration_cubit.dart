@@ -24,18 +24,62 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       ? 'The password needs to contain at least 8 characters'
       : null;
 
-  Option<RegisterRequest> _verificationData({required bool manual}) =>
-      Option.Do(
-        (mb) => RegisterRequest(
-          firstName: mb(Option.fromNullable(state.firstName)),
-          lastName: mb(Option.fromNullable(state.lastName)),
-          gradYear: '${mb(Option.fromNullable(state.graduationYear))}',
-          email: mb(Option.fromNullable(state.email)),
-          telegram: state.telegram,
-          password: mb(Option.fromNullable(state.password)),
-          manualVerification: manual,
-        ),
-      );
+  String? _validateTelegram(String? telegram) {
+    if (telegram == null || telegram.isEmpty) return null;
+    return telegram.length < 3
+        ? 'Telegram alias must contain at least 3 characters'
+        : null;
+  }
+
+  String? _trimmed(String? value) {
+    final trimmed = value?.trim();
+    return trimmed == null || trimmed.isEmpty ? null : trimmed;
+  }
+
+  String _missingFieldsMessage(List<String> fields) {
+    if (fields.length == 1) {
+      return 'Please enter your ${fields.single}';
+    }
+
+    final allButLast = fields.take(fields.length - 1).join(', ');
+    return 'Please enter your $allButLast, and ${fields.last}';
+  }
+
+  Either<String, RegisterRequest> _verificationData({required bool manual}) {
+    final firstName = _trimmed(state.firstName);
+    final lastName = _trimmed(state.lastName);
+    final email = _trimmed(state.email);
+    final password = state.password;
+    final telegram = _trimmed(state.telegram);
+
+    final missingFields = [
+      if (firstName == null) 'first name',
+      if (lastName == null) 'last name',
+      if (email == null) 'university email',
+      if (state.graduationYear == null) 'graduation year',
+      if (password == null || password.isEmpty) 'password',
+    ];
+
+    if (missingFields.isNotEmpty) {
+      return Left(_missingFieldsMessage(missingFields));
+    }
+
+    if (_validateTelegram(telegram) case final e?) {
+      return Left(e);
+    }
+
+    return Right(
+      RegisterRequest(
+        firstName: firstName!,
+        lastName: lastName!,
+        gradYear: '${state.graduationYear}',
+        email: email!,
+        telegram: telegram,
+        password: password!,
+        manualVerification: manual,
+      ),
+    );
+  }
 
   void toInitial() =>
       emit(const RegistrationState(verification: LoadedState.init()));
@@ -60,9 +104,6 @@ class RegistrationCubit extends Cubit<RegistrationState> {
 
   Either<String, RegisterRequest> verificationRequest(bool manual) =>
       _verificationData(manual: manual)
-          .toEither(
-            () => 'Please, specify all fields to complete the verification',
-          )
           .flatMap<RegisterRequest>(
             (r) => switch (_validateEmail(r.email)) {
               final e? => Left(e),
