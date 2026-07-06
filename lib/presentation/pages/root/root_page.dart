@@ -53,10 +53,33 @@ class _RootPageState extends State<RootPage> {
     _ => const <Badge>[],
   };
 
+  static Set<String> _liveCodes(BadgesState s) => switch (s.badges) {
+    LoadedStateData<BadgesData>(:final data) => {
+      ...data.earned.map((e) => e.badge.code),
+      ...data.newlyEarned.map((b) => b.code),
+    },
+    _ => const <String>{},
+  };
+
+  // Drops any code from _badgesShown that's no longer in the user's earned
+  // or newly-earned list — i.e. a badge that was revoked (e.g. after leaving
+  // an event). Without this, re-earning a revoked badge would silently skip
+  // the popup because the code is still remembered from the first award.
+  void _pruneRevoked(BadgesState s) {
+    final live = _liveCodes(s);
+    if (live.isEmpty) {
+      return;
+    }
+    _badgesShown.removeWhere((code) => !live.contains(code));
+  }
+
   Future<void> _drainBadgePopups(BuildContext context, BadgesState s) async {
     if (_popupInFlight) {
       return;
     }
+    // Second-line reconcile: if listenWhen didn't fire the prune (e.g. an
+    // out-of-band emit), still drop revoked codes here before checking fresh.
+    _pruneRevoked(s);
     final fresh = _newly(s).where((b) => !_badgesShown.contains(b.code)).toList();
     if (fresh.isEmpty) {
       return;
@@ -125,6 +148,7 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) => BlocListener<BadgesCubit, BadgesState>(
     listenWhen: (p, c) {
+      _pruneRevoked(c);
       final codes = _newly(c).map((b) => b.code).toSet();
       return codes.difference(_badgesShown).isNotEmpty;
     },
