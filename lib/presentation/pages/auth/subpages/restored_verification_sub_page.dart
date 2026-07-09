@@ -7,6 +7,7 @@ import 'package:ui_alumni_mobile/presentation/common/widgets/app_button.dart';
 import 'package:ui_alumni_mobile/presentation/common/widgets/app_loader.dart';
 import 'package:ui_alumni_mobile/presentation/common/widgets/app_scaffold.dart';
 import 'package:ui_alumni_mobile/presentation/common/widgets/app_text_field.dart';
+import 'package:ui_alumni_mobile/presentation/common/utils/university_email.dart';
 
 import '../../../../application/repositories/auth/auth_repository.dart';
 
@@ -27,13 +28,28 @@ class _RestoredVerificationSubPageState
   bool _success = false;
 
   Future<void> _resend() async {
-    if (_email.isEmpty) return;
+    final email = _email.trim();
+    if (email.isEmpty) {
+      setState(() {
+        _message = 'Please enter your email';
+        _success = false;
+      });
+      return;
+    }
+    final emailError = validateUniversityEmail(email);
+    if (emailError != null) {
+      setState(() {
+        _message = emailError;
+        _success = false;
+      });
+      return;
+    }
     setState(() {
       _loading = true;
       _message = null;
     });
     final repo = context.read<AuthRepository>();
-    repo.setEmail(_email);
+    repo.setEmail(email);
     final result = await repo.sendCode();
     if (!mounted) return;
     setState(() {
