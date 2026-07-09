@@ -9,9 +9,12 @@ import '../../../common/constants/app_text_styles.dart';
 import '../../../common/models/loaded_state.dart';
 import '../../../common/widgets/app_loader.dart';
 import '../../../common/constants/app_text_styles.dart' show AppTextStyles;
+import 'badge_details_sheet.dart';
 
 const _badgeWidth = 96.0;
 const _ringSize = 96.0;
+
+enum _BadgeFilter { all, earned, locked }
 
 class BadgesSection extends StatefulWidget {
   const BadgesSection({super.key});
@@ -21,6 +24,8 @@ class BadgesSection extends StatefulWidget {
 }
 
 class _BadgesSectionState extends State<BadgesSection> {
+  _BadgeFilter _filter = _BadgeFilter.all;
+
   @override
   void initState() {
     super.initState();
@@ -62,7 +67,20 @@ class _BadgesSectionState extends State<BadgesSection> {
             textAlign: TextAlign.center,
           ),
         ),
-        LoadedStateData<BadgesData>(:final data) => _Row(data: data),
+        LoadedStateData<BadgesData>(:final data) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _FilterTabs(
+              current: _filter,
+              allCount: data.earned.length + data.locked.length,
+              earnedCount: data.earned.length,
+              lockedCount: data.locked.length,
+              onChanged: (f) => setState(() => _filter = f),
+            ),
+            const SizedBox(height: 12),
+            _Row(data: data, filter: _filter),
+          ],
+        ),
         LoadedStateError(:final error) => Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
@@ -81,29 +99,103 @@ class _BadgesSectionState extends State<BadgesSection> {
   );
 }
 
-class _Row extends StatelessWidget {
-  const _Row({required this.data});
+class _FilterTabs extends StatelessWidget {
+  const _FilterTabs({
+    required this.current,
+    required this.allCount,
+    required this.earnedCount,
+    required this.lockedCount,
+    required this.onChanged,
+  });
 
-  final BadgesData data;
+  final _BadgeFilter current;
+  final int allCount;
+  final int earnedCount;
+  final int lockedCount;
+  final ValueChanged<_BadgeFilter> onChanged;
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
-    physics: const BouncingScrollPhysics(),
     scrollDirection: Axis.horizontal,
     child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final e in data.earned) ...[
-          _EarnedTile(earned: e),
-          const SizedBox(width: 10),
-        ],
-        for (final l in data.locked) ...[
-          _LockedTile(locked: l),
-          const SizedBox(width: 10),
-        ],
+        _pill(_BadgeFilter.all, 'All', allCount),
+        const SizedBox(width: 8),
+        _pill(_BadgeFilter.earned, 'Earned', earnedCount),
+        const SizedBox(width: 8),
+        _pill(_BadgeFilter.locked, 'Locked', lockedCount),
       ],
     ),
   );
+
+  Widget _pill(_BadgeFilter f, String label, int count) {
+    final active = current == f;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => onChanged(f),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        decoration: BoxDecoration(
+          color: active ? AppColors.primary : AppColors.gray90,
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Text(
+          '$label · $count',
+          style: AppTextStyles.caption.copyWith(
+            color: active ? Colors.white : AppColors.gray30,
+            fontWeight: FontWeight.w700,
+            fontSize: 12,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Row extends StatelessWidget {
+  const _Row({required this.data, required this.filter});
+
+  final BadgesData data;
+  final _BadgeFilter filter;
+
+  @override
+  Widget build(BuildContext context) {
+    final showEarned = filter != _BadgeFilter.locked;
+    final showLocked = filter != _BadgeFilter.earned;
+    final visible = (showEarned ? data.earned.length : 0) +
+        (showLocked ? data.locked.length : 0);
+    if (visible == 0) {
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          filter == _BadgeFilter.earned
+              ? 'No earned badges yet.'
+              : 'Nothing locked — you have them all!',
+          style: AppTextStyles.caption,
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (showEarned)
+            for (final e in data.earned) ...[
+              _EarnedTile(earned: e),
+              const SizedBox(width: 10),
+            ],
+          if (showLocked)
+            for (final l in data.locked) ...[
+              _LockedTile(locked: l),
+              const SizedBox(width: 10),
+            ],
+        ],
+      ),
+    );
+  }
 }
 
 class _EarnedTile extends StatelessWidget {
@@ -114,56 +206,60 @@ class _EarnedTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ringColors = _tierGradient(earned.badge.tier);
-    return SizedBox(
-      width: _badgeWidth,
-      child: Column(
-        children: [
-          Container(
-            width: _ringSize,
-            height: _ringSize,
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: ringColors,
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: Container(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => BadgeDetailsSheet.showEarned(context, earned),
+      child: SizedBox(
+        width: _badgeWidth,
+        child: Column(
+          children: [
+            Container(
+              width: _ringSize,
+              height: _ringSize,
+              padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _tierIconBg(earned.badge.tier),
+                gradient: LinearGradient(
+                  colors: ringColors,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-              child: Icon(
-                _iconFor(earned.badge.iconKey),
-                color: _tierIconColor(earned.badge.tier),
-                size: 44,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _tierIconBg(earned.badge.tier),
+                ),
+                child: Icon(
+                  _iconFor(earned.badge.iconKey),
+                  color: _tierIconColor(earned.badge.tier),
+                  size: 44,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 6),
-          _TierPill(tier: earned.badge.tier),
-          const SizedBox(height: 4),
-          Text(
-            earned.badge.name,
-            style: AppTextStyles.caption.copyWith(
-              color: AppColors.darkGray,
-              fontWeight: FontWeight.w600,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          if (earned.metadataLabel case final label?)
+            const SizedBox(height: 6),
+            _TierPill(tier: earned.badge.tier),
+            const SizedBox(height: 4),
             Text(
-              label,
-              style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
+              earned.badge.name,
+              style: AppTextStyles.caption.copyWith(
+                color: AppColors.darkGray,
+                fontWeight: FontWeight.w600,
+              ),
               textAlign: TextAlign.center,
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-        ],
+            if (earned.metadataLabel case final label?)
+              Text(
+                label,
+                style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -175,7 +271,10 @@ class _LockedTile extends StatelessWidget {
   final LockedBadge locked;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
+  Widget build(BuildContext context) => GestureDetector(
+    behavior: HitTestBehavior.opaque,
+    onTap: () => BadgeDetailsSheet.showLocked(context, locked),
+    child: SizedBox(
     width: _badgeWidth,
     child: Column(
       children: [
@@ -336,6 +435,7 @@ class _LockedTile extends StatelessWidget {
           ),
         ),
       ],
+    ),
     ),
   );
 }
