@@ -105,9 +105,14 @@ class _Cover extends StatelessWidget {
 
   Future<void> _leave(BuildContext context) async {
     final profileCubit = context.read<ProfileCubit>();
+    final badgesCubit = context.read<BadgesCubit>();
     await context.read<OneEventCubit>().leave();
     // Mark this one is updated
     await profileCubit.updateParticipatedEvents();
+    // Re-fetch badges so any badge that got revoked (Networker /
+    // Cross-city commuter / Rainmaker / cascaded Badge Collector) is
+    // gone from the earned list on the next render.
+    await badgesCubit.loadMine();
   }
 
   @override
