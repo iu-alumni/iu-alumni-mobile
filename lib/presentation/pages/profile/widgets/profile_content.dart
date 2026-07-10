@@ -23,6 +23,7 @@ import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
 import 'badges_section.dart';
 import 'open_bot_card.dart';
+import 'profile_projects_section.dart';
 
 const _eventCardWidth = 200.0;
 
@@ -122,6 +123,8 @@ class ProfileContent {
         const BadgesSection(),
         if (personal) const _OwnedEvents(),
         const _ParticipatedEvents(),
+        if (personal) const MyOwnedProjects(),
+        ContributedProjects(profileId: profile.profileId),
         if (personal) const OpenBotCard(),
         if (personal)
           AppButton(

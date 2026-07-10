@@ -24,6 +24,8 @@ import 'application/repositories/auth/telegram_verify_repository.dart';
 import 'application/repositories/auth/telegram_verify_repository_impl.dart';
 import 'application/repositories/events/events_repository.dart';
 import 'application/repositories/events/events_repository_impl.dart';
+import 'application/repositories/projects/projects_repository.dart';
+import 'application/repositories/projects/projects_repository_api.dart';
 import 'application/repositories/map/map_repository.dart';
 import 'application/repositories/map/map_repository_impl.dart';
 import 'application/repositories/reporter/reporter.dart';
@@ -47,6 +49,7 @@ import 'data/users/users_gateway_impl.dart';
 import 'presentation/blocs/badges/badges_cubit.dart';
 import 'presentation/blocs/events_list/events_list_cubit.dart';
 import 'presentation/blocs/profile/profile_cubit.dart';
+import 'presentation/blocs/projects/projects_cubit.dart';
 import 'presentation/common/constants/app_colors.dart';
 import 'presentation/router/always_root_route.dart';
 import 'presentation/router/app_router.dart';
@@ -181,6 +184,12 @@ class App extends StatelessWidget {
           context.read<DioOptionsManager>(),
         ),
       ),
+      RepositoryProvider<ProjectsRepository>(
+        create: (context) => ProjectsRepositoryApi(
+          context.read<Dio>(),
+          context.read<DioOptionsManager>(),
+        ),
+      ),
       // --- BLOCs ---
       BlocProvider(
         create: (context) => EventsListCubit(context.read<EventsRepository>()),
@@ -193,6 +202,9 @@ class App extends StatelessWidget {
       ),
       BlocProvider(
         create: (ctx) => BadgesCubit(ctx.read<BadgesRepository>())..loadMine(),
+      ),
+      BlocProvider(
+        create: (ctx) => ProjectsCubit(ctx.read<ProjectsRepository>()),
       ),
     ],
     child: Builder(

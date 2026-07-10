@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum RootPageState { eventsListPage, mapPage, profilePage }
+enum RootPageState { eventsListPage, mapPage, projectsListPage, profilePage }
 
 class RootPageCubit extends Cubit<RootPageState> {
   RootPageCubit() : super(RootPageState.eventsListPage);
