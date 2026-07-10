@@ -13,7 +13,7 @@ Map<String, dynamic> _$$RegisterRequestImplToJson(
   'last_name': instance.lastName,
   'graduation_year': instance.gradYear,
   'email': instance.email,
-  'telegram_alias': instance.telegram,
   'password': instance.password,
   'manual_verification': instance.manualVerification,
+  'telegram_alias': instance.telegram,
 };
