@@ -16,6 +16,7 @@ import '../events_list/events_list_page.dart';
 import '../map/map_page.dart';
 import '../profile/profile_page.dart';
 import '../profile/widgets/badge_earned_popup.dart';
+import '../projects_list/projects_list_page.dart';
 
 @RoutePage()
 class RootPage extends StatefulWidget implements AutoRouteWrapper {
@@ -41,6 +42,7 @@ class RootPage extends StatefulWidget implements AutoRouteWrapper {
 class _RootPageState extends State<RootPage> {
   late final Widget _eventsPage = const EventsListPage();
   late final Widget _mapPage = const MapPage();
+  late final Widget _projectsPage = const ProjectsListPage();
   late final Widget _profilePage = const ProfilePage();
 
   // Popup-chain state. RootPage sits INSIDE the Navigator, so showDialog
@@ -98,6 +100,7 @@ class _RootPageState extends State<RootPage> {
       [
             (Icons.location_pin, RootPageState.mapPage, 'map'),
             (Icons.calendar_month, RootPageState.eventsListPage, 'events'),
+            (Icons.emoji_objects, RootPageState.projectsListPage, 'projects'),
             (Icons.person, RootPageState.profilePage, 'profile'),
           ]
           .map(
@@ -136,6 +139,7 @@ class _RootPageState extends State<RootPage> {
           builder: (context, page) => switch (page) {
             RootPageState.eventsListPage => _eventsPage,
             RootPageState.mapPage => _mapPage,
+            RootPageState.projectsListPage => _projectsPage,
             RootPageState.profilePage => _profilePage,
           },
         ),
