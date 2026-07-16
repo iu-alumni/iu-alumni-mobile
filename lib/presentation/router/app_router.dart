@@ -9,6 +9,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: RootRoute.page),
     AutoRoute(page: EventRoute.page),
     AutoRoute(page: EventEditingRoute.page),
+    AutoRoute(page: ProjectRoute.page),
+    AutoRoute(page: ProjectEditingRoute.page),
     AutoRoute(page: PasswordResetConfirmRoute.page),
     AutoRoute(
       page: AuthRoute.page,
