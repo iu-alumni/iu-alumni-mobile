@@ -4,7 +4,9 @@ import 'dart:typed_data';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 
+import '../../../application/models/profile.dart';
 import '../../../application/models/project.dart';
 import '../../../application/repositories/projects/projects_repository.dart';
 import '../../../application/repositories/users/users_repository.dart';
@@ -17,6 +19,7 @@ import '../../common/models/loaded_state.dart';
 import '../../common/widgets/app_button.dart';
 import '../../common/widgets/app_loader.dart';
 import '../../common/widgets/app_scaffold.dart';
+import '../../common/widgets/profile_pic.dart';
 import '../../router/app_router.gr.dart';
 
 @RoutePage()
@@ -43,6 +46,8 @@ class ProjectPage extends StatelessWidget implements AutoRouteWrapper {
         builder: (context, state) => switch (state.project) {
           LoadedStateData<ProjectModel>(:final data) => _Body(
             project: data,
+            owner: state.owner,
+            contributors: state.contributors,
             actionInFlight: state.actionInFlight,
           ),
           LoadedStateError(:final error) => Center(
@@ -63,9 +68,16 @@ class ProjectPage extends StatelessWidget implements AutoRouteWrapper {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.project, required this.actionInFlight});
+  const _Body({
+    required this.project,
+    required this.owner,
+    required this.contributors,
+    required this.actionInFlight,
+  });
 
   final ProjectModel project;
+  final Profile? owner;
+  final List<Profile> contributors;
   final bool actionInFlight;
 
   @override
@@ -95,18 +107,12 @@ class _Body extends StatelessWidget {
                   fontSize: 22,
                 ),
               ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  const Icon(Icons.people_outline, size: 16, color: AppColors.gray50),
-                  const SizedBox(width: 6),
-                  Text(
-                    project.contributorCount == 1
-                        ? '1 contributor'
-                        : '${project.contributorCount} contributors',
-                    style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
-                  ),
-                ],
+              const SizedBox(height: 12),
+              _OwnerRow(owner: owner, ownerId: project.ownerId),
+              const SizedBox(height: 12),
+              _ContributorsTap(
+                project: project,
+                contributors: contributors,
               ),
               const SizedBox(height: 16),
               Text(
@@ -143,6 +149,235 @@ class _Body extends StatelessWidget {
       ],
     );
   }
+}
+
+class _OwnerRow extends StatelessWidget {
+  const _OwnerRow({required this.owner, required this.ownerId});
+
+  final Profile? owner;
+  final String ownerId;
+
+  @override
+  Widget build(BuildContext context) {
+    final displayName = owner?.fullName ?? 'Alumni';
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: owner == null
+          ? null
+          : () => context.pushRoute(ProfileRoute(profile: Option.of(owner!))),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: [
+            if (owner case final o?)
+              ProfilePic(profile: o, size: 28)
+            else
+              const CircleAvatar(
+                radius: 14,
+                backgroundColor: AppColors.gray90,
+                child: Icon(Icons.person, size: 16, color: AppColors.gray50),
+              ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Proposed by',
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.gray50,
+                      fontSize: 11,
+                    ),
+                  ),
+                  Text(
+                    displayName,
+                    style: AppTextStyles.body.copyWith(
+                      color: AppColors.darkGray,
+                      fontWeight: FontWeight.w600,
+                      decoration: owner == null
+                          ? TextDecoration.none
+                          : TextDecoration.underline,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            if (owner != null)
+              const Icon(
+                Icons.arrow_forward_ios,
+                size: 14,
+                color: AppColors.gray50,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ContributorsTap extends StatelessWidget {
+  const _ContributorsTap({required this.project, required this.contributors});
+
+  final ProjectModel project;
+  final List<Profile> contributors;
+
+  @override
+  Widget build(BuildContext context) {
+    final count = project.contributorCount;
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: count == 0
+          ? null
+          : () => _ContributorsSheet.show(context, contributors, count),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.people_outline,
+              size: 16,
+              color: AppColors.gray50,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              count == 1 ? '1 contributor' : '$count contributors',
+              style: AppTextStyles.caption.copyWith(
+                color: AppColors.gray50,
+                decoration: count == 0
+                    ? TextDecoration.none
+                    : TextDecoration.underline,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ContributorsSheet {
+  static Future<void> show(
+    BuildContext context,
+    List<Profile> contributors,
+    int count,
+  ) => showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (_) => DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.6,
+      minChildSize: 0.3,
+      maxChildSize: 0.9,
+      builder: (_, scrollController) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(top: 12, bottom: 12),
+              decoration: BoxDecoration(
+                color: AppColors.gray80,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: Text(
+              count == 1 ? '1 contributor' : '$count contributors',
+              style: AppTextStyles.subtitle.copyWith(
+                color: AppColors.darkGray,
+                fontWeight: FontWeight.w800,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          if (contributors.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+              child: Center(
+                child: Text(
+                  'Could not load contributor profiles.',
+                  style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          else
+            Expanded(
+              child: ListView.builder(
+                controller: scrollController,
+                itemCount: contributors.length,
+                itemBuilder: (context, i) => _ContributorTile(
+                  profile: contributors[i],
+                ),
+              ),
+            ),
+        ],
+      ),
+    ),
+  );
+}
+
+class _ContributorTile extends StatelessWidget {
+  const _ContributorTile({required this.profile});
+
+  final Profile profile;
+
+  @override
+  Widget build(BuildContext context) => InkWell(
+    onTap: () {
+      Navigator.of(context).pop();
+      context.pushRoute(ProfileRoute(profile: Option.of(profile)));
+    },
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Row(
+        children: [
+          ProfilePic(profile: profile, size: 40),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  profile.fullName,
+                  style: AppTextStyles.body.copyWith(
+                    color: AppColors.darkGray,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (profile.location case final loc?)
+                  Text(
+                    loc,
+                    style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+              ],
+            ),
+          ),
+          const Icon(
+            Icons.arrow_forward_ios,
+            size: 14,
+            color: AppColors.gray50,
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 class _Cover extends StatelessWidget {
