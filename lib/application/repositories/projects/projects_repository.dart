@@ -23,6 +23,7 @@ abstract interface class ProjectsRepository {
     required String title,
     required String description,
     String? cover,
+    String? donationLink,
   });
 
   /// Returns the refreshed project on success, `null` on failure.
@@ -31,6 +32,7 @@ abstract interface class ProjectsRepository {
     String? title,
     String? description,
     String? cover,
+    String? donationLink,
   });
 
   Future<bool> delete(String id);
