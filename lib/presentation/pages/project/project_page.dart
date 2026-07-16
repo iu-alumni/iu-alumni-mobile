@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart' hide State;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../application/models/profile.dart';
 import '../../../application/models/project.dart';
@@ -143,6 +144,12 @@ class _Body extends StatelessWidget {
                     }
                   },
                 ),
+              if (project.donationLink case final link?
+                  when link.isNotEmpty &&
+                      project.approval == ProjectApproval.approved) ...[
+                const SizedBox(height: 12),
+                _DonateButton(url: link),
+              ],
             ],
           ),
         ),
@@ -520,6 +527,42 @@ class _EditButton extends StatelessWidget {
       'Edit',
       style: AppTextStyles.actionSB.copyWith(color: Colors.white),
       textAlign: TextAlign.center,
+    ),
+  );
+}
+
+class _DonateButton extends StatelessWidget {
+  const _DonateButton({required this.url});
+
+  final String url;
+
+  Future<void> _open(BuildContext context) async {
+    final uri = Uri.tryParse(url);
+    if (uri == null) {
+      return;
+    }
+    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!ok && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not open $url')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => AppButton(
+    buttonStyle: AppButtonStyle.secondary,
+    onTap: () => _open(context),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.volunteer_activism, color: Colors.white, size: 18),
+        const SizedBox(width: 8),
+        Text(
+          'Donate',
+          style: AppTextStyles.actionSB.copyWith(color: Colors.white),
+        ),
+      ],
     ),
   );
 }

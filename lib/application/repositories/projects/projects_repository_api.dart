@@ -51,6 +51,7 @@ class ProjectsRepositoryApi implements ProjectsRepository {
     required String title,
     required String description,
     String? cover,
+    String? donationLink,
   }) async {
     try {
       final res = await _dio.post<Map<String, dynamic>>(
@@ -59,6 +60,7 @@ class ProjectsRepositoryApi implements ProjectsRepository {
           'title': title,
           'description': description,
           if (cover != null) 'cover': cover,
+          if (donationLink != null) 'donation_link': donationLink,
         },
         options: _options.opts(),
       );
@@ -76,6 +78,7 @@ class ProjectsRepositoryApi implements ProjectsRepository {
     String? title,
     String? description,
     String? cover,
+    String? donationLink,
   }) async {
     try {
       final res = await _dio.put<Map<String, dynamic>>(
@@ -84,6 +87,7 @@ class ProjectsRepositoryApi implements ProjectsRepository {
           if (title != null) 'title': title,
           if (description != null) 'description': description,
           if (cover != null) 'cover': cover,
+          if (donationLink != null) 'donation_link': donationLink,
         },
         options: _options.opts(),
       );

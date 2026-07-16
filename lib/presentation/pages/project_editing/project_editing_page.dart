@@ -28,6 +28,7 @@ class ProjectEditingPage extends StatefulWidget {
 class _ProjectEditingPageState extends State<ProjectEditingPage> {
   final _titleCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
+  final _donationLinkCtrl = TextEditingController();
   String? _cover;
   bool _saving = false;
   bool _loading = false;
@@ -52,6 +53,7 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
     if (project != null) {
       _titleCtrl.text = project.title;
       _descCtrl.text = project.description;
+      _donationLinkCtrl.text = project.donationLink ?? '';
       _cover = project.cover;
     }
     setState(() => _loading = false);
@@ -61,6 +63,7 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
   void dispose() {
     _titleCtrl.dispose();
     _descCtrl.dispose();
+    _donationLinkCtrl.dispose();
     super.dispose();
   }
 
@@ -92,6 +95,19 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
                   minLines: 5,
                   maxLines: 12,
                   maxLength: 2000,
+                ),
+                const SizedBox(height: 8),
+                _Label('Donation link (optional)'),
+                TextField(
+                  controller: _donationLinkCtrl,
+                  decoration: _decoration('https://tinkoff.ru/... or any bank link'),
+                  keyboardType: TextInputType.url,
+                  maxLength: 500,
+                ),
+                Text(
+                  'Contributors can tap this to open your payment page. '
+                  'Leave blank if there is no way to donate money.',
+                  style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
                 ),
                 if (_isEditMode) ...[
                   const SizedBox(height: 8),
@@ -139,12 +155,24 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
   Future<void> _submit() async {
     final title = _titleCtrl.text.trim();
     final desc = _descCtrl.text.trim();
+    final rawLink = _donationLinkCtrl.text.trim();
     if (title.isEmpty || desc.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Title and description are required.')),
       );
       return;
     }
+    if (rawLink.isNotEmpty && !_looksLikeUrl(rawLink)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Donation link must start with http:// or https://'),
+        ),
+      );
+      return;
+    }
+    // Empty string tells the backend "clear the field" on update; on
+    // create we omit it so the column stays NULL rather than "".
+    final donationLink = _isEditMode ? rawLink : (rawLink.isEmpty ? null : rawLink);
     setState(() => _saving = true);
     final repo = context.read<ProjectsRepository>();
     final ok = _isEditMode
@@ -153,12 +181,14 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
               title: title,
               description: desc,
               cover: _cover,
+              donationLink: donationLink,
             )) !=
             null
         : (await repo.create(
               title: title,
               description: desc,
               cover: _cover,
+              donationLink: donationLink,
             )) !=
             null;
 
@@ -188,6 +218,11 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
     if (context.mounted) {
       await context.router.maybePop();
     }
+  }
+
+  static bool _looksLikeUrl(String s) {
+    final uri = Uri.tryParse(s);
+    return uri != null && (uri.scheme == 'http' || uri.scheme == 'https');
   }
 }
 
