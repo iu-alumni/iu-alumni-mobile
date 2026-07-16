@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../application/models/profile.dart';
 import '../../../application/models/project.dart';
 import '../../../application/repositories/projects/projects_repository.dart';
 import '../../../application/repositories/users/users_repository.dart';
@@ -11,18 +12,21 @@ class OneProjectCubit extends Cubit<OneProjectState> {
 
   final ProjectsRepository _repo;
   final UsersRepository _users;
-  String? _myId;
 
-  String? get myId => _myId;
+  /// Cached current-user profile — populated on load. Kept locally so
+  /// contribute / retract can update the contributors list optimistically
+  /// without needing another users_by_ids round-trip.
+  Profile? _me;
+
+  String? get myId => _me?.profileId;
 
   Future<void> load(String projectId) async {
     emit(state.copyWith(project: const LoadedState.loading()));
-    // Fire both requests in parallel and reconcile at the end so the
-    // details render as soon as both come back.
+    // Fire the project + me lookups in parallel.
     final mePromise = _users.loadMe();
     final projectPromise = _repo.getOne(projectId);
     final me = await mePromise;
-    me.map((p) => _myId = p.profileId);
+    me.map((p) => _me = p);
     final project = await projectPromise;
     if (project == null) {
       emit(
@@ -32,25 +36,71 @@ class OneProjectCubit extends Cubit<OneProjectState> {
       );
       return;
     }
-    emit(state.copyWith(project: LoadedState.data(project)));
+
+    // Resolve every profile we need for the details screen in one call:
+    // the owner + every contributor. Both feed the tap targets on the
+    // page. Failures downgrade to nulls / empty; the UI falls back to
+    // "owner", "contributor" placeholders.
+    final wantedIds = <String>{
+      project.ownerId,
+      ...project.contributorsIds,
+    };
+    List<Profile> profiles = const [];
+    try {
+      profiles = (await _users.getUsersByIds(wantedIds)).toList();
+    } catch (_) {
+      // getUsersByIds isn't guaranteed to be failure-tolerant — swallow
+      // so a hiccup doesn't blank the whole details screen.
+    }
+
+    Profile? owner;
+    final contributors = <Profile>[];
+    for (final p in profiles) {
+      if (p.profileId == project.ownerId) {
+        owner = p;
+      }
+      if (project.contributorsIds.contains(p.profileId)) {
+        contributors.add(p);
+      }
+    }
+    // Preserve contributor ordering to match the project's list.
+    contributors.sort(
+      (a, b) => project.contributorsIds
+          .indexOf(a.profileId)
+          .compareTo(project.contributorsIds.indexOf(b.profileId)),
+    );
+
+    emit(
+      OneProjectState(
+        project: LoadedState.data(project),
+        owner: owner,
+        contributors: contributors,
+      ),
+    );
   }
 
   Future<bool> contribute() async {
     final current = _current();
-    final myId = _myId;
-    if (current == null || myId == null || state.actionInFlight) {
+    final me = _me;
+    if (current == null || me == null || state.actionInFlight) {
       return false;
     }
     emit(state.copyWith(actionInFlight: true));
     final ok = await _repo.contribute(current.id);
     if (ok) {
       final ids = <String>[...current.contributorsIds];
-      if (!ids.contains(myId)) {
-        ids.add(myId);
+      if (!ids.contains(me.profileId)) {
+        ids.add(me.profileId);
+      }
+      final contributors = <Profile>[...state.contributors];
+      if (!contributors.any((p) => p.profileId == me.profileId)) {
+        contributors.add(me);
       }
       emit(
         OneProjectState(
           project: LoadedState.data(current.copyWith(contributorsIds: ids)),
+          owner: state.owner,
+          contributors: contributors,
           actionInFlight: false,
         ),
       );
@@ -62,19 +112,24 @@ class OneProjectCubit extends Cubit<OneProjectState> {
 
   Future<bool> retract() async {
     final current = _current();
-    final myId = _myId;
-    if (current == null || myId == null || state.actionInFlight) {
+    final me = _me;
+    if (current == null || me == null || state.actionInFlight) {
       return false;
     }
     emit(state.copyWith(actionInFlight: true));
     final ok = await _repo.retract(current.id);
     if (ok) {
       final ids = current.contributorsIds
-          .where((id) => id != myId)
+          .where((id) => id != me.profileId)
+          .toList(growable: false);
+      final contributors = state.contributors
+          .where((p) => p.profileId != me.profileId)
           .toList(growable: false);
       emit(
         OneProjectState(
           project: LoadedState.data(current.copyWith(contributorsIds: ids)),
+          owner: state.owner,
+          contributors: contributors,
           actionInFlight: false,
         ),
       );

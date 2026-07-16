@@ -124,7 +124,10 @@ class ProfileContent {
         if (personal) const _OwnedEvents(),
         const _ParticipatedEvents(),
         if (personal) const MyOwnedProjects(),
-        ContributedProjects(profileId: profile.profileId),
+        ContributedProjects(
+          profileId: profile.profileId,
+          personal: personal,
+        ),
         if (personal) const OpenBotCard(),
         if (personal)
           AppButton(

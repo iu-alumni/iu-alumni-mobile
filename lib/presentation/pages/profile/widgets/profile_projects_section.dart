@@ -42,12 +42,19 @@ class MyOwnedProjectsState extends State<MyOwnedProjects> {
 }
 
 /// Section on any profile — lists **approved** projects the target user
-/// has contributed to. Hidden on other-user profiles when empty; on the
-/// personal profile it stays visible with an empty message.
+/// has contributed to. On the personal profile it always renders with
+/// an empty message when there are no contributions; on someone else's
+/// profile the whole section is hidden when they have none.
 class ContributedProjects extends StatefulWidget {
-  const ContributedProjects({required this.profileId});
+  const ContributedProjects({
+    required this.profileId,
+    required this.personal,
+  });
 
   final String profileId;
+
+  /// True when the profile being viewed belongs to the current user.
+  final bool personal;
 
   @override
   State<ContributedProjects> createState() => ContributedProjectsState();
@@ -72,6 +79,10 @@ class ContributedProjectsState extends State<ContributedProjects> {
   Widget build(BuildContext context) => _ProjectSection(
     title: 'Contributed projects',
     emptyMessage: 'No contributions yet.',
+    // Personal profile: keep the empty message so the user knows the
+    // section exists. Other-user profile: hide entirely when empty so
+    // we don't clutter someone else's page with "nothing here."
+    hideWhenEmpty: !widget.personal,
     future: _future,
   );
 }
@@ -81,36 +92,51 @@ class _ProjectSection extends StatelessWidget {
     required this.title,
     required this.emptyMessage,
     required this.future,
+    this.hideWhenEmpty = false,
   });
 
   final String title;
   final String emptyMessage;
   final Future<List<ProjectModel>> future;
 
+  /// When true, the section returns a zero-size widget on empty results
+  /// (so it disappears from the profile entirely) instead of rendering
+  /// the empty-message placeholder.
+  final bool hideWhenEmpty;
+
   @override
-  Widget build(BuildContext context) => TitledItem(
-    title: title,
-    child: FutureBuilder<List<ProjectModel>>(
-      future: future,
-      builder: (context, snap) {
-        if (snap.connectionState != ConnectionState.done) {
-          return const Padding(
+  Widget build(BuildContext context) => FutureBuilder<List<ProjectModel>>(
+    future: future,
+    builder: (context, snap) {
+      if (snap.connectionState != ConnectionState.done) {
+        return TitledItem(
+          title: title,
+          child: const Padding(
             padding: EdgeInsets.all(16),
             child: Center(child: AppLoader()),
-          );
+          ),
+        );
+      }
+      final items = snap.data ?? const <ProjectModel>[];
+      if (items.isEmpty) {
+        if (hideWhenEmpty) {
+          return const SizedBox.shrink();
         }
-        final items = snap.data ?? const <ProjectModel>[];
-        if (items.isEmpty) {
-          return Padding(
+        return TitledItem(
+          title: title,
+          child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
               emptyMessage,
               style: AppTextStyles.caption,
               textAlign: TextAlign.center,
             ),
-          );
-        }
-        return SingleChildScrollView(
+          ),
+        );
+      }
+      return TitledItem(
+        title: title,
+        child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -122,9 +148,9 @@ class _ProjectSection extends StatelessWidget {
               ],
             ],
           ),
-        );
-      },
-    ),
+        ),
+      );
+    },
   );
 }
 
