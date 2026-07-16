@@ -14,6 +14,7 @@ class ProjectModel {
     required this.approval,
     required this.createdAt,
     this.cover,
+    this.donationLink,
   });
 
   final String id;
@@ -22,6 +23,10 @@ class ProjectModel {
   final String title;
   final String description;
   final String? cover;
+
+  /// Owner-supplied payment URL (bank / Tinkoff / YooKassa). The client
+  /// just opens it via url_launcher — no in-app payment handling.
+  final String? donationLink;
   final ProjectApproval approval;
   final DateTime createdAt;
 
@@ -36,6 +41,7 @@ class ProjectModel {
     String? title,
     String? description,
     String? cover,
+    String? donationLink,
     ProjectApproval? approval,
     DateTime? createdAt,
   }) => ProjectModel(
@@ -45,6 +51,7 @@ class ProjectModel {
     title: title ?? this.title,
     description: description ?? this.description,
     cover: cover ?? this.cover,
+    donationLink: donationLink ?? this.donationLink,
     approval: approval ?? this.approval,
     createdAt: createdAt ?? this.createdAt,
   );
@@ -74,6 +81,7 @@ class ProjectModel {
       title: (json['title'] as String?) ?? 'Untitled',
       description: (json['description'] as String?) ?? '',
       cover: json['cover'] as String?,
+      donationLink: json['donation_link'] as String?,
       approval: approval,
       createdAt:
           DateTime.tryParse((json['created_at'] as String?) ?? '') ??
