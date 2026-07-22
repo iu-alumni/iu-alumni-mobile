@@ -26,6 +26,8 @@ import 'application/repositories/events/events_repository.dart';
 import 'application/repositories/events/events_repository_impl.dart';
 import 'application/repositories/map/map_repository.dart';
 import 'application/repositories/map/map_repository_impl.dart';
+import 'application/repositories/notifications/notifications_repository.dart';
+import 'application/repositories/notifications/notifications_repository_impl.dart';
 import 'application/repositories/reporter/reporter.dart';
 import 'application/repositories/reporter/reporter_appmetrica.dart';
 import 'application/repositories/users/users_repository.dart';
@@ -35,6 +37,8 @@ import 'data/auth/auth_gateway_impl.dart';
 import 'data/common/dio_options_manager.dart';
 import 'data/events/events_gateway.dart';
 import 'data/events/events_gateway_impl.dart';
+import 'data/notifications/notifications_gateway.dart';
+import 'data/notifications/notifications_gateway_impl.dart';
 import 'data/profile/profile_gateway.dart';
 import 'data/profile/profile_gateway_impl.dart';
 import 'data/config/api_config.dart';
@@ -46,6 +50,7 @@ import 'data/users/users_gateway.dart';
 import 'data/users/users_gateway_impl.dart';
 import 'presentation/blocs/badges/badges_cubit.dart';
 import 'presentation/blocs/events_list/events_list_cubit.dart';
+import 'presentation/blocs/notifications/notifications_cubit.dart';
 import 'presentation/blocs/profile/profile_cubit.dart';
 import 'presentation/common/constants/app_colors.dart';
 import 'presentation/router/always_root_route.dart';
@@ -126,6 +131,12 @@ class App extends StatelessWidget {
           context.read<DioOptionsManager>(),
         ),
       ),
+      RepositoryProvider<NotificationsGateway>(
+        create: (context) => NotificationsGatewayImpl(
+          context.read<Dio>(),
+          context.read<DioOptionsManager>(),
+        ),
+      ),
       // --- REPOSITORIES ---
       RepositoryProvider<AuthRepository>(
         create: (context) => AuthRepositoryImpl(context.read<AuthGateway>()),
@@ -181,6 +192,11 @@ class App extends StatelessWidget {
           context.read<DioOptionsManager>(),
         ),
       ),
+      RepositoryProvider<NotificationsRepository>(
+        create: (context) => NotificationsRepositoryImpl(
+          context.read<NotificationsGateway>(),
+        ),
+      ),
       // --- BLOCs ---
       BlocProvider(
         create: (context) => EventsListCubit(context.read<EventsRepository>()),
@@ -193,6 +209,10 @@ class App extends StatelessWidget {
       ),
       BlocProvider(
         create: (ctx) => BadgesCubit(ctx.read<BadgesRepository>())..loadMine(),
+      ),
+      BlocProvider(
+        create: (context) =>
+            NotificationsCubit(context.read<NotificationsRepository>()),
       ),
     ],
     child: Builder(

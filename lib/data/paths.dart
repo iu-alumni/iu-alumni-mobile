@@ -29,4 +29,7 @@ abstract class Paths {
   static const String _cities = '/api/v1/cities';
   static String coordinates = '$_cities/coordinates';
   static String search = '$_cities/search';
+
+  static const String notifications = '/api/v1/notifications/';
+  static String notificationsUnreadCount = '${notifications}unread-count';
 }
