@@ -9,7 +9,10 @@ abstract class UsersRepository {
   void logout();
 
   /// Fetch a page of all alumni profiles (cursor-paginated).
-  Future<PaginatedResult<Profile>> getAllUsers({String? cursor, int limit = 50});
+  Future<PaginatedResult<Profile>> getAllUsers({
+    String? cursor,
+    int limit = 50,
+  });
 
   /// Fetch a page of alumni at a specific location string, e.g. 'Russia, Innopolis'.
   Future<PaginatedResult<Profile>> getUsersAtLocation(
@@ -19,4 +22,8 @@ abstract class UsersRepository {
   });
 
   Future<Iterable<Profile>> getUsersByIds(Iterable<String> ids);
+
+  Future<bool> followUser(String userId);
+
+  Future<bool> unfollowUser(String userId);
 }

@@ -96,6 +96,29 @@ class ProfileCubit extends Cubit<ProfileState> {
     return loadParticipatedEvents();
   }
 
+  Future<void> toggleFollow(String userId, bool currentlyFollowing) async {
+    final success = currentlyFollowing
+        ? await _usersRepository.unfollowUser(userId)
+        : await _usersRepository.followUser(userId);
+
+    if (!success) {
+      return;
+    }
+
+    switch (state.profile) {
+      case LoadedStateData(:final data) when data.profileId == userId:
+        emit(
+          state.copyWith(
+            profile: LoadedState.data(
+              data.copyWith(isFollowing: !currentlyFollowing),
+            ),
+          ),
+        );
+      case _:
+        break;
+    }
+  }
+
   void logout() {
     _usersRepository.logout();
   }

@@ -25,6 +25,7 @@ abstract class Paths {
   static String myProfile = '${profile}me';
   static String allProfiles = '${profile}all';
   static String mapProfiles = '${profile}map';
+  static String profileFollow(String userId) => '${profile}$userId/follow';
 
   static const String _cities = '/api/v1/cities';
   static String coordinates = '$_cities/coordinates';

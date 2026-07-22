@@ -79,6 +79,10 @@ class ProfileContent {
           AppTag(icon: Icons.school, text: profile.graduationYear),
         ],
       ),
+      if (!personal) ...[
+        const SizedBox(height: 16),
+        Center(child: _FollowButton(profile: profile)),
+      ],
       ...[
         if (profile.biography case final bio?)
           Text(bio, style: AppTextStyles.body),
@@ -135,6 +139,39 @@ class ProfileContent {
       ].expand((e) => [const SizedBox(height: 24), e]),
       const SizedBox(height: RootPage.navigationBarHeight + 16),
     ],
+  );
+}
+
+class _FollowButton extends StatelessWidget {
+  const _FollowButton({required this.profile});
+
+  final Profile profile;
+
+  @override
+  Widget build(BuildContext context) => BlocBuilder<ProfileCubit, ProfileState>(
+    buildWhen: (previous, current) => previous.profile != current.profile,
+    builder: (context, state) {
+      final currentProfile = switch (state.profile) {
+        LoadedStateData(:final data) => data,
+        _ => profile,
+      };
+
+      return AppButton(
+        buttonStyle: currentProfile.isFollowing
+            ? AppButtonStyle.secondary
+            : AppButtonStyle.primary,
+        is48Height: true,
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        onTap: () => context.read<ProfileCubit>().toggleFollow(
+          currentProfile.profileId,
+          currentProfile.isFollowing,
+        ),
+        child: Text(
+          currentProfile.isFollowing ? 'Following' : 'Follow',
+          style: AppTextStyles.actionM.copyWith(color: Colors.white),
+        ),
+      );
+    },
   );
 }
 

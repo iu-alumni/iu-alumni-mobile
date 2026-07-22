@@ -38,6 +38,12 @@ mixin _$Profile {
   String? get avatar => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_telegram_verified')
   bool get isTelegramVerified => throw _privateConstructorUsedError;
+  @JsonKey(name: 'followers_count')
+  int get followersCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'following_count')
+  int get followingCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_following')
+  bool get isFollowing => throw _privateConstructorUsedError;
 
   /// Serializes this Profile to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -64,6 +70,9 @@ abstract class $ProfileCopyWith<$Res> {
     @JsonKey(name: 'telegram_alias') String? telegramAlias,
     String? avatar,
     @JsonKey(name: 'is_telegram_verified') bool isTelegramVerified,
+    @JsonKey(name: 'followers_count') int followersCount,
+    @JsonKey(name: 'following_count') int followingCount,
+    @JsonKey(name: 'is_following') bool isFollowing,
   });
 }
 
@@ -92,6 +101,9 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
     Object? telegramAlias = freezed,
     Object? avatar = freezed,
     Object? isTelegramVerified = null,
+    Object? followersCount = null,
+    Object? followingCount = null,
+    Object? isFollowing = null,
   }) {
     return _then(
       _value.copyWith(
@@ -145,6 +157,21 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
                     ? _value.isTelegramVerified
                     : isTelegramVerified // ignore: cast_nullable_to_non_nullable
                         as bool,
+            followersCount:
+                null == followersCount
+                    ? _value.followersCount
+                    : followersCount // ignore: cast_nullable_to_non_nullable
+                        as int,
+            followingCount:
+                null == followingCount
+                    ? _value.followingCount
+                    : followingCount // ignore: cast_nullable_to_non_nullable
+                        as int,
+            isFollowing:
+                null == isFollowing
+                    ? _value.isFollowing
+                    : isFollowing // ignore: cast_nullable_to_non_nullable
+                        as bool,
           )
           as $Val,
     );
@@ -170,6 +197,9 @@ abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
     @JsonKey(name: 'telegram_alias') String? telegramAlias,
     String? avatar,
     @JsonKey(name: 'is_telegram_verified') bool isTelegramVerified,
+    @JsonKey(name: 'followers_count') int followersCount,
+    @JsonKey(name: 'following_count') int followingCount,
+    @JsonKey(name: 'is_following') bool isFollowing,
   });
 }
 
@@ -197,6 +227,9 @@ class __$$ProfileImplCopyWithImpl<$Res>
     Object? telegramAlias = freezed,
     Object? avatar = freezed,
     Object? isTelegramVerified = null,
+    Object? followersCount = null,
+    Object? followingCount = null,
+    Object? isFollowing = null,
   }) {
     return _then(
       _$ProfileImpl(
@@ -250,6 +283,21 @@ class __$$ProfileImplCopyWithImpl<$Res>
                 ? _value.isTelegramVerified
                 : isTelegramVerified // ignore: cast_nullable_to_non_nullable
                     as bool,
+        followersCount:
+            null == followersCount
+                ? _value.followersCount
+                : followersCount // ignore: cast_nullable_to_non_nullable
+                    as int,
+        followingCount:
+            null == followingCount
+                ? _value.followingCount
+                : followingCount // ignore: cast_nullable_to_non_nullable
+                    as int,
+        isFollowing:
+            null == isFollowing
+                ? _value.isFollowing
+                : isFollowing // ignore: cast_nullable_to_non_nullable
+                    as bool,
       ),
     );
   }
@@ -269,6 +317,9 @@ class _$ProfileImpl extends _Profile {
     @JsonKey(name: 'telegram_alias') required this.telegramAlias,
     required this.avatar,
     @JsonKey(name: 'is_telegram_verified') required this.isTelegramVerified,
+    @JsonKey(name: 'followers_count') this.followersCount = 0,
+    @JsonKey(name: 'following_count') this.followingCount = 0,
+    @JsonKey(name: 'is_following') this.isFollowing = false,
   }) : super._();
 
   factory _$ProfileImpl.fromJson(Map<String, dynamic> json) =>
@@ -301,10 +352,19 @@ class _$ProfileImpl extends _Profile {
   @override
   @JsonKey(name: 'is_telegram_verified')
   final bool isTelegramVerified;
+  @override
+  @JsonKey(name: 'followers_count')
+  final int followersCount;
+  @override
+  @JsonKey(name: 'following_count')
+  final int followingCount;
+  @override
+  @JsonKey(name: 'is_following')
+  final bool isFollowing;
 
   @override
   String toString() {
-    return 'Profile(profileId: $profileId, firstName: $firstName, lastName: $lastName, graduationYear: $graduationYear, location: $location, biography: $biography, showLocation: $showLocation, telegramAlias: $telegramAlias, avatar: $avatar, isTelegramVerified: $isTelegramVerified)';
+    return 'Profile(profileId: $profileId, firstName: $firstName, lastName: $lastName, graduationYear: $graduationYear, location: $location, biography: $biography, showLocation: $showLocation, telegramAlias: $telegramAlias, avatar: $avatar, isTelegramVerified: $isTelegramVerified, followersCount: $followersCount, followingCount: $followingCount, isFollowing: $isFollowing)';
   }
 
   @override
@@ -330,7 +390,13 @@ class _$ProfileImpl extends _Profile {
                 other.telegramAlias == telegramAlias) &&
             (identical(other.avatar, avatar) || other.avatar == avatar) &&
             (identical(other.isTelegramVerified, isTelegramVerified) ||
-                other.isTelegramVerified == isTelegramVerified));
+                other.isTelegramVerified == isTelegramVerified) &&
+            (identical(other.followersCount, followersCount) ||
+                other.followersCount == followersCount) &&
+            (identical(other.followingCount, followingCount) ||
+                other.followingCount == followingCount) &&
+            (identical(other.isFollowing, isFollowing) ||
+                other.isFollowing == isFollowing));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -347,6 +413,9 @@ class _$ProfileImpl extends _Profile {
     telegramAlias,
     avatar,
     isTelegramVerified,
+    followersCount,
+    followingCount,
+    isFollowing,
   );
 
   /// Create a copy of Profile
@@ -376,6 +445,9 @@ abstract class _Profile extends Profile {
     required final String? avatar,
     @JsonKey(name: 'is_telegram_verified')
     required final bool isTelegramVerified,
+    @JsonKey(name: 'followers_count') final int followersCount,
+    @JsonKey(name: 'following_count') final int followingCount,
+    @JsonKey(name: 'is_following') final bool isFollowing,
   }) = _$ProfileImpl;
   const _Profile._() : super._();
 
@@ -408,6 +480,15 @@ abstract class _Profile extends Profile {
   @override
   @JsonKey(name: 'is_telegram_verified')
   bool get isTelegramVerified;
+  @override
+  @JsonKey(name: 'followers_count')
+  int get followersCount;
+  @override
+  @JsonKey(name: 'following_count')
+  int get followingCount;
+  @override
+  @JsonKey(name: 'is_following')
+  bool get isFollowing;
 
   /// Create a copy of Profile
   /// with the given fields replaced by the non-null parameter values.

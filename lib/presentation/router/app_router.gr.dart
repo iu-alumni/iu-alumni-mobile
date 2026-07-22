@@ -303,12 +303,12 @@ class OtpVerifySubRoute extends _i21.PageRouteInfo<void> {
 class PasswordResetConfirmRoute
     extends _i21.PageRouteInfo<PasswordResetConfirmRouteArgs> {
   PasswordResetConfirmRoute({
-    _i24.Key? key,
     required String token,
+    _i24.Key? key,
     List<_i21.PageRouteInfo>? children,
   }) : super(
          PasswordResetConfirmRoute.name,
-         args: PasswordResetConfirmRouteArgs(key: key, token: token),
+         args: PasswordResetConfirmRouteArgs(token: token, key: key),
          initialChildren: children,
        );
 
@@ -319,22 +319,22 @@ class PasswordResetConfirmRoute
     builder: (data) {
       final args = data.argsAs<PasswordResetConfirmRouteArgs>();
       return _i21.WrappedRoute(
-        child: _i10.PasswordResetConfirmPage(key: args.key, token: args.token),
+        child: _i10.PasswordResetConfirmPage(token: args.token, key: args.key),
       );
     },
   );
 }
 
 class PasswordResetConfirmRouteArgs {
-  const PasswordResetConfirmRouteArgs({this.key, required this.token});
-
-  final _i24.Key? key;
+  const PasswordResetConfirmRouteArgs({required this.token, this.key});
 
   final String token;
 
+  final _i24.Key? key;
+
   @override
   String toString() {
-    return 'PasswordResetConfirmRouteArgs{key: $key, token: $token}';
+    return 'PasswordResetConfirmRouteArgs{token: $token, key: $key}';
   }
 }
 
