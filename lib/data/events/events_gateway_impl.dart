@@ -17,7 +17,7 @@ class EventsGatewayImpl implements EventsGateway {
   final DioOptionsManager _optionsManager;
 
   @override
-  Future<Option<String>> addEvent(EventRequestDataModel event) async {
+  Future<Either<String, String>> addEvent(EventRequestDataModel event) async {
     final result = await TaskEither.tryCatch(() async {
       final data = jsonEncode(event.toJson());
       final response = await _dio.post(
@@ -27,8 +27,8 @@ class EventsGatewayImpl implements EventsGateway {
       );
       final json = response.data as Map<String, dynamic>;
       return json['id'] as String;
-    }, (e, _) => '$e').run();
-    return result.toOption();
+    }, (e, _) => _extractErrorMessage(e)).run();
+    return result;
   }
 
   @override
@@ -92,7 +92,10 @@ class EventsGatewayImpl implements EventsGateway {
   }
 
   @override
-  Future<bool> updateEvent(String eventId, EventRequestDataModel event) async {
+  Future<Either<String, Unit>> updateEvent(
+    String eventId,
+    EventRequestDataModel event,
+  ) async {
     final result = await TaskEither.tryCatch(() async {
       final requestModel = event.toJson();
       await _dio.put(
@@ -100,9 +103,62 @@ class EventsGatewayImpl implements EventsGateway {
         options: _optionsManager.opts(),
         data: jsonEncode(requestModel),
       );
-    }, (e, _) => '$e').run();
-    return result.isRight();
+      return unit;
+    }, (e, _) => _extractErrorMessage(e)).run();
+    return result;
   }
+
+  /// Turns a Dio/API failure into a message a user can act on.
+  ///
+  /// Mirrors the FastAPI error shapes: `{"detail": "..."}` for plain errors
+  /// and `{"detail": [{"loc": [...], "msg": "..."}]}` for validation errors.
+  String _extractErrorMessage(Object error) {
+    if (error is DioException) {
+      final data = error.response?.data;
+      if (data is Map<String, dynamic>) {
+        final detail = data['detail'];
+        if (detail is String) {
+          return detail;
+        }
+        if (detail is List) {
+          final messages = detail
+              .whereType<Map<String, dynamic>>()
+              .map((d) {
+                final loc = d['loc'];
+                final field = loc is List && loc.isNotEmpty
+                    ? loc.last.toString()
+                    : null;
+                final msg = (d['msg'] as String?)?.replaceFirst(
+                  'Value error, ',
+                  '',
+                );
+                if (msg == null) {
+                  return null;
+                }
+                return field != null ? '${_titleCase(field)}: $msg' : msg;
+              })
+              .nonNulls
+              .toList();
+          if (messages.isNotEmpty) {
+            return messages.join('\n');
+          }
+        }
+      }
+      return switch (error.type) {
+        DioExceptionType.connectionTimeout ||
+        DioExceptionType.sendTimeout ||
+        DioExceptionType.receiveTimeout =>
+          'The request timed out. Please check your connection and try again.',
+        DioExceptionType.connectionError =>
+          'Could not reach the server. Please check your connection.',
+        _ => 'Something went wrong${error.response?.statusCode != null ? ' (${error.response!.statusCode})' : ''}.',
+      };
+    }
+    return '$error';
+  }
+
+  String _titleCase(String field) =>
+      field.isEmpty ? field : '${field[0].toUpperCase()}${field.substring(1)}';
 
   @override
   Future<bool> participate(String eventId, String userId) async {
