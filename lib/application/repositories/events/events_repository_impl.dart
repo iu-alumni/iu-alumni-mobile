@@ -110,26 +110,24 @@ class EventsRepositoryImpl implements EventsRepository {
     _modifiedEvent = event;
   }
 
-  Future<Option<String>> _mutateAndSave(EventModel event) async {
+  Future<Either<String, String>> _mutateAndSave(EventModel event) async {
     final eventRequest = EventMapper.eventRequestFromModel(event);
     // Has event already been in the created ever (otherwise it is new)
     if (_cache!.containsKey(event.eventId)) {
-      final success = await _gateway.updateEvent(event.eventId, eventRequest);
-      if (success) {
+      final result = await _gateway.updateEvent(event.eventId, eventRequest);
+      return result.match(Left.new, (_) {
         // Update the event in the cache on success
         _cache![event.eventId] = event;
         // When modified, the event ID stays the same
-        return Option.of(event.eventId);
-      }
-      // The event modification was not successful, none for the error state
-      return const None();
+        return Right(event.eventId);
+      });
     } else {
       // Event not found in the cache, so it is a new event
-      final newId = await _gateway.addEvent(eventRequest);
+      final result = await _gateway.addEvent(eventRequest);
       // Load personal profile to add the ID of the creator
       final myProfile = await _usersRepository.loadMe();
       // Update the event ID by the one server responded with
-      newId.map((eid) {
+      return result.match(Left.new, (eid) {
         _cache![eid] = event.copyWith(
           eventId: eid,
           participantsIds: [
@@ -137,17 +135,17 @@ class EventsRepositoryImpl implements EventsRepository {
           ].toISet(),
         );
         _owned!.add(eid);
+        return Right(eid);
       });
-      return newId;
     }
   }
 
   @override
-  Future<Option<String>> save() async {
+  Future<Either<String, String>> save() async {
     final event = _modifiedEvent;
     if (event == null) {
       // Nothing modified, so nothing to save
-      return const None();
+      return const Left('Nothing to save.');
     }
     _modifiedEvent = null;
     return _mutateAndSave(_fixEvent(event));
