@@ -24,11 +24,11 @@ mixin _$RegisterRequest {
   @JsonKey(name: 'graduation_year')
   String get gradYear => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  @JsonKey(name: 'telegram_alias')
-  String? get telegram => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
   @JsonKey(name: 'manual_verification')
   bool get manualVerification => throw _privateConstructorUsedError;
+  @JsonKey(name: 'telegram_alias')
+  String? get telegram => throw _privateConstructorUsedError;
 
   /// Serializes this RegisterRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,9 +52,9 @@ abstract class $RegisterRequestCopyWith<$Res> {
     @JsonKey(name: 'last_name') String lastName,
     @JsonKey(name: 'graduation_year') String gradYear,
     String email,
-    @JsonKey(name: 'telegram_alias') String? telegram,
     String password,
     @JsonKey(name: 'manual_verification') bool manualVerification,
+    @JsonKey(name: 'telegram_alias') String? telegram,
   });
 }
 
@@ -77,9 +77,9 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
     Object? lastName = null,
     Object? gradYear = null,
     Object? email = null,
-    Object? telegram = freezed,
     Object? password = null,
     Object? manualVerification = null,
+    Object? telegram = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -103,11 +103,6 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
                     ? _value.email
                     : email // ignore: cast_nullable_to_non_nullable
                         as String,
-            telegram:
-                freezed == telegram
-                    ? _value.telegram
-                    : telegram // ignore: cast_nullable_to_non_nullable
-                        as String?,
             password:
                 null == password
                     ? _value.password
@@ -118,6 +113,11 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
                     ? _value.manualVerification
                     : manualVerification // ignore: cast_nullable_to_non_nullable
                         as bool,
+            telegram:
+                freezed == telegram
+                    ? _value.telegram
+                    : telegram // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -138,9 +138,9 @@ abstract class _$$RegisterRequestImplCopyWith<$Res>
     @JsonKey(name: 'last_name') String lastName,
     @JsonKey(name: 'graduation_year') String gradYear,
     String email,
-    @JsonKey(name: 'telegram_alias') String? telegram,
     String password,
     @JsonKey(name: 'manual_verification') bool manualVerification,
+    @JsonKey(name: 'telegram_alias') String? telegram,
   });
 }
 
@@ -162,9 +162,9 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
     Object? lastName = null,
     Object? gradYear = null,
     Object? email = null,
-    Object? telegram = freezed,
     Object? password = null,
     Object? manualVerification = null,
+    Object? telegram = freezed,
   }) {
     return _then(
       _$RegisterRequestImpl(
@@ -188,11 +188,6 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
                 ? _value.email
                 : email // ignore: cast_nullable_to_non_nullable
                     as String,
-        telegram:
-            freezed == telegram
-                ? _value.telegram
-                : telegram // ignore: cast_nullable_to_non_nullable
-                    as String?,
         password:
             null == password
                 ? _value.password
@@ -203,6 +198,11 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
                 ? _value.manualVerification
                 : manualVerification // ignore: cast_nullable_to_non_nullable
                     as bool,
+        telegram:
+            freezed == telegram
+                ? _value.telegram
+                : telegram // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -216,9 +216,9 @@ class _$RegisterRequestImpl implements _RegisterRequest {
     @JsonKey(name: 'last_name') required this.lastName,
     @JsonKey(name: 'graduation_year') required this.gradYear,
     required this.email,
-    @JsonKey(name: 'telegram_alias') this.telegram,
     required this.password,
     @JsonKey(name: 'manual_verification') required this.manualVerification,
+    @JsonKey(name: 'telegram_alias') this.telegram,
   });
 
   @override
@@ -233,17 +233,17 @@ class _$RegisterRequestImpl implements _RegisterRequest {
   @override
   final String email;
   @override
-  @JsonKey(name: 'telegram_alias')
-  final String? telegram;
-  @override
   final String password;
   @override
   @JsonKey(name: 'manual_verification')
   final bool manualVerification;
+  @override
+  @JsonKey(name: 'telegram_alias')
+  final String? telegram;
 
   @override
   String toString() {
-    return 'RegisterRequest(firstName: $firstName, lastName: $lastName, gradYear: $gradYear, email: $email, telegram: $telegram, password: $password, manualVerification: $manualVerification)';
+    return 'RegisterRequest(firstName: $firstName, lastName: $lastName, gradYear: $gradYear, email: $email, password: $password, manualVerification: $manualVerification, telegram: $telegram)';
   }
 
   @override
@@ -258,12 +258,12 @@ class _$RegisterRequestImpl implements _RegisterRequest {
             (identical(other.gradYear, gradYear) ||
                 other.gradYear == gradYear) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.telegram, telegram) ||
-                other.telegram == telegram) &&
             (identical(other.password, password) ||
                 other.password == password) &&
             (identical(other.manualVerification, manualVerification) ||
-                other.manualVerification == manualVerification));
+                other.manualVerification == manualVerification) &&
+            (identical(other.telegram, telegram) ||
+                other.telegram == telegram));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -274,9 +274,9 @@ class _$RegisterRequestImpl implements _RegisterRequest {
     lastName,
     gradYear,
     email,
-    telegram,
     password,
     manualVerification,
+    telegram,
   );
 
   /// Create a copy of RegisterRequest
@@ -302,10 +302,10 @@ abstract class _RegisterRequest implements RegisterRequest {
     @JsonKey(name: 'last_name') required final String lastName,
     @JsonKey(name: 'graduation_year') required final String gradYear,
     required final String email,
-    @JsonKey(name: 'telegram_alias') final String? telegram,
     required final String password,
     @JsonKey(name: 'manual_verification')
     required final bool manualVerification,
+    @JsonKey(name: 'telegram_alias') final String? telegram,
   }) = _$RegisterRequestImpl;
 
   @override
@@ -320,13 +320,13 @@ abstract class _RegisterRequest implements RegisterRequest {
   @override
   String get email;
   @override
-  @JsonKey(name: 'telegram_alias')
-  String? get telegram;
-  @override
   String get password;
   @override
   @JsonKey(name: 'manual_verification')
   bool get manualVerification;
+  @override
+  @JsonKey(name: 'telegram_alias')
+  String? get telegram;
 
   /// Create a copy of RegisterRequest
   /// with the given fields replaced by the non-null parameter values.
