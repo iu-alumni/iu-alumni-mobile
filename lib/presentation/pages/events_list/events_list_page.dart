@@ -5,6 +5,9 @@ import 'package:fpdart/fpdart.dart' hide State;
 
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../blocs/events_list/events_list_cubit.dart';
+import '../../blocs/notifications/notifications_cubit.dart';
+import '../../blocs/notifications/notifications_state.dart';
+import '../../common/constants/app_colors.dart';
 import '../../common/constants/app_text_styles.dart';
 import '../../common/widgets/app_button.dart';
 import '../../common/widgets/app_loader.dart';
@@ -23,6 +26,7 @@ class _EventsListPageState extends State<EventsListPage> {
   @override
   void initState() {
     context.read<EventsListCubit>().loadEvents();
+    context.read<NotificationsCubit>().loadUnreadCount();
     super.initState();
   }
 
@@ -41,6 +45,33 @@ class _EventsListPageState extends State<EventsListPage> {
           context.read<Reporter>().reportCreateEventTap(AppLocation.eventsTab);
           context.pushRoute(EventEditingRoute(eventId: const None()));
         },
+      ),
+      AppButton(
+        is48Height: true,
+        buttonStyle: AppButtonStyle.gray,
+        onTap: () => context.pushRoute(const NotificationsRoute()),
+        child: BlocBuilder<NotificationsCubit, NotificationsState>(
+          buildWhen: (p, c) => p.unreadCount != c.unreadCount,
+          builder: (context, state) => Stack(
+            clipBehavior: Clip.none,
+            children: [
+              const Icon(Icons.notifications_outlined, color: AppColors.darkGray),
+              if (state.unreadCount > 0)
+                Positioned(
+                  right: -2,
+                  top: -2,
+                  child: Container(
+                    width: 10,
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      color: AppColors.error,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     ],
     body: AppChildBody(

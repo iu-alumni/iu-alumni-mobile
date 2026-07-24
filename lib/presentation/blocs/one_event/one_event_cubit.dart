@@ -55,22 +55,39 @@ class OneEventCubit extends Cubit<OneEventState> {
     state.event.map((s) => s.eventId).map(_repository.deleteEvent);
   }
 
+  /// Fields the backend rejects when blank; checked here so the user finds
+  /// out before a round trip instead of getting a generic save failure.
+  String? _validationError(EventModel event) {
+    final missing = <String>[
+      if ((event.description ?? '').trim().isEmpty) 'Description',
+      if ((event.location ?? '').trim().isEmpty) 'Location',
+    ];
+    if (missing.isEmpty) {
+      return null;
+    }
+    return 'Please fill in: ${missing.join(', ')}.';
+  }
+
   Future<void> save() async {
     state.event.map(
       (event) =>
           _reporter.reportSaveEvent(event, AppLocation.eventEditingScreen),
     );
+
+    final validationError = state.event.match(() => null, _validationError);
+    if (validationError != null) {
+      emit(state.copyWith(saveState: LoadedState.error(validationError)));
+      return;
+    }
+
     emit(state.copyWith(saveState: const LoadedState.loading()));
     state.event.map(_repository.modifyEvent);
-    final newId = await _repository.save();
+    final result = await _repository.save();
     emit(
       state.copyWith(
-        saveState: newId.match(
-          () => const LoadedState.error('Could not save the event'),
-          (_) => const LoadedState.data(unit),
-        ),
-        event: newId.match(
-          () => state.event,
+        saveState: result.match(LoadedState.error, (_) => const LoadedState.data(unit)),
+        event: result.match(
+          (_) => state.event,
           (id) => state.event.map((e) => e.copyWith(eventId: id)),
         ),
       ),
