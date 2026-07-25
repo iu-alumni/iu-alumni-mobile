@@ -24,6 +24,7 @@ abstract interface class ProjectsRepository {
     required String description,
     String? cover,
     String? donationLink,
+    int? goalAmount,
   });
 
   /// Returns the refreshed project on success, `null` on failure.
@@ -33,6 +34,7 @@ abstract interface class ProjectsRepository {
     String? description,
     String? cover,
     String? donationLink,
+    int? goalAmount,
   });
 
   Future<bool> delete(String id);
@@ -40,4 +42,9 @@ abstract interface class ProjectsRepository {
   Future<bool> contribute(String id);
 
   Future<bool> retract(String id);
+
+  /// Logs a self-reported donation of `amount` whole rubles. Bumps the
+  /// running `raised_amount` and adds the caller to contributors if not
+  /// already there. Returns the refreshed project or `null` on failure.
+  Future<ProjectModel?> donate(String id, int amount);
 }

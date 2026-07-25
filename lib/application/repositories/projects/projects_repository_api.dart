@@ -52,6 +52,7 @@ class ProjectsRepositoryApi implements ProjectsRepository {
     required String description,
     String? cover,
     String? donationLink,
+    int? goalAmount,
   }) async {
     try {
       final res = await _dio.post<Map<String, dynamic>>(
@@ -61,6 +62,7 @@ class ProjectsRepositoryApi implements ProjectsRepository {
           'description': description,
           if (cover != null) 'cover': cover,
           if (donationLink != null) 'donation_link': donationLink,
+          if (goalAmount != null) 'goal_amount': goalAmount,
         },
         options: _options.opts(),
       );
@@ -79,6 +81,7 @@ class ProjectsRepositoryApi implements ProjectsRepository {
     String? description,
     String? cover,
     String? donationLink,
+    int? goalAmount,
   }) async {
     try {
       final res = await _dio.put<Map<String, dynamic>>(
@@ -88,6 +91,7 @@ class ProjectsRepositoryApi implements ProjectsRepository {
           if (description != null) 'description': description,
           if (cover != null) 'cover': cover,
           if (donationLink != null) 'donation_link': donationLink,
+          if (goalAmount != null) 'goal_amount': goalAmount,
         },
         options: _options.opts(),
       );
@@ -121,6 +125,22 @@ class ProjectsRepositoryApi implements ProjectsRepository {
     } catch (e) {
       logger.d('contribute($id) failed: $e');
       return false;
+    }
+  }
+
+  @override
+  Future<ProjectModel?> donate(String id, int amount) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '$_base/$id/donations',
+        data: {'amount': amount},
+        options: _options.opts(),
+      );
+      final data = res.data;
+      return data == null ? null : ProjectModel.fromJson(data);
+    } catch (e) {
+      logger.d('donate($id) failed: $e');
+      return null;
     }
   }
 

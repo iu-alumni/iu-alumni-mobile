@@ -204,7 +204,10 @@ class App extends StatelessWidget {
         create: (ctx) => BadgesCubit(ctx.read<BadgesRepository>())..loadMine(),
       ),
       BlocProvider(
-        create: (ctx) => ProjectsCubit(ctx.read<ProjectsRepository>()),
+        create: (ctx) => ProjectsCubit(
+          ctx.read<ProjectsRepository>(),
+          ctx.read<UsersRepository>(),
+        ),
       ),
     ],
     child: Builder(

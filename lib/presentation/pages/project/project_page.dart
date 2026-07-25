@@ -22,6 +22,7 @@ import '../../common/widgets/app_loader.dart';
 import '../../common/widgets/app_scaffold.dart';
 import '../../common/widgets/profile_pic.dart';
 import '../../router/app_router.gr.dart';
+import 'donate_dialog.dart';
 
 @RoutePage()
 class ProjectPage extends StatelessWidget implements AutoRouteWrapper {
@@ -123,6 +124,10 @@ class _Body extends StatelessWidget {
                   height: 1.5,
                 ),
               ),
+              if (_showFundingBlock(project)) ...[
+                const SizedBox(height: 20),
+                _FundingBlock(project: project),
+              ],
               const SizedBox(height: 24),
               if (isOwner)
                 _EditButton(project: project)
@@ -148,7 +153,7 @@ class _Body extends StatelessWidget {
                   when link.isNotEmpty &&
                       project.approval == ProjectApproval.approved) ...[
                 const SizedBox(height: 12),
-                _DonateButton(url: link),
+                _DonateButton(project: project),
               ],
             ],
           ),
@@ -532,27 +537,45 @@ class _EditButton extends StatelessWidget {
 }
 
 class _DonateButton extends StatelessWidget {
-  const _DonateButton({required this.url});
+  const _DonateButton({required this.project});
 
-  final String url;
+  final ProjectModel project;
 
-  Future<void> _open(BuildContext context) async {
-    final uri = Uri.tryParse(url);
-    if (uri == null) {
+  Future<void> _handle(BuildContext context) async {
+    final url = project.donationLink;
+    if (url == null || url.isEmpty) {
       return;
     }
-    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!ok && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not open $url')),
-      );
+    final uri = Uri.tryParse(url);
+    if (uri != null) {
+      final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!ok && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not open $url')),
+        );
+        return;
+      }
+    }
+    if (!context.mounted) {
+      return;
+    }
+    // After the user comes back from the external URL, ask the amount.
+    // Dialog handles the POST + toast; on success it also pushes the
+    // refreshed project into OneProjectCubit so the raised total /
+    // progress bar update in place.
+    final logged = await DonateDialog.run(context, project);
+    if (logged && context.mounted) {
+      // Also refresh the list so the tab reflects the new total when
+      // the user pops back.
+      // ignore: unawaited_futures
+      context.read<ProjectsCubit>().refresh();
     }
   }
 
   @override
   Widget build(BuildContext context) => AppButton(
     buttonStyle: AppButtonStyle.secondary,
-    onTap: () => _open(context),
+    onTap: () => _handle(context),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -565,4 +588,72 @@ class _DonateButton extends StatelessWidget {
       ],
     ),
   );
+}
+
+bool _showFundingBlock(ProjectModel p) {
+  final goal = p.goalAmount;
+  final hasLink = p.donationLink != null && p.donationLink!.isNotEmpty;
+  return hasLink || (goal != null && goal > 0);
+}
+
+class _FundingBlock extends StatelessWidget {
+  const _FundingBlock({required this.project});
+
+  final ProjectModel project;
+
+  @override
+  Widget build(BuildContext context) {
+    final raised = _formatRubles(project.raisedAmount);
+    final goal = project.goalAmount;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: LinearProgressIndicator(
+            value: project.progressFraction,
+            minHeight: 10,
+            backgroundColor: AppColors.gray90,
+            valueColor: const AlwaysStoppedAnimation(AppColors.primary),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Row(
+          children: [
+            Text(
+              '₽ $raised raised',
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w800,
+                fontSize: 14,
+              ),
+            ),
+            const Spacer(),
+            if (goal != null && goal > 0)
+              Text(
+                'of ₽ ${_formatRubles(goal)}',
+                style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
+              )
+            else
+              Text(
+                'No goal set',
+                style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+String _formatRubles(int amount) {
+  if (amount >= 1000000) {
+    final m = amount / 1000000;
+    return m == m.roundToDouble() ? '${m.toInt()}M' : '${m.toStringAsFixed(1)}M';
+  }
+  if (amount >= 1000) {
+    final k = amount / 1000;
+    return k == k.roundToDouble() ? '${k.toInt()}k' : '${k.toStringAsFixed(1)}k';
+  }
+  return '$amount';
 }

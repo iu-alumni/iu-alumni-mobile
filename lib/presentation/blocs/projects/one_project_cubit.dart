@@ -79,6 +79,28 @@ class OneProjectCubit extends Cubit<OneProjectState> {
     );
   }
 
+  /// Push a fresh project into the state without a re-fetch — used by
+  /// the donate dialog after a successful POST so the details page shows
+  /// the bumped raised_amount immediately. Also folds `me` into
+  /// `contributors` since donating implies contributing.
+  void refresh(ProjectModel refreshed) {
+    final me = _me;
+    var contributors = state.contributors;
+    if (me != null &&
+        refreshed.contributorsIds.contains(me.profileId) &&
+        !contributors.any((p) => p.profileId == me.profileId)) {
+      contributors = [...contributors, me];
+    }
+    emit(
+      OneProjectState(
+        project: LoadedState.data(refreshed),
+        owner: state.owner,
+        contributors: contributors,
+        actionInFlight: state.actionInFlight,
+      ),
+    );
+  }
+
   Future<bool> contribute() async {
     final current = _current();
     final me = _me;

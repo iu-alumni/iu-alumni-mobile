@@ -6,12 +6,26 @@ import '../../common/models/loaded_state.dart';
 
 @immutable
 class ProjectsState {
-  const ProjectsState({this.projects = const LoadedState.init()});
+  const ProjectsState({
+    this.projects = const LoadedState.init(),
+    this.profilesByAlumniId = const <String, Profile>{},
+  });
 
   final LoadedState<List<ProjectModel>> projects;
 
-  ProjectsState copyWith({LoadedState<List<ProjectModel>>? projects}) =>
-      ProjectsState(projects: projects ?? this.projects);
+  /// Contributor profiles keyed by alumni id, hydrated in bulk by the
+  /// cubit after the list loads. Used to render avatar stacks on cards.
+  /// A missing id in this map means the profile hasn't been resolved yet
+  /// (or the lookup failed) — the UI falls back to a colored placeholder.
+  final Map<String, Profile> profilesByAlumniId;
+
+  ProjectsState copyWith({
+    LoadedState<List<ProjectModel>>? projects,
+    Map<String, Profile>? profilesByAlumniId,
+  }) => ProjectsState(
+    projects: projects ?? this.projects,
+    profilesByAlumniId: profilesByAlumniId ?? this.profilesByAlumniId,
+  );
 }
 
 @immutable

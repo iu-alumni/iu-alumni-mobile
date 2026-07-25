@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -29,6 +30,7 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
   final _titleCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
   final _donationLinkCtrl = TextEditingController();
+  final _goalCtrl = TextEditingController();
   String? _cover;
   bool _saving = false;
   bool _loading = false;
@@ -54,6 +56,7 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
       _titleCtrl.text = project.title;
       _descCtrl.text = project.description;
       _donationLinkCtrl.text = project.donationLink ?? '';
+      _goalCtrl.text = project.goalAmount?.toString() ?? '';
       _cover = project.cover;
     }
     setState(() => _loading = false);
@@ -64,6 +67,7 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
     _titleCtrl.dispose();
     _descCtrl.dispose();
     _donationLinkCtrl.dispose();
+    _goalCtrl.dispose();
     super.dispose();
   }
 
@@ -97,7 +101,7 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
                   maxLength: 2000,
                 ),
                 const SizedBox(height: 8),
-                _Label('Donation link (optional)'),
+                _Label('Donation link'),
                 TextField(
                   controller: _donationLinkCtrl,
                   decoration: _decoration('https://tinkoff.ru/... or any bank link'),
@@ -105,8 +109,22 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
                   maxLength: 500,
                 ),
                 Text(
-                  'Contributors can tap this to open your payment page. '
-                  'Leave blank if there is no way to donate money.',
+                  'Contributors tap this to open your payment page.',
+                  style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
+                ),
+                const SizedBox(height: 8),
+                _Label('Fundraising goal in ₽'),
+                TextField(
+                  controller: _goalCtrl,
+                  decoration: _decoration('e.g. 1000000 for a ₽ 1M target'),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  maxLength: 12,
+                ),
+                Text(
+                  'Sets the progress bar target on the project card.',
                   style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
                 ),
                 if (_isEditMode) ...[
@@ -162,7 +180,13 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
       );
       return;
     }
-    if (rawLink.isNotEmpty && !_looksLikeUrl(rawLink)) {
+    if (rawLink.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Donation link is required.')),
+      );
+      return;
+    }
+    if (!_looksLikeUrl(rawLink)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Donation link must start with http:// or https://'),
@@ -170,9 +194,18 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
       );
       return;
     }
-    // Empty string tells the backend "clear the field" on update; on
-    // create we omit it so the column stays NULL rather than "".
-    final donationLink = _isEditMode ? rawLink : (rawLink.isEmpty ? null : rawLink);
+    final donationLink = rawLink;
+    // Goal: parse the input. Required, must be a positive whole ruble count.
+    final rawGoal = _goalCtrl.text.trim();
+    final goalAmount = int.tryParse(rawGoal);
+    if (goalAmount == null || goalAmount <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Fundraising goal is required — enter a positive whole number of rubles.'),
+        ),
+      );
+      return;
+    }
     setState(() => _saving = true);
     final repo = context.read<ProjectsRepository>();
     final ok = _isEditMode
@@ -182,6 +215,7 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
               description: desc,
               cover: _cover,
               donationLink: donationLink,
+              goalAmount: goalAmount,
             )) !=
             null
         : (await repo.create(
@@ -189,6 +223,7 @@ class _ProjectEditingPageState extends State<ProjectEditingPage> {
               description: desc,
               cover: _cover,
               donationLink: donationLink,
+              goalAmount: goalAmount,
             )) !=
             null;
 
