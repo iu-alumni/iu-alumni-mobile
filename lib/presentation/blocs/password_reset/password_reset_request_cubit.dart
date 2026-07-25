@@ -3,6 +3,7 @@ import 'package:fpdart/fpdart.dart';
 
 import '../../../application/repositories/auth/password_reset_repository.dart';
 import '../../common/models/loaded_state.dart';
+import '../../common/utils/university_email.dart';
 
 /// Manages the "Forgot password?" request step.
 /// Emits [LoadedState.data] when the email was submitted successfully —
@@ -19,6 +20,11 @@ class PasswordResetRequestCubit extends Cubit<LoadedState<Unit>> {
     final normalizedEmail = email.trim();
     if (normalizedEmail.isEmpty) {
       emit(const LoadedState.error('Please enter your email address'));
+      return;
+    }
+    final emailError = validateUniversityEmail(normalizedEmail);
+    if (emailError != null) {
+      emit(LoadedState.error(emailError));
       return;
     }
     emit(const LoadedState.loading());
