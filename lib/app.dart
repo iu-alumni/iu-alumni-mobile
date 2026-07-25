@@ -224,7 +224,10 @@ class App extends StatelessWidget {
             NotificationsCubit(context.read<NotificationsRepository>()),
       ),
       BlocProvider(
-        create: (ctx) => ProjectsCubit(ctx.read<ProjectsRepository>()),
+        create: (ctx) => ProjectsCubit(
+          ctx.read<ProjectsRepository>(),
+          ctx.read<UsersRepository>(),
+        ),
       ),
     ],
     child: Builder(

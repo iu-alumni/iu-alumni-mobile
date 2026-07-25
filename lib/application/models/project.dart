@@ -13,8 +13,10 @@ class ProjectModel {
     required this.description,
     required this.approval,
     required this.createdAt,
+    required this.raisedAmount,
     this.cover,
     this.donationLink,
+    this.goalAmount,
   });
 
   final String id;
@@ -27,12 +29,32 @@ class ProjectModel {
   /// Owner-supplied payment URL (bank / Tinkoff / YooKassa). The client
   /// just opens it via url_launcher — no in-app payment handling.
   final String? donationLink;
+
+  /// Fundraising target in whole rubles. `null` if the owner didn't set
+  /// one — in which case the card hides the progress bar and just shows
+  /// the raised total.
+  final int? goalAmount;
+
+  /// Total self-reported donations, in whole rubles. Bumped by the
+  /// donate endpoint each time a contributor tells us what they gave.
+  final int raisedAmount;
   final ProjectApproval approval;
   final DateTime createdAt;
 
   int get contributorCount => contributorsIds.length;
 
   bool isContributedBy(String alumniId) => contributorsIds.contains(alumniId);
+
+  /// 0.0–1.0 fraction of the goal reached. Zero when no goal is set —
+  /// callers should check `goalAmount` themselves before rendering the
+  /// bar so the "no goal" state can be handled distinctly from "0%".
+  double get progressFraction {
+    final goal = goalAmount;
+    if (goal == null || goal <= 0) {
+      return 0;
+    }
+    return (raisedAmount / goal).clamp(0.0, 1.0);
+  }
 
   ProjectModel copyWith({
     String? id,
@@ -42,6 +64,8 @@ class ProjectModel {
     String? description,
     String? cover,
     String? donationLink,
+    int? goalAmount,
+    int? raisedAmount,
     ProjectApproval? approval,
     DateTime? createdAt,
   }) => ProjectModel(
@@ -52,6 +76,8 @@ class ProjectModel {
     description: description ?? this.description,
     cover: cover ?? this.cover,
     donationLink: donationLink ?? this.donationLink,
+    goalAmount: goalAmount ?? this.goalAmount,
+    raisedAmount: raisedAmount ?? this.raisedAmount,
     approval: approval ?? this.approval,
     createdAt: createdAt ?? this.createdAt,
   );
@@ -82,6 +108,16 @@ class ProjectModel {
       description: (json['description'] as String?) ?? '',
       cover: json['cover'] as String?,
       donationLink: json['donation_link'] as String?,
+      goalAmount: switch (json['goal_amount']) {
+        final int i when i > 0 => i,
+        final num n when n > 0 => n.toInt(),
+        _ => null,
+      },
+      raisedAmount: switch (json['raised_amount']) {
+        final int i => i,
+        final num n => n.toInt(),
+        _ => 0,
+      },
       approval: approval,
       createdAt:
           DateTime.tryParse((json['created_at'] as String?) ?? '') ??
