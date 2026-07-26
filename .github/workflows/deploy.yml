@@ -38,12 +38,11 @@ jobs:
 
       # The repo ships unit tests under test/ that CI never executed, so a broken
       # test could reach main unnoticed. Run them before the build.
-      # Report-only for now: the tree has ~36 pre-existing analyzer warnings
-      # (lints removed in Dart 3.x still listed in analysis_options.yaml, unused
-      # imports). Blocking on them would block every PR until that cleanup lands.
-      # There are 0 errors, so tighten this to fatal once the warnings are fixed.
-      - name: Analyze (report-only)
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings || true
+      # Errors and warnings now fail the build; the 36 pre-existing warnings were
+      # cleared. Infos stay non-fatal — the tree still has ~141 style-lint infos
+      # (mostly always_put_control_body_on_new_line) that are a separate cleanup.
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
 
       - name: Run tests
         run: flutter test --reporter compact
