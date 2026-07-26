@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:ui_alumni_mobile/application/models/cost.dart';
-import 'package:ui_alumni_mobile/application/models/event.dart';
 import 'package:ui_alumni_mobile/application/models/user_status.dart';
 import '../../helpers/test_data.dart';
 

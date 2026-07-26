@@ -2,19 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:ui_alumni_mobile/application/models/user_status.dart';
-import 'package:ui_alumni_mobile/application/models/event.dart';
 import 'package:ui_alumni_mobile/application/models/profile.dart';
 import 'package:ui_alumni_mobile/application/models/paginated_result.dart';
 import 'package:ui_alumni_mobile/application/repositories/events/events_repository_impl.dart';
 import 'package:ui_alumni_mobile/data/events/events_gateway.dart';
-import 'package:ui_alumni_mobile/data/models/event_data_model.dart';
-import 'package:ui_alumni_mobile/data/models/event_request_data_model.dart';
 import 'package:ui_alumni_mobile/application/repositories/users/users_repository.dart';
-import 'package:ui_alumni_mobile/application/mappers/event_mapper.dart';
 
 import '../../../helpers/test_data.dart';
 import 'events_repository_impl_test.mocks.dart';

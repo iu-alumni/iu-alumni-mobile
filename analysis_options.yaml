@@ -15,7 +15,6 @@ linter:
     - always_declare_return_types
     - always_put_control_body_on_new_line
     - always_put_required_named_parameters_first
-    - always_require_non_null_named_parameters
     - annotate_overrides
     - avoid_bool_literals_in_conditional_expressions
     - avoid_double_and_int_checks
@@ -27,8 +26,6 @@ linter:
     - avoid_null_checks_in_equality_operators
     - avoid_private_typedef_functions
     - avoid_return_types_on_setters
-    - avoid_returning_null
-    - avoid_returning_null_for_future
     - avoid_returning_null_for_void
     - avoid_returning_this
     - avoid_setters_without_getters
@@ -80,7 +77,6 @@ linter:
     - prefer_const_constructors
     - prefer_const_declarations
     - prefer_contains
-    - prefer_equal_for_default_values
     - prefer_final_fields
     - prefer_final_in_for_each
     - prefer_final_locals
@@ -146,5 +142,6 @@ analyzer:
     - lib/**.config.dart
     - lib/**.freezed.dart
     - lib/core/l10n/generated/**
+    - "**/*.mocks.dart"
   errors:
     invalid_annotation_target: ignore
