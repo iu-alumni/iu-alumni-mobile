@@ -85,10 +85,10 @@ void main() {
 
       final request = _rightRequest(cubit.verificationRequest(false));
 
-      expect(request?.firstName, 'Ada');
-      expect(request?.lastName, 'Lovelace');
-      expect(request?.email, 'ada@innopolis.university');
-      expect(request?.telegram, isNull);
+      expect(request.firstName, 'Ada');
+      expect(request.lastName, 'Lovelace');
+      expect(request.email, 'ada@innopolis.university');
+      expect(request.telegram, isNull);
     });
 
     test('returns clear message for too-short Telegram alias', () {
