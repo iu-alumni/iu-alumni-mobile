@@ -45,7 +45,35 @@ jobs:
         run: flutter analyze --no-fatal-infos
 
       - name: Run tests
-        run: flutter test --reporter compact
+        run: flutter test --coverage --reporter compact
+
+      # Reports only — there is no signal today about which parts of lib/ the
+      # 15 test files actually reach. Parsed straight from lcov.info so no extra
+      # tooling is needed. Add a threshold once the baseline is known.
+      - name: Coverage summary
+        if: always()
+        run: |
+          if [ ! -f coverage/lcov.info ]; then
+            echo "No coverage/lcov.info produced"
+            exit 0
+          fi
+          awk -F: '
+            /^LF:/ { found += $2 }
+            /^LH:/ { hit   += $2 }
+            END {
+              if (found > 0)
+                printf("TOTAL line coverage: %.1f%% (%d/%d lines)\n", hit * 100 / found, hit, found)
+              else
+                print "no coverage data"
+            }
+          ' coverage/lcov.info
+          echo "── least-covered files ──"
+          awk '
+            /^SF:/          { file = substr($0, 4); lf = 0; lh = 0 }
+            /^LF:/          { lf = substr($0, 4) }
+            /^LH:/          { lh = substr($0, 4) }
+            /^end_of_record/ { if (lf > 0) printf("%6.1f%%  %5d lines  %s\n", lh * 100 / lf, lf, file) }
+          ' coverage/lcov.info | sort -n | head -20
 
       - name: Build Flutter web
         run: |
