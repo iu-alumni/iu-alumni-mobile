@@ -129,3 +129,26 @@ jobs:
       SERVER_HOST: ${{ secrets.SERVER_HOST }}
       SERVER_USER: ${{ secrets.SERVER_USER }}
       SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+
+  # Verify the deploy actually serves traffic. A deploy step exiting 0 only means
+  # the SSH script ran — production once sat with a dead Docker daemon while runs
+  # were still reported as successful.
+  smoke-testing:
+    needs: deploy-testing
+    uses: iu-alumni/iu-alumni-infra/.github/workflows/smoke-test.yml@main
+    with:
+      environment: testing
+    secrets:
+      SERVER_HOST: ${{ secrets.SERVER_HOST }}
+      SERVER_USER: ${{ secrets.SERVER_USER }}
+      SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+
+  smoke-production:
+    needs: deploy-production
+    uses: iu-alumni/iu-alumni-infra/.github/workflows/smoke-test.yml@main
+    with:
+      environment: production
+    secrets:
+      SERVER_HOST: ${{ secrets.SERVER_HOST }}
+      SERVER_USER: ${{ secrets.SERVER_USER }}
+      SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
