@@ -5,7 +5,6 @@ import 'package:mockito/annotations.dart';
 
 import 'package:ui_alumni_mobile/application/repositories/auth/auth_repository_impl.dart';
 import 'package:ui_alumni_mobile/data/auth/auth_gateway.dart';
-import 'package:ui_alumni_mobile/application/models/register_request.dart';
 import '../../../helpers/test_data.dart';
 import 'auth_repository_impl_test.mocks.dart';
 

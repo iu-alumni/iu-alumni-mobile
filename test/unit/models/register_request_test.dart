@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ui_alumni_mobile/application/models/register_request.dart';
 import '../../helpers/test_data.dart';
 
 void main() {

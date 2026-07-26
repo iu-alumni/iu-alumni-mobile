@@ -1,10 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:ui_alumni_mobile/application/mappers/event_mapper.dart';
-import 'package:ui_alumni_mobile/application/models/cost.dart';
-import 'package:ui_alumni_mobile/application/models/event.dart';
 import 'package:ui_alumni_mobile/application/models/user_status.dart';
-import 'package:ui_alumni_mobile/data/models/event_data_model.dart';
 import '../../helpers/test_data.dart';
 
 void main() {
