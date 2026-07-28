@@ -45,6 +45,7 @@ class TestData {
       firstName: firstName ?? TestData.firstName,
       lastName: lastName ?? TestData.lastName,
       graduationYear: graduationYear ?? TestData.graduationYear,
+      role: 'alumni',
       location: location,
       biography: biography,
       showLocation: showLocation ?? false,
