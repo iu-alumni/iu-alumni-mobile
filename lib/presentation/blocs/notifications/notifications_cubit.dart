@@ -21,6 +21,12 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     emit(state.copyWith(unreadCount: count));
   }
 
+  void clearUnreadCount() {
+    if (state.unreadCount > 0) {
+      emit(state.copyWith(unreadCount: 0));
+    }
+  }
+
   /// Loads the list (soonest-first). Per the backend, this marks every
   /// currently unread notification as read, so the badge is cleared
   /// locally too — they won't show as "new" again on a later session,
@@ -40,7 +46,6 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     emit(
       state.copyWith(
         list: LoadedState.data(displayed),
-        unreadCount: 0,
       ),
     );
   }

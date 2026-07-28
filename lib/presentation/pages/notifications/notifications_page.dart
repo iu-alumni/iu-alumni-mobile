@@ -21,7 +21,9 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   @override
   void initState() {
-    context.read<NotificationsCubit>().loadNotifications();
+    final notificationsCubit = context.read<NotificationsCubit>();
+    notificationsCubit.clearUnreadCount();
+    notificationsCubit.loadNotifications();
     super.initState();
   }
 
