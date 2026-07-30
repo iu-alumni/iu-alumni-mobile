@@ -361,4 +361,3 @@ class _CoverPicker extends StatelessWidget {
     }
   }
 }
-
