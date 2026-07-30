@@ -52,11 +52,14 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     final password = state.password;
     final telegram = _trimmed(state.telegram);
 
+    // Alumni Friends legitimately have no graduation year — skip the
+    // check when the user picked that role.
+    final needsGradYear = !state.isAlumniFriend;
     final missingFields = [
       if (firstName == null) 'first name',
       if (lastName == null) 'last name',
       if (email == null) 'university email',
-      if (state.graduationYear == null) 'graduation year',
+      if (needsGradYear && state.graduationYear == null) 'graduation year',
       if (password == null || password.isEmpty) 'password',
     ];
 
@@ -72,7 +75,8 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       RegisterRequest(
         firstName: firstName!,
         lastName: lastName!,
-        gradYear: '${state.graduationYear}',
+        gradYear: state.isAlumniFriend ? null : '${state.graduationYear}',
+        role: state.role,
         email: email!,
         telegram: telegram,
         password: password!,
@@ -136,6 +140,17 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   void setLastName(String lastName) => emit(state.copyWith(lastName: lastName));
 
   void setTelegram(String telegram) => emit(state.copyWith(telegram: telegram));
+
+  void setRole(String role) {
+    // Flipping to alumni_friend also drops any grad year the user might
+    // have entered before switching — keeps the state consistent with
+    // what will be sent to the backend.
+    if (role == 'alumni_friend') {
+      emit(state.copyWith(role: role, graduationYear: null));
+    } else {
+      emit(state.copyWith(role: role));
+    }
+  }
 
   void dispose() => _authRepository.cleanEmail();
 }

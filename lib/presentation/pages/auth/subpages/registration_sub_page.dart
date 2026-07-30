@@ -139,28 +139,58 @@ class _RegistrationSubPageState extends State<RegistrationSubPage> {
               maxLines: 1,
             ),
             const SizedBox(height: 8),
-            AppButton(
-              onTap: _pickGradYear,
-              buttonStyle: AppButtonStyle.gray,
-              child: BlocBuilder<RegistrationCubit, RegistrationState>(
-                buildWhen: (p, c) => p.graduationYear != c.graduationYear,
-                builder: (context, verData) {
-                  final (content, isHint) = switch (verData.graduationYear) {
-                    final year? => ('$year', false),
-                    _ => ('Graduation year', true),
-                  };
-                  return Align(
-                    alignment: Alignment.centerLeft,
+            BlocBuilder<RegistrationCubit, RegistrationState>(
+              buildWhen: (p, c) => p.role != c.role,
+              builder: (context, s) => _RolePicker(
+                selected: s.role,
+                onChanged: _registrationCubit.setRole,
+              ),
+            ),
+            const SizedBox(height: 8),
+            BlocBuilder<RegistrationCubit, RegistrationState>(
+              buildWhen: (p, c) =>
+                  p.role != c.role || p.graduationYear != c.graduationYear,
+              builder: (context, verData) {
+                if (verData.isAlumniFriend) {
+                  // Alumni Friends have no graduation year — hide the
+                  // picker entirely and surface a short explainer where
+                  // it used to sit.
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(
-                      content,
-                      style: AppTextStyles.body.copyWith(
-                        color: isHint ? AppColors.gray50 : AppColors.darkGray,
+                      'No graduation year needed — an admin will confirm '
+                      'your connection to the community.',
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.gray50,
                       ),
-                      textAlign: TextAlign.start,
                     ),
                   );
-                },
-              ),
+                }
+                return AppButton(
+                  onTap: _pickGradYear,
+                  buttonStyle: AppButtonStyle.gray,
+                  child: Builder(
+                    builder: (_) {
+                      final (content, isHint) = switch (verData.graduationYear) {
+                        final year? => ('$year', false),
+                        _ => ('Graduation year', true),
+                      };
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          content,
+                          style: AppTextStyles.body.copyWith(
+                            color: isHint
+                                ? AppColors.gray50
+                                : AppColors.darkGray,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 8),
             AppTextField(
@@ -230,6 +260,77 @@ class _RegistrationSubPageState extends State<RegistrationSubPage> {
             ),
             const SizedBox(height: 16),
           ],
+        ),
+      ),
+    ),
+  );
+}
+
+/// Two-option segmented picker for the alumni role, sitting between the
+/// email field and the graduation-year picker on the registration form.
+class _RolePicker extends StatelessWidget {
+  const _RolePicker({required this.selected, required this.onChanged});
+
+  final String selected;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: BoxDecoration(
+      color: AppColors.gray90,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(4),
+      child: Row(
+        children: [
+          Expanded(
+            child: _RoleOption(
+              label: 'Alumni',
+              active: selected == 'alumni',
+              onTap: () => onChanged('alumni'),
+            ),
+          ),
+          Expanded(
+            child: _RoleOption(
+              label: 'Alumni Friend',
+              active: selected == 'alumni_friend',
+              onTap: () => onChanged('alumni_friend'),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+class _RoleOption extends StatelessWidget {
+  const _RoleOption({
+    required this.label,
+    required this.active,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool active;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Material(
+    color: active ? AppColors.primary : Colors.transparent,
+    borderRadius: BorderRadius.circular(8),
+    child: InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: AppTextStyles.body.copyWith(
+            color: active ? Colors.white : AppColors.darkGray,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     ),
