@@ -77,7 +77,12 @@ class ProfileContent {
         children: [
           if (profile.location case final loc?)
             AppTag(icon: Icons.pin_drop, text: loc),
-          AppTag(icon: Icons.school, text: profile.graduationYear),
+          // Alumni Friends have no graduation year — show a chip that
+          // signals their community role instead of the school-year tag.
+          if (profile.isAlumniFriend)
+            const AppTag(icon: Icons.groups, text: 'Alumni Friend')
+          else if (profile.graduationYear case final year? when year.isNotEmpty)
+            AppTag(icon: Icons.school, text: year),
         ],
       ),
       ...[

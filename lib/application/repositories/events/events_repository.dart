@@ -21,7 +21,7 @@ abstract interface class EventsRepository {
 
   Future<void> deleteEvent(String eventId);
 
-  Future<Option<String>> save();
+  Future<Either<String, String>> save();
 
   Future<Option<EventModel>> participate(String eventId);
 

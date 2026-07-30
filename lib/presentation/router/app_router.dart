@@ -31,6 +31,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: AppLoadingRoute.page, initial: true),
     AutoRoute(page: ProfileRoute.page),
     AutoRoute(page: CityDataRoute.page),
+    AutoRoute(page: NotificationsRoute.page),
   ];
 
   @override
