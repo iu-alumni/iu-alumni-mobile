@@ -21,14 +21,19 @@ mixin _$RegisterRequest {
   String get firstName => throw _privateConstructorUsedError;
   @JsonKey(name: 'last_name')
   String get lastName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'graduation_year')
-  String get gradYear => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  @JsonKey(name: 'telegram_alias')
-  String? get telegram => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
   @JsonKey(name: 'manual_verification')
-  bool get manualVerification => throw _privateConstructorUsedError;
+  bool get manualVerification => throw _privateConstructorUsedError; // Null for Alumni Friends — backend nulls it anyway when role is
+  // 'alumni_friend', but omitting the field on the wire keeps things
+  // clean.
+  @JsonKey(name: 'graduation_year', includeIfNull: false)
+  String? get gradYear => throw _privateConstructorUsedError; // Defaults to 'alumni'. Registration form is a radio; validation
+  // that grad_year is set for role=alumni happens on the backend.
+  @JsonKey(name: 'role')
+  String get role => throw _privateConstructorUsedError;
+  @JsonKey(name: 'telegram_alias')
+  String? get telegram => throw _privateConstructorUsedError;
 
   /// Serializes this RegisterRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,11 +55,12 @@ abstract class $RegisterRequestCopyWith<$Res> {
   $Res call({
     @JsonKey(name: 'first_name') String firstName,
     @JsonKey(name: 'last_name') String lastName,
-    @JsonKey(name: 'graduation_year') String gradYear,
     String email,
-    @JsonKey(name: 'telegram_alias') String? telegram,
     String password,
     @JsonKey(name: 'manual_verification') bool manualVerification,
+    @JsonKey(name: 'graduation_year', includeIfNull: false) String? gradYear,
+    @JsonKey(name: 'role') String role,
+    @JsonKey(name: 'telegram_alias') String? telegram,
   });
 }
 
@@ -75,11 +81,12 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
   $Res call({
     Object? firstName = null,
     Object? lastName = null,
-    Object? gradYear = null,
     Object? email = null,
-    Object? telegram = freezed,
     Object? password = null,
     Object? manualVerification = null,
+    Object? gradYear = freezed,
+    Object? role = null,
+    Object? telegram = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -93,21 +100,11 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
                     ? _value.lastName
                     : lastName // ignore: cast_nullable_to_non_nullable
                         as String,
-            gradYear:
-                null == gradYear
-                    ? _value.gradYear
-                    : gradYear // ignore: cast_nullable_to_non_nullable
-                        as String,
             email:
                 null == email
                     ? _value.email
                     : email // ignore: cast_nullable_to_non_nullable
                         as String,
-            telegram:
-                freezed == telegram
-                    ? _value.telegram
-                    : telegram // ignore: cast_nullable_to_non_nullable
-                        as String?,
             password:
                 null == password
                     ? _value.password
@@ -118,6 +115,21 @@ class _$RegisterRequestCopyWithImpl<$Res, $Val extends RegisterRequest>
                     ? _value.manualVerification
                     : manualVerification // ignore: cast_nullable_to_non_nullable
                         as bool,
+            gradYear:
+                freezed == gradYear
+                    ? _value.gradYear
+                    : gradYear // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            role:
+                null == role
+                    ? _value.role
+                    : role // ignore: cast_nullable_to_non_nullable
+                        as String,
+            telegram:
+                freezed == telegram
+                    ? _value.telegram
+                    : telegram // ignore: cast_nullable_to_non_nullable
+                        as String?,
           )
           as $Val,
     );
@@ -136,11 +148,12 @@ abstract class _$$RegisterRequestImplCopyWith<$Res>
   $Res call({
     @JsonKey(name: 'first_name') String firstName,
     @JsonKey(name: 'last_name') String lastName,
-    @JsonKey(name: 'graduation_year') String gradYear,
     String email,
-    @JsonKey(name: 'telegram_alias') String? telegram,
     String password,
     @JsonKey(name: 'manual_verification') bool manualVerification,
+    @JsonKey(name: 'graduation_year', includeIfNull: false) String? gradYear,
+    @JsonKey(name: 'role') String role,
+    @JsonKey(name: 'telegram_alias') String? telegram,
   });
 }
 
@@ -160,11 +173,12 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
   $Res call({
     Object? firstName = null,
     Object? lastName = null,
-    Object? gradYear = null,
     Object? email = null,
-    Object? telegram = freezed,
     Object? password = null,
     Object? manualVerification = null,
+    Object? gradYear = freezed,
+    Object? role = null,
+    Object? telegram = freezed,
   }) {
     return _then(
       _$RegisterRequestImpl(
@@ -178,21 +192,11 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
                 ? _value.lastName
                 : lastName // ignore: cast_nullable_to_non_nullable
                     as String,
-        gradYear:
-            null == gradYear
-                ? _value.gradYear
-                : gradYear // ignore: cast_nullable_to_non_nullable
-                    as String,
         email:
             null == email
                 ? _value.email
                 : email // ignore: cast_nullable_to_non_nullable
                     as String,
-        telegram:
-            freezed == telegram
-                ? _value.telegram
-                : telegram // ignore: cast_nullable_to_non_nullable
-                    as String?,
         password:
             null == password
                 ? _value.password
@@ -203,6 +207,21 @@ class __$$RegisterRequestImplCopyWithImpl<$Res>
                 ? _value.manualVerification
                 : manualVerification // ignore: cast_nullable_to_non_nullable
                     as bool,
+        gradYear:
+            freezed == gradYear
+                ? _value.gradYear
+                : gradYear // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        role:
+            null == role
+                ? _value.role
+                : role // ignore: cast_nullable_to_non_nullable
+                    as String,
+        telegram:
+            freezed == telegram
+                ? _value.telegram
+                : telegram // ignore: cast_nullable_to_non_nullable
+                    as String?,
       ),
     );
   }
@@ -214,11 +233,12 @@ class _$RegisterRequestImpl implements _RegisterRequest {
   const _$RegisterRequestImpl({
     @JsonKey(name: 'first_name') required this.firstName,
     @JsonKey(name: 'last_name') required this.lastName,
-    @JsonKey(name: 'graduation_year') required this.gradYear,
     required this.email,
-    @JsonKey(name: 'telegram_alias') this.telegram,
     required this.password,
     @JsonKey(name: 'manual_verification') required this.manualVerification,
+    @JsonKey(name: 'graduation_year', includeIfNull: false) this.gradYear,
+    @JsonKey(name: 'role') this.role = 'alumni',
+    @JsonKey(name: 'telegram_alias') this.telegram,
   });
 
   @override
@@ -228,22 +248,30 @@ class _$RegisterRequestImpl implements _RegisterRequest {
   @JsonKey(name: 'last_name')
   final String lastName;
   @override
-  @JsonKey(name: 'graduation_year')
-  final String gradYear;
-  @override
   final String email;
-  @override
-  @JsonKey(name: 'telegram_alias')
-  final String? telegram;
   @override
   final String password;
   @override
   @JsonKey(name: 'manual_verification')
   final bool manualVerification;
+  // Null for Alumni Friends — backend nulls it anyway when role is
+  // 'alumni_friend', but omitting the field on the wire keeps things
+  // clean.
+  @override
+  @JsonKey(name: 'graduation_year', includeIfNull: false)
+  final String? gradYear;
+  // Defaults to 'alumni'. Registration form is a radio; validation
+  // that grad_year is set for role=alumni happens on the backend.
+  @override
+  @JsonKey(name: 'role')
+  final String role;
+  @override
+  @JsonKey(name: 'telegram_alias')
+  final String? telegram;
 
   @override
   String toString() {
-    return 'RegisterRequest(firstName: $firstName, lastName: $lastName, gradYear: $gradYear, email: $email, telegram: $telegram, password: $password, manualVerification: $manualVerification)';
+    return 'RegisterRequest(firstName: $firstName, lastName: $lastName, email: $email, password: $password, manualVerification: $manualVerification, gradYear: $gradYear, role: $role, telegram: $telegram)';
   }
 
   @override
@@ -255,15 +283,16 @@ class _$RegisterRequestImpl implements _RegisterRequest {
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
                 other.lastName == lastName) &&
-            (identical(other.gradYear, gradYear) ||
-                other.gradYear == gradYear) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.telegram, telegram) ||
-                other.telegram == telegram) &&
             (identical(other.password, password) ||
                 other.password == password) &&
             (identical(other.manualVerification, manualVerification) ||
-                other.manualVerification == manualVerification));
+                other.manualVerification == manualVerification) &&
+            (identical(other.gradYear, gradYear) ||
+                other.gradYear == gradYear) &&
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.telegram, telegram) ||
+                other.telegram == telegram));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -272,11 +301,12 @@ class _$RegisterRequestImpl implements _RegisterRequest {
     runtimeType,
     firstName,
     lastName,
-    gradYear,
     email,
-    telegram,
     password,
     manualVerification,
+    gradYear,
+    role,
+    telegram,
   );
 
   /// Create a copy of RegisterRequest
@@ -300,12 +330,14 @@ abstract class _RegisterRequest implements RegisterRequest {
   const factory _RegisterRequest({
     @JsonKey(name: 'first_name') required final String firstName,
     @JsonKey(name: 'last_name') required final String lastName,
-    @JsonKey(name: 'graduation_year') required final String gradYear,
     required final String email,
-    @JsonKey(name: 'telegram_alias') final String? telegram,
     required final String password,
     @JsonKey(name: 'manual_verification')
     required final bool manualVerification,
+    @JsonKey(name: 'graduation_year', includeIfNull: false)
+    final String? gradYear,
+    @JsonKey(name: 'role') final String role,
+    @JsonKey(name: 'telegram_alias') final String? telegram,
   }) = _$RegisterRequestImpl;
 
   @override
@@ -315,18 +347,24 @@ abstract class _RegisterRequest implements RegisterRequest {
   @JsonKey(name: 'last_name')
   String get lastName;
   @override
-  @JsonKey(name: 'graduation_year')
-  String get gradYear;
-  @override
   String get email;
-  @override
-  @JsonKey(name: 'telegram_alias')
-  String? get telegram;
   @override
   String get password;
   @override
   @JsonKey(name: 'manual_verification')
-  bool get manualVerification;
+  bool get manualVerification; // Null for Alumni Friends — backend nulls it anyway when role is
+  // 'alumni_friend', but omitting the field on the wire keeps things
+  // clean.
+  @override
+  @JsonKey(name: 'graduation_year', includeIfNull: false)
+  String? get gradYear; // Defaults to 'alumni'. Registration form is a radio; validation
+  // that grad_year is set for role=alumni happens on the backend.
+  @override
+  @JsonKey(name: 'role')
+  String get role;
+  @override
+  @JsonKey(name: 'telegram_alias')
+  String? get telegram;
 
   /// Create a copy of RegisterRequest
   /// with the given fields replaced by the non-null parameter values.

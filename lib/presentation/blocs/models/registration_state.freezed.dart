@@ -20,7 +20,11 @@ mixin _$RegistrationState {
   LoadedState<bool> get verification => throw _privateConstructorUsedError;
   String? get firstName => throw _privateConstructorUsedError;
   String? get lastName => throw _privateConstructorUsedError;
-  int? get graduationYear => throw _privateConstructorUsedError;
+  int? get graduationYear =>
+      throw _privateConstructorUsedError; // Radio selection. Defaults to 'alumni' so the existing UX (grad
+  // year visible, required) stays put unless the user opts into the
+  // Alumni Friend flow.
+  String get role => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
   String? get telegram => throw _privateConstructorUsedError;
@@ -44,6 +48,7 @@ abstract class $RegistrationStateCopyWith<$Res> {
     String? firstName,
     String? lastName,
     int? graduationYear,
+    String role,
     String? email,
     String? password,
     String? telegram,
@@ -71,6 +76,7 @@ class _$RegistrationStateCopyWithImpl<$Res, $Val extends RegistrationState>
     Object? firstName = freezed,
     Object? lastName = freezed,
     Object? graduationYear = freezed,
+    Object? role = null,
     Object? email = freezed,
     Object? password = freezed,
     Object? telegram = freezed,
@@ -97,6 +103,11 @@ class _$RegistrationStateCopyWithImpl<$Res, $Val extends RegistrationState>
                     ? _value.graduationYear
                     : graduationYear // ignore: cast_nullable_to_non_nullable
                         as int?,
+            role:
+                null == role
+                    ? _value.role
+                    : role // ignore: cast_nullable_to_non_nullable
+                        as String,
             email:
                 freezed == email
                     ? _value.email
@@ -142,6 +153,7 @@ abstract class _$$RegistrationStateImplCopyWith<$Res>
     String? firstName,
     String? lastName,
     int? graduationYear,
+    String role,
     String? email,
     String? password,
     String? telegram,
@@ -169,6 +181,7 @@ class __$$RegistrationStateImplCopyWithImpl<$Res>
     Object? firstName = freezed,
     Object? lastName = freezed,
     Object? graduationYear = freezed,
+    Object? role = null,
     Object? email = freezed,
     Object? password = freezed,
     Object? telegram = freezed,
@@ -195,6 +208,11 @@ class __$$RegistrationStateImplCopyWithImpl<$Res>
                 ? _value.graduationYear
                 : graduationYear // ignore: cast_nullable_to_non_nullable
                     as int?,
+        role:
+            null == role
+                ? _value.role
+                : role // ignore: cast_nullable_to_non_nullable
+                    as String,
         email:
             freezed == email
                 ? _value.email
@@ -223,6 +241,7 @@ class _$RegistrationStateImpl extends _RegistrationState {
     this.firstName,
     this.lastName,
     this.graduationYear,
+    this.role = 'alumni',
     this.email,
     this.password,
     this.telegram,
@@ -236,6 +255,12 @@ class _$RegistrationStateImpl extends _RegistrationState {
   final String? lastName;
   @override
   final int? graduationYear;
+  // Radio selection. Defaults to 'alumni' so the existing UX (grad
+  // year visible, required) stays put unless the user opts into the
+  // Alumni Friend flow.
+  @override
+  @JsonKey()
+  final String role;
   @override
   final String? email;
   @override
@@ -245,7 +270,7 @@ class _$RegistrationStateImpl extends _RegistrationState {
 
   @override
   String toString() {
-    return 'RegistrationState(verification: $verification, firstName: $firstName, lastName: $lastName, graduationYear: $graduationYear, email: $email, password: $password, telegram: $telegram)';
+    return 'RegistrationState(verification: $verification, firstName: $firstName, lastName: $lastName, graduationYear: $graduationYear, role: $role, email: $email, password: $password, telegram: $telegram)';
   }
 
   @override
@@ -261,6 +286,7 @@ class _$RegistrationStateImpl extends _RegistrationState {
                 other.lastName == lastName) &&
             (identical(other.graduationYear, graduationYear) ||
                 other.graduationYear == graduationYear) &&
+            (identical(other.role, role) || other.role == role) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
@@ -275,6 +301,7 @@ class _$RegistrationStateImpl extends _RegistrationState {
     firstName,
     lastName,
     graduationYear,
+    role,
     email,
     password,
     telegram,
@@ -298,6 +325,7 @@ abstract class _RegistrationState extends RegistrationState {
     final String? firstName,
     final String? lastName,
     final int? graduationYear,
+    final String role,
     final String? email,
     final String? password,
     final String? telegram,
@@ -311,7 +339,11 @@ abstract class _RegistrationState extends RegistrationState {
   @override
   String? get lastName;
   @override
-  int? get graduationYear;
+  int? get graduationYear; // Radio selection. Defaults to 'alumni' so the existing UX (grad
+  // year visible, required) stays put unless the user opts into the
+  // Alumni Friend flow.
+  @override
+  String get role;
   @override
   String? get email;
   @override

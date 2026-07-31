@@ -23,6 +23,7 @@ import '../../../common/widgets/titled_item.dart';
 import '../../root/root_page.dart';
 import 'badges_section.dart';
 import 'open_bot_card.dart';
+import 'profile_projects_section.dart';
 
 const _eventCardWidth = 200.0;
 
@@ -76,7 +77,12 @@ class ProfileContent {
         children: [
           if (profile.location case final loc?)
             AppTag(icon: Icons.pin_drop, text: loc),
-          AppTag(icon: Icons.school, text: profile.graduationYear),
+          // Alumni Friends have no graduation year — show a chip that
+          // signals their community role instead of the school-year tag.
+          if (profile.isAlumniFriend)
+            const AppTag(icon: Icons.groups, text: 'Alumni Friend')
+          else if (profile.graduationYear case final year? when year.isNotEmpty)
+            AppTag(icon: Icons.school, text: year),
         ],
       ),
       ...[
@@ -122,6 +128,11 @@ class ProfileContent {
         const BadgesSection(),
         if (personal) const _OwnedEvents(),
         const _ParticipatedEvents(),
+        if (personal) const MyOwnedProjects(),
+        ContributedProjects(
+          profileId: profile.profileId,
+          personal: personal,
+        ),
         if (personal) const OpenBotCard(),
         if (personal)
           AppButton(
