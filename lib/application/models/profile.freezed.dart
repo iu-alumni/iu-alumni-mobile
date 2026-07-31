@@ -26,9 +26,13 @@ mixin _$Profile {
   @JsonKey(name: 'first_name')
   String get firstName => throw _privateConstructorUsedError;
   @JsonKey(name: 'last_name')
-  String get lastName => throw _privateConstructorUsedError;
+  String get lastName => throw _privateConstructorUsedError; // NULL for Alumni Friends — the header shows an "Alumni Friend" chip
+  // in place of the graduation-year tag when [isAlumniFriend].
   @JsonKey(name: 'graduation_year')
-  String get graduationYear => throw _privateConstructorUsedError;
+  String? get graduationYear => throw _privateConstructorUsedError; // Backend defaults to 'alumni'; older payloads that pre-date the
+  // field are parsed as regular alumni via [_defaultRole].
+  @JsonKey(name: 'role', defaultValue: alumniRoleAlumni)
+  String get role => throw _privateConstructorUsedError;
   String? get location => throw _privateConstructorUsedError;
   String? get biography => throw _privateConstructorUsedError;
   @JsonKey(name: 'show_location')
@@ -63,7 +67,8 @@ abstract class $ProfileCopyWith<$Res> {
     @JsonKey(name: 'id') String profileId,
     @JsonKey(name: 'first_name') String firstName,
     @JsonKey(name: 'last_name') String lastName,
-    @JsonKey(name: 'graduation_year') String graduationYear,
+    @JsonKey(name: 'graduation_year') String? graduationYear,
+    @JsonKey(name: 'role', defaultValue: alumniRoleAlumni) String role,
     String? location,
     String? biography,
     @JsonKey(name: 'show_location') bool showLocation,
@@ -94,7 +99,8 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
     Object? profileId = null,
     Object? firstName = null,
     Object? lastName = null,
-    Object? graduationYear = null,
+    Object? graduationYear = freezed,
+    Object? role = null,
     Object? location = freezed,
     Object? biography = freezed,
     Object? showLocation = null,
@@ -123,9 +129,14 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
                     : lastName // ignore: cast_nullable_to_non_nullable
                         as String,
             graduationYear:
-                null == graduationYear
+                freezed == graduationYear
                     ? _value.graduationYear
                     : graduationYear // ignore: cast_nullable_to_non_nullable
+                        as String?,
+            role:
+                null == role
+                    ? _value.role
+                    : role // ignore: cast_nullable_to_non_nullable
                         as String,
             location:
                 freezed == location
@@ -190,7 +201,8 @@ abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
     @JsonKey(name: 'id') String profileId,
     @JsonKey(name: 'first_name') String firstName,
     @JsonKey(name: 'last_name') String lastName,
-    @JsonKey(name: 'graduation_year') String graduationYear,
+    @JsonKey(name: 'graduation_year') String? graduationYear,
+    @JsonKey(name: 'role', defaultValue: alumniRoleAlumni) String role,
     String? location,
     String? biography,
     @JsonKey(name: 'show_location') bool showLocation,
@@ -220,7 +232,8 @@ class __$$ProfileImplCopyWithImpl<$Res>
     Object? profileId = null,
     Object? firstName = null,
     Object? lastName = null,
-    Object? graduationYear = null,
+    Object? graduationYear = freezed,
+    Object? role = null,
     Object? location = freezed,
     Object? biography = freezed,
     Object? showLocation = null,
@@ -249,9 +262,14 @@ class __$$ProfileImplCopyWithImpl<$Res>
                 : lastName // ignore: cast_nullable_to_non_nullable
                     as String,
         graduationYear:
-            null == graduationYear
+            freezed == graduationYear
                 ? _value.graduationYear
                 : graduationYear // ignore: cast_nullable_to_non_nullable
+                    as String?,
+        role:
+            null == role
+                ? _value.role
+                : role // ignore: cast_nullable_to_non_nullable
                     as String,
         location:
             freezed == location
@@ -311,6 +329,7 @@ class _$ProfileImpl extends _Profile {
     @JsonKey(name: 'first_name') required this.firstName,
     @JsonKey(name: 'last_name') required this.lastName,
     @JsonKey(name: 'graduation_year') required this.graduationYear,
+    @JsonKey(name: 'role', defaultValue: alumniRoleAlumni) required this.role,
     required this.location,
     required this.biography,
     @JsonKey(name: 'show_location') required this.showLocation,
@@ -334,9 +353,16 @@ class _$ProfileImpl extends _Profile {
   @override
   @JsonKey(name: 'last_name')
   final String lastName;
+  // NULL for Alumni Friends — the header shows an "Alumni Friend" chip
+  // in place of the graduation-year tag when [isAlumniFriend].
   @override
   @JsonKey(name: 'graduation_year')
-  final String graduationYear;
+  final String? graduationYear;
+  // Backend defaults to 'alumni'; older payloads that pre-date the
+  // field are parsed as regular alumni via [_defaultRole].
+  @override
+  @JsonKey(name: 'role', defaultValue: alumniRoleAlumni)
+  final String role;
   @override
   final String? location;
   @override
@@ -364,7 +390,7 @@ class _$ProfileImpl extends _Profile {
 
   @override
   String toString() {
-    return 'Profile(profileId: $profileId, firstName: $firstName, lastName: $lastName, graduationYear: $graduationYear, location: $location, biography: $biography, showLocation: $showLocation, telegramAlias: $telegramAlias, avatar: $avatar, isTelegramVerified: $isTelegramVerified, followersCount: $followersCount, followingCount: $followingCount, isFollowing: $isFollowing)';
+    return 'Profile(profileId: $profileId, firstName: $firstName, lastName: $lastName, graduationYear: $graduationYear, role: $role, location: $location, biography: $biography, showLocation: $showLocation, telegramAlias: $telegramAlias, avatar: $avatar, isTelegramVerified: $isTelegramVerified, followersCount: $followersCount, followingCount: $followingCount, isFollowing: $isFollowing)';
   }
 
   @override
@@ -380,6 +406,7 @@ class _$ProfileImpl extends _Profile {
                 other.lastName == lastName) &&
             (identical(other.graduationYear, graduationYear) ||
                 other.graduationYear == graduationYear) &&
+            (identical(other.role, role) || other.role == role) &&
             (identical(other.location, location) ||
                 other.location == location) &&
             (identical(other.biography, biography) ||
@@ -407,6 +434,7 @@ class _$ProfileImpl extends _Profile {
     firstName,
     lastName,
     graduationYear,
+    role,
     location,
     biography,
     showLocation,
@@ -437,7 +465,9 @@ abstract class _Profile extends Profile {
     @JsonKey(name: 'id') required final String profileId,
     @JsonKey(name: 'first_name') required final String firstName,
     @JsonKey(name: 'last_name') required final String lastName,
-    @JsonKey(name: 'graduation_year') required final String graduationYear,
+    @JsonKey(name: 'graduation_year') required final String? graduationYear,
+    @JsonKey(name: 'role', defaultValue: alumniRoleAlumni)
+    required final String role,
     required final String? location,
     required final String? biography,
     @JsonKey(name: 'show_location') required final bool showLocation,
@@ -461,10 +491,15 @@ abstract class _Profile extends Profile {
   String get firstName;
   @override
   @JsonKey(name: 'last_name')
-  String get lastName;
+  String get lastName; // NULL for Alumni Friends — the header shows an "Alumni Friend" chip
+  // in place of the graduation-year tag when [isAlumniFriend].
   @override
   @JsonKey(name: 'graduation_year')
-  String get graduationYear;
+  String? get graduationYear; // Backend defaults to 'alumni'; older payloads that pre-date the
+  // field are parsed as regular alumni via [_defaultRole].
+  @override
+  @JsonKey(name: 'role', defaultValue: alumniRoleAlumni)
+  String get role;
   @override
   String? get location;
   @override

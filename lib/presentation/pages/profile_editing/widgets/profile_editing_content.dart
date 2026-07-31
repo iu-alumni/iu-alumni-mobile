@@ -124,34 +124,41 @@ class ProfileEditingContent {
           ),
         ),
       ),
-      const SizedBox(height: 24),
-      TitledItem(
-        title: 'Graduation year',
-        child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
-          buildWhen: (p, c) =>
-              p.profile.map((p) => p.graduationYear) !=
-              c.profile.map((p) => p.graduationYear),
-          builder: (context, ep) => AppButton(
-            buttonStyle: AppButtonStyle.gray,
-            onTap: () async {
-              final year = await GraduationYearPicker.show(context);
-              if (year != null && context.mounted) {
-                context.read<ProfileEditingCubit>().update(
-                  (p) => p.copyWith(graduationYear: '$year'),
-                );
-              }
-            },
-            child: Text(
-              ep.profile.match(
-                () => profile.graduationYear,
-                (s) => s.graduationYear,
+      // Alumni Friends carry no graduation year — the field is nulled
+      // on the backend regardless of what we send, so hide the picker
+      // and show a short explainer where it used to sit.
+      if (profile.isAlumniFriend)
+        const _AlumniFriendNote()
+      else ...[
+        const SizedBox(height: 24),
+        TitledItem(
+          title: 'Graduation year',
+          child: BlocBuilder<ProfileEditingCubit, ProfileEditingState>(
+            buildWhen: (p, c) =>
+                p.profile.map((p) => p.graduationYear) !=
+                c.profile.map((p) => p.graduationYear),
+            builder: (context, ep) => AppButton(
+              buttonStyle: AppButtonStyle.gray,
+              onTap: () async {
+                final year = await GraduationYearPicker.show(context);
+                if (year != null && context.mounted) {
+                  context.read<ProfileEditingCubit>().update(
+                    (p) => p.copyWith(graduationYear: '$year'),
+                  );
+                }
+              },
+              child: Text(
+                ep.profile.match(
+                  () => profile.graduationYear ?? '',
+                  (s) => s.graduationYear ?? '',
+                ),
+                style: AppTextStyles.body,
+                textAlign: TextAlign.start,
               ),
-              style: AppTextStyles.body,
-              textAlign: TextAlign.start,
             ),
           ),
         ),
-      ),
+      ],
       const SizedBox(height: 24),
       TitledItem(
         title: 'Biography',
@@ -271,4 +278,29 @@ class _ErrorText extends StatelessWidget {
           },
         ),
       );
+}
+
+/// Small explainer that stands in for the graduation-year picker on the
+/// edit form when the profile belongs to an Alumni Friend.
+class _AlumniFriendNote extends StatelessWidget {
+  const _AlumniFriendNote();
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: 24),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Icon(Icons.groups, size: 18, color: AppColors.gray50),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            'You are registered as an Alumni Friend — no graduation year on '
+            'your profile. Ask an admin if you need to switch to Alumni.',
+            style: AppTextStyles.caption.copyWith(color: AppColors.gray50),
+          ),
+        ),
+      ],
+    ),
+  );
 }

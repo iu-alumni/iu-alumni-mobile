@@ -16,6 +16,7 @@ import '../events_list/events_list_page.dart';
 import '../map/map_page.dart';
 import '../profile/profile_page.dart';
 import '../profile/widgets/badge_earned_popup.dart';
+import '../projects_list/projects_list_page.dart';
 
 @RoutePage()
 class RootPage extends StatefulWidget implements AutoRouteWrapper {
@@ -41,6 +42,7 @@ class RootPage extends StatefulWidget implements AutoRouteWrapper {
 class _RootPageState extends State<RootPage> {
   late final Widget _eventsPage = const EventsListPage();
   late final Widget _mapPage = const MapPage();
+  late final Widget _projectsPage = const ProjectsListPage();
   late final Widget _profilePage = const ProfilePage();
 
   // Popup-chain state. RootPage sits INSIDE the Navigator, so showDialog
@@ -53,10 +55,33 @@ class _RootPageState extends State<RootPage> {
     _ => const <Badge>[],
   };
 
+  static Set<String> _liveCodes(BadgesState s) => switch (s.badges) {
+    LoadedStateData<BadgesData>(:final data) => {
+      ...data.earned.map((e) => e.badge.code),
+      ...data.newlyEarned.map((b) => b.code),
+    },
+    _ => const <String>{},
+  };
+
+  // Drops any code from _badgesShown that's no longer in the user's earned
+  // or newly-earned list — i.e. a badge that was revoked (e.g. after leaving
+  // an event). Without this, re-earning a revoked badge would silently skip
+  // the popup because the code is still remembered from the first award.
+  void _pruneRevoked(BadgesState s) {
+    final live = _liveCodes(s);
+    if (live.isEmpty) {
+      return;
+    }
+    _badgesShown.removeWhere((code) => !live.contains(code));
+  }
+
   Future<void> _drainBadgePopups(BuildContext context, BadgesState s) async {
     if (_popupInFlight) {
       return;
     }
+    // Second-line reconcile: if listenWhen didn't fire the prune (e.g. an
+    // out-of-band emit), still drop revoked codes here before checking fresh.
+    _pruneRevoked(s);
     final fresh = _newly(s).where((b) => !_badgesShown.contains(b.code)).toList();
     if (fresh.isEmpty) {
       return;
@@ -98,6 +123,7 @@ class _RootPageState extends State<RootPage> {
       [
             (Icons.location_pin, RootPageState.mapPage, 'map'),
             (Icons.calendar_month, RootPageState.eventsListPage, 'events'),
+            (Icons.emoji_objects, RootPageState.projectsListPage, 'projects'),
             (Icons.person, RootPageState.profilePage, 'profile'),
           ]
           .map(
@@ -125,6 +151,7 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) => BlocListener<BadgesCubit, BadgesState>(
     listenWhen: (p, c) {
+      _pruneRevoked(c);
       final codes = _newly(c).map((b) => b.code).toSet();
       return codes.difference(_badgesShown).isNotEmpty;
     },
@@ -136,6 +163,7 @@ class _RootPageState extends State<RootPage> {
           builder: (context, page) => switch (page) {
             RootPageState.eventsListPage => _eventsPage,
             RootPageState.mapPage => _mapPage,
+            RootPageState.projectsListPage => _projectsPage,
             RootPageState.profilePage => _profilePage,
           },
         ),

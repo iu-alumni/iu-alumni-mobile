@@ -17,6 +17,8 @@ import 'events_repository_impl_test.mocks.dart';
 void _provideDummies() {
   provideDummy<Option<Profile>>(None());
   provideDummy<Option<String>>(None());
+  provideDummy<Either<String, String>>(const Left('dummy error'));
+  provideDummy<Either<String, Unit>>(const Left('dummy error'));
 }
 
 @GenerateMocks([EventsGateway, UsersRepository, Uuid])
@@ -78,13 +80,13 @@ void main() {
         repository.modifyEvent(modifiedEvent);
 
         when(mockGateway.addEvent(any))
-            .thenAnswer((_) async => Some(eventId));
+            .thenAnswer((_) async => const Right(eventId));
 
         final result = await repository.save();
 
-        expect(result.isSome(), true);
+        expect(result.isRight(), true);
         result.match(
-          () => fail('Expected Some but got None'),
+          (error) => fail('Expected Right but got Left: $error'),
           (id) => expect(id, eventId),
         );
         verify(mockGateway.addEvent(any)).called(1);
@@ -114,7 +116,7 @@ void main() {
         repository.modifyEvent(modifiedEvent);
 
         when(mockGateway.addEvent(any))
-            .thenAnswer((_) async => Some(eventId));
+            .thenAnswer((_) async => const Right(eventId));
 
         await repository.save();
 
@@ -126,21 +128,21 @@ void main() {
         repository.modifyEvent(updatedEvent);
 
         when(mockGateway.updateEvent(eventId, any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => const Right(unit));
 
         final result = await repository.save();
 
-        expect(result.isSome(), true);
+        expect(result.isRight(), true);
         result.match(
-          () => fail('Expected Some but got None'),
+          (error) => fail('Expected Right but got Left: $error'),
           (id) => expect(id, eventId),
         );
         verify(mockGateway.updateEvent(eventId, any)).called(1);
       });
 
-      test('should return None when no event modified', () async {
+      test('should return Left when no event modified', () async {
         final result = await repository.save();
-        expect(result.isNone(), true);
+        expect(result, const Left<String, String>('Nothing to save.'));
       });
     });
 
@@ -168,7 +170,7 @@ void main() {
         ));
 
         when(mockGateway.addEvent(any))
-            .thenAnswer((_) async => Some(eventId));
+            .thenAnswer((_) async => const Right(eventId));
 
         await repository.save();
 
@@ -203,7 +205,7 @@ void main() {
         ));
 
         when(mockGateway.addEvent(any))
-            .thenAnswer((_) async => Some(eventId));
+            .thenAnswer((_) async => const Right(eventId));
 
         await repository.save();
 

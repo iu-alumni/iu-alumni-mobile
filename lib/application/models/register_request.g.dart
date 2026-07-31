@@ -11,9 +11,10 @@ Map<String, dynamic> _$$RegisterRequestImplToJson(
 ) => <String, dynamic>{
   'first_name': instance.firstName,
   'last_name': instance.lastName,
-  'graduation_year': instance.gradYear,
   'email': instance.email,
   'password': instance.password,
   'manual_verification': instance.manualVerification,
+  if (instance.gradYear case final value?) 'graduation_year': value,
+  'role': instance.role,
   'telegram_alias': instance.telegram,
 };

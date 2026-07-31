@@ -9,6 +9,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: RootRoute.page),
     AutoRoute(page: EventRoute.page),
     AutoRoute(page: EventEditingRoute.page),
+    AutoRoute(page: ProjectRoute.page),
+    AutoRoute(page: ProjectEditingRoute.page),
     AutoRoute(page: PasswordResetConfirmRoute.page),
     AutoRoute(
       page: AuthRoute.page,
@@ -29,6 +31,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: AppLoadingRoute.page, initial: true),
     AutoRoute(page: ProfileRoute.page),
     AutoRoute(page: CityDataRoute.page),
+    AutoRoute(page: NotificationsRoute.page),
   ];
 
   @override
