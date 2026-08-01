@@ -21,10 +21,7 @@ class UsersGatewayImpl extends UsersGateway {
       final response = await _dio.get(
         Paths.allProfiles,
         options: _optionsManager.opts(),
-        queryParameters: {
-          if (cursor != null) 'cursor': cursor,
-          'limit': limit,
-        },
+        queryParameters: {if (cursor != null) 'cursor': cursor, 'limit': limit},
       );
       return PaginatedResult.fromJson(
         response.data as Map<String, dynamic>,
@@ -52,7 +49,9 @@ class UsersGatewayImpl extends UsersGateway {
         },
       );
       return PaginatedResult.fromJson(
-          response.data as Map<String, dynamic>, (e) => Profile.fromJson(e as Map<String, dynamic>));
+        response.data as Map<String, dynamic>,
+        (e) => Profile.fromJson(e as Map<String, dynamic>),
+      );
     } catch (_) {
       return const PaginatedResult(items: []);
     }
@@ -70,6 +69,32 @@ class UsersGatewayImpl extends UsersGateway {
       return [for (final p in list) Profile.fromJson(p)];
     } catch (_) {
       return <Profile>[];
+    }
+  }
+
+  @override
+  Future<bool> followUser(String userId) async {
+    try {
+      await _dio.post(
+        Paths.profileFollow(userId),
+        options: _optionsManager.opts(),
+      );
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> unfollowUser(String userId) async {
+    try {
+      await _dio.delete(
+        Paths.profileFollow(userId),
+        options: _optionsManager.opts(),
+      );
+      return true;
+    } catch (_) {
+      return false;
     }
   }
 }

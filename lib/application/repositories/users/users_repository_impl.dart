@@ -94,4 +94,30 @@ class UsersRepositoryImpl extends UsersRepository {
     }
     return ids.map((pid) => _users?[pid]).nonNulls;
   }
+
+  @override
+  Future<bool> followUser(String userId) async {
+    final success = await _usersGateway.followUser(userId);
+    if (!success) return false;
+    if (_users?.containsKey(userId) ?? false) {
+      _users![userId] = _users![userId]!.copyWith(isFollowing: true);
+    }
+    if (_me?.profileId == userId) {
+      _me = _me?.copyWith(isFollowing: true);
+    }
+    return true;
+  }
+
+  @override
+  Future<bool> unfollowUser(String userId) async {
+    final success = await _usersGateway.unfollowUser(userId);
+    if (!success) return false;
+    if (_users?.containsKey(userId) ?? false) {
+      _users![userId] = _users![userId]!.copyWith(isFollowing: false);
+    }
+    if (_me?.profileId == userId) {
+      _me = _me?.copyWith(isFollowing: false);
+    }
+    return true;
+  }
 }

@@ -17,4 +17,8 @@ abstract class UsersGateway {
   });
 
   Future<List<Profile>> getUsersByIds(List<String> ids);
+
+  Future<bool> followUser(String userId);
+
+  Future<bool> unfollowUser(String userId);
 }

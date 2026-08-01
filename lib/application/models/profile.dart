@@ -27,6 +27,9 @@ class Profile with _$Profile {
     @JsonKey(name: 'telegram_alias') required String? telegramAlias,
     required String? avatar,
     @JsonKey(name: 'is_telegram_verified') required bool isTelegramVerified,
+    @JsonKey(name: 'followers_count') @Default(0) int followersCount,
+    @JsonKey(name: 'following_count') @Default(0) int followingCount,
+    @JsonKey(name: 'is_following') @Default(false) bool isFollowing,
   }) = _Profile;
   const Profile._();
 
