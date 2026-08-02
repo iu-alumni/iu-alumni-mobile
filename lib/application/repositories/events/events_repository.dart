@@ -15,6 +15,8 @@ abstract interface class EventsRepository {
 
   Future<Option<EventModel>> getOneEvent(String eventId);
 
+  Future<String?> getEventCover(String eventId);
+
   EventModel createEvent();
 
   void modifyEvent(EventModel event);
