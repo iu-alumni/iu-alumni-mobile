@@ -36,6 +36,7 @@ class _EventsListState extends State<EventsList> {
 
   @override
   Widget build(BuildContext context) {
+    final events = widget.events.toList(growable: false);
     final child = MasonryGridView.count(
       crossAxisCount: 2,
       mainAxisSpacing: 8,
@@ -45,9 +46,12 @@ class _EventsListState extends State<EventsList> {
         horizontal: 8,
         vertical: 16,
       ).copyWith(bottom: RootPage.navigationBarHeight + 16),
-      itemCount: widget.events.length,
-      itemBuilder: (context, i) =>
-          EventCard(color: _colorFor(i), event: widget.events.elementAt(i)),
+      itemCount: events.length,
+      itemBuilder: (context, i) => EventCard(
+        key: ValueKey(events[i].eventId),
+        color: _colorFor(i),
+        event: events[i],
+      ),
     );
     return widget.refresh != null
         ? SmartRefresher(

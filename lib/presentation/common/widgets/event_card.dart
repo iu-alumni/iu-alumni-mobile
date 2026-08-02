@@ -75,14 +75,25 @@ class _EventCardState extends State<EventCard> {
               future: _cover,
               builder: (context, snapshot) {
                 final bytes = snapshot.data;
-                if (bytes == null || bytes.isEmpty) {
-                  return const SizedBox.shrink();
-                }
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: AspectRatio(
                     aspectRatio: 1,
-                    child: Image.memory(base64Decode(bytes), fit: BoxFit.cover),
+                    child: bytes == null || bytes.isEmpty
+                        ? const ColoredBox(
+                            color: Colors.white38,
+                            child: Center(
+                              child: Icon(
+                                Icons.image_outlined,
+                                color: Colors.black26,
+                              ),
+                            ),
+                          )
+                        : Image.memory(
+                            base64Decode(bytes),
+                            fit: BoxFit.cover,
+                            gaplessPlayback: true,
+                          ),
                   ),
                 );
               },
