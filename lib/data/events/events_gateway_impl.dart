@@ -8,6 +8,7 @@ import '../common/dio_options_manager.dart';
 import '../models/event_data_model.dart';
 import '../models/event_request_data_model.dart';
 import '../paths.dart';
+import '../../util/logger.dart';
 import 'events_gateway.dart';
 
 class EventsGatewayImpl implements EventsGateway {
@@ -88,8 +89,22 @@ class EventsGatewayImpl implements EventsGateway {
       );
       final data = response.data;
       return data is Map<String, dynamic> ? data['cover'] as String? : null;
-    } catch (_) {
-      return null;
+    } catch (error) {
+      logger.w('Dedicated cover request failed for $eventId: $error');
+      // Compatibility fallback for deployments where the dedicated image
+      // route is temporarily unavailable. The full event response contains
+      // the same cover field.
+      try {
+        final response = await _dio.get(
+          Paths.eventWithId(eventId),
+          options: _optionsManager.opts(),
+        );
+        final data = response.data;
+        return data is Map<String, dynamic> ? data['cover'] as String? : null;
+      } catch (fallbackError) {
+        logger.w('Cover fallback failed for $eventId: $fallbackError');
+        return null;
+      }
     }
   }
 

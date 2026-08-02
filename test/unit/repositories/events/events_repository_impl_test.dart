@@ -215,6 +215,7 @@ void main() {
         await repository.deleteEvent(eventId);
 
         // Event should still be in cache
+        when(mockGateway.loadCover(eventId)).thenAnswer((_) async => null);
         final cached = await repository.getOneEvent(eventId);
         expect(cached.isSome(), true);
         cached.match(

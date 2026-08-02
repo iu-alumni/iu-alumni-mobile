@@ -23,7 +23,15 @@ class EventsRepositoryImpl implements EventsRepository {
   Set<String>? _owned;
   Set<String>? _participated;
   EventModel? _modifiedEvent;
-  final Map<String, String?> _coverCache = {};
+  final Map<String, String> _coverCache = {};
+
+  void _cacheCover(String eventId, String? cover) {
+    if (cover == null || cover.isEmpty) {
+      _coverCache.remove(eventId);
+    } else {
+      _coverCache[eventId] = cover;
+    }
+  }
 
   @override
   Future<Iterable<EventModel>> getEvents() async {
@@ -123,7 +131,7 @@ class EventsRepositoryImpl implements EventsRepository {
       return result.match(Left.new, (_) {
         // Update the event in the cache on success
         _cache![event.eventId] = event;
-        _coverCache[event.eventId] = event.coverBytes;
+        _cacheCover(event.eventId, event.coverBytes);
         // When modified, the event ID stays the same
         return Right(event.eventId);
       });
@@ -140,7 +148,7 @@ class EventsRepositoryImpl implements EventsRepository {
             if (myProfile case Some(:final value)) value.profileId,
           ].toISet(),
         );
-        _coverCache[eid] = event.coverBytes;
+        _cacheCover(eid, event.coverBytes);
         _owned!.add(eid);
         return Right(eid);
       });
@@ -177,11 +185,14 @@ class EventsRepositoryImpl implements EventsRepository {
     if (cachedEventCover != null) {
       return cachedEventCover;
     }
-    if (_coverCache.containsKey(eventId)) {
-      return _coverCache[eventId];
+    final cachedCover = _coverCache[eventId];
+    if (cachedCover != null) {
+      return cachedCover;
     }
     final cover = await _gateway.loadCover(eventId);
-    _coverCache[eventId] = cover;
+    // A failed request returns null. Do not permanently cache that failure,
+    // so a later rebuild or navigation can recover without restarting the app.
+    _cacheCover(eventId, cover);
     return cover;
   }
 
@@ -194,7 +205,7 @@ class EventsRepositoryImpl implements EventsRepository {
     if (!success && deletedModel != null) {
       // Return the deleted event back if it wasn't deleted
       _cache?[eventId] = deletedModel;
-      _coverCache[eventId] = deletedCover;
+      _cacheCover(eventId, deletedCover);
       _owned?.remove(eventId);
     }
   }
