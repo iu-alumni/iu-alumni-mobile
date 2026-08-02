@@ -32,15 +32,15 @@ class EventsGatewayImpl implements EventsGateway {
   }
 
   @override
-  Future<PaginatedResult<EventDataModel>> loadEvents({String? cursor, int limit = 50}) async {
+  Future<PaginatedResult<EventDataModel>> loadEvents({
+    String? cursor,
+    int limit = 50,
+  }) async {
     try {
       final resp = await _dio.get(
         Paths.events,
         options: _optionsManager.opts(),
-        queryParameters: {
-          if (cursor != null) 'cursor': cursor,
-          'limit': limit,
-        },
+        queryParameters: {if (cursor != null) 'cursor': cursor, 'limit': limit},
       );
       final data = resp.data;
       if (data is! Map<String, dynamic> || data['items'] is! List) {
@@ -56,15 +56,15 @@ class EventsGatewayImpl implements EventsGateway {
   }
 
   @override
-  Future<PaginatedResult<EventDataModel>> loadPendingEvents({String? cursor, int limit = 50}) async {
+  Future<PaginatedResult<EventDataModel>> loadPendingEvents({
+    String? cursor,
+    int limit = 50,
+  }) async {
     try {
       final resp = await _dio.get(
         Paths.eventsPending,
         options: _optionsManager.opts(),
-        queryParameters: {
-          if (cursor != null) 'cursor': cursor,
-          'limit': limit,
-        },
+        queryParameters: {if (cursor != null) 'cursor': cursor, 'limit': limit},
       );
       final data = resp.data;
       if (data is! Map<String, dynamic> || data['items'] is! List) {
@@ -76,6 +76,20 @@ class EventsGatewayImpl implements EventsGateway {
       );
     } catch (_) {
       return const PaginatedResult(items: []);
+    }
+  }
+
+  @override
+  Future<String?> loadCover(String eventId) async {
+    try {
+      final response = await _dio.get(
+        Paths.eventCover(eventId),
+        options: _optionsManager.opts(),
+      );
+      final data = response.data;
+      return data is Map<String, dynamic> ? data['cover'] as String? : null;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -151,7 +165,8 @@ class EventsGatewayImpl implements EventsGateway {
           'The request timed out. Please check your connection and try again.',
         DioExceptionType.connectionError =>
           'Could not reach the server. Please check your connection.',
-        _ => 'Something went wrong${error.response?.statusCode != null ? ' (${error.response!.statusCode})' : ''}.',
+        _ =>
+          'Something went wrong${error.response?.statusCode != null ? ' (${error.response!.statusCode})' : ''}.',
       };
     }
     return '$error';

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../application/models/event.dart';
+import '../../../application/repositories/events/events_repository.dart';
 import '../../../application/repositories/reporter/reporter.dart';
 import '../../router/app_router.gr.dart';
 import '../constants/app_colors.dart';
@@ -27,6 +28,28 @@ class EventCard extends StatefulWidget {
 
 class _EventCardState extends State<EventCard> {
   late final _formatter = DateFormat('dd.MM.yyyy, HH:mm');
+  late Future<String?> _cover;
+
+  @override
+  void initState() {
+    super.initState();
+    _cover = widget.event.coverBytes != null
+        ? Future.value(widget.event.coverBytes)
+        : context.read<EventsRepository>().getEventCover(widget.event.eventId);
+  }
+
+  @override
+  void didUpdateWidget(covariant EventCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.event.eventId != widget.event.eventId ||
+        oldWidget.event.coverBytes != widget.event.coverBytes) {
+      _cover = widget.event.coverBytes != null
+          ? Future.value(widget.event.coverBytes)
+          : context.read<EventsRepository>().getEventCover(
+              widget.event.eventId,
+            );
+    }
+  }
 
   void _openEvent() {
     context.read<Reporter>().reportOpenEvent(
@@ -48,14 +71,22 @@ class _EventCardState extends State<EventCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (widget.event.coverBytes case final bytes? when bytes.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Image.memory(base64Decode(bytes), fit: BoxFit.cover),
-                ),
-              ),
+            FutureBuilder<String?>(
+              future: _cover,
+              builder: (context, snapshot) {
+                final bytes = snapshot.data;
+                if (bytes == null || bytes.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Image.memory(base64Decode(bytes), fit: BoxFit.cover),
+                  ),
+                );
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(8).copyWith(top: 16),
               child: Column(

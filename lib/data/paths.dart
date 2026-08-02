@@ -5,6 +5,7 @@ abstract class Paths {
   static String eventsWhereParticipant(String uid) =>
       '${events}participant/$uid';
   static String eventWithId(String eid) => '$events$eid';
+  static String eventCover(String eid) => '${eventWithId(eid)}/cover';
   static String participants(String eid) => '${eventWithId(eid)}/participants';
   static String leave(String eid) => '${eventWithId(eid)}/participants/remove';
 

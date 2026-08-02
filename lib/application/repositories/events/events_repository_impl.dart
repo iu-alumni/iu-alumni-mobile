@@ -1,4 +1,3 @@
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
@@ -24,6 +23,7 @@ class EventsRepositoryImpl implements EventsRepository {
   Set<String>? _owned;
   Set<String>? _participated;
   EventModel? _modifiedEvent;
+  final Map<String, String?> _coverCache = {};
 
   @override
   Future<Iterable<EventModel>> getEvents() async {
@@ -53,15 +53,21 @@ class EventsRepositoryImpl implements EventsRepository {
     final privateItems = <dynamic>[];
     String? privCursor;
     do {
-      final page = await _gateway.loadPendingEvents(cursor: privCursor, limit: 100);
+      final page = await _gateway.loadPendingEvents(
+        cursor: privCursor,
+        limit: 100,
+      );
       privateItems.addAll(page.items);
       privCursor = page.nextCursor;
     } while (privCursor != null);
 
     final myId = await _myId();
     final eventModels = privateItems
-      .followedBy(publicItems)
-      .map((d) => EventMapper.eventFromData(myId.toNullable())(d as EventDataModel));
+        .followedBy(publicItems)
+        .map(
+          (d) =>
+              EventMapper.eventFromData(myId.toNullable())(d as EventDataModel),
+        );
     // Fill the cache
     _cache?.clear();
     _owned?.clear();
@@ -117,6 +123,7 @@ class EventsRepositoryImpl implements EventsRepository {
       return result.match(Left.new, (_) {
         // Update the event in the cache on success
         _cache![event.eventId] = event;
+        _coverCache[event.eventId] = event.coverBytes;
         // When modified, the event ID stays the same
         return Right(event.eventId);
       });
@@ -133,6 +140,7 @@ class EventsRepositoryImpl implements EventsRepository {
             if (myProfile case Some(:final value)) value.profileId,
           ].toISet(),
         );
+        _coverCache[eid] = event.coverBytes;
         _owned!.add(eid);
         return Right(eid);
       });
@@ -153,17 +161,40 @@ class EventsRepositoryImpl implements EventsRepository {
   @override
   Future<Option<EventModel>> getOneEvent(String eventId) async {
     await _loadEvents();
-    return Option.fromNullable(_cache![eventId]);
+    final event = _cache![eventId];
+    if (event == null || event.coverBytes != null) {
+      return Option.fromNullable(event);
+    }
+    final cover = await getEventCover(eventId);
+    final withCover = event.copyWith(coverBytes: cover);
+    _cache![eventId] = withCover;
+    return Option.of(withCover);
+  }
+
+  @override
+  Future<String?> getEventCover(String eventId) async {
+    final cachedEventCover = _cache?[eventId]?.coverBytes;
+    if (cachedEventCover != null) {
+      return cachedEventCover;
+    }
+    if (_coverCache.containsKey(eventId)) {
+      return _coverCache[eventId];
+    }
+    final cover = await _gateway.loadCover(eventId);
+    _coverCache[eventId] = cover;
+    return cover;
   }
 
   @override
   Future<void> deleteEvent(String eventId) async {
     final deletedModel = _cache!.remove(eventId);
+    final deletedCover = _coverCache.remove(eventId);
     // TODO show an error in case of failure
     final success = await _gateway.deleteEvent(eventId);
     if (!success && deletedModel != null) {
       // Return the deleted event back if it wasn't deleted
       _cache?[eventId] = deletedModel;
+      _coverCache[eventId] = deletedCover;
       _owned?.remove(eventId);
     }
   }
